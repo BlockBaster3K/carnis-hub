@@ -3578,6 +3578,7 @@ import com.carnis.mod.client.renderer.FleshAmalgamRenderer;
 import com.carnis.mod.client.renderer.DartRenderer;
 import com.carnis.mod.client.renderer.PulsingHeartRenderer;
 import com.carnis.mod.client.renderer.HiveEyeRenderer;
+import com.carnis.mod.client.renderer.layer.OptionalGlowLayer;
 import com.carnis.mod.init.ModBlockEntities;
 import com.carnis.mod.init.ModEntities;
 import net.minecraft.client.renderer.entity.ZombieRenderer;
@@ -3587,6 +3588,8 @@ import net.minecraft.client.renderer.entity.SpiderRenderer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -3599,6 +3602,12 @@ import net.minecraftforge.fml.common.Mod;
 )
 public final class ClientModEvents {
     private ClientModEvents() {
+    }
+
+    @SubscribeEvent
+    public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener((ResourceManagerReloadListener) resourceManager ->
+                OptionalGlowLayer.clearGlowmaskCache());
     }
 
     @SubscribeEvent
@@ -5916,25 +5925,44 @@ package com.carnis.mod.client.renderer.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public final class OptionalGlowLayer<T extends GeoAnimatable> extends AutoGlowingGeoLayer<T> {
+    private static final ConcurrentMap<ResourceLocation, Boolean> GLOWMASK_CACHE = new ConcurrentHashMap<>();
+
     public OptionalGlowLayer(GeoRenderer<T> renderer) {
         super(renderer);
+    }
+
+    public static void clearGlowmaskCache() {
+        GLOWMASK_CACHE.clear();
+    }
+
+    private static boolean glowmaskExists(ResourceLocation mask) {
+        return GLOWMASK_CACHE.computeIfAbsent(mask,
+                location -> Minecraft.getInstance().getResourceManager().getResource(location).isPresent());
     }
 
     @Override
     public void render(PoseStack poseStack, T animatable, BakedGeoModel model, RenderType renderType,
                        MultiBufferSource buffers, VertexConsumer buffer, float partialTick,
                        int packedLight, int packedOverlay) {
-        String path = getTextureResource(animatable).getPath();
+        ResourceLocation base = getTextureResource(animatable);
+        String path = base.getPath();
         if (!path.endsWith(".png")) return;
+        ResourceLocation mask = new ResourceLocation(base.getNamespace(),
+                path.substring(0, path.length() - 4) + "_glowmask.png");
+        if (!glowmaskExists(mask)) return;
         super.render(poseStack, animatable, model, renderType, buffers, buffer,
                 partialTick, packedLight, packedOverlay);
     }
@@ -5953,17 +5981,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Arrays;
 
 /** Samples loaded Hive blocks only; no chunk loading and a fixed client-tick budget. */
 @Mod.EventBusSubscriber(modid = CarnisMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -5990,6 +6021,7 @@ public final class HiveAmbientSoundHandler {
     private static final long NO_SCHEDULED_TIME = -1L;
 
     private static Level lastLevel;
+    private static ResourceManager lastResourceManager;
     private static boolean playerWasPresent = false;
     private static BlockPos center;
     private static int cursor = VOLUME;
@@ -6008,6 +6040,17 @@ public final class HiveAmbientSoundHandler {
     private static boolean nextHiveHeartbeatEvent = true;
     private static SimpleSoundInstance heartbeatSound;
     private static boolean heartbeatPlaying = false;
+    // Zone order follows density: threshold, surface, deep, core.
+    private static final String[] ZONE_OGG_PATHS = {
+            "hive/amb_threshold.ogg", "hive/amb_surface.ogg", "hive/amb_deep.ogg", "hive/amb_core.ogg"
+    };
+    private static final String[] STINGER_OGG_PATHS = {
+            "hive/zone_stinger_intensify.ogg", "hive/zone_stinger_release.ogg", "hive/zone_stinger_deep.ogg"
+    };
+    private static boolean[] zoneOggExists = new boolean[4];
+    private static boolean[] stingerOggExists = new boolean[3];
+    private static boolean stingerAssetWarningLogged = false;
+    private static int oggCheckCooldown = 0;
     private static int currentZone = -1;
     private static int pendingZone = -1;
     private static int pendingZoneTicks = 0;
@@ -6023,16 +6066,24 @@ public final class HiveAmbientSoundHandler {
         if (level == null) return;
         if (client.player == null) {
             if (playerWasPresent) {
-                reset();
+                reset(false);
                 playerWasPresent = false;
             }
             return;
         }
         playerWasPresent = true;
         if (level != lastLevel) {
-            reset();
+            reset(false);
             lastLevel = level;
         }
+        ResourceManager resourceManager = client.getResourceManager();
+        if (lastResourceManager != null && resourceManager != lastResourceManager) {
+            reset(true);
+        }
+        lastResourceManager = resourceManager;
+        if (oggCheckCooldown > 0) oggCheckCooldown--;
+        refreshZoneOggCache(client);
+
         if (center == null || cursor >= VOLUME && level.getGameTime() % 40L == 0L) {
             center = client.player.blockPosition().immutable();
             cursor = 0;
@@ -6091,7 +6142,7 @@ public final class HiveAmbientSoundHandler {
             targetVolume = 0.85F * (float) (1.0D - nearestHive / (RADIUS + 1.0D));
         }
         targetVolume = Mth.clamp(targetVolume, 0.0F, 0.85F);
-        SoundEvent wantedBed = selectZoneBed();
+        SoundEvent wantedBed = selectZoneBed(client);
         if (!insideStructure && closeHiveBlockCount > CLOSE_STRUCTURE_ENTER) {
             insideStructure = true;
         } else if (insideStructure && closeHiveBlockCount < CLOSE_STRUCTURE_EXIT) {
@@ -6137,8 +6188,10 @@ public final class HiveAmbientSoundHandler {
         }
     }
 
-    /** Select the sound event for the current Hive density zone. */
-    private static SoundEvent selectZoneBed() {
+    /** Select the current zonal bed using the cached OGG availability state. */
+    private static SoundEvent selectZoneBed(Minecraft client) {
+        refreshZoneOggCache(client);
+        if (!zoneOggExists[currentZone]) return ModSounds.HIVE_AMBIENT.get();
         return switch (currentZone) {
             case ZONE_SURFACE -> ModSounds.HIVE_AMB_SURFACE.get();
             case ZONE_DEEP -> ModSounds.HIVE_AMB_DEEP.get();
@@ -6200,6 +6253,7 @@ public final class HiveAmbientSoundHandler {
 
     private static void playZoneStinger(Level level, Player player, int stingerType) {
         if (!zoneKnown) return;
+        if (!stingerOggExists[stingerType]) return;
         SoundEvent stinger = switch (stingerType) {
             case STINGER_INTENSIFY -> ModSounds.ZONE_STINGER_INTENSIFY.get();
             case STINGER_RELEASE -> ModSounds.ZONE_STINGER_RELEASE.get();
@@ -6209,6 +6263,34 @@ public final class HiveAmbientSoundHandler {
         if (stinger == null) return;
 
         level.playSound(null, player.blockPosition(), stinger, SoundSource.AMBIENT, 1.0F, 1.0F);
+    }
+
+    private static void refreshZoneOggCache(Minecraft client) {
+        if (oggCheckCooldown > 0) return;
+        var resourceManager = client.getResourceManager();
+        for (int i = 0; i < ZONE_OGG_PATHS.length; i++) {
+            ResourceLocation resource = new ResourceLocation(
+                    CarnisMod.MOD_ID, "sounds/" + ZONE_OGG_PATHS[i]);
+            zoneOggExists[i] = resourceManager.getResource(resource).isPresent();
+        }
+
+        StringBuilder missingStingers = new StringBuilder();
+        for (int i = 0; i < STINGER_OGG_PATHS.length; i++) {
+            ResourceLocation resource = new ResourceLocation(
+                    CarnisMod.MOD_ID, "sounds/" + STINGER_OGG_PATHS[i]);
+            stingerOggExists[i] = resourceManager.getResource(resource).isPresent();
+            if (!stingerOggExists[i]) {
+                if (missingStingers.length() > 0) missingStingers.append(", ");
+                missingStingers.append(STINGER_OGG_PATHS[i]);
+            }
+        }
+        if (!stingerAssetWarningLogged) {
+            if (missingStingers.length() > 0) {
+                CarnisMod.LOGGER.warn("Missing Hive transition stinger audio: {}", missingStingers);
+            }
+            stingerAssetWarningLogged = true;
+        }
+        oggCheckCooldown = 200;
     }
 
     private static void playPeriodicEvents(Minecraft client, ClientLevel level) {
@@ -6274,7 +6356,7 @@ public final class HiveAmbientSoundHandler {
         heartbeatPlaying = false;
     }
 
-    private static void reset() {
+    private static void reset(boolean full) {
         stopHeartbeat(Minecraft.getInstance());
         if (sound != null) sound.end();
         if (closeSound != null) closeSound.end();
@@ -6299,6 +6381,13 @@ public final class HiveAmbientSoundHandler {
         pendingZoneTicks = 0;
         heartbeatPlaying = false;
         zoneKnown = false;
+        if (full) {
+            playerWasPresent = false;
+            Arrays.fill(zoneOggExists, false);
+            Arrays.fill(stingerOggExists, false);
+            oggCheckCooldown = 0;
+            stingerAssetWarningLogged = false;
+        }
     }
 
 }
@@ -46008,13 +46097,13 @@ side="BOTH"
     "subtitle": "carnis.subtitle.amalgam_smash",
     "sounds": [
       {
-        "name": "carnis:entity/flesh_amalgam_smash_01",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 1.0,
         "pitch": 0.95,
         "weight": 1
       },
       {
-        "name": "carnis:entity/flesh_amalgam_smash_02",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 1.0,
         "pitch": 1.05,
         "weight": 1
@@ -46033,13 +46122,13 @@ side="BOTH"
     "subtitle": "carnis.subtitle.amalgam_roar",
     "sounds": [
       {
-        "name": "carnis:entity/flesh_amalgam_roar_01",
+        "name": "carnis:entity/amalgam_roar",
         "volume": 1.0,
         "pitch": 0.75,
         "weight": 1
       },
       {
-        "name": "carnis:entity/flesh_amalgam_roar_02",
+        "name": "carnis:entity/amalgam_roar",
         "volume": 1.0,
         "pitch": 0.75,
         "weight": 1
@@ -46059,13 +46148,13 @@ side="BOTH"
     "subtitle": "carnis.subtitle.amalgam_step",
     "sounds": [
       {
-        "name": "carnis:entity/flesh_amalgam_step_01",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 0.9,
         "pitch": 0.95,
         "weight": 1
       },
       {
-        "name": "carnis:entity/flesh_amalgam_step_02",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 0.9,
         "pitch": 1.05,
         "weight": 1
@@ -46352,7 +46441,7 @@ side="BOTH"
     "subtitle": "carnis.subtitle.flesh_amalgam_hurt",
     "sounds": [
       {
-        "name": "carnis:entity/flesh_amalgam_hurt_01",
+        "name": "carnis:entity/flesh_amalgam_hurt",
         "volume": 1.0,
         "pitch": 1.0,
         "stream": false
@@ -46363,7 +46452,7 @@ side="BOTH"
     "subtitle": "carnis.subtitle.flesh_amalgam_death",
     "sounds": [
       {
-        "name": "carnis:entity/flesh_amalgam_death_01",
+        "name": "carnis:entity/flesh_amalgam_death",
         "volume": 1.1,
         "pitch": 1.0,
         "stream": false
@@ -46407,7 +46496,7 @@ side="BOTH"
     "subtitle": "carnis.subtitle.hive_amalgam_shuffle",
     "sounds": [
       {
-        "name": "carnis:block/creeper_rupture",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 0.35,
         "pitch": 0.95,
         "weight": 1
@@ -46429,7 +46518,7 @@ side="BOTH"
     "subtitle": "carnis.subtitle.hive_amalgam_slam",
     "sounds": [
       {
-        "name": "carnis:block/creeper_rupture",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 0.55,
         "pitch": 1.0,
         "weight": 1
@@ -46542,7 +46631,7 @@ side="BOTH"
     "subtitle": "carnis.subtitle.hive_spawn_attack",
     "sounds": [
       {
-        "name": "carnis:block/creeper_rupture",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 0.7,
         "pitch": 0.94,
         "weight": 1
@@ -46680,7 +46769,7 @@ side="BOTH"
     "subtitle": "carnis.subtitle.hive_spawn_skeleton_blade",
     "sounds": [
       {
-        "name": "carnis:block/creeper_rupture",
+        "name": "carnis:entity/amalgam_smash",
         "volume": 0.7,
         "pitch": 0.94,
         "weight": 1
