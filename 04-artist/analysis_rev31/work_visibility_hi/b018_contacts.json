@@ -1,0 +1,98 @@
+[
+  {
+    "face_a": [
+      "leg_right",
+      1,
+      "right",
+      "cartilage"
+    ],
+    "face_b": [
+      "leg_left",
+      1,
+      "front",
+      "cartilage"
+    ],
+    "classes": [
+      "bone",
+      "cartilage"
+    ],
+    "first_view": 1,
+    "first_pixel": [
+      254,
+      522
+    ],
+    "observations": 2
+  },
+  {
+    "face_a": [
+      "leg_left",
+      1,
+      "back",
+      "cartilage"
+    ],
+    "face_b": [
+      "leg_right",
+      1,
+      "right",
+      "cartilage"
+    ],
+    "classes": [
+      "bone",
+      "cartilage"
+    ],
+    "first_view": 3,
+    "first_pixel": [
+      263,
+      518
+    ],
+    "observations": 22
+  },
+  {
+    "face_a": [
+      "leg_left",
+      1,
+      "left",
+      "cartilage"
+    ],
+    "face_b": [
+      "leg_right",
+      1,
+      "back",
+      "cartilage"
+    ],
+    "classes": [
+      "bone",
+      "cartilage"
+    ],
+    "first_view": 5,
+    "first_pixel": [
+      251,
+      521
+    ],
+    "observations": 4
+  },
+  {
+    "face_a": [
+      "leg_right",
+      1,
+      "front",
+      "cartilage"
+    ],
+    "face_b": [
+      "leg_left",
+      1,
+      "left",
+      "cartilage"
+    ],
+    "classes": [
+      "bone",
+      "cartilage"
+    ],
+    "first_view": 7,
+    "first_pixel": [
+      269,
+      518
+    ],
+    "observations": 12
+  }
+]

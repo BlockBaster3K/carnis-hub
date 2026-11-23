@@ -1,0 +1,47 @@
+[
+  {
+    "path": "textures/block/pulsing_heart.png",
+    "bytes": 11911,
+    "sha256": "c3c29096b1e23be62a31e328e0986b8cd89fd17d74326291501915a062fb2843"
+  },
+  {
+    "path": "textures/block/pulsing_heart_glowmask.png",
+    "bytes": 1655,
+    "sha256": "6277157bcdee8fdbca3c9128b5a7607831d6791859c15f89053f3a33606f04a3"
+  },
+  {
+    "path": "models/block/pulsing_heart.json",
+    "bytes": 69,
+    "sha256": "7abbb2824a7f62ba233fe624e43e4e61182fa7c043d33da949aaad9beea80ab5"
+  },
+  {
+    "path": "models/item/pulsing_heart.json",
+    "bytes": 792,
+    "sha256": "1b7df1916ef9b3528acb0c1311c2a8267a911159fe046bfc397fa199b36b4f6c"
+  },
+  {
+    "path": "models/item/pulsing_heart_geometry.json",
+    "bytes": 4786,
+    "sha256": "fbd5a4242f354308f4c2214c66fa9336bf3b336909804ecf73825576634ce1c1"
+  },
+  {
+    "path": "models/item/pulsing_heart_geo_display.json",
+    "bytes": 792,
+    "sha256": "1b7df1916ef9b3528acb0c1311c2a8267a911159fe046bfc397fa199b36b4f6c"
+  },
+  {
+    "path": "geo/block/pulsing_heart.geo.json",
+    "bytes": 4420,
+    "sha256": "eb5e5996f0f0334b948363604d74b0feb78fce13a1d47d30e0870aec999f375f"
+  },
+  {
+    "path": "animations/block/pulsing_heart.animation.json",
+    "bytes": 4754,
+    "sha256": "48c5d005f4379bb65ec3c59880b52d74d3fe3caacb1b13250ce479de8051e223"
+  },
+  {
+    "path": "blockstates/pulsing_heart.json",
+    "bytes": 84,
+    "sha256": "6b540946e20be81ca069e46e699a7652c5d32017d0484cc8c69f151491f415f0"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "carnis:living_flesh",
+    "carnis:ossified_flesh",
+    "carnis:fireproof_flesh",
+    "carnis:charred_flesh",
+    "carnis:flesh_spat"
+  ]
+}

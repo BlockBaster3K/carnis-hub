@@ -1,0 +1,40 @@
+{
+  "entity": "b017",
+  "rest_candidates": 1,
+  "positive_area": 1,
+  "same_facing_positive_area": 0,
+  "records": [
+    {
+      "a": {
+        "bone": "torso",
+        "primitive": 0,
+        "cube": 0,
+        "side": "front",
+        "material": "healthy_base",
+        "rect": [
+          0,
+          0,
+          16,
+          16
+        ]
+      },
+      "b": {
+        "bone": "torso",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "rect": [
+          112,
+          0,
+          16,
+          16
+        ]
+      },
+      "area_blocks2": 0.04323475807905197,
+      "classification": "positive-area overlap",
+      "normal_dot": -1.0
+    }
+  ],
+  "scope": "Static exported rest transforms, including hidden faces; positive geometric overlap is not proof of actual visible z-fighting. Areas do not use texture alpha. Zero-area candidates include projected false positives. No animation."
+}

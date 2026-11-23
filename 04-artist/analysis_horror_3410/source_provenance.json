@@ -1,0 +1,91 @@
+{
+  "source_repository": "https://github.com/BlockBaster3K/carnis-hub.git",
+  "branch": "main",
+  "commit": "a0ec7369de21ec6a4f86260ac7f4d2c2219c2a0e",
+  "source_archive": "01-coder/project-3.4.10-clean.zip",
+  "source_archive_sha256": "e979e237e9fa1599c6967f6fb71f94e76368cfae5e93155ebf9ff537a3f33c62",
+  "source_archive_bytes": 808632,
+  "preserved_originals": [
+    {
+      "path": "textures/block/living_flesh_0.png",
+      "bytes": 269,
+      "sha256": "a0ea192029749ed54e0cf10e4985a57a9b7f9608dc8ddfa32e5adebdba11bddd"
+    },
+    {
+      "path": "textures/block/living_flesh_1.png",
+      "bytes": 276,
+      "sha256": "ec787b5467fd641a52b284be51c337432377c8b1930dccd5e00f9a6325580d9f"
+    },
+    {
+      "path": "textures/block/living_flesh_2.png",
+      "bytes": 289,
+      "sha256": "e62fde7c74e426826a13b4635cb973870fa9adf62516e72de6043ac1e6868923"
+    },
+    {
+      "path": "textures/block/living_flesh_3.png",
+      "bytes": 282,
+      "sha256": "0a292fc791de291b629be21034e9329787430660c121e95502f64fc7fd582cc2"
+    },
+    {
+      "path": "textures/block/ossified_flesh_0.png",
+      "bytes": 199,
+      "sha256": "d4aeda3b6803cf34e2d47570e86434b8a2ddeef9895374e3dcf9dc9d2acb508a"
+    },
+    {
+      "path": "textures/block/ossified_flesh_1.png",
+      "bytes": 258,
+      "sha256": "d9a85e4d0d989f834f40c39a8ce10f79baff199a46f62372cae579ebf1ad20e4"
+    },
+    {
+      "path": "textures/block/ossified_flesh_2.png",
+      "bytes": 287,
+      "sha256": "2bc319744a9d18afd3038d32695674641aeafce1916c8836b50c4f91a4238737"
+    },
+    {
+      "path": "textures/block/ossified_flesh_3.png",
+      "bytes": 258,
+      "sha256": "0a12711e0aa4f7fc8c0ecb1fe2c442d815ea7b0c99429dfe33a871dc344c0a1a"
+    },
+    {
+      "path": "textures/block/charred_flesh_0.png",
+      "bytes": 247,
+      "sha256": "747d96c5160eeffe95501d0603063dcf65a0a9a3df0857193a57eb5207119010"
+    },
+    {
+      "path": "textures/block/charred_flesh_1.png",
+      "bytes": 273,
+      "sha256": "52d240864a004258e3f021497ccb1221aaa0a943dc887fc68d8c98d97920c14a"
+    },
+    {
+      "path": "textures/block/charred_flesh_2.png",
+      "bytes": 267,
+      "sha256": "9c5451ea231718b1e3d5ead23a2abad0c3d5d06640e38a97fc22c097fc80f57f"
+    },
+    {
+      "path": "textures/block/charred_flesh_3.png",
+      "bytes": 245,
+      "sha256": "f84385ec19143e0fcf1039ecb3809b0c1e8cf81603d450d856821e2acc770625"
+    },
+    {
+      "path": "textures/block/fireproof_flesh_0.png",
+      "bytes": 270,
+      "sha256": "2913329fbcc7859fd821446379ae80c03c7302817cb2dd705623b1f3c5d2f5ee"
+    },
+    {
+      "path": "textures/block/fireproof_flesh_1.png",
+      "bytes": 288,
+      "sha256": "c7d842b7aa81645843d76563e49d68b641287aa74f1cf4778c6415f6c0f3b05b"
+    },
+    {
+      "path": "textures/block/fireproof_flesh_2.png",
+      "bytes": 297,
+      "sha256": "a0c12532c9a792e7cccfd5cd7388f1671f10da58fc2fb4dde426f8baabe25307"
+    },
+    {
+      "path": "textures/block/fireproof_flesh_3.png",
+      "bytes": 283,
+      "sha256": "dd170af8058cbab6b5e639b80faccfa69974fe2c77fc65c99f02d0da1441f98b"
+    }
+  ],
+  "scope": "Original PNGs replaced in project_3_4_10; other unmodified files remain in the extracted project. Backup copies are not deliverable replacements."
+}

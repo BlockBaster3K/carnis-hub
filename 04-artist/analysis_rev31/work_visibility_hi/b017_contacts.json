@@ -1,0 +1,362 @@
+[
+  {
+    "face_a": [
+      "forearm_left",
+      1,
+      "front",
+      "raw"
+    ],
+    "face_b": [
+      "forearm_left",
+      2,
+      "front",
+      "crust"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 0,
+    "first_pixel": [
+      317,
+      377
+    ],
+    "observations": 45
+  },
+  {
+    "face_a": [
+      "torso",
+      1,
+      "front",
+      "shirt_wound"
+    ],
+    "face_b": [
+      "arm_left",
+      1,
+      "front",
+      "infection"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 0,
+    "first_pixel": [
+      279,
+      247
+    ],
+    "observations": 45
+  },
+  {
+    "face_a": [
+      "arm_left",
+      1,
+      "front",
+      "infection"
+    ],
+    "face_b": [
+      "arm_left",
+      0,
+      "front",
+      "skin"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 0,
+    "first_pixel": [
+      286,
+      310
+    ],
+    "observations": 6
+  },
+  {
+    "face_a": [
+      "arm_left",
+      1,
+      "back",
+      "infection"
+    ],
+    "face_b": [
+      "arm_left",
+      0,
+      "back",
+      "skin"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 3,
+    "first_pixel": [
+      254,
+      310
+    ],
+    "observations": 6
+  },
+  {
+    "face_a": [
+      "arm_left",
+      1,
+      "back",
+      "infection"
+    ],
+    "face_b": [
+      "torso",
+      0,
+      "back",
+      "shirt"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 5,
+    "first_pixel": [
+      229,
+      246
+    ],
+    "observations": 48
+  },
+  {
+    "face_a": [
+      "forearm_left",
+      0,
+      "left",
+      "skin"
+    ],
+    "face_b": [
+      "arm_left",
+      0,
+      "back",
+      "skin"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 5,
+    "first_pixel": [
+      228,
+      316
+    ],
+    "observations": 3
+  },
+  {
+    "face_a": [
+      "torso",
+      0,
+      "left",
+      "shirt"
+    ],
+    "face_b": [
+      "arm_right",
+      0,
+      "back",
+      "shirt"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 5,
+    "first_pixel": [
+      285,
+      324
+    ],
+    "observations": 14
+  },
+  {
+    "face_a": [
+      "torso",
+      0,
+      "left",
+      "shirt"
+    ],
+    "face_b": [
+      "forearm_right",
+      0,
+      "back",
+      "skin"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 5,
+    "first_pixel": [
+      288,
+      328
+    ],
+    "observations": 82
+  },
+  {
+    "face_a": [
+      "forearm_left",
+      2,
+      "left",
+      "crust"
+    ],
+    "face_b": [
+      "forearm_left",
+      3,
+      "back",
+      "crust"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 5,
+    "first_pixel": [
+      210,
+      418
+    ],
+    "observations": 1
+  },
+  {
+    "face_a": [
+      "forearm_left",
+      1,
+      "front",
+      "raw"
+    ],
+    "face_b": [
+      "forearm_left",
+      2,
+      "left",
+      "crust"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 7,
+    "first_pixel": [
+      317,
+      378
+    ],
+    "observations": 5
+  },
+  {
+    "face_a": [
+      "arm_right",
+      0,
+      "front",
+      "shirt"
+    ],
+    "face_b": [
+      "torso",
+      0,
+      "left",
+      "shirt"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 7,
+    "first_pixel": [
+      234,
+      324
+    ],
+    "observations": 14
+  },
+  {
+    "face_a": [
+      "forearm_right",
+      0,
+      "front",
+      "skin"
+    ],
+    "face_b": [
+      "torso",
+      0,
+      "left",
+      "shirt"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 7,
+    "first_pixel": [
+      231,
+      328
+    ],
+    "observations": 82
+  },
+  {
+    "face_a": [
+      "torso",
+      1,
+      "top",
+      "shirt_wound"
+    ],
+    "face_b": [
+      "arm_left",
+      1,
+      "front",
+      "infection"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 8,
+    "first_pixel": [
+      279,
+      278
+    ],
+    "observations": 9
+  },
+  {
+    "face_a": [
+      "forearm_left",
+      1,
+      "top",
+      "raw"
+    ],
+    "face_b": [
+      "torso",
+      0,
+      "right",
+      "shirt"
+    ],
+    "classes": [
+      "skin",
+      "cloth"
+    ],
+    "first_view": 10,
+    "first_pixel": [
+      283,
+      350
+    ],
+    "observations": 14
+  },
+  {
+    "face_a": [
+      "forearm_left",
+      1,
+      "right",
+      "raw"
+    ],
+    "face_b": [
+      "forearm_left",
+      2,
+      "top",
+      "crust"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 10,
+    "first_pixel": [
+      269,
+      412
+    ],
+    "observations": 8
+  }
+]

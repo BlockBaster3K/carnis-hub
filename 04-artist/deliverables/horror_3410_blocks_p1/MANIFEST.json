@@ -1,0 +1,274 @@
+{
+  "files": [
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/living_flesh_0.png",
+      "bytes": 10891,
+      "sha256": "9dfb7148a7b9bb418588ffff9ea7f31b7f02700238e0c14f9cf6091cd111842c",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "a0ea192029749ed54e0cf10e4985a57a9b7f9608dc8ddfa32e5adebdba11bddd"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/living_flesh_1.png",
+      "bytes": 11024,
+      "sha256": "fd4a475e349995983115baaa78ad94a433f96c63ba694739e4fdb4c827556dfa",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "ec787b5467fd641a52b284be51c337432377c8b1930dccd5e00f9a6325580d9f"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/living_flesh_2.png",
+      "bytes": 10757,
+      "sha256": "a84c7196c677ea3a2082917593daf1557ba77e48e599fa101619b0fe7d9a6968",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "e62fde7c74e426826a13b4635cb973870fa9adf62516e72de6043ac1e6868923"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/living_flesh_3.png",
+      "bytes": 10979,
+      "sha256": "74261efe01f00986c6ffff797e99fe798259fd679823bc59d45031020ed95f19",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "0a292fc791de291b629be21034e9329787430660c121e95502f64fc7fd582cc2"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/ossified_flesh_0.png",
+      "bytes": 11955,
+      "sha256": "b57b41e2b9422d3b6006edae93118163243b889cf513adda4cc5ad6c958fa933",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "d4aeda3b6803cf34e2d47570e86434b8a2ddeef9895374e3dcf9dc9d2acb508a"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/ossified_flesh_1.png",
+      "bytes": 11160,
+      "sha256": "bc11765e95b1a4934091c8fed760210f1bcaab904ae60c95cd98ce78aee9ef71",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "d9a85e4d0d989f834f40c39a8ce10f79baff199a46f62372cae579ebf1ad20e4"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/ossified_flesh_2.png",
+      "bytes": 12395,
+      "sha256": "6182c7ad92f68220fddf0c5e320735a34fba696917233a922ce39e81f1d14724",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "2bc319744a9d18afd3038d32695674641aeafce1916c8836b50c4f91a4238737"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/ossified_flesh_3.png",
+      "bytes": 11147,
+      "sha256": "fa79003ea18f6119f10d006813005200e8b70542e7e2a3d2ccbca5f5bfe3e81f",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "0a12711e0aa4f7fc8c0ecb1fe2c442d815ea7b0c99429dfe33a871dc344c0a1a"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/charred_flesh_0.png",
+      "bytes": 10340,
+      "sha256": "d57dff5a539d3d8086a9cfee59c25494715bfda9b618ff4f208293126cb316f9",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "747d96c5160eeffe95501d0603063dcf65a0a9a3df0857193a57eb5207119010"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/charred_flesh_1.png",
+      "bytes": 10837,
+      "sha256": "ef1ca5d2b047e858d8275dd0a636f6856dac9702571411efc948b533385a0dfd",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "52d240864a004258e3f021497ccb1221aaa0a943dc887fc68d8c98d97920c14a"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/charred_flesh_2.png",
+      "bytes": 10618,
+      "sha256": "22085525a8c6dea4aa7241126e1df4b63d626305c368cd811fedf61a185c81de",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "9c5451ea231718b1e3d5ead23a2abad0c3d5d06640e38a97fc22c097fc80f57f"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/charred_flesh_3.png",
+      "bytes": 10486,
+      "sha256": "8e3aad3946b7b5b132bdafe4ced92233c2dd0b2b9c87439e0a558b5e8d5e53ad",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "f84385ec19143e0fcf1039ecb3809b0c1e8cf81603d450d856821e2acc770625"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/fireproof_flesh_0.png",
+      "bytes": 9722,
+      "sha256": "0603666a7fcb9b710455c427474514b55f0e852190edcd10224e4f7278753d62",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "2913329fbcc7859fd821446379ae80c03c7302817cb2dd705623b1f3c5d2f5ee"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/fireproof_flesh_1.png",
+      "bytes": 9799,
+      "sha256": "0abbbb97c1329bc2ecaf56073277bdf23da1173b8d5d11cb499fc312fbebde17",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "c7d842b7aa81645843d76563e49d68b641287aa74f1cf4778c6415f6c0f3b05b"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/fireproof_flesh_2.png",
+      "bytes": 9911,
+      "sha256": "0dcd3f295ade4bc6aba312bdc6f275b622fde512e34d5ef69becfd26e35a5d30",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "a0c12532c9a792e7cccfd5cd7388f1671f10da58fc2fb4dde426f8baabe25307"
+    },
+    {
+      "path": "src/main/resources/assets/carnis/textures/block/fireproof_flesh_3.png",
+      "bytes": 9860,
+      "sha256": "2b8eb54b503bf81bf1000d7358d7b9213dabf619990837064564210d00fbf5b2",
+      "resolution": [
+        64,
+        64
+      ],
+      "rgba": "RGBA/alpha255",
+      "previous_dimensions": [
+        16,
+        16
+      ],
+      "previous_sha256": "dd170af8058cbab6b5e639b80faccfa69974fe2c77fc65c99f02d0da1441f98b"
+    }
+  ],
+  "seam_tests": {
+    "living_flesh": {
+      "pair_combinations": 256,
+      "max_horizontal": 1.71038,
+      "max_vertical": 1.71038,
+      "pairs_ge_2": 0,
+      "measure": "mean absolute RGB difference across seam divided by mean internal RGB difference in same axis; model rotations 0/90/180/270; not a perceptual or Minecraft test"
+    },
+    "ossified_flesh": {
+      "pair_combinations": 256,
+      "max_horizontal": 1.26361,
+      "max_vertical": 1.26361,
+      "pairs_ge_2": 0,
+      "measure": "mean absolute RGB difference across seam divided by mean internal RGB difference in same axis; model rotations 0/90/180/270; not a perceptual or Minecraft test"
+    },
+    "charred_flesh": {
+      "pair_combinations": 256,
+      "max_horizontal": 0.90851,
+      "max_vertical": 0.90851,
+      "pairs_ge_2": 0,
+      "measure": "mean absolute RGB difference across seam divided by mean internal RGB difference in same axis; model rotations 0/90/180/270; not a perceptual or Minecraft test"
+    },
+    "fireproof_flesh": {
+      "pair_combinations": 256,
+      "max_horizontal": 1.32889,
+      "max_vertical": 1.32889,
+      "pairs_ge_2": 0,
+      "measure": "mean absolute RGB difference across seam divided by mean internal RGB difference in same axis; model rotations 0/90/180/270; not a perceptual or Minecraft test"
+    }
+  }
+}

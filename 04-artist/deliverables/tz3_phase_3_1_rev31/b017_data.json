@@ -1,0 +1,10576 @@
+{
+  "id": "b017",
+  "label": "Заражённый зомби",
+  "bones": [
+    {
+      "name": "root",
+      "role": "корень"
+    },
+    {
+      "name": "torso",
+      "role": "торс в остатках рубахи и открытая плоть"
+    },
+    {
+      "name": "head",
+      "role": "череп и видимая зелёная кожа"
+    },
+    {
+      "name": "jaw",
+      "role": "нижняя челюсть"
+    },
+    {
+      "name": "mask",
+      "role": "выступающая биомаска, пустулы, светящиеся глаза"
+    },
+    {
+      "name": "chest_growth",
+      "role": "отдельный грудной нарост"
+    },
+    {
+      "name": "arm_left",
+      "role": "плечо: мутировавшее"
+    },
+    {
+      "name": "forearm_left",
+      "role": "предплечье: когти и наросты"
+    },
+    {
+      "name": "leg_left",
+      "role": "нога: рваная одежда"
+    },
+    {
+      "name": "foot_left",
+      "role": "стопа и корешки"
+    },
+    {
+      "name": "arm_right",
+      "role": "плечо: сохранившее кожу"
+    },
+    {
+      "name": "forearm_right",
+      "role": "предплечье: кисть"
+    },
+    {
+      "name": "leg_right",
+      "role": "нога: нарост и корка"
+    },
+    {
+      "name": "foot_right",
+      "role": "стопа и корешки"
+    }
+  ],
+  "animations": [
+    {
+      "name": "idle",
+      "duration": 3,
+      "mode": "loop"
+    },
+    {
+      "name": "walk",
+      "duration": 0.8,
+      "mode": "loop"
+    },
+    {
+      "name": "attack",
+      "duration": 0.4,
+      "mode": "once"
+    },
+    {
+      "name": "hurt",
+      "duration": 0.2,
+      "mode": "once"
+    },
+    {
+      "name": "death",
+      "duration": 1.5,
+      "mode": "once"
+    },
+    {
+      "name": "mask_twitch",
+      "duration": 0.15,
+      "mode": "once"
+    }
+  ],
+  "tiles": [
+    [
+      "torso",
+      0,
+      "front",
+      "shirt",
+      [
+        0,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      0,
+      "back",
+      "shirt",
+      [
+        16,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      0,
+      "right",
+      "shirt",
+      [
+        32,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      0,
+      "left",
+      "shirt",
+      [
+        48,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      0,
+      "top",
+      "shirt",
+      [
+        64,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      0,
+      "bottom",
+      "shirt",
+      [
+        16,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "torso",
+      1,
+      "front",
+      "shirt_wound",
+      [
+        80,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      1,
+      "back",
+      "shirt_wound",
+      [
+        96,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      1,
+      "right",
+      "shirt_wound",
+      [
+        112,
+        0,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      1,
+      "left",
+      "shirt_wound",
+      [
+        0,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "torso",
+      1,
+      "top",
+      "shirt_wound",
+      [
+        24,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "torso",
+      1,
+      "bottom",
+      "shirt_wound",
+      [
+        32,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "head",
+      0,
+      "front",
+      "skin",
+      [
+        16,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "head",
+      0,
+      "back",
+      "skin",
+      [
+        32,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "head",
+      0,
+      "right",
+      "skin",
+      [
+        48,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "head",
+      0,
+      "left",
+      "skin",
+      [
+        64,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "head",
+      0,
+      "top",
+      "skin",
+      [
+        80,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "head",
+      0,
+      "bottom",
+      "skin",
+      [
+        96,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "jaw",
+      0,
+      "front",
+      "skin",
+      [
+        40,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "jaw",
+      0,
+      "back",
+      "skin",
+      [
+        48,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "jaw",
+      0,
+      "right",
+      "skin",
+      [
+        56,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "jaw",
+      0,
+      "left",
+      "skin",
+      [
+        64,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "jaw",
+      0,
+      "top",
+      "skin",
+      [
+        72,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "jaw",
+      0,
+      "bottom",
+      "skin",
+      [
+        80,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      0,
+      "front",
+      "mask",
+      [
+        112,
+        16,
+        16,
+        16
+      ]
+    ],
+    [
+      "mask",
+      0,
+      "back",
+      "mask",
+      [
+        0,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "mask",
+      0,
+      "right",
+      "mask",
+      [
+        88,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      0,
+      "left",
+      "mask",
+      [
+        96,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      0,
+      "top",
+      "mask",
+      [
+        104,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      0,
+      "bottom",
+      "mask",
+      [
+        112,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      1,
+      "front",
+      "sac",
+      [
+        120,
+        80,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      1,
+      "back",
+      "sac",
+      [
+        16,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      1,
+      "right",
+      "sac",
+      [
+        24,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      1,
+      "left",
+      "sac",
+      [
+        32,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      1,
+      "top",
+      "sac",
+      [
+        40,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      1,
+      "bottom",
+      "sac",
+      [
+        48,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      2,
+      "front",
+      "sac",
+      [
+        56,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      2,
+      "back",
+      "sac",
+      [
+        64,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      2,
+      "right",
+      "sac",
+      [
+        72,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      2,
+      "left",
+      "sac",
+      [
+        80,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      2,
+      "top",
+      "sac",
+      [
+        88,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "mask",
+      2,
+      "bottom",
+      "sac",
+      [
+        96,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "chest_growth",
+      0,
+      "front",
+      "raw",
+      [
+        104,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "chest_growth",
+      0,
+      "back",
+      "raw",
+      [
+        112,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "chest_growth",
+      0,
+      "right",
+      "raw",
+      [
+        120,
+        88,
+        8,
+        8
+      ]
+    ],
+    [
+      "chest_growth",
+      0,
+      "left",
+      "raw",
+      [
+        0,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "chest_growth",
+      0,
+      "top",
+      "raw",
+      [
+        8,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "chest_growth",
+      0,
+      "bottom",
+      "raw",
+      [
+        16,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      0,
+      "front",
+      "skin",
+      [
+        24,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      0,
+      "back",
+      "skin",
+      [
+        32,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      0,
+      "right",
+      "skin",
+      [
+        40,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      0,
+      "left",
+      "skin",
+      [
+        48,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      0,
+      "top",
+      "skin",
+      [
+        56,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      0,
+      "bottom",
+      "skin",
+      [
+        64,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      1,
+      "front",
+      "infection",
+      [
+        16,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_left",
+      1,
+      "back",
+      "infection",
+      [
+        32,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_left",
+      1,
+      "right",
+      "infection",
+      [
+        48,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_left",
+      1,
+      "left",
+      "infection",
+      [
+        64,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_left",
+      1,
+      "top",
+      "infection",
+      [
+        72,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_left",
+      1,
+      "bottom",
+      "infection",
+      [
+        80,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      0,
+      "front",
+      "skin",
+      [
+        88,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      0,
+      "back",
+      "skin",
+      [
+        96,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      0,
+      "right",
+      "skin",
+      [
+        104,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      0,
+      "left",
+      "skin",
+      [
+        112,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      0,
+      "top",
+      "skin",
+      [
+        120,
+        96,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      0,
+      "bottom",
+      "skin",
+      [
+        0,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      1,
+      "front",
+      "raw",
+      [
+        80,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_left",
+      1,
+      "back",
+      "raw",
+      [
+        96,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_left",
+      1,
+      "right",
+      "raw",
+      [
+        112,
+        32,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_left",
+      1,
+      "left",
+      "raw",
+      [
+        0,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_left",
+      1,
+      "top",
+      "raw",
+      [
+        8,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      1,
+      "bottom",
+      "raw",
+      [
+        16,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      2,
+      "front",
+      "crust",
+      [
+        24,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      2,
+      "back",
+      "crust",
+      [
+        32,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      2,
+      "right",
+      "crust",
+      [
+        40,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      2,
+      "left",
+      "crust",
+      [
+        48,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      2,
+      "top",
+      "crust",
+      [
+        56,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_left",
+      2,
+      "bottom",
+      "crust",
+      [
+        64,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "leg_left",
+      0,
+      "front",
+      "pants",
+      [
+        16,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_left",
+      0,
+      "back",
+      "pants",
+      [
+        32,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_left",
+      0,
+      "right",
+      "pants",
+      [
+        48,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_left",
+      0,
+      "left",
+      "pants",
+      [
+        64,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_left",
+      0,
+      "top",
+      "pants",
+      [
+        72,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "leg_left",
+      0,
+      "bottom",
+      "pants",
+      [
+        80,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      0,
+      "front",
+      "crust",
+      [
+        88,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      0,
+      "back",
+      "crust",
+      [
+        96,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      0,
+      "right",
+      "crust",
+      [
+        104,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      0,
+      "left",
+      "crust",
+      [
+        112,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      0,
+      "top",
+      "crust",
+      [
+        120,
+        104,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      0,
+      "bottom",
+      "crust",
+      [
+        0,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      1,
+      "front",
+      "rootlet",
+      [
+        8,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      1,
+      "back",
+      "rootlet",
+      [
+        16,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      1,
+      "right",
+      "rootlet",
+      [
+        24,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      1,
+      "left",
+      "rootlet",
+      [
+        32,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      1,
+      "top",
+      "rootlet",
+      [
+        40,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_left",
+      1,
+      "bottom",
+      "rootlet",
+      [
+        48,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_right",
+      0,
+      "front",
+      "shirt",
+      [
+        80,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_right",
+      0,
+      "back",
+      "shirt",
+      [
+        96,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_right",
+      0,
+      "right",
+      "shirt",
+      [
+        112,
+        48,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_right",
+      0,
+      "left",
+      "shirt",
+      [
+        0,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "arm_right",
+      0,
+      "top",
+      "shirt",
+      [
+        56,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "arm_right",
+      0,
+      "bottom",
+      "shirt",
+      [
+        64,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      0,
+      "front",
+      "skin",
+      [
+        16,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_right",
+      0,
+      "back",
+      "skin",
+      [
+        32,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_right",
+      0,
+      "right",
+      "skin",
+      [
+        48,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_right",
+      0,
+      "left",
+      "skin",
+      [
+        64,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "forearm_right",
+      0,
+      "top",
+      "skin",
+      [
+        72,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      0,
+      "bottom",
+      "skin",
+      [
+        80,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      1,
+      "front",
+      "cloth_skin",
+      [
+        88,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      1,
+      "back",
+      "cloth_skin",
+      [
+        96,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      1,
+      "right",
+      "cloth_skin",
+      [
+        104,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      1,
+      "left",
+      "cloth_skin",
+      [
+        112,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      1,
+      "top",
+      "cloth_skin",
+      [
+        120,
+        112,
+        8,
+        8
+      ]
+    ],
+    [
+      "forearm_right",
+      1,
+      "bottom",
+      "cloth_skin",
+      [
+        0,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "leg_right",
+      0,
+      "front",
+      "pants",
+      [
+        80,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_right",
+      0,
+      "back",
+      "pants",
+      [
+        96,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_right",
+      0,
+      "right",
+      "pants",
+      [
+        112,
+        64,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_right",
+      0,
+      "left",
+      "pants",
+      [
+        0,
+        80,
+        16,
+        16
+      ]
+    ],
+    [
+      "leg_right",
+      0,
+      "top",
+      "pants",
+      [
+        8,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "leg_right",
+      0,
+      "bottom",
+      "pants",
+      [
+        16,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      0,
+      "front",
+      "crust",
+      [
+        24,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      0,
+      "back",
+      "crust",
+      [
+        32,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      0,
+      "right",
+      "crust",
+      [
+        40,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      0,
+      "left",
+      "crust",
+      [
+        48,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      0,
+      "top",
+      "crust",
+      [
+        56,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      0,
+      "bottom",
+      "crust",
+      [
+        64,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      1,
+      "front",
+      "rootlet",
+      [
+        72,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      1,
+      "back",
+      "rootlet",
+      [
+        80,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      1,
+      "right",
+      "rootlet",
+      [
+        88,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      1,
+      "left",
+      "rootlet",
+      [
+        96,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      1,
+      "top",
+      "rootlet",
+      [
+        104,
+        120,
+        8,
+        8
+      ]
+    ],
+    [
+      "foot_right",
+      1,
+      "bottom",
+      "rootlet",
+      [
+        112,
+        120,
+        8,
+        8
+      ]
+    ]
+  ],
+  "uv_layout": [
+    {
+      "bone": "torso",
+      "cube": 0,
+      "side": "front",
+      "style": "shirt",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.1373985242816969,
+      "large": true,
+      "size": 16,
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 0,
+      "side": "back",
+      "style": "shirt",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.1373985242816969,
+      "large": true,
+      "size": 16,
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 0,
+      "side": "right",
+      "style": "shirt",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.11166711624552429,
+      "large": true,
+      "size": 16,
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 0,
+      "side": "left",
+      "style": "shirt",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.11166711624552429,
+      "large": true,
+      "size": 16,
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 0,
+      "side": "top",
+      "style": "shirt",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.04441850827116763,
+      "large": false,
+      "size": 16,
+      "rect": [
+        64,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 0,
+      "side": "bottom",
+      "style": "shirt",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.04441850827116763,
+      "large": false,
+      "size": 8,
+      "rect": [
+        16,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "style": "shirt_wound",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.05175085660327568,
+      "large": true,
+      "size": 16,
+      "rect": [
+        80,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "style": "shirt_wound",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.05175085660327568,
+      "large": true,
+      "size": 16,
+      "rect": [
+        96,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "style": "shirt_wound",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0035860982915601027,
+      "large": true,
+      "size": 16,
+      "rect": [
+        112,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "style": "shirt_wound",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0035860982915601027,
+      "large": true,
+      "size": 16,
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "style": "shirt_wound",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0020780588664873747,
+      "large": false,
+      "size": 8,
+      "rect": [
+        24,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "style": "shirt_wound",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0020780588664873747,
+      "large": false,
+      "size": 8,
+      "rect": [
+        32,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "head",
+      "cube": 0,
+      "side": "front",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.08004132487973303,
+      "large": true,
+      "size": 16,
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "head",
+      "cube": 0,
+      "side": "back",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.08004132487973303,
+      "large": true,
+      "size": 16,
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "head",
+      "cube": 0,
+      "side": "right",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.07650343021994885,
+      "large": true,
+      "size": 16,
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "head",
+      "cube": 0,
+      "side": "left",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.07650343021994885,
+      "large": true,
+      "size": 16,
+      "rect": [
+        64,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "head",
+      "cube": 0,
+      "side": "top",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.06026370712813385,
+      "large": true,
+      "size": 16,
+      "rect": [
+        80,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "head",
+      "cube": 0,
+      "side": "bottom",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.06026370712813385,
+      "large": true,
+      "size": 16,
+      "rect": [
+        96,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "jaw",
+      "cube": 0,
+      "side": "front",
+      "style": "skin",
+      "variant": 3,
+      "face": "side",
+      "glow": false,
+      "area": 0.011902697018753405,
+      "large": false,
+      "size": 8,
+      "rect": [
+        40,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "jaw",
+      "cube": 0,
+      "side": "back",
+      "style": "skin",
+      "variant": 3,
+      "face": "side",
+      "glow": false,
+      "area": 0.011902697018753405,
+      "large": false,
+      "size": 8,
+      "rect": [
+        48,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "jaw",
+      "cube": 0,
+      "side": "right",
+      "style": "skin",
+      "variant": 3,
+      "face": "side",
+      "glow": false,
+      "area": 0.0071721965831202045,
+      "large": false,
+      "size": 8,
+      "rect": [
+        56,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "jaw",
+      "cube": 0,
+      "side": "left",
+      "style": "skin",
+      "variant": 3,
+      "face": "side",
+      "glow": false,
+      "area": 0.0071721965831202045,
+      "large": false,
+      "size": 8,
+      "rect": [
+        64,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "jaw",
+      "cube": 0,
+      "side": "top",
+      "style": "skin",
+      "variant": 3,
+      "face": "side",
+      "glow": false,
+      "area": 0.02389767696460481,
+      "large": false,
+      "size": 8,
+      "rect": [
+        72,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "jaw",
+      "cube": 0,
+      "side": "bottom",
+      "style": "skin",
+      "variant": 3,
+      "face": "side",
+      "glow": false,
+      "area": 0.02389767696460481,
+      "large": false,
+      "size": 8,
+      "rect": [
+        80,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "style": "mask",
+      "variant": 0,
+      "face": "mask_face",
+      "glow": true,
+      "area": 0.05606342798688198,
+      "large": true,
+      "size": 16,
+      "rect": [
+        112,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "back",
+      "style": "mask",
+      "variant": 0,
+      "face": "mask_face",
+      "glow": true,
+      "area": 0.05606342798688198,
+      "large": true,
+      "size": 16,
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "right",
+      "style": "mask",
+      "variant": 0,
+      "face": "mask_face",
+      "glow": true,
+      "area": 0.0373551905370844,
+      "large": false,
+      "size": 8,
+      "rect": [
+        88,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "left",
+      "style": "mask",
+      "variant": 0,
+      "face": "mask_face",
+      "glow": true,
+      "area": 0.0373551905370844,
+      "large": false,
+      "size": 8,
+      "rect": [
+        96,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "top",
+      "style": "mask",
+      "variant": 0,
+      "face": "mask_face",
+      "glow": true,
+      "area": 0.03376845658041983,
+      "large": false,
+      "size": 8,
+      "rect": [
+        104,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "bottom",
+      "style": "mask",
+      "variant": 0,
+      "face": "mask_face",
+      "glow": true,
+      "area": 0.03376845658041983,
+      "large": false,
+      "size": 8,
+      "rect": [
+        112,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 1,
+      "side": "front",
+      "style": "sac",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.007590125635147098,
+      "large": false,
+      "size": 8,
+      "rect": [
+        120,
+        80,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 1,
+      "side": "back",
+      "style": "sac",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.007590125635147098,
+      "large": false,
+      "size": 8,
+      "rect": [
+        16,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 1,
+      "side": "right",
+      "style": "sac",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.010957522557544758,
+      "large": false,
+      "size": 8,
+      "rect": [
+        24,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 1,
+      "side": "left",
+      "style": "sac",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.010957522557544758,
+      "large": false,
+      "size": 8,
+      "rect": [
+        32,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 1,
+      "side": "top",
+      "style": "sac",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.0069268628882912485,
+      "large": false,
+      "size": 8,
+      "rect": [
+        40,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 1,
+      "side": "bottom",
+      "style": "sac",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.0069268628882912485,
+      "large": false,
+      "size": 8,
+      "rect": [
+        48,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 2,
+      "side": "front",
+      "style": "sac",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.008538891339540486,
+      "large": false,
+      "size": 8,
+      "rect": [
+        56,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 2,
+      "side": "back",
+      "style": "sac",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.008538891339540486,
+      "large": false,
+      "size": 8,
+      "rect": [
+        64,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 2,
+      "side": "right",
+      "style": "sac",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.010957522557544758,
+      "large": false,
+      "size": 8,
+      "rect": [
+        72,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 2,
+      "side": "left",
+      "style": "sac",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.010957522557544758,
+      "large": false,
+      "size": 8,
+      "rect": [
+        80,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 2,
+      "side": "top",
+      "style": "sac",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.007792720749327655,
+      "large": false,
+      "size": 8,
+      "rect": [
+        88,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 2,
+      "side": "bottom",
+      "style": "sac",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.007792720749327655,
+      "large": false,
+      "size": 8,
+      "rect": [
+        96,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "chest_growth",
+      "cube": 0,
+      "side": "front",
+      "style": "raw",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.010350171320655133,
+      "large": false,
+      "size": 8,
+      "rect": [
+        104,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "chest_growth",
+      "cube": 0,
+      "side": "back",
+      "style": "raw",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.010350171320655133,
+      "large": false,
+      "size": 8,
+      "rect": [
+        112,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "chest_growth",
+      "cube": 0,
+      "side": "right",
+      "style": "raw",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.011953660971867008,
+      "large": false,
+      "size": 8,
+      "rect": [
+        120,
+        88,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "chest_growth",
+      "cube": 0,
+      "side": "left",
+      "style": "raw",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.011953660971867008,
+      "large": false,
+      "size": 8,
+      "rect": [
+        0,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "chest_growth",
+      "cube": 0,
+      "side": "top",
+      "style": "raw",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.004870450468329783,
+      "large": false,
+      "size": 8,
+      "rect": [
+        8,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "chest_growth",
+      "cube": 0,
+      "side": "bottom",
+      "style": "raw",
+      "variant": 1,
+      "face": "side",
+      "glow": true,
+      "area": 0.004870450468329783,
+      "large": false,
+      "size": 8,
+      "rect": [
+        16,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 0,
+      "side": "front",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.0155252569809827,
+      "large": false,
+      "size": 8,
+      "rect": [
+        24,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 0,
+      "side": "back",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.0155252569809827,
+      "large": false,
+      "size": 8,
+      "rect": [
+        32,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 0,
+      "side": "right",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.025102688040920716,
+      "large": false,
+      "size": 8,
+      "rect": [
+        40,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 0,
+      "side": "left",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.025102688040920716,
+      "large": false,
+      "size": 8,
+      "rect": [
+        48,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 0,
+      "side": "top",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.006818630655661697,
+      "large": false,
+      "size": 8,
+      "rect": [
+        56,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 0,
+      "side": "bottom",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.006818630655661697,
+      "large": false,
+      "size": 8,
+      "rect": [
+        64,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "style": "infection",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.02915298255317863,
+      "large": true,
+      "size": 16,
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "style": "infection",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.02915298255317863,
+      "large": true,
+      "size": 16,
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "style": "infection",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.03884939815856778,
+      "large": true,
+      "size": 16,
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "style": "infection",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.03884939815856778,
+      "large": true,
+      "size": 16,
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "style": "infection",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.016884228290209916,
+      "large": false,
+      "size": 8,
+      "rect": [
+        72,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "style": "infection",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.016884228290209916,
+      "large": false,
+      "size": 8,
+      "rect": [
+        80,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 0,
+      "side": "front",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.016172142688523645,
+      "large": false,
+      "size": 8,
+      "rect": [
+        88,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 0,
+      "side": "back",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.016172142688523645,
+      "large": false,
+      "size": 8,
+      "rect": [
+        96,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 0,
+      "side": "right",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.02614863337595908,
+      "large": false,
+      "size": 8,
+      "rect": [
+        104,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 0,
+      "side": "left",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.02614863337595908,
+      "large": false,
+      "size": 8,
+      "rect": [
+        112,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 0,
+      "side": "top",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.006818630655661697,
+      "large": false,
+      "size": 8,
+      "rect": [
+        120,
+        96,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 0,
+      "side": "bottom",
+      "style": "skin",
+      "variant": 4,
+      "face": "side",
+      "glow": false,
+      "area": 0.006818630655661697,
+      "large": false,
+      "size": 8,
+      "rect": [
+        0,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 1,
+      "side": "front",
+      "style": "raw",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.036225599622292964,
+      "large": true,
+      "size": 16,
+      "rect": [
+        80,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 1,
+      "side": "back",
+      "style": "raw",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.036225599622292964,
+      "large": true,
+      "size": 16,
+      "rect": [
+        96,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 1,
+      "side": "right",
+      "style": "raw",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.04183781340153453,
+      "large": true,
+      "size": 16,
+      "rect": [
+        112,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 1,
+      "side": "left",
+      "style": "raw",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.04183781340153453,
+      "large": true,
+      "size": 16,
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 1,
+      "side": "top",
+      "style": "raw",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.019481801873319132,
+      "large": false,
+      "size": 8,
+      "rect": [
+        8,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 1,
+      "side": "bottom",
+      "style": "raw",
+      "variant": 2,
+      "face": "side",
+      "glow": true,
+      "area": 0.019481801873319132,
+      "large": false,
+      "size": 8,
+      "rect": [
+        16,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 2,
+      "side": "front",
+      "style": "crust",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.011730194163409154,
+      "large": false,
+      "size": 8,
+      "rect": [
+        24,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 2,
+      "side": "back",
+      "style": "crust",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.011730194163409154,
+      "large": false,
+      "size": 8,
+      "rect": [
+        32,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 2,
+      "side": "right",
+      "style": "crust",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.022313500480818416,
+      "large": false,
+      "size": 8,
+      "rect": [
+        40,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 2,
+      "side": "left",
+      "style": "crust",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.022313500480818416,
+      "large": false,
+      "size": 8,
+      "rect": [
+        48,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 2,
+      "side": "top",
+      "style": "crust",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.010303708546333234,
+      "large": false,
+      "size": 8,
+      "rect": [
+        56,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_left",
+      "cube": 2,
+      "side": "bottom",
+      "style": "crust",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.010303708546333234,
+      "large": false,
+      "size": 8,
+      "rect": [
+        64,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "cube": 0,
+      "side": "front",
+      "style": "pants",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.07210619353389744,
+      "large": true,
+      "size": 16,
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "cube": 0,
+      "side": "back",
+      "style": "pants",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.07210619353389744,
+      "large": true,
+      "size": 16,
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "cube": 0,
+      "side": "right",
+      "style": "pants",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.11355977923273658,
+      "large": true,
+      "size": 16,
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "cube": 0,
+      "side": "left",
+      "style": "pants",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.11355977923273658,
+      "large": true,
+      "size": 16,
+      "rect": [
+        64,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "cube": 0,
+      "side": "top",
+      "style": "pants",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.014286654707100698,
+      "large": false,
+      "size": 8,
+      "rect": [
+        72,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "cube": 0,
+      "side": "bottom",
+      "style": "pants",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.014286654707100698,
+      "large": false,
+      "size": 8,
+      "rect": [
+        80,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 0,
+      "side": "front",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.012333954157114035,
+      "large": false,
+      "size": 8,
+      "rect": [
+        88,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 0,
+      "side": "back",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.012333954157114035,
+      "large": false,
+      "size": 8,
+      "rect": [
+        96,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 0,
+      "side": "right",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.027194578710997442,
+      "large": false,
+      "size": 8,
+      "rect": [
+        104,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 0,
+      "side": "left",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.027194578710997442,
+      "large": false,
+      "size": 8,
+      "rect": [
+        112,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 0,
+      "side": "top",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.020001316589940976,
+      "large": false,
+      "size": 8,
+      "rect": [
+        120,
+        104,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 0,
+      "side": "bottom",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.020001316589940976,
+      "large": false,
+      "size": 8,
+      "rect": [
+        0,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 1,
+      "side": "front",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.0050715839471210155,
+      "large": false,
+      "size": 8,
+      "rect": [
+        8,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 1,
+      "side": "back",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.0050715839471210155,
+      "large": false,
+      "size": 8,
+      "rect": [
+        16,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 1,
+      "side": "right",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.006694050144245524,
+      "large": false,
+      "size": 8,
+      "rect": [
+        24,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 1,
+      "side": "left",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.006694050144245524,
+      "large": false,
+      "size": 8,
+      "rect": [
+        32,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 1,
+      "side": "top",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.010909809049058715,
+      "large": false,
+      "size": 8,
+      "rect": [
+        40,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "cube": 1,
+      "side": "bottom",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.010909809049058715,
+      "large": false,
+      "size": 8,
+      "rect": [
+        48,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_right",
+      "cube": 0,
+      "side": "front",
+      "style": "shirt",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.02130410263501515,
+      "large": true,
+      "size": 16,
+      "rect": [
+        80,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_right",
+      "cube": 0,
+      "side": "back",
+      "style": "shirt",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.02130410263501515,
+      "large": true,
+      "size": 16,
+      "rect": [
+        96,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_right",
+      "cube": 0,
+      "side": "right",
+      "style": "shirt",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.033669478404092075,
+      "large": true,
+      "size": 16,
+      "rect": [
+        112,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_right",
+      "cube": 0,
+      "side": "left",
+      "style": "shirt",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.033669478404092075,
+      "large": true,
+      "size": 16,
+      "rect": [
+        0,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "arm_right",
+      "cube": 0,
+      "side": "top",
+      "style": "shirt",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.010693344583799613,
+      "large": false,
+      "size": 8,
+      "rect": [
+        56,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "arm_right",
+      "cube": 0,
+      "side": "bottom",
+      "style": "shirt",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.010693344583799613,
+      "large": false,
+      "size": 8,
+      "rect": [
+        64,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 0,
+      "side": "front",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.02052783978596602,
+      "large": true,
+      "size": 16,
+      "rect": [
+        16,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 0,
+      "side": "back",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.02052783978596602,
+      "large": true,
+      "size": 16,
+      "rect": [
+        32,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 0,
+      "side": "right",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.03347025072122762,
+      "large": true,
+      "size": 16,
+      "rect": [
+        48,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 0,
+      "side": "left",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.03347025072122762,
+      "large": true,
+      "size": 16,
+      "rect": [
+        64,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 0,
+      "side": "top",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.008831750182571343,
+      "large": false,
+      "size": 8,
+      "rect": [
+        72,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 0,
+      "side": "bottom",
+      "style": "skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.008831750182571343,
+      "large": false,
+      "size": 8,
+      "rect": [
+        80,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "style": "cloth_skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.005175085660327567,
+      "large": false,
+      "size": 8,
+      "rect": [
+        88,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "style": "cloth_skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.005175085660327567,
+      "large": false,
+      "size": 8,
+      "rect": [
+        96,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "style": "cloth_skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0008965245728900257,
+      "large": false,
+      "size": 8,
+      "rect": [
+        104,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "style": "cloth_skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0008965245728900257,
+      "large": false,
+      "size": 8,
+      "rect": [
+        112,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "style": "cloth_skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0008312235465949497,
+      "large": false,
+      "size": 8,
+      "rect": [
+        120,
+        112,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "style": "cloth_skin",
+      "variant": 1,
+      "face": "side",
+      "glow": false,
+      "area": 0.0008312235465949497,
+      "large": false,
+      "size": 8,
+      "rect": [
+        0,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "cube": 0,
+      "side": "front",
+      "style": "pants",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.07210619353389744,
+      "large": true,
+      "size": 16,
+      "rect": [
+        80,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "cube": 0,
+      "side": "back",
+      "style": "pants",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.07210619353389744,
+      "large": true,
+      "size": 16,
+      "rect": [
+        96,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "cube": 0,
+      "side": "right",
+      "style": "pants",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.11355977923273658,
+      "large": true,
+      "size": 16,
+      "rect": [
+        112,
+        64,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "cube": 0,
+      "side": "left",
+      "style": "pants",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.11355977923273658,
+      "large": true,
+      "size": 16,
+      "rect": [
+        0,
+        80,
+        16,
+        16
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "cube": 0,
+      "side": "top",
+      "style": "pants",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.014286654707100698,
+      "large": false,
+      "size": 8,
+      "rect": [
+        8,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "cube": 0,
+      "side": "bottom",
+      "style": "pants",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.014286654707100698,
+      "large": false,
+      "size": 8,
+      "rect": [
+        16,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 0,
+      "side": "front",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.012333954157114035,
+      "large": false,
+      "size": 8,
+      "rect": [
+        24,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 0,
+      "side": "back",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.012333954157114035,
+      "large": false,
+      "size": 8,
+      "rect": [
+        32,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 0,
+      "side": "right",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.027194578710997442,
+      "large": false,
+      "size": 8,
+      "rect": [
+        40,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 0,
+      "side": "left",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.027194578710997442,
+      "large": false,
+      "size": 8,
+      "rect": [
+        48,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 0,
+      "side": "top",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.020001316589940976,
+      "large": false,
+      "size": 8,
+      "rect": [
+        56,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 0,
+      "side": "bottom",
+      "style": "crust",
+      "variant": 2,
+      "face": "side",
+      "glow": false,
+      "area": 0.020001316589940976,
+      "large": false,
+      "size": 8,
+      "rect": [
+        64,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 1,
+      "side": "front",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.0050715839471210155,
+      "large": false,
+      "size": 8,
+      "rect": [
+        72,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 1,
+      "side": "back",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.0050715839471210155,
+      "large": false,
+      "size": 8,
+      "rect": [
+        80,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 1,
+      "side": "right",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.006694050144245524,
+      "large": false,
+      "size": 8,
+      "rect": [
+        88,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 1,
+      "side": "left",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.006694050144245524,
+      "large": false,
+      "size": 8,
+      "rect": [
+        96,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 1,
+      "side": "top",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.010909809049058715,
+      "large": false,
+      "size": 8,
+      "rect": [
+        104,
+        120,
+        8,
+        8
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "cube": 1,
+      "side": "bottom",
+      "style": "rootlet",
+      "variant": 0,
+      "face": "side",
+      "glow": false,
+      "area": 0.010909809049058715,
+      "large": false,
+      "size": 8,
+      "rect": [
+        112,
+        120,
+        8,
+        8
+      ]
+    }
+  ],
+  "transition_samples": [
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          80,
+          0
+        ],
+        [
+          81,
+          0
+        ],
+        [
+          82,
+          0
+        ],
+        [
+          83,
+          0
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          80,
+          1
+        ],
+        [
+          81,
+          1
+        ],
+        [
+          82,
+          1
+        ],
+        [
+          83,
+          1
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          81,
+          2
+        ],
+        [
+          82,
+          2
+        ],
+        [
+          83,
+          2
+        ],
+        [
+          84,
+          2
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          81,
+          3
+        ],
+        [
+          82,
+          3
+        ],
+        [
+          83,
+          3
+        ],
+        [
+          84,
+          3
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          80,
+          4
+        ],
+        [
+          81,
+          4
+        ],
+        [
+          82,
+          4
+        ],
+        [
+          83,
+          4
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          80,
+          5
+        ],
+        [
+          81,
+          5
+        ],
+        [
+          82,
+          5
+        ],
+        [
+          83,
+          5
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          81,
+          6
+        ],
+        [
+          82,
+          6
+        ],
+        [
+          83,
+          6
+        ],
+        [
+          84,
+          6
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          81,
+          7
+        ],
+        [
+          82,
+          7
+        ],
+        [
+          83,
+          7
+        ],
+        [
+          84,
+          7
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          82,
+          8
+        ],
+        [
+          83,
+          8
+        ],
+        [
+          84,
+          8
+        ],
+        [
+          85,
+          8
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          82,
+          9
+        ],
+        [
+          83,
+          9
+        ],
+        [
+          84,
+          9
+        ],
+        [
+          85,
+          9
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          83,
+          10
+        ],
+        [
+          84,
+          10
+        ],
+        [
+          85,
+          10
+        ],
+        [
+          86,
+          10
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          83,
+          11
+        ],
+        [
+          84,
+          11
+        ],
+        [
+          85,
+          11
+        ],
+        [
+          86,
+          11
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          82,
+          12
+        ],
+        [
+          83,
+          12
+        ],
+        [
+          84,
+          12
+        ],
+        [
+          85,
+          12
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          82,
+          13
+        ],
+        [
+          83,
+          13
+        ],
+        [
+          84,
+          13
+        ],
+        [
+          85,
+          13
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          81,
+          14
+        ],
+        [
+          82,
+          14
+        ],
+        [
+          83,
+          14
+        ],
+        [
+          84,
+          14
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          81,
+          15
+        ],
+        [
+          82,
+          15
+        ],
+        [
+          83,
+          15
+        ],
+        [
+          84,
+          15
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          0
+        ],
+        [
+          98,
+          0
+        ],
+        [
+          99,
+          0
+        ],
+        [
+          100,
+          0
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          1
+        ],
+        [
+          98,
+          1
+        ],
+        [
+          99,
+          1
+        ],
+        [
+          100,
+          1
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          96,
+          2
+        ],
+        [
+          97,
+          2
+        ],
+        [
+          98,
+          2
+        ],
+        [
+          99,
+          2
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          96,
+          3
+        ],
+        [
+          97,
+          3
+        ],
+        [
+          98,
+          3
+        ],
+        [
+          99,
+          3
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          4
+        ],
+        [
+          98,
+          4
+        ],
+        [
+          99,
+          4
+        ],
+        [
+          100,
+          4
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          5
+        ],
+        [
+          98,
+          5
+        ],
+        [
+          99,
+          5
+        ],
+        [
+          100,
+          5
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          6
+        ],
+        [
+          99,
+          6
+        ],
+        [
+          100,
+          6
+        ],
+        [
+          101,
+          6
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          7
+        ],
+        [
+          99,
+          7
+        ],
+        [
+          100,
+          7
+        ],
+        [
+          101,
+          7
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          99,
+          8
+        ],
+        [
+          100,
+          8
+        ],
+        [
+          101,
+          8
+        ],
+        [
+          102,
+          8
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          99,
+          9
+        ],
+        [
+          100,
+          9
+        ],
+        [
+          101,
+          9
+        ],
+        [
+          102,
+          9
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          10
+        ],
+        [
+          99,
+          10
+        ],
+        [
+          100,
+          10
+        ],
+        [
+          101,
+          10
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          11
+        ],
+        [
+          99,
+          11
+        ],
+        [
+          100,
+          11
+        ],
+        [
+          101,
+          11
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          12
+        ],
+        [
+          98,
+          12
+        ],
+        [
+          99,
+          12
+        ],
+        [
+          100,
+          12
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          13
+        ],
+        [
+          98,
+          13
+        ],
+        [
+          99,
+          13
+        ],
+        [
+          100,
+          13
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          96,
+          14
+        ],
+        [
+          97,
+          14
+        ],
+        [
+          98,
+          14
+        ],
+        [
+          99,
+          14
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          96,
+          15
+        ],
+        [
+          97,
+          15
+        ],
+        [
+          98,
+          15
+        ],
+        [
+          99,
+          15
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          112,
+          0
+        ],
+        [
+          113,
+          0
+        ],
+        [
+          114,
+          0
+        ],
+        [
+          115,
+          0
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          112,
+          1
+        ],
+        [
+          113,
+          1
+        ],
+        [
+          114,
+          1
+        ],
+        [
+          115,
+          1
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          113,
+          2
+        ],
+        [
+          114,
+          2
+        ],
+        [
+          115,
+          2
+        ],
+        [
+          116,
+          2
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          113,
+          3
+        ],
+        [
+          114,
+          3
+        ],
+        [
+          115,
+          3
+        ],
+        [
+          116,
+          3
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          114,
+          4
+        ],
+        [
+          115,
+          4
+        ],
+        [
+          116,
+          4
+        ],
+        [
+          117,
+          4
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          114,
+          5
+        ],
+        [
+          115,
+          5
+        ],
+        [
+          116,
+          5
+        ],
+        [
+          117,
+          5
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          115,
+          6
+        ],
+        [
+          116,
+          6
+        ],
+        [
+          117,
+          6
+        ],
+        [
+          118,
+          6
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          115,
+          7
+        ],
+        [
+          116,
+          7
+        ],
+        [
+          117,
+          7
+        ],
+        [
+          118,
+          7
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          114,
+          8
+        ],
+        [
+          115,
+          8
+        ],
+        [
+          116,
+          8
+        ],
+        [
+          117,
+          8
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          114,
+          9
+        ],
+        [
+          115,
+          9
+        ],
+        [
+          116,
+          9
+        ],
+        [
+          117,
+          9
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          113,
+          10
+        ],
+        [
+          114,
+          10
+        ],
+        [
+          115,
+          10
+        ],
+        [
+          116,
+          10
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          113,
+          11
+        ],
+        [
+          114,
+          11
+        ],
+        [
+          115,
+          11
+        ],
+        [
+          116,
+          11
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          112,
+          12
+        ],
+        [
+          113,
+          12
+        ],
+        [
+          114,
+          12
+        ],
+        [
+          115,
+          12
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          112,
+          13
+        ],
+        [
+          113,
+          13
+        ],
+        [
+          114,
+          13
+        ],
+        [
+          115,
+          13
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          113,
+          14
+        ],
+        [
+          114,
+          14
+        ],
+        [
+          115,
+          14
+        ],
+        [
+          116,
+          14
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          113,
+          15
+        ],
+        [
+          114,
+          15
+        ],
+        [
+          115,
+          15
+        ],
+        [
+          116,
+          15
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          1,
+          16
+        ],
+        [
+          2,
+          16
+        ],
+        [
+          3,
+          16
+        ],
+        [
+          4,
+          16
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          1,
+          17
+        ],
+        [
+          2,
+          17
+        ],
+        [
+          3,
+          17
+        ],
+        [
+          4,
+          17
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          2,
+          18
+        ],
+        [
+          3,
+          18
+        ],
+        [
+          4,
+          18
+        ],
+        [
+          5,
+          18
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          2,
+          19
+        ],
+        [
+          3,
+          19
+        ],
+        [
+          4,
+          19
+        ],
+        [
+          5,
+          19
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          3,
+          20
+        ],
+        [
+          4,
+          20
+        ],
+        [
+          5,
+          20
+        ],
+        [
+          6,
+          20
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          3,
+          21
+        ],
+        [
+          4,
+          21
+        ],
+        [
+          5,
+          21
+        ],
+        [
+          6,
+          21
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          2,
+          22
+        ],
+        [
+          3,
+          22
+        ],
+        [
+          4,
+          22
+        ],
+        [
+          5,
+          22
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          2,
+          23
+        ],
+        [
+          3,
+          23
+        ],
+        [
+          4,
+          23
+        ],
+        [
+          5,
+          23
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          1,
+          24
+        ],
+        [
+          2,
+          24
+        ],
+        [
+          3,
+          24
+        ],
+        [
+          4,
+          24
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          1,
+          25
+        ],
+        [
+          2,
+          25
+        ],
+        [
+          3,
+          25
+        ],
+        [
+          4,
+          25
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          0,
+          26
+        ],
+        [
+          1,
+          26
+        ],
+        [
+          2,
+          26
+        ],
+        [
+          3,
+          26
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          0,
+          27
+        ],
+        [
+          1,
+          27
+        ],
+        [
+          2,
+          27
+        ],
+        [
+          3,
+          27
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          1,
+          28
+        ],
+        [
+          2,
+          28
+        ],
+        [
+          3,
+          28
+        ],
+        [
+          4,
+          28
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          1,
+          29
+        ],
+        [
+          2,
+          29
+        ],
+        [
+          3,
+          29
+        ],
+        [
+          4,
+          29
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          0,
+          30
+        ],
+        [
+          1,
+          30
+        ],
+        [
+          2,
+          30
+        ],
+        [
+          3,
+          30
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          0,
+          31
+        ],
+        [
+          1,
+          31
+        ],
+        [
+          2,
+          31
+        ],
+        [
+          3,
+          31
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          27,
+          80
+        ],
+        [
+          28,
+          80
+        ],
+        [
+          29,
+          80
+        ],
+        [
+          30,
+          80
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          27,
+          81
+        ],
+        [
+          28,
+          81
+        ],
+        [
+          29,
+          81
+        ],
+        [
+          30,
+          81
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          26,
+          82
+        ],
+        [
+          27,
+          82
+        ],
+        [
+          28,
+          82
+        ],
+        [
+          29,
+          82
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          25,
+          83
+        ],
+        [
+          26,
+          83
+        ],
+        [
+          27,
+          83
+        ],
+        [
+          28,
+          83
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          25,
+          84
+        ],
+        [
+          26,
+          84
+        ],
+        [
+          27,
+          84
+        ],
+        [
+          28,
+          84
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          26,
+          85
+        ],
+        [
+          27,
+          85
+        ],
+        [
+          28,
+          85
+        ],
+        [
+          29,
+          85
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          26,
+          86
+        ],
+        [
+          27,
+          86
+        ],
+        [
+          28,
+          86
+        ],
+        [
+          29,
+          86
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          26,
+          87
+        ],
+        [
+          27,
+          87
+        ],
+        [
+          28,
+          87
+        ],
+        [
+          29,
+          87
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          35,
+          80
+        ],
+        [
+          36,
+          80
+        ],
+        [
+          37,
+          80
+        ],
+        [
+          38,
+          80
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          34,
+          81
+        ],
+        [
+          35,
+          81
+        ],
+        [
+          36,
+          81
+        ],
+        [
+          37,
+          81
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          33,
+          82
+        ],
+        [
+          34,
+          82
+        ],
+        [
+          35,
+          82
+        ],
+        [
+          36,
+          82
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          33,
+          83
+        ],
+        [
+          34,
+          83
+        ],
+        [
+          35,
+          83
+        ],
+        [
+          36,
+          83
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          34,
+          84
+        ],
+        [
+          35,
+          84
+        ],
+        [
+          36,
+          84
+        ],
+        [
+          37,
+          84
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          34,
+          85
+        ],
+        [
+          35,
+          85
+        ],
+        [
+          36,
+          85
+        ],
+        [
+          37,
+          85
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          34,
+          86
+        ],
+        [
+          35,
+          86
+        ],
+        [
+          36,
+          86
+        ],
+        [
+          37,
+          86
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "torso",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          35,
+          87
+        ],
+        [
+          36,
+          87
+        ],
+        [
+          37,
+          87
+        ],
+        [
+          38,
+          87
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#4B3538",
+        "#8B4040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          16
+        ],
+        [
+          114,
+          16
+        ],
+        [
+          115,
+          16
+        ],
+        [
+          116,
+          16
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          17
+        ],
+        [
+          114,
+          17
+        ],
+        [
+          115,
+          17
+        ],
+        [
+          116,
+          17
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          18
+        ],
+        [
+          114,
+          18
+        ],
+        [
+          115,
+          18
+        ],
+        [
+          116,
+          18
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          19
+        ],
+        [
+          114,
+          19
+        ],
+        [
+          115,
+          19
+        ],
+        [
+          116,
+          19
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          114,
+          20
+        ],
+        [
+          115,
+          20
+        ],
+        [
+          116,
+          20
+        ],
+        [
+          117,
+          20
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          114,
+          21
+        ],
+        [
+          115,
+          21
+        ],
+        [
+          116,
+          21
+        ],
+        [
+          117,
+          21
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          114,
+          22
+        ],
+        [
+          115,
+          22
+        ],
+        [
+          116,
+          22
+        ],
+        [
+          117,
+          22
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          114,
+          23
+        ],
+        [
+          115,
+          23
+        ],
+        [
+          116,
+          23
+        ],
+        [
+          117,
+          23
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          24
+        ],
+        [
+          114,
+          24
+        ],
+        [
+          115,
+          24
+        ],
+        [
+          116,
+          24
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          25
+        ],
+        [
+          114,
+          25
+        ],
+        [
+          115,
+          25
+        ],
+        [
+          116,
+          25
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          112,
+          26
+        ],
+        [
+          113,
+          26
+        ],
+        [
+          114,
+          26
+        ],
+        [
+          115,
+          26
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          112,
+          27
+        ],
+        [
+          113,
+          27
+        ],
+        [
+          114,
+          27
+        ],
+        [
+          115,
+          27
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          28
+        ],
+        [
+          114,
+          28
+        ],
+        [
+          115,
+          28
+        ],
+        [
+          116,
+          28
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          113,
+          29
+        ],
+        [
+          114,
+          29
+        ],
+        [
+          115,
+          29
+        ],
+        [
+          116,
+          29
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          114,
+          30
+        ],
+        [
+          115,
+          30
+        ],
+        [
+          116,
+          30
+        ],
+        [
+          117,
+          30
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "mask",
+      "cube": 0,
+      "side": "front",
+      "coords": [
+        [
+          114,
+          31
+        ],
+        [
+          115,
+          31
+        ],
+        [
+          116,
+          31
+        ],
+        [
+          117,
+          31
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          21,
+          32
+        ],
+        [
+          22,
+          32
+        ],
+        [
+          23,
+          32
+        ],
+        [
+          24,
+          32
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          21,
+          33
+        ],
+        [
+          22,
+          33
+        ],
+        [
+          23,
+          33
+        ],
+        [
+          24,
+          33
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          34
+        ],
+        [
+          23,
+          34
+        ],
+        [
+          24,
+          34
+        ],
+        [
+          25,
+          34
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          35
+        ],
+        [
+          23,
+          35
+        ],
+        [
+          24,
+          35
+        ],
+        [
+          25,
+          35
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          36
+        ],
+        [
+          23,
+          36
+        ],
+        [
+          24,
+          36
+        ],
+        [
+          25,
+          36
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          37
+        ],
+        [
+          23,
+          37
+        ],
+        [
+          24,
+          37
+        ],
+        [
+          25,
+          37
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          38
+        ],
+        [
+          23,
+          38
+        ],
+        [
+          24,
+          38
+        ],
+        [
+          25,
+          38
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          39
+        ],
+        [
+          23,
+          39
+        ],
+        [
+          24,
+          39
+        ],
+        [
+          25,
+          39
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          23,
+          40
+        ],
+        [
+          24,
+          40
+        ],
+        [
+          25,
+          40
+        ],
+        [
+          26,
+          40
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          23,
+          41
+        ],
+        [
+          24,
+          41
+        ],
+        [
+          25,
+          41
+        ],
+        [
+          26,
+          41
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          23,
+          42
+        ],
+        [
+          24,
+          42
+        ],
+        [
+          25,
+          42
+        ],
+        [
+          26,
+          42
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          23,
+          43
+        ],
+        [
+          24,
+          43
+        ],
+        [
+          25,
+          43
+        ],
+        [
+          26,
+          43
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          44
+        ],
+        [
+          23,
+          44
+        ],
+        [
+          24,
+          44
+        ],
+        [
+          25,
+          44
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          22,
+          45
+        ],
+        [
+          23,
+          45
+        ],
+        [
+          24,
+          45
+        ],
+        [
+          25,
+          45
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          21,
+          46
+        ],
+        [
+          22,
+          46
+        ],
+        [
+          23,
+          46
+        ],
+        [
+          24,
+          46
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          21,
+          47
+        ],
+        [
+          22,
+          47
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          24,
+          47
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          32
+        ],
+        [
+          39,
+          32
+        ],
+        [
+          40,
+          32
+        ],
+        [
+          41,
+          32
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          33
+        ],
+        [
+          39,
+          33
+        ],
+        [
+          40,
+          33
+        ],
+        [
+          41,
+          33
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          34
+        ],
+        [
+          39,
+          34
+        ],
+        [
+          40,
+          34
+        ],
+        [
+          41,
+          34
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          35
+        ],
+        [
+          39,
+          35
+        ],
+        [
+          40,
+          35
+        ],
+        [
+          41,
+          35
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          36
+        ],
+        [
+          39,
+          36
+        ],
+        [
+          40,
+          36
+        ],
+        [
+          41,
+          36
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          37
+        ],
+        [
+          39,
+          37
+        ],
+        [
+          40,
+          37
+        ],
+        [
+          41,
+          37
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          39,
+          38
+        ],
+        [
+          40,
+          38
+        ],
+        [
+          41,
+          38
+        ],
+        [
+          42,
+          38
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          39,
+          39
+        ],
+        [
+          40,
+          39
+        ],
+        [
+          41,
+          39
+        ],
+        [
+          42,
+          39
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          39,
+          40
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          41,
+          40
+        ],
+        [
+          42,
+          40
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          39,
+          41
+        ],
+        [
+          40,
+          41
+        ],
+        [
+          41,
+          41
+        ],
+        [
+          42,
+          41
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          42
+        ],
+        [
+          39,
+          42
+        ],
+        [
+          40,
+          42
+        ],
+        [
+          41,
+          42
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          38,
+          43
+        ],
+        [
+          39,
+          43
+        ],
+        [
+          40,
+          43
+        ],
+        [
+          41,
+          43
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          37,
+          44
+        ],
+        [
+          38,
+          44
+        ],
+        [
+          39,
+          44
+        ],
+        [
+          40,
+          44
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          37,
+          45
+        ],
+        [
+          38,
+          45
+        ],
+        [
+          39,
+          45
+        ],
+        [
+          40,
+          45
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          37,
+          46
+        ],
+        [
+          38,
+          46
+        ],
+        [
+          39,
+          46
+        ],
+        [
+          40,
+          46
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          37,
+          47
+        ],
+        [
+          38,
+          47
+        ],
+        [
+          39,
+          47
+        ],
+        [
+          40,
+          47
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          32
+        ],
+        [
+          55,
+          32
+        ],
+        [
+          56,
+          32
+        ],
+        [
+          57,
+          32
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          33
+        ],
+        [
+          55,
+          33
+        ],
+        [
+          56,
+          33
+        ],
+        [
+          57,
+          33
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          34
+        ],
+        [
+          55,
+          34
+        ],
+        [
+          56,
+          34
+        ],
+        [
+          57,
+          34
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          35
+        ],
+        [
+          55,
+          35
+        ],
+        [
+          56,
+          35
+        ],
+        [
+          57,
+          35
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          55,
+          36
+        ],
+        [
+          56,
+          36
+        ],
+        [
+          57,
+          36
+        ],
+        [
+          58,
+          36
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          55,
+          37
+        ],
+        [
+          56,
+          37
+        ],
+        [
+          57,
+          37
+        ],
+        [
+          58,
+          37
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          55,
+          38
+        ],
+        [
+          56,
+          38
+        ],
+        [
+          57,
+          38
+        ],
+        [
+          58,
+          38
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          55,
+          39
+        ],
+        [
+          56,
+          39
+        ],
+        [
+          57,
+          39
+        ],
+        [
+          58,
+          39
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          40
+        ],
+        [
+          55,
+          40
+        ],
+        [
+          56,
+          40
+        ],
+        [
+          57,
+          40
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          41
+        ],
+        [
+          55,
+          41
+        ],
+        [
+          56,
+          41
+        ],
+        [
+          57,
+          41
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          53,
+          42
+        ],
+        [
+          54,
+          42
+        ],
+        [
+          55,
+          42
+        ],
+        [
+          56,
+          42
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          53,
+          43
+        ],
+        [
+          54,
+          43
+        ],
+        [
+          55,
+          43
+        ],
+        [
+          56,
+          43
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          53,
+          44
+        ],
+        [
+          54,
+          44
+        ],
+        [
+          55,
+          44
+        ],
+        [
+          56,
+          44
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          53,
+          45
+        ],
+        [
+          54,
+          45
+        ],
+        [
+          55,
+          45
+        ],
+        [
+          56,
+          45
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          46
+        ],
+        [
+          55,
+          46
+        ],
+        [
+          56,
+          46
+        ],
+        [
+          57,
+          46
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          54,
+          47
+        ],
+        [
+          55,
+          47
+        ],
+        [
+          56,
+          47
+        ],
+        [
+          57,
+          47
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          32
+        ],
+        [
+          71,
+          32
+        ],
+        [
+          72,
+          32
+        ],
+        [
+          73,
+          32
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          33
+        ],
+        [
+          71,
+          33
+        ],
+        [
+          72,
+          33
+        ],
+        [
+          73,
+          33
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          71,
+          34
+        ],
+        [
+          72,
+          34
+        ],
+        [
+          73,
+          34
+        ],
+        [
+          74,
+          34
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          71,
+          35
+        ],
+        [
+          72,
+          35
+        ],
+        [
+          73,
+          35
+        ],
+        [
+          74,
+          35
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          71,
+          36
+        ],
+        [
+          72,
+          36
+        ],
+        [
+          73,
+          36
+        ],
+        [
+          74,
+          36
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          71,
+          37
+        ],
+        [
+          72,
+          37
+        ],
+        [
+          73,
+          37
+        ],
+        [
+          74,
+          37
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          38
+        ],
+        [
+          71,
+          38
+        ],
+        [
+          72,
+          38
+        ],
+        [
+          73,
+          38
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          39
+        ],
+        [
+          71,
+          39
+        ],
+        [
+          72,
+          39
+        ],
+        [
+          73,
+          39
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          69,
+          40
+        ],
+        [
+          70,
+          40
+        ],
+        [
+          71,
+          40
+        ],
+        [
+          72,
+          40
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          69,
+          41
+        ],
+        [
+          70,
+          41
+        ],
+        [
+          71,
+          41
+        ],
+        [
+          72,
+          41
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          69,
+          42
+        ],
+        [
+          70,
+          42
+        ],
+        [
+          71,
+          42
+        ],
+        [
+          72,
+          42
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          69,
+          43
+        ],
+        [
+          70,
+          43
+        ],
+        [
+          71,
+          43
+        ],
+        [
+          72,
+          43
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          44
+        ],
+        [
+          71,
+          44
+        ],
+        [
+          72,
+          44
+        ],
+        [
+          73,
+          44
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          45
+        ],
+        [
+          71,
+          45
+        ],
+        [
+          72,
+          45
+        ],
+        [
+          73,
+          45
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          46
+        ],
+        [
+          71,
+          46
+        ],
+        [
+          72,
+          46
+        ],
+        [
+          73,
+          46
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          70,
+          47
+        ],
+        [
+          71,
+          47
+        ],
+        [
+          72,
+          47
+        ],
+        [
+          73,
+          47
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          75,
+          96
+        ],
+        [
+          76,
+          96
+        ],
+        [
+          77,
+          96
+        ],
+        [
+          78,
+          96
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          75,
+          97
+        ],
+        [
+          76,
+          97
+        ],
+        [
+          77,
+          97
+        ],
+        [
+          78,
+          97
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          74,
+          98
+        ],
+        [
+          75,
+          98
+        ],
+        [
+          76,
+          98
+        ],
+        [
+          77,
+          98
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          73,
+          99
+        ],
+        [
+          74,
+          99
+        ],
+        [
+          75,
+          99
+        ],
+        [
+          76,
+          99
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          73,
+          100
+        ],
+        [
+          74,
+          100
+        ],
+        [
+          75,
+          100
+        ],
+        [
+          76,
+          100
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          74,
+          101
+        ],
+        [
+          75,
+          101
+        ],
+        [
+          76,
+          101
+        ],
+        [
+          77,
+          101
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          74,
+          102
+        ],
+        [
+          75,
+          102
+        ],
+        [
+          76,
+          102
+        ],
+        [
+          77,
+          102
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          74,
+          103
+        ],
+        [
+          75,
+          103
+        ],
+        [
+          76,
+          103
+        ],
+        [
+          77,
+          103
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          83,
+          96
+        ],
+        [
+          84,
+          96
+        ],
+        [
+          85,
+          96
+        ],
+        [
+          86,
+          96
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          82,
+          97
+        ],
+        [
+          83,
+          97
+        ],
+        [
+          84,
+          97
+        ],
+        [
+          85,
+          97
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          81,
+          98
+        ],
+        [
+          82,
+          98
+        ],
+        [
+          83,
+          98
+        ],
+        [
+          84,
+          98
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          81,
+          99
+        ],
+        [
+          82,
+          99
+        ],
+        [
+          83,
+          99
+        ],
+        [
+          84,
+          99
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          82,
+          100
+        ],
+        [
+          83,
+          100
+        ],
+        [
+          84,
+          100
+        ],
+        [
+          85,
+          100
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          82,
+          101
+        ],
+        [
+          83,
+          101
+        ],
+        [
+          84,
+          101
+        ],
+        [
+          85,
+          101
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          82,
+          102
+        ],
+        [
+          83,
+          102
+        ],
+        [
+          84,
+          102
+        ],
+        [
+          85,
+          102
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "arm_left",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          83,
+          103
+        ],
+        [
+          84,
+          103
+        ],
+        [
+          85,
+          103
+        ],
+        [
+          86,
+          103
+        ]
+      ],
+      "colors": [
+        "#596C4A",
+        "#6B7A5A",
+        "#7A5040",
+        "#8B2020"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          90,
+          112
+        ],
+        [
+          91,
+          112
+        ],
+        [
+          92,
+          112
+        ],
+        [
+          93,
+          112
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          89,
+          113
+        ],
+        [
+          90,
+          113
+        ],
+        [
+          91,
+          113
+        ],
+        [
+          92,
+          113
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          89,
+          114
+        ],
+        [
+          90,
+          114
+        ],
+        [
+          91,
+          114
+        ],
+        [
+          92,
+          114
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          90,
+          115
+        ],
+        [
+          91,
+          115
+        ],
+        [
+          92,
+          115
+        ],
+        [
+          93,
+          115
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          90,
+          116
+        ],
+        [
+          91,
+          116
+        ],
+        [
+          92,
+          116
+        ],
+        [
+          93,
+          116
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          90,
+          117
+        ],
+        [
+          91,
+          117
+        ],
+        [
+          92,
+          117
+        ],
+        [
+          93,
+          117
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          91,
+          118
+        ],
+        [
+          92,
+          118
+        ],
+        [
+          93,
+          118
+        ],
+        [
+          94,
+          118
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "front",
+      "coords": [
+        [
+          91,
+          119
+        ],
+        [
+          92,
+          119
+        ],
+        [
+          93,
+          119
+        ],
+        [
+          94,
+          119
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          112
+        ],
+        [
+          98,
+          112
+        ],
+        [
+          99,
+          112
+        ],
+        [
+          100,
+          112
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          97,
+          113
+        ],
+        [
+          98,
+          113
+        ],
+        [
+          99,
+          113
+        ],
+        [
+          100,
+          113
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          114
+        ],
+        [
+          99,
+          114
+        ],
+        [
+          100,
+          114
+        ],
+        [
+          101,
+          114
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          115
+        ],
+        [
+          99,
+          115
+        ],
+        [
+          100,
+          115
+        ],
+        [
+          101,
+          115
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          116
+        ],
+        [
+          99,
+          116
+        ],
+        [
+          100,
+          116
+        ],
+        [
+          101,
+          116
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          99,
+          117
+        ],
+        [
+          100,
+          117
+        ],
+        [
+          101,
+          117
+        ],
+        [
+          102,
+          117
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          99,
+          118
+        ],
+        [
+          100,
+          118
+        ],
+        [
+          101,
+          118
+        ],
+        [
+          102,
+          118
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "back",
+      "coords": [
+        [
+          98,
+          119
+        ],
+        [
+          99,
+          119
+        ],
+        [
+          100,
+          119
+        ],
+        [
+          101,
+          119
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          105,
+          112
+        ],
+        [
+          106,
+          112
+        ],
+        [
+          107,
+          112
+        ],
+        [
+          108,
+          112
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          106,
+          113
+        ],
+        [
+          107,
+          113
+        ],
+        [
+          108,
+          113
+        ],
+        [
+          109,
+          113
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          106,
+          114
+        ],
+        [
+          107,
+          114
+        ],
+        [
+          108,
+          114
+        ],
+        [
+          109,
+          114
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          106,
+          115
+        ],
+        [
+          107,
+          115
+        ],
+        [
+          108,
+          115
+        ],
+        [
+          109,
+          115
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          107,
+          116
+        ],
+        [
+          108,
+          116
+        ],
+        [
+          109,
+          116
+        ],
+        [
+          110,
+          116
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          107,
+          117
+        ],
+        [
+          108,
+          117
+        ],
+        [
+          109,
+          117
+        ],
+        [
+          110,
+          117
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          106,
+          118
+        ],
+        [
+          107,
+          118
+        ],
+        [
+          108,
+          118
+        ],
+        [
+          109,
+          118
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "right",
+      "coords": [
+        [
+          105,
+          119
+        ],
+        [
+          106,
+          119
+        ],
+        [
+          107,
+          119
+        ],
+        [
+          108,
+          119
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          114,
+          112
+        ],
+        [
+          115,
+          112
+        ],
+        [
+          116,
+          112
+        ],
+        [
+          117,
+          112
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          114,
+          113
+        ],
+        [
+          115,
+          113
+        ],
+        [
+          116,
+          113
+        ],
+        [
+          117,
+          113
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          114,
+          114
+        ],
+        [
+          115,
+          114
+        ],
+        [
+          116,
+          114
+        ],
+        [
+          117,
+          114
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          115,
+          115
+        ],
+        [
+          116,
+          115
+        ],
+        [
+          117,
+          115
+        ],
+        [
+          118,
+          115
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          115,
+          116
+        ],
+        [
+          116,
+          116
+        ],
+        [
+          117,
+          116
+        ],
+        [
+          118,
+          116
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          114,
+          117
+        ],
+        [
+          115,
+          117
+        ],
+        [
+          116,
+          117
+        ],
+        [
+          117,
+          117
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          113,
+          118
+        ],
+        [
+          114,
+          118
+        ],
+        [
+          115,
+          118
+        ],
+        [
+          116,
+          118
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "left",
+      "coords": [
+        [
+          113,
+          119
+        ],
+        [
+          114,
+          119
+        ],
+        [
+          115,
+          119
+        ],
+        [
+          116,
+          119
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          122,
+          112
+        ],
+        [
+          123,
+          112
+        ],
+        [
+          124,
+          112
+        ],
+        [
+          125,
+          112
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          122,
+          113
+        ],
+        [
+          123,
+          113
+        ],
+        [
+          124,
+          113
+        ],
+        [
+          125,
+          113
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          123,
+          114
+        ],
+        [
+          124,
+          114
+        ],
+        [
+          125,
+          114
+        ],
+        [
+          126,
+          114
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          123,
+          115
+        ],
+        [
+          124,
+          115
+        ],
+        [
+          125,
+          115
+        ],
+        [
+          126,
+          115
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          122,
+          116
+        ],
+        [
+          123,
+          116
+        ],
+        [
+          124,
+          116
+        ],
+        [
+          125,
+          116
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          121,
+          117
+        ],
+        [
+          122,
+          117
+        ],
+        [
+          123,
+          117
+        ],
+        [
+          124,
+          117
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          121,
+          118
+        ],
+        [
+          122,
+          118
+        ],
+        [
+          123,
+          118
+        ],
+        [
+          124,
+          118
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "top",
+      "coords": [
+        [
+          122,
+          119
+        ],
+        [
+          123,
+          119
+        ],
+        [
+          124,
+          119
+        ],
+        [
+          125,
+          119
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          2,
+          120
+        ],
+        [
+          3,
+          120
+        ],
+        [
+          4,
+          120
+        ],
+        [
+          5,
+          120
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          3,
+          121
+        ],
+        [
+          4,
+          121
+        ],
+        [
+          5,
+          121
+        ],
+        [
+          6,
+          121
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          3,
+          122
+        ],
+        [
+          4,
+          122
+        ],
+        [
+          5,
+          122
+        ],
+        [
+          6,
+          122
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          2,
+          123
+        ],
+        [
+          3,
+          123
+        ],
+        [
+          4,
+          123
+        ],
+        [
+          5,
+          123
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          1,
+          124
+        ],
+        [
+          2,
+          124
+        ],
+        [
+          3,
+          124
+        ],
+        [
+          4,
+          124
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          1,
+          125
+        ],
+        [
+          2,
+          125
+        ],
+        [
+          3,
+          125
+        ],
+        [
+          4,
+          125
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          2,
+          126
+        ],
+        [
+          3,
+          126
+        ],
+        [
+          4,
+          126
+        ],
+        [
+          5,
+          126
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    },
+    {
+      "bone": "forearm_right",
+      "cube": 1,
+      "side": "bottom",
+      "coords": [
+        [
+          2,
+          127
+        ],
+        [
+          3,
+          127
+        ],
+        [
+          4,
+          127
+        ],
+        [
+          5,
+          127
+        ]
+      ],
+      "colors": [
+        "#39534C",
+        "#506356",
+        "#66705B",
+        "#596C4A"
+      ]
+    }
+  ],
+  "uv_unused_texels": 64,
+  "rest_bounds": [
+    [
+      -0.29933708130945197,
+      0.2993521970628825
+    ],
+    [
+      0.00010000000000001674,
+      1.9475506
+    ],
+    [
+      -0.12,
+      0.275
+    ]
+  ],
+  "hitbox": [
+    0.6,
+    1.95,
+    0.6
+  ]
+}

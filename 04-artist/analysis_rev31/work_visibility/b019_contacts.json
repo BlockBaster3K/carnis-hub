@@ -1,0 +1,146 @@
+[
+  {
+    "face_a": [
+      "jaw",
+      0,
+      "front",
+      "flesh"
+    ],
+    "face_b": [
+      "head",
+      0,
+      "front",
+      "skin"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 0,
+    "first_pixel": [
+      130,
+      151
+    ],
+    "observations": 32
+  },
+  {
+    "face_a": [
+      "body",
+      0,
+      "back",
+      "skin"
+    ],
+    "face_b": [
+      "sac_back",
+      0,
+      "top",
+      "sac"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 4,
+    "first_pixel": [
+      133,
+      188
+    ],
+    "observations": 2
+  },
+  {
+    "face_a": [
+      "sac_left",
+      0,
+      "left",
+      "sac"
+    ],
+    "face_b": [
+      "sac_back",
+      0,
+      "top",
+      "sac"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 5,
+    "first_pixel": [
+      104,
+      187
+    ],
+    "observations": 2
+  },
+  {
+    "face_a": [
+      "head",
+      0,
+      "front",
+      "skin"
+    ],
+    "face_b": [
+      "head",
+      3,
+      "left",
+      "raw"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 7,
+    "first_pixel": [
+      174,
+      90
+    ],
+    "observations": 11
+  },
+  {
+    "face_a": [
+      "head",
+      3,
+      "top",
+      "raw"
+    ],
+    "face_b": [
+      "head",
+      0,
+      "front",
+      "skin"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 9,
+    "first_pixel": [
+      118,
+      114
+    ],
+    "observations": 10
+  },
+  {
+    "face_a": [
+      "sac_right",
+      0,
+      "right",
+      "sac"
+    ],
+    "face_b": [
+      "sac_back",
+      0,
+      "top",
+      "sac"
+    ],
+    "classes": [
+      "skin",
+      "flesh"
+    ],
+    "first_view": 11,
+    "first_pixel": [
+      160,
+      200
+    ],
+    "observations": 2
+  }
+]
