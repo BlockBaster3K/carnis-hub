@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "carnis:block/tainted_sludge_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "carnis:block/tainted_sludge_flow"
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+{
+  "id": "b017",
+  "label": "Заражённый зомби",
+  "bones": [
+    {
+      "name": "root",
+      "role": "корень"
+    },
+    {
+      "name": "torso",
+      "role": "торс в остатках рубахи и открытая плоть"
+    },
+    {
+      "name": "head",
+      "role": "череп и видимая зелёная кожа"
+    },
+    {
+      "name": "jaw",
+      "role": "нижняя челюсть"
+    },
+    {
+      "name": "mask",
+      "role": "выступающая биомаска, пустулы, светящиеся глаза"
+    },
+    {
+      "name": "chest_growth",
+      "role": "отдельный грудной нарост"
+    },
+    {
+      "name": "arm_left",
+      "role": "плечо: мутировавшее"
+    },
+    {
+      "name": "forearm_left",
+      "role": "предплечье: когти и наросты"
+    },
+    {
+      "name": "leg_left",
+      "role": "нога: рваная одежда"
+    },
+    {
+      "name": "foot_left",
+      "role": "стопа и корешки"
+    },
+    {
+      "name": "arm_right",
+      "role": "плечо: сохранившее кожу"
+    },
+    {
+      "name": "forearm_right",
+      "role": "предплечье: кисть"
+    },
+    {
+      "name": "leg_right",
+      "role": "нога: нарост и корка"
+    },
+    {
+      "name": "foot_right",
+      "role": "стопа и корешки"
+    }
+  ],
+  "animations": [
+    {
+      "name": "idle",
+      "duration": 3,
+      "mode": "loop"
+    },
+    {
+      "name": "walk",
+      "duration": 0.8,
+      "mode": "loop"
+    },
+    {
+      "name": "attack",
+      "duration": 0.4,
+      "mode": "once"
+    },
+    {
+      "name": "hurt",
+      "duration": 0.2,
+      "mode": "once"
+    },
+    {
+      "name": "death",
+      "duration": 1.5,
+      "mode": "once"
+    },
+    {
+      "name": "mask_twitch",
+      "duration": 0.15,
+      "mode": "once"
+    }
+  ],
+  "tiles": [
+    [
+      "shirt",
+      0,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      1,
+      "side",
+      false
+    ],
+    [
+      "shirt_wound",
+      1,
+      "side",
+      false
+    ],
+    [
+      "skin",
+      1,
+      "side",
+      false
+    ],
+    [
+      "pants",
+      2,
+      "side",
+      false
+    ],
+    [
+      "skin",
+      2,
+      "side",
+      false
+    ],
+    [
+      "skin",
+      3,
+      "side",
+      false
+    ],
+    [
+      "mask",
+      1,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      3,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      4,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      0,
+      "side",
+      false
+    ],
+    [
+      "eye_mask",
+      0,
+      "side",
+      true
+    ],
+    [
+      "eye_mask",
+      0,
+      "side",
+      false
+    ],
+    [
+      "sac",
+      1,
+      "side",
+      true
+    ],
+    [
+      "sac",
+      3,
+      "side",
+      true
+    ],
+    [
+      "sac",
+      1,
+      "side",
+      false
+    ],
+    [
+      "sinew",
+      2,
+      "side",
+      false
+    ],
+    [
+      "skin",
+      4,
+      "side",
+      false
+    ],
+    [
+      "infection",
+      2,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      4,
+      "side",
+      true
+    ],
+    [
+      "sac",
+      2,
+      "side",
+      false
+    ],
+    [
+      "crust",
+      1,
+      "side",
+      false
+    ],
+    [
+      "crust",
+      2,
+      "side",
+      false
+    ],
+    [
+      "flesh",
+      2,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      2,
+      "side",
+      false
+    ],
+    [
+      "pants",
+      0,
+      "side",
+      false
+    ],
+    [
+      "rootlet",
+      0,
+      "side",
+      false
+    ],
+    [
+      "shirt",
+      2,
+      "side",
+      false
+    ],
+    [
+      "skin",
+      0,
+      "side",
+      false
+    ],
+    [
+      "bone",
+      2,
+      "side",
+      false
+    ]
+  ],
+  "rest_bounds": [
+    [
+      -0.29934118818503475,
+      0.29934700174639983
+    ],
+    [
+      0.0001000000000000445,
+      1.9475505999999998
+    ],
+    [
+      -0.135,
+      0.275
+    ]
+  ],
+  "hitbox": [
+    0.6,
+    1.95,
+    0.6
+  ]
+}

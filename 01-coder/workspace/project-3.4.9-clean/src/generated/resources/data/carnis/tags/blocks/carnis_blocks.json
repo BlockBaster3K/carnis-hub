@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "carnis:tainted_sludge",
+    "carnis:flesh_veins",
+    "carnis:flesh_bulb",
+    "carnis:sinew_spikes",
+    "carnis:nerve_pillar",
+    "carnis:creeping_tendrils",
+    "carnis:pustule_cluster",
+    "carnis:stomach_pool",
+    "carnis:spore_sprout",
+    "carnis:neural_moss",
+    "carnis:charred_flesh",
+    "carnis:living_flesh",
+    "carnis:ossified_flesh",
+    "carnis:fireproof_flesh",
+    "carnis:pulsing_heart",
+    "carnis:hive_eye"
+  ]
+}

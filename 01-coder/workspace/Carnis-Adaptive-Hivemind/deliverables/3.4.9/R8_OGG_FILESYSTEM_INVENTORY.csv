@@ -1,0 +1,23 @@
+exact_path,bytes,filename,declared_resolution,events_declaring_path
+sounds/block/creeper_rupture.ogg,14000,creeper_rupture.ogg,yes,creeper_rupture; hive.spawn_creeper_detonate; hive.spawn_death
+sounds/block/digestor_churn.ogg,15984,digestor_churn.ogg,yes,digestor_churn; hive.spawn_idle; hive.spawn_skeleton_bonecrack
+sounds/block/heart_pulse.ogg,4690,heart_pulse.ogg,yes,pulsing_heart_beat
+sounds/block/heartbeat_loop.ogg,4690,heartbeat_loop.ogg,yes,heartbeat_loop; hive.spawn_alert; hive.spawn_idle
+sounds/block/hive_alarm.ogg,16209,hive_alarm.ogg,yes,hive.spawn_alert; hive.alarm
+sounds/block/hive_eye_screech.ogg,16209,hive_eye_screech.ogg,yes,hive.spawn_alert; hive.eye_screech
+sounds/block/hive_heartbeat.ogg,4690,hive_heartbeat.ogg,yes,hive.heartbeat
+sounds/block/nervous_twitch.ogg,14000,nervous_twitch.ogg,yes,synapse_shock; hive.spawn_creeper_crawl; hive.spawn_hurt; hive.spawn_skeleton_whip; hive.spawn_skeleton_bonecrack
+sounds/block/pustule_burst.ogg,14973,pustule_burst.ogg,yes,pustule_burst; hive.spawn_creeper_sac; hive.spawn_hurt_critical; hive.spawn_skeleton_bonecrack
+sounds/block/synapse_rupture.ogg,14000,synapse_rupture.ogg,yes,synapse_rupture; hive.spawn_hurt_critical; hive.spawn_death
+sounds/entity/acid_splash.ogg,14973,acid_splash.ogg,yes,acid_splash; hive.spawn_hurt
+sounds/entity/amalgamation_fuse.ogg,13959,amalgamation_fuse.ogg,yes,amalgamation_fuse; hive.spawn_skeleton_whip
+sounds/entity/flamethrower_fire.ogg,7762,flamethrower_fire.ogg,yes,flamethrower_fire; hive.spawn_skeleton_whip
+sounds/entity/flesh_amalgam_ambient.ogg,22955,flesh_amalgam_ambient.ogg,yes,flesh_amalgam_ambient; hive.amalgam_breath; hive.spawn_idle
+sounds/entity/flesh_amalgam_death.ogg,25848,flesh_amalgam_death.ogg,yes,hive.spawn_death
+sounds/entity/flesh_amalgam_hurt.ogg,10050,flesh_amalgam_hurt.ogg,yes,hive.spawn_hurt; hive.spawn_hurt_critical
+sounds/hallucination/phantom_creeper.ogg,19302,phantom_creeper.ogg,yes,phantom_creeper
+sounds/hallucination/phantom_whisper.ogg,28406,phantom_whisper.ogg,yes,phantom_whisper
+sounds/item/dart_hit.ogg,4027,dart_hit.ogg,yes,entity.dart.hit
+sounds/item/inoculator_fire.ogg,6985,inoculator_fire.ogg,yes,item.inoculator.fire
+sounds/item/purifier_ignite.ogg,6860,purifier_ignite.ogg,yes,item.purifier.ignite
+sounds/item/purifier_loop.ogg,6252,purifier_loop.ogg,yes,item.purifier.loop

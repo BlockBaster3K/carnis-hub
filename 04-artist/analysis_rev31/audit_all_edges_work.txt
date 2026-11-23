@@ -1,0 +1,27 @@
+=== Q3: original B019 GLB, materials, textures and pixels ===
+Embedded base PNG == b019.png bytes: True
+Original mesh count 13 primitive count 22 size (64, 64)
+material: healthy_base primitives: 9 base texture image index: 0 factor: [1, 1, 1, 1]
+material: infection_overlay primitives: 9 base texture image index: 0 factor: [1, 1, 1, 1]
+material: sac_charge_runtime primitives: 4 base texture image index: 0 factor: [1, 1, 1, 1]
+nonzero alpha: 1856 max rgb: (255, 134, 97) cream-like (all channels >=110): 0
+bone palette pixel (212, 200, 160, 255) count 0
+bone palette pixel (168, 152, 112, 255) count 0
+bone palette pixel (232, 220, 192, 255) count 0
+max-min-channel colors: [(117, 134, 97, 255), (107, 122, 90, 255), (208, 80, 80, 255), (89, 108, 74, 255), (122, 80, 64, 255), (192, 64, 80, 255)]
+Transparency: {255: 1792, 178: 48, 128: 16, 0: 2240}
+Embedded glow PNG == b019_glow.png bytes: True
+Glow cream-like pixels (all channels >=110): 0
+Limit: absent the reference pixels/coordinates for the claimed cream rectangle, its displayed source is not identified.
+
+=== ANGLE DIAGNOSTIC: all emitted GLB cuboid edges ===
+b017 edge pairs 324 with any mismatch 0 samples mismatched 0 / 4608
+b018 edge pairs 492 with any mismatch 0 samples mismatched 0 / 7296
+b019 edge pairs 576 with any mismatch 0 samples mismatched 0 / 7488
+Scope: static corners of all individual cuboids, not an exhaustive inter-cuboid visibility or material-boundary proof; equal texels are necessary but not sufficient to prove motif flow.
+
+=== PACKING LOWER BOUND (current working definition of large) ===
+b017 8x8 cells: 256 faces: 162 large: 40 minimum assigned: 282 spare: -26 add one 6-face cube (>=6) fits: False
+b018 8x8 cells: 1024 faces: 246 large: 28 minimum assigned: 330 spare: 694 add one 6-face cube (>=6) fits: True
+b019 8x8 cells: 256 faces: 288 large: 40 minimum assigned: 408 spare: -152 add one 6-face cube (>=6) fits: False
+Lower bound is necessary, not sufficient for rectangle packing; counts change if geometry or definition of large changes.

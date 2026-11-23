@@ -1,0 +1,419 @@
+[
+  {
+    "name": "flesh_block_1",
+    "base": "flesh_block",
+    "description": "Крупное гнездо в правом нижнем углу, гребень через верх-лево.",
+    "seam": [
+      0.67,
+      0.49
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": []
+  },
+  {
+    "name": "flesh_block_2",
+    "base": "flesh_block",
+    "description": "Две поры-каверны, сетчатый микрорельеф, жила идёт вертикально.",
+    "seam": [
+      0.57,
+      0.28
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": []
+  },
+  {
+    "name": "flesh_block_3",
+    "base": "flesh_block",
+    "description": "Плотная мышца: светлая масса слева, гнездо справа, две жилки встречные.",
+    "seam": [
+      1.06,
+      0.27
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": []
+  },
+  {
+    "name": "flesh_veins_t1_1",
+    "base": "flesh_veins_t1",
+    "description": "Тонкая жилка идёт от левого края вниз-вправо с одной развилкой.",
+    "seam": [
+      1.13,
+      0.28
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": [
+      [
+        7,
+        5,
+        [
+          107,
+          53,
+          48
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "flesh_veins_t1_2",
+    "base": "flesh_veins_t1",
+    "description": "Жилка слева снизу к центру, без развилки, с утолщением на конце.",
+    "seam": [
+      1.47,
+      0.32
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": [
+      [
+        5,
+        4,
+        [
+          107,
+          53,
+          48
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "flesh_veins_t2_1",
+    "base": "flesh_veins_t2",
+    "description": "Ствол 2px по диагонали + ветвь вверх.",
+    "seam": [
+      1.31,
+      0.54
+    ],
+    "colors": 8,
+    "replacements": {
+      "(150, 88, 77)": [
+        136,
+        71,
+        63
+      ]
+    },
+    "added": [
+      [
+        7,
+        5,
+        [
+          107,
+          53,
+          48
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "flesh_veins_t2_2",
+    "base": "flesh_veins_t2",
+    "description": "Два ствола, сходящихся у правого края (вилка вверх ногами).",
+    "seam": [
+      1.47,
+      0.24
+    ],
+    "colors": 8,
+    "replacements": {
+      "(150, 88, 77)": [
+        136,
+        71,
+        63
+      ]
+    },
+    "added": [
+      [
+        5,
+        4,
+        [
+          107,
+          53,
+          48
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "flesh_veins_t3_1",
+    "base": "flesh_veins_t3",
+    "description": "Сеть: проток через центр с двумя перемычками.",
+    "seam": [
+      1.4,
+      0.64
+    ],
+    "colors": 9,
+    "replacements": {},
+    "added": [
+      [
+        3,
+        10,
+        [
+          107,
+          53,
+          48
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "flesh_veins_t3_2",
+    "base": "flesh_veins_t3",
+    "description": "Сеть: переплетение диагональных протоков, без вертикалей.",
+    "seam": [
+      1.62,
+      0.33
+    ],
+    "colors": 9,
+    "replacements": {},
+    "added": [
+      [
+        6,
+        6,
+        [
+          107,
+          53,
+          48
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "flesh_veins_t4_1",
+    "base": "flesh_veins_t4",
+    "description": "Сплошная ткань: спиральные наплывы вокруг центра (органическая карусель).",
+    "seam": [
+      1.94,
+      1.15
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": [
+      [
+        10,
+        3,
+        [
+          70,
+          32,
+          30
+        ]
+      ],
+      [
+        11,
+        3,
+        [
+          98,
+          47,
+          43
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "flesh_veins_t4_2",
+    "base": "flesh_veins_t4",
+    "description": "Сплошная ткань: диагональные наплывы, стекающие вниз-влево.",
+    "seam": [
+      0.81,
+      0.92
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": [
+      [
+        12,
+        2,
+        [
+          70,
+          32,
+          30
+        ]
+      ],
+      [
+        13,
+        2,
+        [
+          98,
+          47,
+          43
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "bone_flesh_1",
+    "base": "bone_flesh",
+    "description": "Костные включения рассеяны короткими осколками: нет крупных плато, рисунок хряща сдвинут по смыслу, а не трансформацией.",
+    "seam": [
+      0.27,
+      1.51
+    ],
+    "colors": 7,
+    "replacements": {},
+    "added": []
+  },
+  {
+    "name": "charred_flesh_1",
+    "base": "charred_flesh",
+    "description": "Отдельная композиция исходного материала.",
+    "seam": [
+      0.94,
+      0.35
+    ],
+    "colors": 6,
+    "replacements": {},
+    "added": []
+  },
+  {
+    "name": "refractory_flesh_1",
+    "base": "refractory_flesh",
+    "description": "Отдельная композиция исходного материала.",
+    "seam": [
+      0.92,
+      1.66
+    ],
+    "colors": 7,
+    "replacements": {
+      "(130, 110, 128)": [
+        132,
+        112,
+        130
+      ]
+    },
+    "added": []
+  },
+  {
+    "name": "nerve_pillar_1",
+    "base": "nerve_pillar",
+    "description": "Волокна: одно толстое в центре, два тонких по краям; корни слева снизу.",
+    "seam": [
+      0.55,
+      1.38
+    ],
+    "colors": 6,
+    "replacements": {
+      "(110, 94, 105)": [
+        106,
+        90,
+        101
+      ]
+    },
+    "added": []
+  },
+  {
+    "name": "nerve_pillar_2",
+    "base": "nerve_pillar",
+    "description": "Волокна: сильный наклон вправо, одно раздваивается; корни справа снизу.",
+    "seam": [
+      0.09,
+      0.78
+    ],
+    "colors": 6,
+    "replacements": {
+      "(110, 94, 105)": [
+        106,
+        90,
+        101
+      ]
+    },
+    "added": []
+  },
+  {
+    "name": "nerve_pillar_top_1",
+    "base": "nerve_pillar_top",
+    "description": "Торец: смещённые кольца, центр у левого верха, разрыв снизу.",
+    "seam": [
+      1.54,
+      1.54
+    ],
+    "colors": 6,
+    "replacements": {
+      "(106, 90, 101)": [
+        110,
+        94,
+        105
+      ]
+    },
+    "added": []
+  },
+  {
+    "name": "nerve_pillar_top_2",
+    "base": "nerve_pillar_top",
+    "description": "Торец: центр смещён к правому низу, кольца толще, сверху срез волокна.",
+    "seam": [
+      1.06,
+      1.31
+    ],
+    "colors": 6,
+    "replacements": {
+      "(106, 90, 101)": [
+        110,
+        94,
+        105
+      ]
+    },
+    "added": []
+  },
+  {
+    "name": "stomach_pool_top_1",
+    "base": "stomach_pool_top",
+    "description": "Поверхность гуще: облака разной формы в других местах, 5 пузырей.",
+    "seam": [
+      1.07,
+      0.75
+    ],
+    "colors": 8,
+    "replacements": {},
+    "added": [
+      [
+        12,
+        2,
+        [
+          138,
+          144,
+          112
+        ]
+      ],
+      [
+        3,
+        5,
+        [
+          144,
+          150,
+          118
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "stomach_pool_side_1",
+    "base": "stomach_pool_side",
+    "description": "Стенка: складки сильнее наклонены, кромка сверху с иным ритмом.",
+    "seam": [
+      0.95,
+      0.98
+    ],
+    "colors": 7,
+    "replacements": {
+      "(144, 150, 116)": [
+        144,
+        150,
+        118
+      ]
+    },
+    "added": []
+  },
+  {
+    "name": "sinew_spikes_1",
+    "base": "sinew_spikes",
+    "description": "Шипы: рёбра заметно наклонены, кончики бледные в правом верхнем углу.",
+    "seam": [
+      0.97,
+      1.05
+    ],
+    "colors": 7,
+    "replacements": {},
+    "added": []
+  }
+]

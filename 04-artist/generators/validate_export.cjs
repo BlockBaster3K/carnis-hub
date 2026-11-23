@@ -1,0 +1,2 @@
+const validator = require('gltf-validator'); const fs=require('fs');
+(async()=>{let result={validator:'Khronos glTF Validator 2.0.0-dev.3.10',models:{}};for (const id of ['b017','b018','b019']) {const buf=fs.readFileSync('../deliverables/tz3_phase_3_1_rev3/'+id+'.glb');let v=await validator.validateBytes(new Uint8Array(buf),{uri:id+'.glb',maxIssues:1000}); result.models[id]=v.issues; }fs.writeFileSync('../deliverables/tz3_phase_3_1_rev3/gltf_validation.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));})();

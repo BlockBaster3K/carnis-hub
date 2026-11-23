@@ -1,0 +1,69 @@
+event,java_callsite,file_line
+item.inoculator.fire,yes,src/main/java/com/carnis/mod/item/PneumaticInoculatorItem.java:112
+entity.dart.hit,yes,src/main/java/com/carnis/mod/entity/ViralDartEntity.java:53; src/main/java/com/carnis/mod/entity/ViralDartEntity.java:58; src/main/java/com/carnis/mod/entity/PurificationDartEntity.java:56; src/main/java/com/carnis/mod/entity/PurificationDartEntity.java:61; src/main/java/com/carnis/mod/entity/projectile/InoculatorDartEntity.java:108; src/main/java/com/carnis/mod/entity/projectile/InoculatorDartEntity.java:109
+item.purifier.ignite,yes,src/main/java/com/carnis/mod/item/BioPurifierItem.java:80
+item.purifier.loop,yes,src/main/java/com/carnis/mod/item/BioPurifierItem.java:89
+flamethrower_fire,no,
+amalgam_smash,no,
+organic_creak,yes,src/main/java/com/carnis/mod/block/SporeSproutBlock.java:103; src/main/java/com/carnis/mod/entity/ai/FleshAmalgamAbilityGoal.java:89
+amalgam_roar,yes,src/main/java/com/carnis/mod/client/PlayerHallucinationHandler.java:53; src/main/java/com/carnis/mod/event/AmalgamationHandler.java:185; src/main/java/com/carnis/mod/entity/ai/CarnisGestationGoal.java:41; src/main/java/com/carnis/mod/entity/ai/AmalgamBiomassFeast.java:73; src/main/java/com/carnis/mod/block/entity/HiveEyeBlockEntity.java:474; src/main/java/com/carnis/mod/block/entity/PulsingHeartBlockEntity.java:198
+heartbeat_loop,yes,src/main/java/com/carnis/mod/client/PlayerHallucinationHandler.java:53; src/main/java/com/carnis/mod/client/PlayerHallucinationHandler.java:60; src/main/java/com/carnis/mod/client/HeartAmbientTicker.java:24; src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:344; src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:345
+amalgam_step,yes,src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java:61
+phantom_creeper,yes,src/main/java/com/carnis/mod/client/sound/PhantomSoundManager.java:90
+phantom_footsteps,yes,src/main/java/com/carnis/mod/client/PlayerHallucinationHandler.java:59; src/main/java/com/carnis/mod/client/sound/PhantomSoundManager.java:91
+phantom_whisper,yes,src/main/java/com/carnis/mod/entity/HiveSentinelEntity.java:46; src/main/java/com/carnis/mod/client/PlayerHallucinationHandler.java:87; src/main/java/com/carnis/mod/client/sound/PhantomSoundManager.java:92; src/main/java/com/carnis/mod/entity/ai/HiveSwarmCoordinator.java:202
+pulsing_heart_beat,yes,src/main/java/com/carnis/mod/block/entity/PulsingHeartBlockEntity.java:171; src/main/java/com/carnis/mod/block/entity/FleshBulbBlockEntity.java:55
+synapse_shock,no,
+synapse_rupture,yes,src/main/java/com/carnis/mod/block/NervePillarBlock.java:84
+digestor_churn,yes,src/main/java/com/carnis/mod/entity/ai/CarnisFeedingGoal.java:118
+flesh_block_step,yes,src/main/java/com/carnis/mod/entity/InfectedSkeletonEntity.java:298; src/main/java/com/carnis/mod/sound/CarnisSoundTypes.java:19; src/main/java/com/carnis/mod/sound/CarnisSoundTypes.java:22
+hive.spread,no,
+combat.flesh_hit,yes,src/main/java/com/carnis/mod/sound/CarnisCombatSounds.java:49; src/main/java/com/carnis/mod/sound/CarnisSoundTypes.java:21
+combat.flesh_hit_deep,yes,src/main/java/com/carnis/mod/sound/CarnisCombatSounds.java:64
+combat.dismember,yes,src/main/java/com/carnis/mod/sound/CarnisCombatSounds.java:85
+combat.armor_deflect,yes,src/main/java/com/carnis/mod/sound/CarnisCombatSounds.java:109
+combat.block_stab,yes,src/main/java/com/carnis/mod/sound/CarnisCombatSounds.java:114
+creeper_rupture,no,
+amalgamation_fuse,yes,src/main/java/com/carnis/mod/event/AmalgamationHandler.java:228
+bone_deflect,yes,src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java:487
+acid_splash,yes,src/main/java/com/carnis/mod/block/StomachPoolBlock.java:116; src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java:542; src/main/java/com/carnis/mod/entity/ParasiticTendrilEntity.java:64; src/main/java/com/carnis/mod/entity/AmalgamBileProjectile.java:47; src/main/java/com/carnis/mod/event/InfectionHandler.java:119; src/main/java/com/carnis/mod/event/DartTreatmentEvents.java:133; src/main/java/com/carnis/mod/entity/ai/FleshAmalgamAbilityGoal.java:108; src/main/java/com/carnis/mod/block/entity/FleshBulbBlockEntity.java:37
+pustule_burst,yes,src/main/java/com/carnis/mod/block/PustuleClusterBlock.java:113
+flesh_amalgam_ambient,no,
+flesh_amalgam_hurt,yes,src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java:619
+flesh_amalgam_death,yes,src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java:624
+hive.spawn_creeper_sac,yes,src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java:231
+hive.spawn_creeper_crawl,yes,src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java:300
+hive.spawn_creeper_detonate,yes,src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java:241
+hive.amalgam_shuffle,yes,src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java:64
+hive.amalgam_breath,yes,src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java:614
+hive.amalgam_slam,yes,src/main/java/com/carnis/mod/entity/ai/FleshAmalgamAbilityGoal.java:62
+hive.block_place,yes,src/main/java/com/carnis/mod/sound/CarnisSoundTypes.java:20
+hive.block_break,yes,src/main/java/com/carnis/mod/sound/CarnisSoundTypes.java:18
+hive.detail_flow,no,
+hive.detail_membrane,no,
+hive.detail_bubbles,no,
+hive.detail_creak,no,
+hive.detail_scuttle,no,
+hive.spawn_alert,yes,src/main/java/com/carnis/mod/entity/InfectedZombieEntity.java:143
+hive.spawn_attack,yes,src/main/java/com/carnis/mod/entity/InfectedZombieEntity.java:131
+hive.spawn_idle,yes,src/main/java/com/carnis/mod/entity/InfectedZombieEntity.java:122; src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java:312
+hive.spawn_hurt,yes,src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java:317; src/main/java/com/carnis/mod/entity/InfectedSkeletonEntity.java:153; src/main/java/com/carnis/mod/entity/HiveEntity.java:32
+hive.spawn_hurt_critical,yes,src/main/java/com/carnis/mod/entity/HiveEntity.java:49
+hive.spawn_death,yes,src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java:322; src/main/java/com/carnis/mod/entity/InfectedSkeletonEntity.java:162; src/main/java/com/carnis/mod/entity/HiveEntity.java:37
+hive.spawn_skeleton_whip,yes,src/main/java/com/carnis/mod/entity/InfectedSkeletonEntity.java:287
+hive.spawn_skeleton_blade,yes,src/main/java/com/carnis/mod/entity/InfectedSkeletonEntity.java:256
+hive.spawn_skeleton_bonecrack,yes,src/main/java/com/carnis/mod/entity/InfectedSkeletonEntity.java:129; src/main/java/com/carnis/mod/entity/InfectedSkeletonEntity.java:293
+hive.alarm,yes,src/main/java/com/carnis/mod/block/entity/HiveEyeBlockEntity.java:362; src/main/java/com/carnis/mod/block/entity/HiveEyeBlockEntity.java:754
+hive.ambient,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:222
+hive.ambient_close,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:184
+hive.ambient_tonal_stinger,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:333
+hive.eye_screech,yes,src/main/java/com/carnis/mod/block/entity/HiveEyeBlockEntity.java:734
+hive.heartbeat,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:343
+hive.pulse,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:324
+hive.ambient_surface,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:215
+hive.ambient_deep,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:216
+hive.ambient_core,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:217
+hive.ambient_threshold,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:218
+hive.zone_stinger_intensify,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:310
+hive.zone_stinger_release,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:311
+hive.zone_stinger_deep,yes,src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:312

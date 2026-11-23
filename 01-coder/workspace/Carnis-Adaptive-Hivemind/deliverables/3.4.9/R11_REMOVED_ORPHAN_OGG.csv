@@ -1,0 +1,3 @@
+path_removed_from_project,bytes,reason,external_sounder_bank
+src/main/resources/assets/carnis/sounds/entity/amalgam_smash.ogg,6117,Unreferenced unnumbered legacy Amalgam sample; canonical numbered Wave 17 smash samples are declared.,Not accessed or changed
+src/main/resources/assets/carnis/sounds/entity/amalgam_roar.ogg,25848,Unreferenced unnumbered legacy Amalgam sample; canonical numbered Wave 17 roar samples are declared.,Not accessed or changed

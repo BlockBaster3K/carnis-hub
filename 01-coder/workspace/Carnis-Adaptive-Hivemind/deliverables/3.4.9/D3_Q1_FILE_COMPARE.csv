@@ -1,0 +1,10 @@
+event,saved_baseline_file_samples,prior_PHASE_F_3_4_8_REPORT_Q1_claim,match
+amalgam_smash,"entity/flesh_amalgam_smash_01.ogg, entity/flesh_amalgam_smash_02.ogg","entity/flesh_amalgam_smash_01.ogg, entity/flesh_amalgam_smash_02.ogg",yes
+amalgam_roar,"entity/flesh_amalgam_roar_01.ogg, entity/flesh_amalgam_roar_02.ogg","entity/flesh_amalgam_roar_01.ogg, entity/flesh_amalgam_roar_02.ogg",yes
+amalgam_step,"entity/flesh_amalgam_step_01.ogg, entity/flesh_amalgam_step_02.ogg","entity/flesh_amalgam_step_01.ogg, entity/flesh_amalgam_step_02.ogg",yes
+flesh_amalgam_hurt,entity/flesh_amalgam_hurt_01.ogg,entity/flesh_amalgam_hurt_01.ogg,yes
+flesh_amalgam_death,entity/flesh_amalgam_death_01.ogg,entity/flesh_amalgam_death_01.ogg,yes
+hive.amalgam_shuffle,block/creeper_rupture.ogg,block/creeper_rupture.ogg,yes
+hive.amalgam_slam,block/creeper_rupture.ogg,block/creeper_rupture.ogg,yes
+hive.spawn_attack,"block/creeper_rupture.ogg, block/synapse_rupture.ogg, entity/acid_splash.ogg","block/creeper_rupture.ogg, block/synapse_rupture.ogg, entity/acid_splash.ogg",yes
+hive.spawn_skeleton_blade,"block/creeper_rupture.ogg, block/synapse_rupture.ogg, block/creeper_rupture.ogg","block/creeper_rupture.ogg, block/synapse_rupture.ogg, block/creeper_rupture.ogg",yes

@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "age=0,burst=false": {
+      "model": "carnis:block/pustule_cluster"
+    },
+    "age=1,burst=false": {
+      "model": "carnis:block/pustule_cluster"
+    },
+    "age=2,burst=false": {
+      "model": "carnis:block/pustule_cluster"
+    },
+    "age=3,burst=false": {
+      "model": "carnis:block/pustule_cluster"
+    },
+    "age=0,burst=true": {
+      "model": "carnis:block/pustule_cluster"
+    },
+    "age=1,burst=true": {
+      "model": "carnis:block/pustule_cluster"
+    },
+    "age=2,burst=true": {
+      "model": "carnis:block/pustule_cluster"
+    },
+    "age=3,burst=true": {
+      "model": "carnis:block/pustule_cluster"
+    }
+  }
+}

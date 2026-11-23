@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "carnis:hive_membrane",
+    "carnis:synapse_node",
+    "carnis:incubation_cyst",
+    "carnis:purifier_lamp"
+  ]
+}
