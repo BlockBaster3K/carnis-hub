@@ -58,6 +58,7 @@ entity/organic_creak.ogg | 24038
 flesh/flesh_block_step_01.ogg | 7767
 flesh/flesh_block_step_02.ogg | 7908
 flesh/flesh_block_step_03.ogg | 7146
+hallucination/phantom_footsteps.ogg | 36176
 hive/amalgam_breath_01.ogg | 38924
 hive/amalgam_breath_01_w1516.ogg | 38235
 hive/amalgam_breath_02.ogg | 47090
