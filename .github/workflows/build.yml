@@ -101,12 +101,22 @@ jobs:
         shell: bash
         run: |
           set -e
-          mkdir -p 06-build/jars
-          cp "${{ steps.jar.outputs.file }}" "06-build/jars/${{ steps.jar.outputs.name }}"
+          JAR_NAME="${{ steps.jar.outputs.name }}"
+          cp "${{ steps.jar.outputs.file }}" "/tmp/$JAR_NAME"
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "06-build/jars/${{ steps.jar.outputs.name }}"
-          git commit -m "build: ${{ steps.jar.outputs.name }} из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})" || echo "нечего коммитить"
-          git pull --rebase --autostash origin main
-          git push origin HEAD:main
-          echo "- **JAR в репозитории:** [06-build/jars/${{ steps.jar.outputs.name }}](https://github.com/${{ github.repository }}/blob/main/06-build/jars/${{ steps.jar.outputs.name }})" >> "$GITHUB_STEP_SUMMARY"
+          git fetch --no-tags origin main
+          git checkout -B main origin/main
+          mkdir -p 06-build/jars
+          cp "/tmp/$JAR_NAME" "06-build/jars/$JAR_NAME"
+          git add "06-build/jars/$JAR_NAME"
+          if git diff --cached --quiet; then
+            echo "jar не изменился — коммит не нужен"
+          else
+            git commit -m "build: $JAR_NAME из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})"
+            for i in 1 2 3; do
+              git push origin main && break
+              git pull --rebase --autostash origin main
+            done
+          fi
+          echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
