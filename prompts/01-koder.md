@@ -57,7 +57,7 @@ chmod +x tools/agent_push.sh
 | **Д4** | Перенос двух иконок эффектов в пакет | `src/main/resources/assets/carnis/textures/mob_effect/` |
 | **Д5** | Геометрия Нексуса: 5 компланарных пар и 3 мёртвых куба | `.geo.json` Нексуса |
 | **Д6** | Окостеневшая плоть: разброс 41,2 против порога 12 | `MultifaceSpreader` (`FleshVeinsBlock.java:23`) |
-| **Д7** | Текстуры флоры (3 файла) — придут от Художника **позже**, отдельной пересдачей | твоя зона |
+| **Д7** | Текстуры флоры (3 файла) — **уже сданы Художником**, включи в этот же пакет | `textures/block/` |
 
 **Д1 — самое важное, не исправь формально.** Пауза сейчас считается как
 `phase = bulb.age % interval`, где `interval` меняется каждый тик. Из-за этого
@@ -83,21 +83,28 @@ chmod +x tools/agent_push.sh
 пути в пакете: `src/main/resources/assets/carnis/textures/mob_effect/…`.
 Сверь SHA после распаковки и впиши их в манифест пакета.
 
-**Д7.** Флора придёт отдельной сдачей Художника. **Не жди её.** Сделай Д1–Д6,
-сдай `01-coder/3.5.3/`. Когда текстуры придут — **пересдача
-`01-coder/3.5.3-R/`** (одна замена файлов), старую папку не трогай. Напиши в
-отчёте, что ждёшь Д7 и в какой версии она подхватится.
+**Д7 — флора уже сдана, ждать нечего. Всё делается ОДНИМ пакетом
+`01-coder/3.5.3/`, отдельная пересдача `3.5.3-R` не нужна.**
 
-Подставлять будешь **три файла**, пути и имена те же:
+Источник — `04-artist/deliverables/Carnis_3.5.3-R_wave28_D7_flora.zip`
+(SHA-256 `54ef929da80aa1909d148173d690d2544ad3bb6316a1589664da196464f39df9`,
+33 323 Б). Внутри — три PNG уже по целевым путям; **переименовывать не надо**,
+достаёшь как есть:
 
-```
-src/main/resources/assets/carnis/textures/block/spore_sprout.png     (16×16)
-src/main/resources/assets/carnis/textures/block/pustule_cluster.png   (64×64)
-src/main/resources/assets/carnis/textures/block/neural_moss.png       (16×16)
-```
+| Целевой путь в пакете | Размер | SHA-256 нового файла | SHA-256 в 3.5.2-R (было) |
+|---|---:|---|---|
+| `src/main/resources/assets/carnis/textures/block/spore_sprout.png` | 16×16 | `c3a2e80c42b0000b64ceeb081b7cb20f802a7b776c9218cebb8285ffbb109346` | `281090bd…` |
+| `src/main/resources/assets/carnis/textures/block/neural_moss.png` | 16×16 | `b18a55b4a996357a891a9b35af4aea9e0f89cd3755d2e9f0ddaf03a63e9a51dd` | `5fb3b0ee…` |
+| `src/main/resources/assets/carnis/textures/block/pustule_cluster.png` | 64×64 | `e58a6d7c73a314941eba2421afe4aaa9986deb29e5286e3965d905bd9d04613b` | `5862cea6…` |
 
-`pustule_cluster_glowmask.png` не трогай. Хеши — из `SHA256SUMS.txt` Художника,
-сверить после подстановки.
+**Проверь после подстановки:** `sha256sum` по каждому из трёх файлов должен
+совпасть с таблицей; впиши эти три хеша в манифест пакета.
+
+`pustule_cluster_glowmask.png` **не трогай** — остаётся `781aff6c…`.
+Размеры 16×16 / 16×16 / 64×64 не повышай.
+
+В отчёте по Д7 напиши: путь файла → размер → SHA-256 → что изменилось
+(перекраска палитры, форма и альфа сохранены побайтно).
 
 ### Что НЕ является дефектом — не переделывай
 
