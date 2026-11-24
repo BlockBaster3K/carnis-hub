@@ -17,6 +17,12 @@ on:
 permissions:
   contents: write
 
+# Несколько агентов могут сдавать файлы подряд. Собираем только последнее
+# состояние ветки: промежуточный прогон отменяется, раннеры не тратятся впустую.
+concurrency:
+  group: build-jar-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
