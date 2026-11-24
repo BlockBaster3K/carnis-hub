@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       package:
-        description: 'Путь к zip-пакету проекта (пусто = последняя пересдача)'
+        description: 'Путь к zip-пакету проекта (пусто = последняя версия)'
         required: false
         default: ''
   push:
@@ -36,18 +36,21 @@ jobs:
           set -e
           PKG="${{ github.event.inputs.package }}"
           if [ -z "$PKG" ]; then
-            PKG=$(ls -1 01-coder/*/project-*-clean.zip | sort -V | tail -1)
+            DIR=$(ls -1d 01-coder/*/ 2>/dev/null | sed 's|01-coder/||; s|/$||' \
+                  | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V | tail -1)
+            test -n "$DIR" || { echo "::error::Не найдено ни одного каталога версии в 01-coder/"; exit 1; }
+            PKG=$(ls -1 "01-coder/$DIR"/project-*-clean.zip 2>/dev/null | head -1)
           fi
-          test -f "$PKG" || { echo "::error::Пакет не найден: $PKG"; exit 1; }
+          test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
           echo "path=$PKG" >> "$GITHUB_OUTPUT"
-          echo "Собирается пакет: $PKG" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Unpack project package
         shell: bash
         run: |
           mkdir -p build-src
           unzip -q "${{ steps.pkg.outputs.path }}" -d build-src
-          echo "Файлов распаковано: $(find build-src -type f | wc -l)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Файлов распаковано: $(find build-src -type f | wc -l)" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build
         working-directory: build-src
@@ -58,7 +61,7 @@ jobs:
         run: |
           set -e
           JAR=$(ls build-src/build/libs/*.jar | head -1)
-          echo "JAR: $JAR ($(stat -c%s "$JAR") Б)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- JAR: \`$(basename "$JAR")\`, $(stat -c%s "$JAR") Б" >> "$GITHUB_STEP_SUMMARY"
           unzip -p "$JAR" META-INF/mods.toml > /tmp/mods.toml
           echo '```toml' >> "$GITHUB_STEP_SUMMARY"
           grep -E 'version|displayName' /tmp/mods.toml >> "$GITHUB_STEP_SUMMARY" || true
