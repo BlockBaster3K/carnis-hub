@@ -11,6 +11,8 @@ on:
     paths:
       - '01-coder/**'
       - '04-artist/**'
+      - '03-sound/**'
+      - '06-build/overlay.txt'
 
 permissions:
   contents: write
@@ -56,9 +58,55 @@ jobs:
           unzip -q "${{ steps.pkg.outputs.path }}" -d build-src
           echo "- Файлов распаковано: $(find build-src -type f | wc -l)" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Assert version
+        shell: bash
+        run: |
+          set -e
+          V=$(grep -m1 '^mod_version=' build-src/gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          echo "- mod_version в пакете: \`$V\`" >> "$GITHUB_STEP_SUMMARY"
+          [ "$V" = "3.5.2" ] || { echo "::error::ожидалась версия 3.5.2, в пакете '$V'"; exit 1; }
+
+      - name: Overlay accepted drops
+        shell: bash
+        run: |
+          set -e
+          LIST=06-build/overlay.txt
+          test -f "$LIST" || { echo "::error::нет списка $LIST"; exit 1; }
+          : > /tmp/expect.txt
+          n=0
+          while IFS= read -r line; do
+            line="${line%%#*}"
+            [ -z "$(echo -n "$line" | tr -d '[:space:]')" ] && continue
+            src="$(echo "${line%%->*}" | xargs)"
+            dst="$(echo "${line##*->}" | xargs)"
+            test -f "$src" || { echo "::error::источник не найден: $src"; exit 1; }
+            mkdir -p "$(dirname "build-src/$dst")"
+            cp "$src" "build-src/$dst"
+            echo "assets/carnis/${dst#src/main/resources/assets/carnis/}" >> /tmp/expect.txt
+            echo "| \`$src\` | \`$dst\` | \`$(sha256sum "$src" | cut -c1-12)\` |" >> "$GITHUB_STEP_SUMMARY"
+            n=$((n+1))
+          done < "$LIST"
+          echo "- Перекрыто файлов: **$n**" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build
         working-directory: build-src
         run: gradle --no-daemon --console=plain build
+
+      - name: Verify overlay reached the jar
+        shell: bash
+        run: |
+          set -e
+          [ -f /tmp/expect.txt ] || { echo "- Перекрытий не было" >> "$GITHUB_STEP_SUMMARY"; exit 0; }
+          JAR=$(ls build-src/build/libs/*.jar | head -1)
+          unzip -Z1 "$JAR" > /tmp/jarlist.txt
+          miss=0
+          while IFS= read -r rel; do
+            if ! grep -qx "$rel" /tmp/jarlist.txt; then
+              echo "::error::в jar нет $rel"; miss=1
+            fi
+          done < /tmp/expect.txt
+          [ "$miss" = "0" ] && echo "- Все перекрытые файлы внутри jar ✔" >> "$GITHUB_STEP_SUMMARY"
+          exit $miss
 
       - name: Report jar version
         id: jar
