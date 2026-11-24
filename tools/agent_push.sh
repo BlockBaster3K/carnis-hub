@@ -66,6 +66,17 @@ fi
 
 cd "$REPO_DIR"
 
+# --- identity ---
+# Нужен и для commit, и для `git pull --rebase --autostash` (stash создаёт
+# объект коммита и требует ident). Задаём в локальный .git/config репозитория,
+# если его там ещё нет — глобальный конфиг не трогаем.
+if ! git config --local --get user.name >/dev/null 2>&1; then
+  git config --local user.name "${GIT_AUTHOR_NAME:-Arena Agent}"
+fi
+if ! git config --local --get user.email >/dev/null 2>&1; then
+  git config --local user.email "${GIT_AUTHOR_EMAIL:-agent@arena.local}"
+fi
+
 # --- проверка состояния ---
 if [ -n "$(git status --porcelain)" ] && [ ${#PATHS[@]} -eq 0 ]; then
   echo "ОШИБКА: есть незакоммиченные изменения, но пути не указаны." >&2
