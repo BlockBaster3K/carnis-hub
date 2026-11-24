@@ -17,6 +17,12 @@ on:
 permissions:
   contents: write
 
+# Несколько агентов могут сдавать файлы подряд. Собираем только последнее
+# состояние ветки: промежуточный прогон отменяется, раннеры не тратятся впустую.
+concurrency:
+  group: build-jar-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -78,19 +84,20 @@ jobs:
             line="${line%%#*}"
             [ -z "$(echo -n "$line" | tr -d '[:space:]')" ] && continue
             src="$(echo "${line%%->*}" | xargs)"
-            dst="$(echo "${line##*->}" | xargs)"
+            rest="${line#*->}"
+            dst="$(echo "${rest%%|*}" | xargs)"
+            if [ "$rest" = "${rest#*|}" ]; then want=""; else want="$(echo "${rest#*|}" | xargs)"; fi
             test -f "$src" || { echo "::error::источник не найден: $src"; exit 1; }
-            want="$(echo "${line#*|}" | xargs)"
             case "$want" in
               ""|*[!0-9a-fA-F]*) echo "::error::строка без sha256 (файл: $src)"; exit 1 ;;
             esac
             [ "${#want}" = "64" ] || { echo "::error::sha256 неверной длины: $want"; exit 1; }
             got="$(sha256sum "$src" | cut -d' ' -f1)"
-            [ "$got" = "$want" ] || { echo "::error::хеш не совпал: $src"; exit 1; }
+            [ "$got" = "$want" ] || { echo "::error::хеш не совпал: $src (ждали $want, получили $got)"; exit 1; }
             mkdir -p "$(dirname "build-src/$dst")"
             cp "$src" "build-src/$dst"
-            echo "assets/carnis/${dst#src/main/resources/assets/carnis/}" >> /tmp/expect.txt
-            echo "| \`$src\` | \`$dst\` | \`$(sha256sum "$src" | cut -c1-12)\` |" >> "$GITHUB_STEP_SUMMARY"
+            echo "${dst#src/main/resources/}" >> /tmp/expect.txt
+            echo "| \`$src\` | \`$dst\` | \`${want:0:12}\` |" >> "$GITHUB_STEP_SUMMARY"
             n=$((n+1))
           done < "$LIST"
           echo "- Перекрыто файлов: **$n**" >> "$GITHUB_STEP_SUMMARY"

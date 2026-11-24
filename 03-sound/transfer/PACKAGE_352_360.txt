@@ -1,0 +1,8 @@
+Дельта-пакет волны 22 (пути относительно assets/carnis/sounds/).
+3.5.2 — сердце (блокирует сборку): 2 файла
+block/heartbeat_loop.ogg
+block/pulsing_heart_beat.ogg
+
+3.6.0 — голос лёгкой косы: 2 файла
+combat/bone_scythe_swing_01.ogg
+combat/bone_scythe_hit_01.ogg

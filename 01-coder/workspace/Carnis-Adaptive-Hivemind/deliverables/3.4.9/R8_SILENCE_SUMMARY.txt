@@ -1,9 +1,0 @@
-Final event declarations: 68
-Unique sample paths: 97
-Unique declared paths physically present: 22
-Unique declared paths absent: 75
-Actual .ogg files on disk after R11 cleanup: 22
-Fully silent final events: 37
-Fully silent baseline events using the same current physical tree: 33
-Newly silent (baseline -> final): 4: hive.amalgam_shuffle, hive.amalgam_slam, hive.spawn_attack, hive.spawn_skeleton_blade
-Newly voiced (baseline -> final): 0: 
