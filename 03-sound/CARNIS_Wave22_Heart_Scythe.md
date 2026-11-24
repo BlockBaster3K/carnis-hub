@@ -187,3 +187,19 @@
 | `hive_heartbeat.ogg` в jar | 40 087 Б — старый, не трогал (см. §4 отчёта) |
 | метаданные | блок комментариев Vorbis удалён в моих 4 файлах (`encoder=Lavc…` больше нет) |
 | формат | vorbis / 44 100 Гц / моно / 160 kb/s — 4/4 |
+
+---
+
+## 10. Сдача в репозиторий (факт)
+
+| что | где |
+|---|---|
+| ветка | `arena/d474d740-carnis-hub` |
+| коммиты Звукаря | `71a86fa` (файлы + отчёты волн 19–22), `b085322` (проверка jar), `3aeb86a` (снятие ошибочной overlay-строки, дубль, статус 3.6.0) |
+| звуки в репо | `03-sound/sounds/block/heartbeat_loop.ogg` (19 819 Б), `03-sound/sounds/block/pulsing_heart_beat.ogg` (10 926 Б), `03-sound/sounds/combat/bone_scythe_swing_01.ogg` (11 167 Б), `03-sound/sounds/combat/bone_scythe_hit_01.ogg` (7 458 Б) |
+| манифест | `03-sound/SHA256SUMS_wave22.txt`, sha256 `8a0e44b8600482aa31bd44fe8b1aa6f5eee1163697acc546dd174804bd4323f6`, `sha256sum -c` → 4/4 OK |
+| отчёты | `03-sound/REPORT_wave22.md` (по форме промпта), `03-sound/CARNIS_Wave22_Heart_Scythe.md` (полный), плюс задолженность — `CARNIS_Wave19_MixAudit.md`, `CARNIS_Wave20_RepoDelivery.md`, `CARNIS_Wave21_Sync142.md` |
+| переносы | `03-sound/transfer/`: `PACKAGE_142.txt`, `SHA256SUMS_transfer142.txt`, `sync_142.sh`, `PACKAGE_352_360.txt`, `SHA256SUMS_delta22.txt` |
+| CI | прогон `45493049623` — success, 14/14 шагов; релиз `v3.5.2` пересобран, jar 12 613 583 Б, sha `076f3722…`; в jar `heartbeat_loop` = `39de4db0…`, `heart_pulse` = `17f42e30…` (мой новый файл) |
+
+**Метаданные:** во всех четырёх файлах блок Vorbis-комментариев удалён (`encoder=Lavc…` больше не присутствует) — требование промпта «без метаданных-мусора» выполнено. У остальных 156 файлов банка тег `encoder` исторически есть; трогать их не стал (это перезапись файлов, санкции нет).
