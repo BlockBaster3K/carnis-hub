@@ -2,6 +2,11 @@ name: build-jar
 
 on:
   workflow_dispatch:
+    inputs:
+      package:
+        description: 'Путь к zip-пакету проекта (пусто = последняя пересдача)'
+        required: false
+        default: ''
   push:
     paths:
       - '01-coder/**'
@@ -24,19 +29,44 @@ jobs:
         with:
           gradle-version: '8.1.1'
 
+      - name: Resolve package
+        id: pkg
+        shell: bash
+        run: |
+          set -e
+          PKG="${{ github.event.inputs.package }}"
+          if [ -z "$PKG" ]; then
+            PKG=$(ls -1 01-coder/*/project-*-clean.zip | sort -V | tail -1)
+          fi
+          test -f "$PKG" || { echo "::error::Пакет не найден: $PKG"; exit 1; }
+          echo "path=$PKG" >> "$GITHUB_OUTPUT"
+          echo "Собирается пакет: $PKG" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Unpack project package
+        shell: bash
         run: |
           mkdir -p build-src
-          unzip -q 01-coder/3.5.0/project-3.5.0-clean.zip -d build-src
-          ls -la build-src
+          unzip -q "${{ steps.pkg.outputs.path }}" -d build-src
+          echo "Файлов распаковано: $(find build-src -type f | wc -l)" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build
         working-directory: build-src
         run: gradle --no-daemon --console=plain build
 
+      - name: Report jar version
+        shell: bash
+        run: |
+          set -e
+          JAR=$(ls build-src/build/libs/*.jar | head -1)
+          echo "JAR: $JAR ($(stat -c%s "$JAR") Б)" >> "$GITHUB_STEP_SUMMARY"
+          unzip -p "$JAR" META-INF/mods.toml > /tmp/mods.toml
+          echo '```toml' >> "$GITHUB_STEP_SUMMARY"
+          grep -E 'version|displayName' /tmp/mods.toml >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload jar
         uses: actions/upload-artifact@v4
         with:
-          name: carnis-3.5.0-jar
+          name: carnis-jar
           path: build-src/build/libs/*.jar
           if-no-files-found: error
