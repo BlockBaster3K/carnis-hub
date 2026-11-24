@@ -68,9 +68,17 @@ jobs:
         shell: bash
         run: |
           set -e
+          # Ожидаемая версия берётся из имени каталога пакета:
+          # 01-coder/<версия>/project-<версия>-clean.zip  ->  <версия>.
+          # Суффикс пересдачи (-R, -R2, -R5) отбрасывается: внутренний
+          # mod_version пересдачи совпадает с базовой версией.
+          # Так проверка работает для любой версии и не требует правки workflow.
+          DIR=$(basename "$(dirname "${{ steps.pkg.outputs.path }}")")
+          EXPECT="${DIR%%-R*}"
           V=$(grep -m1 '^mod_version=' build-src/gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          echo "- Ожидаемая версия (каталог пакета \`$DIR\`): \`$EXPECT\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- mod_version в пакете: \`$V\`" >> "$GITHUB_STEP_SUMMARY"
-          [ "$V" = "3.5.2" ] || { echo "::error::ожидалась версия 3.5.2, в пакете '$V'"; exit 1; }
+          [ "$V" = "$EXPECT" ] || { echo "::error::ожидалась версия $EXPECT, в пакете '$V'"; exit 1; }
 
       - name: Overlay accepted drops
         shell: bash
