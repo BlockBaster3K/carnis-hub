@@ -11,6 +11,9 @@ on:
     paths:
       - '01-coder/**'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -57,15 +60,34 @@ jobs:
         run: gradle --no-daemon --console=plain build
 
       - name: Report jar version
+        id: jar
         shell: bash
         run: |
           set -e
           JAR=$(ls build-src/build/libs/*.jar | head -1)
+          echo "file=$JAR" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$JAR")" >> "$GITHUB_OUTPUT"
+          echo "ver=$(grep -m1 '^mod_version=' build-src/gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
           echo "- JAR: \`$(basename "$JAR")\`, $(stat -c%s "$JAR") Б" >> "$GITHUB_STEP_SUMMARY"
           unzip -p "$JAR" META-INF/mods.toml > /tmp/mods.toml
           echo '```toml' >> "$GITHUB_STEP_SUMMARY"
           grep -E 'version|displayName' /tmp/mods.toml >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish release with jar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="v${{ steps.jar.outputs.ver }}-run${{ github.run_id }}"
+          gh release create "$TAG" "${{ steps.jar.outputs.file }}" \
+            --title "Carnis ${{ steps.jar.outputs.ver }} (${{ steps.jar.outputs.name }})" \
+            --notes "Автосборка из пакета \`${{ steps.pkg.outputs.path }}\`. Файл: \`${{ steps.jar.outputs.name }}\`. Прогон: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
+            --latest
+          URL="https://github.com/${{ github.repository }}/releases/tag/$TAG"
+          echo "- **Релиз:** [$TAG]($URL)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Прямая ссылка на jar:** https://github.com/${{ github.repository }}/releases/download/$TAG/${{ steps.jar.outputs.name }}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload jar
         uses: actions/upload-artifact@v4
