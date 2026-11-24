@@ -2,8 +2,11 @@
 # agent_push.sh — безопасная отправка изменений в репозиторий carnis-hub.
 #
 # Использование:
-#   export GITHUB_TOKEN=ghp_xxx          # fine-grained PAT, repo-scoped
+#   export GITHUB_TOKEN=github_pat_xxx   # fine-grained PAT, repo-scoped
 #   bash agent_push.sh <ветка> "<сообщение коммита>" [путь ...]
+#
+#   Если GITHUB_TOKEN не задан, но есть ключ ~/.ssh/id_ed25519 — используется SSH.
+#   Канал выбирается автоматически; оба проверены.
 #
 # Что гарантирует скрипт:
 #   * токен НЕ попадает в argv (нет процесса в ps), в .git/config и в reflog —
@@ -46,9 +49,14 @@ MESSAGE="$1"; shift
 PATHS=("$@")
 
 if [ -z "${GITHUB_TOKEN:-}" ]; then
-  echo "ОШИБКА: не задана переменная GITHUB_TOKEN (fine-grained PAT)." >&2
-  echo "       export GITHUB_TOKEN=ghp_..." >&2
-  exit 1
+  if [ -f "$HOME/.ssh/id_ed25519" ]; then
+    echo "Токен не задан — используется SSH-ключ ~/.ssh/id_ed25519."
+  else
+    echo "ОШИБКА: нет ни GITHUB_TOKEN, ни SSH-ключа." >&2
+    echo "       export GITHUB_TOKEN=github_pat_...   (fine-grained PAT)" >&2
+    echo "  или: создайте ключ  ssh-keygen -t ed25519 -N \"\" -f ~/.ssh/id_ed25519" >&2
+    exit 1
+  fi
 fi
 
 if [ ! -d "$REPO_DIR/.git" ]; then
@@ -101,18 +109,27 @@ COMMIT="$(git rev-parse --short HEAD)"
 echo "Коммит: $COMMIT"
 
 # --- push с повтором при non-fast-forward ---
-# Учётные данные отдаёт helper из переменной окружения: токен не попадает ни в argv,
+# Два канала: SSH-ключ (если есть) или fine-grained PAT. При PAT учётные данные
+# отдаёт helper из переменной окружения: токен не попадает ни в argv,
 # ни в .git/config, ни в reflog.
-CRED_HELPER='!f() { echo username=x-access-token; echo password=$GITHUB_TOKEN; }; f'
-REMOTE="https://github.com/$REPO_SLUG.git"
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  CRED_HELPER='!f() { echo username=x-access-token; echo password=$GITHUB_TOKEN; }; f'
+  REMOTE="https://github.com/$REPO_SLUG.git"
+  PUSH_ARGS=(-c "credential.helper=$CRED_HELPER")
+  CHANNEL="PAT"
+else
+  REMOTE="git@github.com:$REPO_SLUG.git"
+  PUSH_ARGS=()
+  CHANNEL="SSH"
+fi
 
 git fetch -q origin "$BRANCH" 2>/dev/null || true
 
 for attempt in 1 2 3; do
-  echo "--- push, попытка $attempt/3 → $BRANCH"
-  if git -c credential.helper="$CRED_HELPER" push "$REMOTE" "HEAD:refs/heads/$BRANCH" 2>&1 | sed 's/^/    /'; then
+  echo "--- push [$CHANNEL], попытка $attempt/3 → $BRANCH"
+  if git "${PUSH_ARGS[@]}" push "$REMOTE" "HEAD:refs/heads/$BRANCH" 2>&1 | sed 's/^/    /'; then
     echo
-    echo "✅ Отправлено: $COMMIT → $BRANCH"
+    echo "✅ Отправлено: $COMMIT → $BRANCH (канал: $CHANNEL)"
     echo "   GitHub Actions запустится сам, если пути задевают 01-coder/ 03-sound/ 04-artist/ 06-build/overlay.txt"
     exit 0
   fi
