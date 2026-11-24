@@ -88,8 +88,10 @@ if git diff --cached --quiet; then
   exit 0
 fi
 
+# Полный список того, что уйдёт в коммит (включая то, что уже было в индексе).
+STAGED="$(git diff --cached --name-status)"
 echo "=== Файлы коммита ==="
-git diff --cached --name-status
+echo "$STAGED"
 echo
 
 WARN="$(git diff --cached --name-only | grep -E "$INTEGRATOR_OWNED" || true)"
