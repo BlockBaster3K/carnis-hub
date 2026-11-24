@@ -80,6 +80,13 @@ jobs:
             src="$(echo "${line%%->*}" | xargs)"
             dst="$(echo "${line##*->}" | xargs)"
             test -f "$src" || { echo "::error::источник не найден: $src"; exit 1; }
+            want="$(echo "${line#*|}" | xargs)"
+            case "$want" in
+              ""|*[!0-9a-fA-F]*) echo "::error::строка без sha256 (файл: $src)"; exit 1 ;;
+            esac
+            [ "${#want}" = "64" ] || { echo "::error::sha256 неверной длины: $want"; exit 1; }
+            got="$(sha256sum "$src" | cut -d' ' -f1)"
+            [ "$got" = "$want" ] || { echo "::error::хеш не совпал: $src"; exit 1; }
             mkdir -p "$(dirname "build-src/$dst")"
             cp "$src" "build-src/$dst"
             echo "assets/carnis/${dst#src/main/resources/assets/carnis/}" >> /tmp/expect.txt
