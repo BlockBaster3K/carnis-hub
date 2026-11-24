@@ -74,24 +74,49 @@ jobs:
           grep -E 'version|displayName' /tmp/mods.toml >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Publish release with jar
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          TAG="v${{ steps.jar.outputs.ver }}-run${{ github.run_id }}"
-          gh release create "$TAG" "${{ steps.jar.outputs.file }}" \
-            --title "Carnis ${{ steps.jar.outputs.ver }} (${{ steps.jar.outputs.name }})" \
-            --notes "Автосборка из пакета \`${{ steps.pkg.outputs.path }}\`. Файл: \`${{ steps.jar.outputs.name }}\`. Прогон: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
-            --latest
-          URL="https://github.com/${{ github.repository }}/releases/tag/$TAG"
-          echo "- **Релиз:** [$TAG]($URL)" >> "$GITHUB_STEP_SUMMARY"
-          echo "- **Прямая ссылка на jar:** https://github.com/${{ github.repository }}/releases/download/$TAG/${{ steps.jar.outputs.name }}" >> "$GITHUB_STEP_SUMMARY"
-
       - name: Upload jar
         uses: actions/upload-artifact@v4
         with:
           name: carnis-jar
           path: build-src/build/libs/*.jar
           if-no-files-found: error
+
+      - name: Publish release with jar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="v${{ steps.jar.outputs.ver }}"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" \
+              --title "Carnis ${{ steps.jar.outputs.ver }}" \
+              --notes "Автосборка модового jar. Файл обновляется при каждом прогоне из актуального пакета."
+          fi
+          gh release upload "$TAG" "${{ steps.jar.outputs.file }}" --clobber
+          echo "- **Релиз:** [ $TAG ](https://github.com/${{ github.repository }}/releases/tag/$TAG)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Прямая ссылка на jar (через Azure, может не открываться):** https://github.com/${{ github.repository }}/releases/download/$TAG/${{ steps.jar.outputs.name }}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit jar into repository
+        shell: bash
+        run: |
+          set -e
+          JAR_NAME="${{ steps.jar.outputs.name }}"
+          cp "${{ steps.jar.outputs.file }}" "/tmp/$JAR_NAME"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --no-tags origin main
+          git checkout -B main origin/main
+          mkdir -p 06-build/jars
+          cp "/tmp/$JAR_NAME" "06-build/jars/$JAR_NAME"
+          git add "06-build/jars/$JAR_NAME"
+          if git diff --cached --quiet; then
+            echo "jar не изменился — коммит не нужен"
+          else
+            git commit -m "build: $JAR_NAME из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})"
+            for i in 1 2 3; do
+              git push origin main && break
+              git pull --rebase --autostash origin main
+            done
+          fi
+          echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
