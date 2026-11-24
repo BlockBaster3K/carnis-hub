@@ -218,8 +218,8 @@ Push выполнен по SSH-ключу (deploy key с правом запис
 | Параметр | Значение |
 |---|---|
 | Файл | `carnis-3.5.2.jar` |
-| Размер | **12 613 582 Б** |
-| **SHA-256** | **`4ac13594840145e89754f60703291f3ce9f163084e62aca6b26c3daf21a1f180`** |
+| Размер | **12 597 148 Б** |
+| **SHA-256** | **`5412a5c4136498a05e7d677d55821f50b44f71e800b799c57cebd57dcc8bde8e`** |
 | `mods.toml` | `modId="carnis"`, `version="3.5.2"`, `displayVersion="3.5.2"`, `displayName="Carnis: Adaptive Hivemind"` |
 | Minecraft / Forge / GeckoLib | `1.20.1` / `[47.1.0,)` / `[4.4.4,)` |
 | Состав | 908 записей: 279 class, 258 json, **145 ogg**, 113 png, 6 mcmeta, 1 toml |
@@ -269,7 +269,7 @@ Push выполнен по SSH-ключу (deploy key с правом запис
 принятое аудио волны 22 внутри jar, версия `3.5.2`, исходный дефект
 (`Level#getGameEventDispatcher`) устранён минимальной правкой без потери
 `GameEventListener.Holder#getListener()`. Артефакт:
-`carnis-3.5.2.jar`, SHA-256 `4ac13594840145e89754f60703291f3ce9f163084e62aca6b26c3daf21a1f180`.
+`carnis-3.5.2.jar`, SHA-256 `5412a5c4136498a05e7d677d55821f50b44f71e800b799c57cebd57dcc8bde8e`.
 
 **Остаётся за заказчиком:** тест в игре (слышимость heartbeat, реакция существ, рендер
 glow pass, поведение конфигурируемой флоры) — это не проверяется сборкой.

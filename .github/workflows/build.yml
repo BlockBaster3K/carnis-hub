@@ -114,6 +114,39 @@ jobs:
         working-directory: build-src
         run: gradle --no-daemon --console=plain build
 
+      # Сборка Gradle проставляет в jar текущее время: в MANIFEST.MF строку
+      # Implementation-Timestamp и в заголовки zip метки времени записей.
+      # Поэтому две сборки одного и того же пакета дают РАЗНЫЕ байты и разный
+      # sha256 — хеш «плывёт» от прогона к прогону, и проверка по хешу становится
+      # бессмысленной. Здесь обе нестабильности обнуляются: jar становится
+      # побайтово воспроизводимым, хеш стабилен между прогонами.
+      - name: Normalize jar for reproducibility
+        shell: bash
+        run: |
+          set -e
+          JAR=$(ls build-src/build/libs/*.jar | head -1)
+          python3 - "$JAR" <<'PYEOF'
+          import os, re, sys, zipfile
+          path = sys.argv[1]
+          tmp = path + ".norm"
+          src = zipfile.ZipFile(path)
+          with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as dst:
+              for info in src.infolist():
+                  data = src.read(info.filename)
+                  if info.filename == "META-INF/MANIFEST.MF":
+                      data = re.sub(rb"Implementation-Timestamp: [^\r\n]*",
+                                    b"Implementation-Timestamp: 0", data)
+                  zi = zipfile.ZipInfo(info.filename, date_time=(1980, 1, 1, 0, 0, 0))
+                  zi.compress_type = info.compress_type
+                  zi.external_attr = info.external_attr
+                  zi.internal_attr = info.internal_attr
+                  zi.create_system = info.create_system
+                  dst.writestr(zi, data)
+          src.close()
+          os.replace(tmp, path)
+          PYEOF
+          echo "- **Jar нормализован:** метки времени записей и Implementation-Timestamp обнулены — сборка побайтово воспроизводима" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Verify overlay reached the jar
         shell: bash
         run: |
@@ -179,15 +212,29 @@ jobs:
           git fetch --no-tags origin main
           git checkout -B main origin/main
           mkdir -p 06-build/jars
-          cp "/tmp/$JAR_NAME" "06-build/jars/$JAR_NAME"
-          git add "06-build/jars/$JAR_NAME"
-          if git diff --cached --quiet; then
-            echo "jar не изменился — коммит не нужен"
-          else
-            git commit -m "build: $JAR_NAME из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})"
-            for i in 1 2 3; do
-              git push origin main && break
-              git pull --rebase --autostash origin main
-            done
+          # Jar нормализован, поэтому побайтовое сравнение корректно:
+          # если содержимое то же — main не трогаем и релиз не перезаписываем.
+          CHANGED=1
+          if git cat-file -e "origin/main:06-build/jars/$JAR_NAME" 2>/dev/null; then
+            git show "origin/main:06-build/jars/$JAR_NAME" > "/tmp/old_$JAR_NAME"
+            if cmp -s "/tmp/$JAR_NAME" "/tmp/old_$JAR_NAME"; then
+              CHANGED=0
+              echo "jar не изменился (побайтово) — коммит не нужен"
+            fi
           fi
-          echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$CHANGED" = "1" ]; then
+            cp "/tmp/$JAR_NAME" "06-build/jars/$JAR_NAME"
+            git add "06-build/jars/$JAR_NAME"
+            if git diff --cached --quiet; then
+              echo "jar не изменился — коммит не нужен"
+            else
+              git commit -m "build: $JAR_NAME из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})"
+              for i in 1 2 3; do
+                git push origin main && break
+                git pull --rebase --autostash origin main
+              done
+            fi
+            echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- **JAR в репозитории:** без изменений (содержимое совпадает с текущим в \`main\`)" >> "$GITHUB_STEP_SUMMARY"
+          fi
