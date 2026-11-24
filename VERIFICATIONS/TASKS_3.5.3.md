@@ -20,6 +20,14 @@
 int interval = 40 - (int)(30L * bulb.age / bulb.duration);
 ```
 
+> **Не путать с `PulsingHeartBlockEntity`** — это другой блок. «Сердце биома»
+> (`pulsing_heart`, Pulsing Heart) — орган улья: он пульсирует раз в
+> `PULSE_INTERVAL_TICKS = 100` тиков (5 с) и **не** играет удар сердца при
+> обычном пульсе (звук звучит только в `morphBlock()` — в момент превращения).
+> Ускоряющееся биение — свойство **`FleshBulbBlockEntity`** (блок `flesh_bulb`,
+> в игре «Flesh Bulb», подсказка: «The muffled, rapid heartbeat of a maturing
+> brood can be heard inside»).
+
 **Что происходит.** Интервал падает от 40 до **10 тиков** по мере старения луковицы
 (`age/duration` → 1). Проигрываемый звук — `ModSounds.PULSING_HEART_BEAT` → файл
 `block/heart_pulse.ogg`, измеренная длительность **0,600 с = 12 тиков**.
@@ -44,6 +52,10 @@ int interval = 40 - (int)(30L * bulb.age / bulb.duration);
 ```java
 soundDelay = Math.max(8, 24 - agonyTicks / 7);
 ```
+
+> Это **клиентский** «галлюцинационный» пульс игрока: включается при стадии
+> инфекции ≥ 1, а `agonyTicks` растёт 1 → 100 при `points() >= 100`. То есть
+> дефект слышен **при высокой инфекции**, когда луп гоняется чаще всего.
 
 **Что происходит.** Задержка перезапуска — **10–24 тика** (0,5–1,2 с). Звук —
 `ModSounds.HEARTBEAT_LOOP` → `block/heartbeat_loop.ogg`, измеренная длительность
