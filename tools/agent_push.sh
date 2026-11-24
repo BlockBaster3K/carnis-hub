@@ -114,32 +114,75 @@ echo "Коммит: $COMMIT"
 # Два канала: SSH-ключ (если есть) или fine-grained PAT. При PAT учётные данные
 # отдаёт helper из переменной окружения: токен не попадает ни в argv,
 # ни в .git/config, ни в reflog.
+#
+# Ограничение GitHub: PAT без области `workflow` не может создавать и изменять
+# файлы в .github/workflows/. Если push по PAT отклонён именно по этой причине,
+# скрипт сам переключается на SSH-ключ (он право на запись в репозиторий имеет).
+SSH_REMOTE="git@github.com:$REPO_SLUG.git"
+HAS_SSH=0
+if [ -f "$HOME/.ssh/id_ed25519" ]; then HAS_SSH=1; fi
+
 if [ -n "${GITHUB_TOKEN:-}" ]; then
   CRED_HELPER='!f() { echo username=x-access-token; echo password=$GITHUB_TOKEN; }; f'
   REMOTE="https://github.com/$REPO_SLUG.git"
   PUSH_ARGS=(-c "credential.helper=$CRED_HELPER")
   CHANNEL="PAT"
 else
-  REMOTE="git@github.com:$REPO_SLUG.git"
+  REMOTE="$SSH_REMOTE"
   PUSH_ARGS=()
   CHANNEL="SSH"
 fi
 
 git fetch -q origin "$BRANCH" 2>/dev/null || true
 
+push_once() {
+  # push_once <канал> <remote> <аргументы git> — печатает лог, возвращает код.
+  local ch="$1" rem="$2"; shift 2
+  local log
+  log="$(git "$@" push "$rem" "HEAD:refs/heads/$BRANCH" 2>&1)"
+  echo "$log" | sed 's/^/    /'
+  PUSH_LOG="$log"
+  [ -z "$log" ] && return 1
+  echo "$log" | grep -q "without .workflow. scope" && return 2
+  echo "$log" | grep -qE "^\s*!" && return 1
+  return 0
+}
+
 for attempt in 1 2 3; do
   echo "--- push [$CHANNEL], попытка $attempt/3 → $BRANCH"
-  if git "${PUSH_ARGS[@]}" push "$REMOTE" "HEAD:refs/heads/$BRANCH" 2>&1 | sed 's/^/    /'; then
-    echo
-    echo "✅ Отправлено: $COMMIT → $BRANCH (канал: $CHANNEL)"
-    echo "   GitHub Actions запустится сам, если пути задевают 01-coder/ 03-sound/ 04-artist/ 06-build/overlay.txt"
-    exit 0
-  fi
-  echo "    push не прошёл, перебазируюсь на актуальный origin/$BRANCH…"
-  git pull -q --rebase --autostash origin "$BRANCH" || {
-    echo "ОШИБКА: не удалось перебазироваться — разрешите конфликт вручную и повторите." >&2
-    exit 1
-  }
+  set +e
+  push_once "$CHANNEL" "$REMOTE" "${PUSH_ARGS[@]}"
+  rc=$?
+  set -e
+  case $rc in
+    0)
+      echo
+      echo "✅ Отправлено: $COMMIT → $BRANCH (канал: $CHANNEL)"
+      echo "   GitHub Actions запустится сам, если пути задевают 01-coder/ 03-sound/ 04-artist/ 06-build/overlay.txt"
+      exit 0
+      ;;
+    2)
+      if [ "$HAS_SSH" = "1" ] && [ "$CHANNEL" = "PAT" ]; then
+        echo
+        echo "⚠️  PAT отклонён: у него нет области 'workflow' (не хватает прав на .github/workflows/)."
+        echo "    Переключаюсь на SSH-ключ ~/.ssh/id_ed25519 — он право на запись имеет."
+        CHANNEL="SSH"; REMOTE="$SSH_REMOTE"; PUSH_ARGS=()
+        continue
+      fi
+      echo "    push отклонён, перебазируюсь на актуальный origin/$BRANCH…"
+      git pull -q --rebase --autostash origin "$BRANCH" || {
+        echo "ОШИБКА: не удалось перебазироваться — разрешите конфликт вручную и повторите." >&2
+        exit 1
+      }
+      ;;
+    *)
+      echo "    push не прошёл, перебазируюсь на актуальный origin/$BRANCH…"
+      git pull -q --rebase --autostash origin "$BRANCH" || {
+        echo "ОШИБКА: не удалось перебазироваться — разрешите конфликт вручную и повторите." >&2
+        exit 1
+      }
+      ;;
+  esac
 done
 
 echo "ОШИБКА: push не удался после 3 попыток." >&2

@@ -191,3 +191,5 @@ jobs:
             done
           fi
           echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
+
+# проверка автопереключения канала (волна 27)
