@@ -192,22 +192,85 @@ Workflow `.github/workflows/build.yml`, ветка `arena/d474d740-carnis-hub`:
 
 ---
 
-## 8. Что осталось за Интегратором
+## 8. CI-сборка — прогон `45485516920`, ✅ SUCCESS
 
-1. **Прогон CI-сборки.** Локальная сборка невозможна: в песочнице 1 ГБ RAM, 2 ядра,
-   JDK 11 (workflow требует JDK 17) и нет Gradle; прежняя попытка упиралась в OOM.
-   Сборка выполняется только GitHub Actions (раннер 7 ГБ).
-2. **Push.** Коммит `c9676da` подготовлен локально в ветке `arena/d474d740-carnis-hub`
-   (родитель `0cc552d`). Отправка требует прав на запись: в текущей сессии нет PAT и нет
-   SSH-ключа в репозитории (`could not read Username for 'https://github.com'`),
-   GitHub connector недоступен. Подготовлен ed25519-ключ и команда отправки:
+Push выполнен по SSH-ключу (deploy key с правом записи) в ветку `arena/d474d740-carnis-hub`,
+коммит `d914c59`. Workflow `build.yml` запустился сам (путь `01-coder/**`).
 
-   ```bash
-   git -C /home/user/hub5 push git@github.com:BlockBaster3K/carnis-hub.git \
-        HEAD:refs/heads/arena/d474d740-carnis-hub
-   ```
+| Шаг workflow | Итог |
+|---|---|
+| `Resolve package` | ✅ — выбран `3.5.2-R` |
+| `Unpack project package` | ✅ |
+| `Assert version` | ✅ — `mod_version=3.5.2` |
+| `Overlay accepted drops` | ✅ — 2 файла |
+| **`Build`** | ✅ **SUCCESS** — падение `45415446373` устранено |
+| `Verify overlay reached the jar` | ✅ — оба принятых OGG внутри jar |
+| `Report jar version` | ✅ |
+| `Upload jar` | ✅ — артефакт `carnis-jar` |
+| `Publish release with jar` | ✅ — релиз `v3.5.2` |
+| `Commit jar into repository` | ✅ — `06-build/jars/carnis-3.5.2.jar` в `main` |
 
-   Push задевает `01-coder/**`, поэтому workflow `build.yml` запускается сам.
-   Готовый скрипт: `/home/user/ci_release.py` (push → ожидание прогона → проверка jar).
-3. **Предъявление результата.** После прогона — `carnis-3.5.2.jar` с проверенным SHA-256,
-   версией `3.5.2` из `mods.toml` и подтверждением, что оба принятых OGG попали внутрь jar.
+Все 17 шагов прогона — `success`. Ссылка:
+`https://github.com/BlockBaster3K/carnis-hub/actions/runs/45485516920`
+
+### 8.1. Итоговый артефакт
+
+| Параметр | Значение |
+|---|---|
+| Файл | `carnis-3.5.2.jar` |
+| Размер | **12 613 584 Б** |
+| **SHA-256** | **`ab7277f90d325467d178c5f597748b240d217e2f3891ff84e988e25b92c2db88`** |
+| `mods.toml` | `modId="carnis"`, `version="3.5.2"`, `displayVersion="3.5.2"`, `displayName="Carnis: Adaptive Hivemind"` |
+| Minecraft / Forge / GeckoLib | `1.20.1` / `[47.1.0,)` / `[4.4.4,)` |
+| Состав | 908 записей: 279 class, 258 json, **145 ogg**, 113 png, 6 mcmeta, 1 toml |
+| Целостность архива | `testzip` — битых записей нет |
+| Каналы доставки | `06-build/jars/carnis-3.5.2.jar` в `main` (SHA сходится с проверенным) · релиз `v3.5.2` |
+
+### 8.2. Принятое аудио внутри jar
+
+| Файл в jar | Размер | SHA-256 | Ожидалось |
+|---|---:|---|---|
+| `assets/carnis/sounds/block/heartbeat_loop.ogg` | 19 819 | `39de4db0d9938af9dba8b1f6b637988003410dd7daf85b17df8284c49a513079` | ✅ совпал |
+| `assets/carnis/sounds/block/heart_pulse.ogg` | 10 926 | `17f42e3076ee1d0bc8212ea4d817d43ac3e78ebbee8d6c7544e87b4832f7e905` | ✅ совпал |
+
+### 8.3. Фикс подтверждён в байткоде собранного jar
+
+Проверка через `javap` (`/usr/lib/jvm/jdk-11/bin/javap -p -c`) по
+`com/carnis/mod/block/entity/HiveEyeBlockEntity.class`:
+
+| Ожидание | Байткод | Итог |
+|---|---|---|
+| `GameEventListener.Holder#getListener()` сохранён | `public GameEventListener m_280052_()` → `getfield vibrationListener; areturn` | ✅ |
+| `setLevel(Level)` не переопределён | `m_7702_` **не объявлен** в классе | ✅ |
+| `setRemoved()` не переопределён | `m_5659_` **не объявлен** в классе | ✅ |
+| `unregisterVibrationListener()` удалён | метода нет | ✅ |
+| `Level#getGameEventDispatcher` не вызывается | ссылок на dispatcher нет | ✅ |
+| `EyeListener implements GameEventListener` | `m_142460_()` / `m_142078_()` / `m_214068_()` — `getListenerSource` / `getListenerRadius` / `handleGameEvent` | ✅ |
+
+> **Замечание о SRG-переименовании.** ForgeGradle в production переименовывает методы
+> Minecraft в SRG-имена (`getListener` → `m_280052_`), поэтому буквальной строки
+> `getListener` в байткоде нет — искать надо по SRG-имени. На исходники это не влияет:
+> в `HiveEyeBlockEntity.java` метод называется `getListener`.
+
+### 8.4. Новые механики в собранном jar
+
+| Механика | Класс в jar |
+|---|---|
+| K-21-1 общий `ScytheItem` | `com/carnis/mod/item/ScytheItem.class` ✅ |
+| K-21-2 `HeartAmbientTicker` | `com/carnis/mod/client/HeartAmbientTicker.class` ✅ |
+| K-21-6 `CarnisConfig` | `com/carnis/mod/config/CarnisConfig.class` ✅ |
+| Ассеты оссифицированной косы | 6 файлов: модель, текстура, 2 OGG, рецепт, advancement ✅ |
+
+---
+
+## 9. Итог
+
+**Релиз 3.5.2 доведён до успешной CI-сборки.** Новые механики волны 21/22 сохранены,
+принятое аудио волны 22 внутри jar, версия `3.5.2`, исходный дефект
+(`Level#getGameEventDispatcher`) устранён минимальной правкой без потери
+`GameEventListener.Holder#getListener()`. Артефакт:
+`carnis-3.5.2.jar`, SHA-256 `ab7277f90d325467d178c5f597748b240d217e2f3891ff84e988e25b92c2db88`.
+
+**Остаётся за заказчиком:** тест в игре (слышимость heartbeat, реакция существ, рендер
+glow pass, поведение конфигурируемой флоры) — это не проверяется сборкой.
+
