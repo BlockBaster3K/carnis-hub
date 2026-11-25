@@ -78,3 +78,23 @@ rm -rf 01-coder/3.7.2 && git read-tree -mu HEAD
 ```
 
 `git read-tree -mu HEAD` сам уже лежащие исключённые каталоги **не удаляет** — сначала `rm -rf`, затем `read-tree`; проверка: `git status --porcelain` пуст, `git ls-files -v | grep -c '^S'` > 0.
+
+## Обновление 2026-11-26 03:40 MSK (Ревизор): 133 МБ → **52 МБ**, пересоздание клона
+
+Sparse-checkout НЕ уменьшает `.git`: блобы, попавшие в pack при `read-tree`, остаются навсегда (после возврата `3.7.2` на диск `.git` вырос 53 → 89 МБ, весь воркспейс — 133 МБ). Лечится только пересозданием клона с sparse **до** первого checkout:
+
+```bash
+cd /home/user
+git clone --filter=blob:none --no-checkout --branch arena/d474d740-carnis-hub \
+    git@github.com:BlockBaster3K/carnis-hub.git hub_new
+cd hub_new && cat > .git/info/sparse-checkout <<'LIST'
+/* ... те же 18 исключений ...
+LIST
+git config core.sparseCheckout true && git config core.sparseCheckoutCone false
+git read-tree -mu HEAD          # блобы качаются только для нужного дерева
+git config user.name reviewer-agent && git config user.email reviewer@carnis.local
+# проверка: git status --porcelain пуст, прогон чекеров; затем swap:
+cd /home/user && mv hub hub_old && mv hub_new hub && rm -rf hub_old
+```
+
+Результат: `.git` **20 МБ** (было 89), дерево 28 МБ, весь `/home/user` — **52 МБ**. В список исключений добавлены пакеты `3.5.0`, `3.5.1`, `3.5.1-R5`, `3.5.2`, `3.5.2-R`, `3.5.3`, `3.6.0` (по 12 МБ каждый, нужны только как базы старых проверок) — всего **18** путей; `3.7.1` и `3.6.0-R` возвращаются командами выше.
