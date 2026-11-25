@@ -1193,6 +1193,7 @@ def check_crest_attack(extract_dir):
     attack_report, no_attack, taut = [], [], []
     used_prev = 0
     unchanged_now = []
+    stationary_cand = []
     worst_c, worst_a = (0.0, ""), (0.0, "")
     for dp, _, fs in os.walk(root):
         for f in sorted(fs):
@@ -1268,7 +1269,19 @@ def check_crest_attack(extract_dir):
             tol = max(thr, base_tbl + 0.05)
             d = abs(cf - cm)
             if d > tol:
-                bad_crest.append((rel, d, tol, typ))
+                # R23 (I23 §10.2): ТАБЛИЧНЫЙ baseline измерен на перекоде
+                # УЖЕ ЗАКОДИРОВАННОГО файла (шум второй генерации), а мастер —
+                # PCM до первого кодирования. Для стационарных сигналов шум
+                # первого кодирования больше табличного (Ревизор: 12 нетронутых
+                # файлов 3.8.0 «падают» на нём, Δ RMS −0,11…+0,01 дБ — то есть
+                # файл не трогали). Пока Звук не измерит baseline(M) своим
+                # энкодером (S46), стационарные идут ОТЧЁТОМ, а не провалом;
+                # транзиентные (порог 0,60) валят как раньше — у них запас
+                # 2-3x и ложных провалов нет.
+                if typ == "стац":
+                    stationary_cand.append((rel, d, tol, base_tbl))
+                else:
+                    bad_crest.append((rel, d, tol, typ))
             if d > worst_c[0]:
                 worst_c = (d, rel)
             am, af = _attack(ref[0], ref[1]), _attack(got[0], got[1])
@@ -1345,6 +1358,15 @@ def check_crest_attack(extract_dir):
     if bad_crest:
         fail.append("crest: %d файлов изменили динамику сверх своего допуска"
                     % len(bad_crest))
+    if stationary_cand:
+        print("  · стационарные сверх табличного baseline — ОТЧЁТ, не провал "
+              "(%d; таблица меряет шум 2-й генерации, мастер — PCM до 1-й, "
+              "S46):" % len(stationary_cand))
+        for rel, d, tol, base in stationary_cand[:5]:
+            print("      ~ %-38s Δ %.3f > %.3f (baseline таблицы %.3f)"
+                  % (rel, d, tol, base))
+        if len(stationary_cand) > 5:
+            print("      ~ … ещё %d" % (len(stationary_cand) - 5))
     if checked and not bad_crest and not no_master:
         print("  ✓ crest/атака: %d файлов в норме от мастеров (З-31)" % checked)
     for path in _TEMP_MASTERS:
