@@ -1,0 +1,3047 @@
+{
+  "tool": "tendrils_check.py",
+  "tiles": [
+    "creeping_tendrils_0.png",
+    "creeping_tendrils_1.png",
+    "creeping_tendrils_2.png",
+    "creeping_tendrils_3.png"
+  ],
+  "checks": {
+    "1_format_and_palette": {
+      "ok": true,
+      "details": [
+        "creeping_tendrils_0.png: непрозрачных 2923/4096 (71.4 %), цветов 7",
+        "creeping_tendrils_1.png: непрозрачных 2812/4096 (68.7 %), цветов 7",
+        "creeping_tendrils_2.png: непрозрачных 2709/4096 (66.1 %), цветов 7",
+        "creeping_tendrils_3.png: непрозрачных 2790/4096 (68.1 %), цветов 7"
+      ]
+    },
+    "2_borders_identical": {
+      "ok": true,
+      "details": [
+        "top: одинаков у 4 вариантов",
+        "bottom: одинаков у 4 вариантов",
+        "left: одинаков у 4 вариантов",
+        "right: одинаков у 4 вариантов"
+      ]
+    },
+    "3_seam_byte_exact": {
+      "ok": true,
+      "details": [
+        "проверено 16 пар (включая самозамыкание)"
+      ],
+      "pairs": 16
+    },
+    "4_mixed_grids": {
+      "ok": false,
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "pattern": [
+            [
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              2,
+              2
+            ],
+            [
+              1,
+              3,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.757,
+          "autocorr_alpha_16px": {
+            "8": 0.3135,
+            "16": 0.6114,
+            "24": 0.4829,
+            "32": 0.3167,
+            "40": 0.4113
+          },
+          "tile_period_ratio": 1.519,
+          "control_same_tile_ratio": 1.483,
+          "control_rotated_ratio": 1.841,
+          "control_noise_ratio": 1.365,
+          "irregularity_margin": 0.976
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "pattern": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 23.565,
+          "autocorr_alpha_16px": {
+            "8": 0.3969,
+            "16": 0.3987,
+            "24": 0.6001,
+            "32": 0.5991,
+            "40": 1.1436
+          },
+          "tile_period_ratio": 0.559,
+          "control_same_tile_ratio": 1.483,
+          "control_rotated_ratio": 1.387,
+          "control_noise_ratio": 0.252,
+          "irregularity_margin": 2.654
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "pattern": [
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              1,
+              3,
+              1
+            ],
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 23.972,
+          "autocorr_alpha_16px": {
+            "8": 0.3571,
+            "16": 0.3833,
+            "24": 0.4285,
+            "32": 0.5554,
+            "40": 0.4724
+          },
+          "tile_period_ratio": 0.914,
+          "control_same_tile_ratio": 1.483,
+          "control_rotated_ratio": 1.397,
+          "control_noise_ratio": -0.214,
+          "irregularity_margin": 1.622
+        },
+        "5x5_982": {
+          "seed": 982,
+          "pattern": [
+            [
+              1,
+              3,
+              1,
+              3,
+              0
+            ],
+            [
+              2,
+              0,
+              2,
+              2,
+              0
+            ],
+            [
+              3,
+              1,
+              2,
+              3,
+              3
+            ],
+            [
+              1,
+              2,
+              0,
+              3,
+              1
+            ],
+            [
+              0,
+              2,
+              1,
+              3,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.199,
+          "autocorr_alpha_16px": {
+            "8": 0.3367,
+            "16": 0.3783,
+            "24": 0.4099,
+            "32": 0.4683,
+            "40": 0.4381,
+            "48": 0.5254,
+            "56": 0.5806,
+            "64": 0.6076
+          },
+          "tile_period_ratio": 0.857,
+          "control_same_tile_ratio": 1.485,
+          "control_rotated_ratio": 1.652,
+          "control_noise_ratio": 0.412,
+          "irregularity_margin": 1.733
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "pattern": [
+            [
+              1,
+              3,
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              3,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              2,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              2,
+              0,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.047,
+          "autocorr_alpha_16px": {
+            "8": 0.4385,
+            "16": 0.5023,
+            "24": 0.6113,
+            "32": 0.3394,
+            "40": 0.5667,
+            "48": 0.3659,
+            "56": 0.3959,
+            "64": 0.1561
+          },
+          "tile_period_ratio": 0.998,
+          "control_same_tile_ratio": 1.485,
+          "control_rotated_ratio": 0.552,
+          "control_noise_ratio": -0.175,
+          "irregularity_margin": 1.488
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "pattern": [
+            [
+              3,
+              0,
+              2,
+              2,
+              2
+            ],
+            [
+              0,
+              2,
+              0,
+              1,
+              0
+            ],
+            [
+              3,
+              1,
+              1,
+              0,
+              3
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              2
+            ],
+            [
+              2,
+              3,
+              3,
+              1,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.117,
+          "autocorr_alpha_16px": {
+            "8": 0.449,
+            "16": 0.4579,
+            "24": 0.5574,
+            "32": 0.4045,
+            "40": 0.5546,
+            "48": 0.2757,
+            "56": 0.4956,
+            "64": 0.7458
+          },
+          "tile_period_ratio": 0.891,
+          "control_same_tile_ratio": 1.485,
+          "control_rotated_ratio": 1.32,
+          "control_noise_ratio": -0.389,
+          "irregularity_margin": 1.668
+        }
+      },
+      "details": [
+        "3x3 seed=980: автокорреляция с периодом плитки 1.52× (контроль «одна плитка» 1.48×, «повёрнутая» 1.84×)",
+        "5x5 seed=20260106: автокорреляция с периодом плитки 1.00× (контроль «одна плитка» 1.49×, «повёрнутая» 0.55×)"
+      ]
+    },
+    "4b_lattice": {
+      "ok": true,
+      "details": [],
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "alpha_at_border": 0.686,
+          "alpha_inside": 0.599,
+          "border_to_inside": 1.145
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "alpha_at_border": 0.696,
+          "alpha_inside": 0.56,
+          "border_to_inside": 1.244
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "alpha_at_border": 0.704,
+          "alpha_inside": 0.569,
+          "border_to_inside": 1.236
+        },
+        "5x5_982": {
+          "seed": 982,
+          "alpha_at_border": 0.694,
+          "alpha_inside": 0.581,
+          "border_to_inside": 1.195
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "alpha_at_border": 0.706,
+          "alpha_inside": 0.552,
+          "border_to_inside": 1.279
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "alpha_at_border": 0.694,
+          "alpha_inside": 0.569,
+          "border_to_inside": 1.221
+        }
+      }
+    },
+    "5_readability_16px": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "opaque_px": 226,
+          "alpha_coverage": 0.711,
+          "components": 1,
+          "components_ge3px": 1,
+          "share_in_big_components": 0.85,
+          "luma_contrast": 148.0
+        },
+        "creeping_tendrils_1.png": {
+          "opaque_px": 231,
+          "alpha_coverage": 0.684,
+          "components": 1,
+          "components_ge3px": 1,
+          "share_in_big_components": 0.779,
+          "luma_contrast": 255.0
+        },
+        "creeping_tendrils_2.png": {
+          "opaque_px": 225,
+          "alpha_coverage": 0.657,
+          "components": 2,
+          "components_ge3px": 2,
+          "share_in_big_components": 0.796,
+          "luma_contrast": 138.0
+        },
+        "creeping_tendrils_3.png": {
+          "opaque_px": 229,
+          "alpha_coverage": 0.678,
+          "components": 1,
+          "components_ge3px": 1,
+          "share_in_big_components": 0.799,
+          "luma_contrast": 255.0
+        }
+      }
+    },
+    "6_ends_and_corners": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "edge_density": 0.719,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        },
+        "creeping_tendrils_1.png": {
+          "edge_density": 0.743,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        },
+        "creeping_tendrils_2.png": {
+          "edge_density": 0.716,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        },
+        "creeping_tendrils_3.png": {
+          "edge_density": 0.716,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        }
+      }
+    },
+    "7_stroke_geometry": {
+      "ok": false,
+      "details": [
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (0, 20)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (0, 24)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (0, 44)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (1, 45)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (1, 51)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (0, 52)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (0, 57)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (1, 46)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (1, 48)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (1, 50)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (20, 0)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (24, 0)",
+        "creeping_tendrils_0.png: штрих толщиной 7.8 px в точке (35, 16)",
+        "creeping_tendrils_0.png: штрих толщиной 6.7 px в точке (36, 15)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (36, 16)",
+        "creeping_tendrils_0.png: штрих толщиной 7.8 px в точке (35, 16)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (36, 16)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (37, 14)",
+        "creeping_tendrils_0.png: штрих толщиной 6.7 px в точке (36, 15)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (39, 0)",
+        "creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (37, 13)",
+        "creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (37, 13)",
+        "creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (37, 13)",
+        "creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (38, 13)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (39, 63)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (39, 10)",
+        "creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (38, 12)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (43, 0)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (43, 63)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (45, 36)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (53, 41)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (53, 0)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (57, 0)",
+        "creeping_tendrils_0.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_0.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (61, 47)",
+        "creeping_tendrils_0.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_0.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_0.png: штрих толщиной 5.8 px в точке (62, 44)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (63, 45)",
+        "creeping_tendrils_0.png: штрих толщиной 3.0 px в точке (63, 51)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_0.png: штрих толщиной 5.8 px в точке (62, 52)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (63, 57)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (63, 43)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (63, 53)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (0, 11)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_1.png: штрих толщиной 3.8 px в точке (1, 12)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_1.png: штрих толщиной 3.8 px в точке (1, 18)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (0, 19)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (0, 24)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (0, 39)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (0, 44)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_1.png: штрих толщиной 3.8 px в точке (1, 45)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 3.8 px в точке (1, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (0, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (0, 57)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (1, 13)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (1, 15)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (1, 17)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (1, 46)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (1, 48)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (1, 50)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (22, 14)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (20, 0)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (24, 0)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (24, 54)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (24, 54)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (26, 53)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (28, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 6.7 px в точке (27, 53)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (28, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (28, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 6.7 px в точке (28, 53)",
+        "creeping_tendrils_1.png: штрих толщиной 6.7 px в точке (29, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (30, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (30, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (31, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (31, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (39, 0)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (41, 34)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (41, 35)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (41, 35)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (42, 33)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (42, 34)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (41, 34)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (42, 34)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (43, 0)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (42, 33)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (42, 33)",
+        "creeping_tendrils_1.png: штрих толщиной 3.8 px в точке (43, 33)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (44, 32)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (46, 30)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (46, 30)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (46, 30)",
+        "creeping_tendrils_1.png: штрих толщиной 3.8 px в точке (46, 31)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (47, 29)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (47, 29)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (47, 29)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (47, 30)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (48, 28)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (48, 28)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (48, 29)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (53, 0)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (57, 0)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (61, 47)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (62, 44)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (63, 45)",
+        "creeping_tendrils_1.png: штрих толщиной 3.0 px в точке (63, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 5.8 px в точке (62, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (63, 57)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (63, 43)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (63, 53)",
+        "creeping_tendrils_2.png: непрерывная линия 32.7 px > 32",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (0, 11)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (1, 12)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (1, 18)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (0, 19)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (0, 44)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (1, 45)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (1, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (0, 52)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (0, 57)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (1, 13)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (1, 15)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (1, 17)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (1, 46)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (1, 48)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (1, 50)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (20, 0)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (24, 0)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (48, 41)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (39, 0)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (39, 63)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (43, 0)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (43, 63)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (48, 25)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (48, 25)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (48, 25)",
+        "creeping_tendrils_2.png: штрих толщиной 7.8 px в точке (49, 25)",
+        "creeping_tendrils_2.png: штрих толщиной 7.8 px в точке (51, 24)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (53, 0)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (57, 0)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 12)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 12)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (61, 14)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 18)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 18)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (61, 47)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (62, 11)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 11)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (63, 12)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (63, 18)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 19)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (62, 19)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (62, 44)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (63, 45)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (63, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (62, 52)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (63, 57)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (63, 10)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 11)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 19)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (63, 20)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (63, 43)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (63, 53)",
+        "creeping_tendrils_3.png: непрерывная линия 37.7 px > 32",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (0, 11)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_3.png: штрих толщиной 3.8 px в точке (1, 12)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 12)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 18)",
+        "creeping_tendrils_3.png: штрих толщиной 3.8 px в точке (1, 18)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (0, 19)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (0, 44)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_3.png: штрих толщиной 3.8 px в точке (1, 45)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 45)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (0, 51)",
+        "creeping_tendrils_3.png: штрих толщиной 3.8 px в точке (1, 51)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (0, 52)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (0, 57)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (1, 13)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (1, 15)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (1, 17)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (7, 40)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (1, 46)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (1, 48)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (1, 50)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (20, 0)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (24, 11)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (24, 0)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (34, 15)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (35, 14)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (34, 15)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (34, 15)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (35, 15)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (36, 13)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (35, 14)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (35, 14)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (36, 14)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (36, 13)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (36, 13)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (36, 14)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (39, 0)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (39, 11)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (40, 8)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (40, 8)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (40, 8)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (40, 9)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (43, 0)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (57, 42)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (53, 0)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (57, 0)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (61, 45)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (61, 47)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (61, 51)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (62, 44)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (63, 45)",
+        "creeping_tendrils_3.png: штрих толщиной 3.0 px в точке (63, 51)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (62, 52)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (63, 57)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (63, 43)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (63, 44)",
+        "creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (63, 52)",
+        "creeping_tendrils_3.png: штрих толщиной 7.0 px в точке (63, 53)"
+      ],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "skeleton_branches": 309,
+          "longest_branch_px": 19.49,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 3.0,
+          "branches_too_thin": [
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                0,
+                20
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                0,
+                24
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                45
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                51
+              ]
+            },
+            {
+              "length": 3.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                0,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                46
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                48
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                50
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                20,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                24,
+                0
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.83,
+              "at": [
+                35,
+                16
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 6.66,
+              "at": [
+                36,
+                15
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                36,
+                16
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.83,
+              "at": [
+                35,
+                16
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                36,
+                16
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.0,
+              "at": [
+                37,
+                14
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 6.66,
+              "at": [
+                36,
+                15
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                39,
+                0
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                37,
+                13
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.83,
+              "at": [
+                37,
+                13
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.83,
+              "at": [
+                37,
+                13
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                38,
+                13
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                39,
+                63
+              ]
+            },
+            {
+              "length": 8.24,
+              "min_width": 5.0,
+              "at": [
+                39,
+                10
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.83,
+              "at": [
+                38,
+                12
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                43,
+                0
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                43,
+                63
+              ]
+            },
+            {
+              "length": 15.24,
+              "min_width": 7.0,
+              "at": [
+                45,
+                36
+              ]
+            },
+            {
+              "length": 14.83,
+              "min_width": 7.0,
+              "at": [
+                53,
+                41
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                53,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                57,
+                0
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 6.0,
+              "min_width": 3.0,
+              "at": [
+                61,
+                47
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                45
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                63,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                43
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                53
+              ]
+            }
+          ],
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_1.png": {
+          "skeleton_branches": 341,
+          "longest_branch_px": 21.24,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 3.0,
+          "branches_too_thin": [
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                11
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                12
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                18
+              ]
+            },
+            {
+              "length": 3.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                19
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                0,
+                24
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                0,
+                39
+              ]
+            },
+            {
+              "length": 3.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                45
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                51
+              ]
+            },
+            {
+              "length": 3.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                0,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                13
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                15
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                17
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                46
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                48
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                50
+              ]
+            },
+            {
+              "length": 21.24,
+              "min_width": 7.0,
+              "at": [
+                22,
+                14
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                20,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                24,
+                0
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 7.0,
+              "at": [
+                24,
+                54
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                24,
+                54
+              ]
+            },
+            {
+              "length": 3.41,
+              "min_width": 5.83,
+              "at": [
+                26,
+                53
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                28,
+                52
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 6.66,
+              "at": [
+                27,
+                53
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.83,
+              "at": [
+                28,
+                52
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.83,
+              "at": [
+                28,
+                52
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 6.66,
+              "at": [
+                28,
+                53
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 6.66,
+              "at": [
+                29,
+                52
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                30,
+                52
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                30,
+                52
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                31,
+                52
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                31,
+                52
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                39,
+                0
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                41,
+                34
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                41,
+                35
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                41,
+                35
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                42,
+                33
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                42,
+                34
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.83,
+              "at": [
+                41,
+                34
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.0,
+              "at": [
+                42,
+                34
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                43,
+                0
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                42,
+                33
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                42,
+                33
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                43,
+                33
+              ]
+            },
+            {
+              "length": 3.83,
+              "min_width": 3.0,
+              "at": [
+                44,
+                32
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                46,
+                30
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                46,
+                30
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                46,
+                30
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                46,
+                31
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.0,
+              "at": [
+                47,
+                29
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                47,
+                29
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                47,
+                29
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.0,
+              "at": [
+                47,
+                30
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                48,
+                28
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                48,
+                28
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                48,
+                29
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                53,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                57,
+                0
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 6.0,
+              "min_width": 3.0,
+              "at": [
+                61,
+                47
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                45
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                63,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                43
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                53
+              ]
+            }
+          ],
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_2.png": {
+          "skeleton_branches": 247,
+          "longest_branch_px": 32.73,
+          "branches_over_limit": [
+            {
+              "length": 32.73,
+              "from": [
+                33,
+                32
+              ],
+              "to": [
+                62,
+                41
+              ]
+            }
+          ],
+          "min_stroke_width_px": 3.0,
+          "branches_too_thin": [
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                11
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                12
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                18
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                19
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                45
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                51
+              ]
+            },
+            {
+              "length": 3.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                0,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                13
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                15
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                17
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                46
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                48
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                50
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                20,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                24,
+                0
+              ]
+            },
+            {
+              "length": 32.73,
+              "min_width": 3.0,
+              "at": [
+                48,
+                41
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                39,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                39,
+                63
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                43,
+                0
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                43,
+                63
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                48,
+                25
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                48,
+                25
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                48,
+                25
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.83,
+              "at": [
+                49,
+                25
+              ]
+            },
+            {
+              "length": 14.24,
+              "min_width": 7.83,
+              "at": [
+                51,
+                24
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                53,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                57,
+                0
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                12
+              ]
+            },
+            {
+              "length": 6.0,
+              "min_width": 3.0,
+              "at": [
+                61,
+                14
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                18
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                18
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 6.0,
+              "min_width": 3.0,
+              "at": [
+                61,
+                47
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                11
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                11
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                12
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                18
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                19
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                19
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                45
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                63,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                10
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                11
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                19
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                20
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                43
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                53
+              ]
+            }
+          ],
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_3.png": {
+          "skeleton_branches": 283,
+          "longest_branch_px": 37.66,
+          "branches_over_limit": [
+            {
+              "length": 37.66,
+              "from": [
+                1,
+                41
+              ],
+              "to": [
+                37,
+                37
+              ]
+            }
+          ],
+          "min_stroke_width_px": 3.0,
+          "branches_too_thin": [
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                11
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                12
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                12
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                18
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                18
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                19
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                45
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                0,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 3.83,
+              "at": [
+                1,
+                51
+              ]
+            },
+            {
+              "length": 3.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                0,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                13
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                15
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                17
+              ]
+            },
+            {
+              "length": 37.66,
+              "min_width": 7.0,
+              "at": [
+                7,
+                40
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                46
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                48
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 3.0,
+              "at": [
+                1,
+                50
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                20,
+                0
+              ]
+            },
+            {
+              "length": 18.73,
+              "min_width": 3.0,
+              "at": [
+                24,
+                11
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                24,
+                0
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                34,
+                15
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                35,
+                14
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                34,
+                15
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                34,
+                15
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                35,
+                15
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.0,
+              "at": [
+                36,
+                13
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.83,
+              "at": [
+                35,
+                14
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.83,
+              "at": [
+                35,
+                14
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                36,
+                14
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                36,
+                13
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                36,
+                13
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                36,
+                14
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                39,
+                0
+              ]
+            },
+            {
+              "length": 5.24,
+              "min_width": 5.83,
+              "at": [
+                39,
+                11
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                40,
+                8
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                40,
+                8
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                40,
+                8
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                40,
+                9
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                43,
+                0
+              ]
+            },
+            {
+              "length": 14.83,
+              "min_width": 7.0,
+              "at": [
+                57,
+                42
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                53,
+                0
+              ]
+            },
+            {
+              "length": 4.0,
+              "min_width": 7.0,
+              "at": [
+                57,
+                0
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                45
+              ]
+            },
+            {
+              "length": 6.0,
+              "min_width": 3.0,
+              "at": [
+                61,
+                47
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                61,
+                51
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                45
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 3.0,
+              "at": [
+                63,
+                51
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 5.83,
+              "at": [
+                62,
+                52
+              ]
+            },
+            {
+              "length": 2.41,
+              "min_width": 7.0,
+              "at": [
+                63,
+                57
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                43
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                44
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                52
+              ]
+            },
+            {
+              "length": 2.0,
+              "min_width": 7.0,
+              "at": [
+                63,
+                53
+              ]
+            }
+          ],
+          "thin_detached_parts": []
+        }
+      }
+    }
+  },
+  "all_ok": false
+}
