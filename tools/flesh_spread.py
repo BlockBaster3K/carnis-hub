@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Разброс средних цветов вариантов ossified_flesh — метрика Д6 (волна 22)."""
-import itertools, os, sys
+import hashlib, itertools, os, sys, warnings
 from PIL import Image
+
+# Pillow 13 помечает getdata() устаревшим, но текст скрипта утверждён заказчиком;
+# предупреждение глушим, чтобы не засорять вывод проверки.
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 THRESHOLD = 12.0
 
@@ -12,6 +16,13 @@ def mean_rgb(path):
         raise SystemExit(f"{path}: нет непрозрачных пикселей")
     n = len(opaque)
     return tuple(sum(p[i] for p in opaque) / n for i in range(3)), n
+
+def pixel_diff(a, b):
+    ia = Image.open(a).convert("RGBA").getdata()
+    ib = Image.open(b).convert("RGBA").getdata()
+    pa, pb = list(ia), list(ib)
+    n = min(len(pa), len(pb))
+    return sum(1 for i in range(n) if pa[i] != pb[i]) / n
 
 def main():
     d = sys.argv[1] if len(sys.argv) > 1 else "."
@@ -36,9 +47,22 @@ def main():
         if d_ > worst[0]:
             worst = (d_, f"{a} <-> {b}")
     print()
+    for f in sorted(files):
+        h = hashlib.sha256(open(f, "rb").read()).hexdigest()[:16]
+        print(f"SHA-256 {f}: {h}")
+    identical = False
+    for a, b in itertools.combinations(files, 2):
+        share = pixel_diff(a, b)
+        print(f"различие пикселей {os.path.basename(a)} <-> {os.path.basename(b)}: {share*100:.2f} %")
+        if share == 0.0:
+            identical = True
+    if identical:
+        print("ВНИМАНИЕ: есть пара побайтово идентичных файлов — варианты не различаются")
+    print()
     print(f"РАЗБРОС = {worst[0]:.2f}   худшая пара: {worst[1]}")
-    print("ИТОГ:", "СХОДИТСЯ" if worst[0] <= THRESHOLD else "ЕСТЬ ЗАМЕЧАНИЯ")
-    return 0 if worst[0] <= THRESHOLD else 2
+    ok = worst[0] <= THRESHOLD and not identical
+    print("ИТОГ:", "СХОДИТСЯ" if ok else "ЕСТЬ ЗАМЕЧАНИЯ")
+    return 0 if ok else 2
 
 if __name__ == "__main__":
     sys.exit(main())
