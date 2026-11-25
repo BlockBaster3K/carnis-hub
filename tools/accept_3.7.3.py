@@ -834,6 +834,31 @@ def check_bank_format(extract_dir):
         if clip:
             fail.append("банк: клиппинг у %d файлов" % len(clip))
 
+        # T-3182 §1 (З-21): потолок не «нет клиппинга», а пик <= -1.20 dBFS
+        # с запасом >= 0.20 дБ. Порог -1.00 (просто «не клиппинг») пропускал
+        # файлы с пиком -1.01: формально не клиппинг, но регулятор громкости
+        # в игре их уже перегружает. Решение Архитектора — жёстче.
+        CEIL_DB = -1.20
+        MARGIN_DB = 0.20
+        over = []
+        for n, pk in peaks:
+            db = 20 * __import__("math").log10(pk) if pk > 0 else -99.0
+            if db > CEIL_DB:
+                over.append((n, db, CEIL_DB - db))
+        if over:
+            worst = min(m for _, _, m in over)
+            print("  ✗ запас до нормы T-3182: %d файлов выше %.2f dBFS "
+                  "(худший запас %.2f дБ, нужно >= %.2f)"
+                  % (len(over), CEIL_DB, worst, MARGIN_DB))
+            for n, db, m in sorted(over, key=lambda x: -x[1])[:5]:
+                print("      %-40s %+.2f dBFS  запас %.2f" % (n, db, m))
+            fail.append("банк: %d файлов выше потолка %.2f dBFS "
+                        "(запас < %.2f дБ) — T-3182 §1"
+                        % (len(over), CEIL_DB, MARGIN_DB))
+        else:
+            print("  ✓ запас: все файлы не выше %.2f dBFS (T-3182 §1)"
+                  % CEIL_DB)
+
 
 # ------------------------------------------------------------------------ main
 def find_manifest(zip_path, given):
