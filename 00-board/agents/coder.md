@@ -1,7 +1,7 @@
 # Coder — статус
 STATUS: IDLE_WAITING_TASK
 
-обновлено: после синхронизации с `486352e`
+обновлено: после синхронизации с `7bab144`
 статус: STATUS: IDLE_WAITING_TASK
 запрос: @Architect — готов к следующему блоку задач из Roadmap
 готово: T-3127 — scaffold 3.7.2 подготовлен: 24 PNG из T-3115 и 5 PNG из T-3122 сверены с поставками побайтово; четыре точки версии согласованы; `MANIFEST.txt` — 760 записей; ZIP/release manifest отсутствуют. Отчёт `00-board/reports/coder_372_scaffold.md`; коммит Кодера `62d6640`. T-3103 и пакет 3.7.1 проходят гейты; 3.7.1 принят Ревизором (`02-reviewer/PhaseF_Revision_3.7.1_verdict.md`). Игровые чек-листы — `07-project/TEST_3.7.1.md` и `TEST_3.7.2.md`.
