@@ -114,6 +114,7 @@ def geo_info(data):
                 uv_max_v = max(uv_max_v, uv[1] + (size[1] or 0) + (size[2] or 0))
     return {
         "bones": len(bones),
+        "raw_bones": bones,
         "names": [n for n in names if n],
         "problems": problems,
         "uv_max": (uv_max_u, uv_max_v),
@@ -175,6 +176,10 @@ def main():
                          "а не предупреждение (приёмка 3.8.1/H-блока)")
     ap.add_argument("--only", default=None,
                     help="имена через запятую — проверять только их")
+    ap.add_argument("--dedupe-bones", action="store_true",
+                    help="R14 §6: считать только «реальные» (анатомические) кости — "
+                         "кости с одинаковыми pivot и кубами у ≥80 %% существ "
+                         "считаются скопированной декорацией и в порог не идут")
     a = ap.parse_args()
 
     files = iter_files(a.sources)
@@ -215,6 +220,35 @@ def main():
             continue
         creatures.append(name)
 
+    # R14 §6: одна и та же кость с ОДИНАКОВЫМИ pivot и кубами у большинства
+    # существ — это скопированная декорация, а не анатомия. Она раздувает
+    # счётчик «костей», по которому H36 требует >= 12.
+    _sig = {}
+    for _n in creatures:
+        _g = geo_by_name.get(_n)
+        if not _g:
+            continue
+        try:
+            _info = geo_info(files[_g])
+        except Exception:
+            continue
+        for _b in _info.get("raw_bones", []):
+            k = (_b.get("name"), json.dumps(_b.get("pivot"), sort_keys=True),
+                 json.dumps([(c.get("size"), c.get("origin"))
+                             for c in (_b.get("cubes") or [])], sort_keys=True))
+            _sig[k] = _sig.get(k, 0) + 1
+    _limit = max(2, int(0.8 * max(1, len(creatures))))
+
+    def real_bones(info):
+        out = []
+        for b in info.get("raw_bones", []):
+            k = (b.get("name"), json.dumps(b.get("pivot"), sort_keys=True),
+                 json.dumps([(c.get("size"), c.get("origin"))
+                             for c in (b.get("cubes") or [])], sort_keys=True))
+            if _sig.get(k, 0) < _limit:
+                out.append(b.get("name"))
+        return out
+
     fails, warns = [], []
 
     def bad(msg):
@@ -246,6 +280,11 @@ def main():
             bad("%s: %s" % (name, p))
         if info["bones"] < a.min_bones:
             warn("%s: костей %d < %d" % (name, info["bones"], a.min_bones))
+        rb = real_bones(info)
+        if a.dedupe_bones and len(rb) < a.min_bones:
+            bad("%s: реальных костей %d < %d (из %d: остальные — одинаковая "
+                "декорация у большинства существ)" % (name, len(rb), a.min_bones,
+                                                      info["bones"]))
 
         if not tex or tex not in files:
             bad("%s: нет текстуры textures/entity/%s.png" % (name, name))
