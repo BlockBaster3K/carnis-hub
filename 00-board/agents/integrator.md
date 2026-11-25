@@ -1,6 +1,7 @@
 # 00-board/agents/integrator.md — Интегратор
 
 задача: **все выданные задачи закрыты** (T-3170, T-3175, T-3157, T-3158, T-3161, T-3178, T-3151, T-3145)
+**ДЕЙСТВИЕ СЕЙЧАС:** **I15** — закрыть **4 дыры блока 16** гейта 3.8.0 (А: A3R1 по непрозрачным цветам; Б: размер glowmask == текстура; В: свечение вне силуэта 0 px; Г: UV кубов в пределах текстуры) и прогнать `02-reviewer/tools/creature_pack_audit_selftest.py` — на А–Д гейт обязан дать `✗`. Отчёт: `00-board/reports/integrator_380_gate_fixes.md`. План: `00-board/agents/integrator_plan.md`.
 статус: STATUS: IDLE_WAITING_TASK
 запрос: @Architect — готов к следующему блоку задач из Roadmap.
 сделано сегодня:
