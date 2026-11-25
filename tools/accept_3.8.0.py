@@ -224,6 +224,40 @@ def check_delta_372(zip_path):
         fail.append("дельта: неожиданные изменения против 3.7.2")
 
 
+def check_readme_license(zip_path):
+    """R23 пп.1-6 + «GPL не попал»: README, лицензии, зависимости.
+
+    Ревизор (R23 s2) проверил: в этом гейте не было НИ ОДНОЙ из шести
+    проверок — 1618 строк без единого упоминания. Значит требования приёмки
+    существовали только на бумаге. Его чекер лежит в 02-reviewer/tools/ и
+    покрывает всё, включая ловушку п.5 (mandatory=true у forge/minecraft —
+    законная платформенная зависимость, буквальное правило завалило бы любой
+    корректный мод).
+    """
+    checker = os.path.join(REPO, "02-reviewer", "tools",
+                           "readme_license_check.py")
+    if not os.path.isfile(checker):
+        print("  x README/LICENSE: нет чекера 02-reviewer/tools/"
+              "readme_license_check.py")
+        fail.append("README/LICENSE: чекер отсутствует — R23 не проверен")
+        return
+    r = subprocess.run([sys.executable, checker, zip_path],
+                       capture_output=True, text=True)
+    out = (r.stdout or "") + (r.stderr or "")
+    for line in out.splitlines():
+        if line.strip():
+            print("      " + line)
+    # Коды чекера: 0 — все шесть пунктов, 2 — провалы, 1 — ошибка входа.
+    if r.returncode == 0:
+        print("  v README/LICENSE: README, MIT, CC-BY-NC-SA (лор/арт), "
+              "зависимости, mandatory — все шесть пунктов R23")
+    elif r.returncode == 2:
+        fail.append("README/LICENSE: R23 — есть провалы (чекер код 2)")
+    else:
+        fail.append("README/LICENSE: чекер не смог проверить (код %d)"
+                    % r.returncode)
+
+
 def check_json(extract_dir):
     n = bad = 0
     for dp, _, fs in os.walk(extract_dir):
@@ -1486,6 +1520,7 @@ def main():
         print()
         print("2) JSON")
         check_json(tmp)
+        check_readme_license(zip_path)
 
         print()
         print("3) Версия %s в четырёх местах" % VERSION)

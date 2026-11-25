@@ -1105,15 +1105,27 @@ def _baseline_master():
     out = {}
     try:
         with open(BASELINE_MASTER, encoding="utf-8") as fh:
-            for rec in json.load(fh):
+            doc = json.load(fh)
+        # Схема v2 — объект {"schema":…, "files": […]}; прежняя — просто список.
+        recs = doc.get("files", []) if isinstance(doc, dict) else doc
+        if True:
+            for rec in recs:
                 name = rec.get("file", "")
                 for prefix in ("sounds/", "sounds_380/"):
                     if name.startswith(prefix):
                         name = name[len(prefix):]
                         break
                 if name and "baseline_master" in rec:
-                    out[name] = (float(rec["baseline_master"]),
-                                 float(rec.get("repro_delta") or 0.0))
+                    # Схема v2 (S52): запись самодостаточна — тип, порог и
+                    # готовый допуск. Гейту не нужно ничего пересчитывать и не
+                    # нужно второй раз читать таблицу (она может отсутствовать).
+                    out[name] = {
+                        "baseline": float(rec["baseline_master"]),
+                        "repro": float(rec.get("repro_delta") or 0.0),
+                        "type": rec.get("signal_type"),
+                        "threshold": rec.get("threshold"),
+                        "tolerance": rec.get("tolerance"),
+                    }
     except (OSError, ValueError, TypeError):
         return {}
     return out
@@ -1284,7 +1296,18 @@ def check_crest_attack(extract_dir):
             if not got or not ref:
                 no_master.append(rel + " (не декодирован)")
                 continue
-            typ, thr, base_tbl = types[rel]
+            bm_rec = _BM.get(rel) or {}
+            if rel in types:
+                typ, thr, base_tbl = types[rel]
+            elif bm_rec:
+                # Записи в таблице нет, но JSON её заменяет (S52 просил брать
+                # тип отсюда). Таблицу читать второй раз незачем.
+                typ = bm_rec.get("type") or "стац"
+                thr = float(bm_rec.get("threshold") or 0.05)
+                base_tbl = 0.0
+            else:
+                no_entry.append(rel)
+                continue
             cm, cf = _crest(ref[0]), _crest(got[0])
             if cm is None or cf is None:
                 no_master.append(rel + " (тишина)")
@@ -1302,10 +1325,17 @@ def check_crest_attack(extract_dir):
             # только запасной, и тогда это печатается.
             bm = _BM.get(rel)
             if bm is not None:
-                base_used, src = bm[0], "baseline(M)"
+                base_used, src = bm["baseline"], "baseline(M)"
             else:
                 base_used, src = base_tbl, "таблица"
+            # tolerance из JSON (S52) — уже посчитанный max(порог, baseline+0,05);
+            # пересчитываю сам намеренно: если формула когда-нибудь изменится,
+            # гейт не должен молча унаследовать старое число.
             tol = max(thr, base_used + 0.05)
+            if bm is not None and bm.get("tolerance") is not None:
+                if abs(float(bm["tolerance"]) - tol) > 0.001:
+                    print("  ! %s: допуск JSON %.3f != формулы %.3f — беру формулу"
+                          % (rel, float(bm["tolerance"]), tol))
             d = abs(cf - cm)
             if d > tol:
                 # R23 (I23 §10.2): ТАБЛИЧНЫЙ baseline измерен на перекоде
