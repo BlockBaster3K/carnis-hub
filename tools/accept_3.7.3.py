@@ -777,6 +777,52 @@ def ogg_header(data):
     return channels, rate
 
 
+def check_crest(zip_path):
+    """T-3182 §4: правка громкости не должна менять динамику.
+
+    crest = Peak - RMS; чистое усиление сдвигает пик и RMS одинаково и crest
+    не трогает. Если dcrest вылезло за 0,05 дБ - значит в файл попал
+    лимитер/перекодирование/VBR, то есть изменилась динамика (дефект З-21,
+    который не видела ни одна проверка). Fail-closed: нет чекера, нет архива
+    или сверено меньше 15 файлов - это НЕ "ок", а "не проверено".
+    """
+    tol = 0.05
+    checker = os.path.join(REPO, "02-reviewer", "tools", "crest_delta.py")
+    archive = os.path.join(REPO, "03-sound", "archive_zapas_2026-11-26")
+    if not os.path.isfile(checker):
+        print("  x crest: нет чекера 02-reviewer/tools/crest_delta.py")
+        fail.append("crest: чекер отсутствует - динамика не проверена")
+        return
+    if not os.path.isdir(archive):
+        print("  x crest: нет архива оригиналов %s" % archive)
+        fail.append("crest: архива оригиналов нет - сверять не с чем")
+        return
+    n_arch = len([f for f in os.listdir(archive) if f.endswith(".ogg")])
+    if n_arch < 15:
+        print("  x crest: в архиве %d файлов вместо 15" % n_arch)
+        fail.append("crest: архив оригиналов неполон (%d из 15)" % n_arch)
+        return
+    py = _python_with("av") or sys.executable
+    r = subprocess.run([py, checker, archive, zip_path,
+                        "--tol", str(tol), "--top", "3"],
+                       capture_output=True, text=True)
+    out = r.stdout
+    over = [ln.strip() for ln in out.splitlines() if ln.strip().startswith("! ")]
+    m = re.search(r"Файлов сверено: (\d+)", out)
+    n = int(m.group(1)) if m else 0
+    for ln in over[:4]:
+        print("      " + ln)
+    if n < 15:
+        print("  x crest: сверено %d файлов вместо 15 - часть банка не проверена" % n)
+        fail.append("crest: сверено %d из 15 файлов" % n)
+        return
+    if r.returncode == 0 and not over:
+        print("  v crest: 15/15 в допуске %.2f дБ (T-3182 §4)" % tol)
+    else:
+        print("  x crest: динамика изменена сверх %.2f дБ (%d файлов)" % (tol, len(over)))
+        fail.append("crest: динамика изменена сверх %.2f дБ" % tol)
+
+
 def check_bank_format(extract_dir):
     """ТЗ 3.7.2 §9, блок 13: формат банка однороден, клиппинга нет.
 
@@ -1111,6 +1157,10 @@ def main():
         print()
         print("12) Блоки — плотность светотени (ТЗ 3.7.2 §9)")
         check_blocks(tmp)
+
+        print()
+        print("12а) Crest — динамика не изменена (T-3182 §4)")
+        check_crest(zip_path)
 
         print()
         print("13) Банк — формат и клиппинг (ТЗ 3.7.2 §9)")
