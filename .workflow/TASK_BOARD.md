@@ -2605,9 +2605,9 @@ baseline достигает **0,47 дБ**, и `min()` срезает допус�
 
 ## T-3202 · Кодер · 3.7.3: 9 событий привязаны; review принятия в процессе
 
-**STATUS:** IN REVIEW — source calls committed as `2c338af`; permanent ZIP/manifest rebuilt with S17-only volume edits. Reviewer full-checkout rerun pending; local gate and Java compile remain blocked/unconfirmed.
+**STATUS:** DONE for implementation/Integrator gate — source calls committed as `2c338af`; `sound_orphans` code 0; package `052c2e0c…` accepted by Integrator (`4c1eea9`, 54/0, code 0). Java compile remains unconfirmed; Reviewer recheck of its contradictory volume finding belongs to T-3179.
 
-На постоянном ZIP `sound_orphans` возвращает **код 0**: сирот 0, ссылок в пустоту 0, недостижимых событий 0 (`FLAMETHROWER_FIRE` — документированный scaffold allowlist). После acceptance report `05a305a` pitch `hive.detail_flow` восстановлен к 0.95/1.05. Reviewer verdict `9967fef` о громкости опирается на `forAmbientAddition`, однако source и ZIP показывают, что detail path использует `level.playLocalSound(..., 0.30F, ...)`; `forAmbientAddition` здесь относится к pulse/stinger/heartbeat. Spread/shock также передают 0.65F/0.8F в Java calls. JSON multipliers для этих событий не добавлял, чтобы не умножать уровни повторно; попросил Ревизора сверить точные call sites. Текущий ZIP/manifest — 761/761, SHA `052c2e0c…`; source semantic compare passes. Локальный gate code 1 из-за missing independent inputs в sparse checkout; полный reviewer rerun ожидается, см. `coder_373_build.md`.
+На постоянном ZIP `sound_orphans` — **код 0**: сирот 0, ссылок в пустоту 0, недостижимых 0 (`FLAMETHROWER_FIRE` — документированный scaffold allowlist). После report `05a305a` pitch `hive.detail_flow` восстановлен к 0.95/1.05. Reviewer verdict `9967fef` о громкости опирается на `forAmbientAddition`, однако source и ZIP показывают detail path `level.playLocalSound(...,0.30F...)`; `forAmbientAddition` здесь относится к pulse/stinger/heartbeat. Spread/shock также передают 0.65F/0.8F в Java calls. Новые JSON multipliers не добавлял, чтобы не умножать уровни повторно; попросил Reviewer сверить call sites. Полный Integrator gate на постоянном ZIP пройден: **54 checks, 0 failures, code 0**, report `integrator_373_gate_final.md`. Independent Reviewer recheck after pitch fix ещё не опубликован.
 
 | Событие | Ключ в `sounds.json` | Куда привязать (карта S17) | volume |
 |---|---|---|---|
@@ -2624,7 +2624,7 @@ baseline достигает **0,47 дБ**, и `min()` срезает допус�
 **Не трогать:** `FLAMETHROWER_FIRE` (задел, в allowlist), `FLESH_AMALGAM_AMBIENT`
 (жив через общий ключ).
 
-**После привязки:** permanent ZIP/manifest пересобраны; локальный gate code 1 из-за отсутствующих независимых inputs в sparse checkout. Полный acceptance по новой сдаче ожидает Reviewer/Integrator в полном checkout.
+**После привязки:** permanent ZIP/manifest пересобраны; полный Integrator gate `4c1eea9` прошёл **54/0, code 0**. Локальный gate code 1 только из-за отсутствующих независимых inputs sparse checkout. Остались не coder-gate блокеры: Java 17/Gradle compile недоступны локально, Reviewer follow-up по расхождению volume-path в T-3179 pending.
 После приёмки — **C13** (регистрация 33 существ) и вставка **132** событий звука
 (фрагмент Звука `03-sound/3.8.0/sounds_json_infected_33.json`), когда будет доступна стартовая база 3.8.0.
 
@@ -3125,7 +3125,7 @@ glowmask по Р-3 **33/33**.
 
 ## T-3177 · Кодер · Сборка 3.7.3 (с 12 PNG + 2 glowmask)
 
-**STATUS:** ASSIGNED — **Приоритет 1, цель релиза 3.7.3**
+**STATUS:** DONE — ZIP/manifest rebuilt; Integrator acceptance `4c1eea9` passed **54 checks, 0 failures, code 0**. Independent Reviewer follow-up remains T-3179.
 **Зона:** `01-coder/3.7.3/`
 
 **Что уже готово:** заготовка `01-coder/3.7.3/` собрана (T-3164), сдача
@@ -3149,8 +3149,7 @@ glowmask по Р-3 **33/33**.
 4. **Отчёт** `00-board/reports/coder_373_build.md`: sha256, размер, число
    файлов, дельта к 3.7.2 (перечень изменённых файлов), результат гейта.
 
-**Критерий приёмки:** ZIP + манифест 759/759, `sha256sum -c` чист, дельта
-ровно 14 PNG к 3.7.2, гейт код 0.
+**Фактическая приёмка:** финальный ZIP/manifest имеют 761/761 записей; код `sha256sum -c` чист, ZIP целостен, Integrator gate `4c1eea9` — 54/0/code 0. Исходный ориентир 759 записей/«ровно 14 PNG» был уточнён после добавления одобренных T-3202 source/resource изменений; итоговое независимое ревью — T-3179.
 
 ---
 
@@ -3675,7 +3674,7 @@ VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
 
 ## Запрос Кодера Архитектору · восстановление лимита workspace
 
-**STATUS: NEEDS_ARCHITECT_DECISION.** Последний замер workspace — 217 MB (>128 MB), `.git` 182 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
+**STATUS: NEEDS_ARCHITECT_DECISION.** Последний замер workspace — 218 MB (>128 MB), `.git` 182 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
 
 Факты, риски и точный вопрос: `00-board/reports/coder_git_storage_architect_request.md`.
 В этом цикле pull уже выполнен по прямому указанию пользователя. До решения не запускать широкие обходы refs/объектов, repack, gc, удаление объектов или замену `.git`; локальные правки сохранить.
