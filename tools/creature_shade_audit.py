@@ -7,13 +7,15 @@
 импортируется его функция `check_image`. Скрипт только обходит все текстуры
 существ и печатает сводную таблицу, отсортированную по доле.
 
-    python3 tools/creature_shade_audit.py [каталог пакета] [--include-glowmask]
+    python3 tools/creature_shade_audit.py [каталог|zip пакета] [--include-glowmask]
                                           [--max-share 0.35] [--min-colors 7]
                                           [--tex-dir textures/block]
 
 `--tex-dir` переключает набор: по умолчанию `textures/entity` (существа),
 `textures/block` — текстуры блоков (T-3131). Правила те же, чекер тот же.
 
+Вход — **каталог пакета или ZIP-пакет**: гейты работают с ZIP, и раньше инструмент
+на ZIP отвечал ошибкой (T-3159, п.3 — проверка инструмента на 3.7.1/3.6.0-R).
 По умолчанию каталог — `01-coder/3.7.0`, сканируется
 `src/main/resources/assets/carnis/textures/entity/*.png`.
 
@@ -22,8 +24,10 @@
 """
 import argparse
 import importlib.util
+import io
 import os
 import sys
+import zipfile
 from collections import Counter
 from pathlib import Path
 
@@ -65,38 +69,55 @@ def main():
         print("ОШИБКА: нужен Pillow (python3 -m pip install pillow)")
         return 1
 
-    ent = Path(a.root) / "src/main/resources/assets/carnis" / a.tex_dir
-    if not ent.is_dir():
-        print("ОШИБКА: нет каталога текстур существ %s" % ent)
-        return 1
-
-    files = sorted(p for p in ent.glob("*.png")
-                   if a.include_glowmask or "_glowmask" not in p.name.lower())
-    if not files:
-        print("ОШИБКА: в %s нет подходящих PNG" % ent)
-        return 1
+    inner = "src/main/resources/assets/carnis/" + a.tex_dir
+    is_zip = os.path.isfile(a.root) and zipfile.is_zipfile(a.root)
+    if is_zip:
+        with zipfile.ZipFile(a.root) as z:
+            members = sorted(n for n in z.namelist()
+                             if n.startswith(inner + "/") and n.lower().endswith(".png"))
+            if not a.include_glowmask:
+                members = [n for n in members if "_glowmask" not in n.rsplit("/", 1)[-1].lower()]
+            if not members:
+                print("ОШИБКА: в %s нет подходящих PNG (%s)" % (a.root, inner))
+                return 1
+            files = [(n, z.read(n)) for n in members]
+        src_label = "%s (%s)" % (a.root, inner)
+        names = [n.rsplit("/", 1)[-1] for n, _ in files]
+    else:
+        ent = Path(a.root) / inner
+        if not ent.is_dir():
+            print("ОШИБКА: нет каталога текстур %s (ни каталог, ни ZIP): %s" % (a.tex_dir, ent))
+            return 1
+        paths = sorted(p for p in ent.glob("*.png")
+                       if a.include_glowmask or "_glowmask" not in p.name.lower())
+        if not paths:
+            print("ОШИБКА: в %s нет подходящих PNG" % ent)
+            return 1
+        files = [(p.name, p.read_bytes()) for p in paths]
+        src_label = str(ent)
+        names = [p.name for p in paths]
 
     rows = []
-    for p in files:
+    for name, blob in files:
         try:
-            im = Image.open(p)
+            im = Image.open(io.BytesIO(blob) if is_zip else name)
             rgba = im.convert("RGBA")
             px = [q[:3] for q in rgba.getdata() if q[3] > 0]
             if not px:
-                rows.append((p.name, 0, 0.0, None, False))
+                rows.append((name, 0, 0.0, None, False))
                 continue
             cnt = Counter(px)
             top_col, top_n = cnt.most_common(1)[0]
             share = top_n / len(px)
             ok = share <= a.max_share and len(cnt) >= a.min_colors
-            rows.append((p.name, len(cnt), share, top_col, ok))
+            rows.append((name, len(cnt), share, top_col, ok))
         except Exception as exc:
-            print("ОШИБКА: %s не прочитан: %s" % (p.name, exc))
+            print("ОШИБКА: %s не прочитан: %s" % (name, exc))
             return 1
 
     subject = "существ" if a.tex_dir.endswith("entity") else "блоков"
     print("Ревизия светотени %s" % subject)
-    print("Источник: %s" % ent)
+    print("Источник: %s" % src_label)
     print("Правила чекера Художника %s: доля одной краски ≤ %.0f %%, цветов ≥ %d"
           % (ARTIST_CHECKER, a.max_share * 100, a.min_colors))
     print()
