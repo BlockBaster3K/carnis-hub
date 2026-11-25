@@ -214,6 +214,115 @@ def run_tool(name, script, *args):
         fail.append("%s: код %d" % (name, r.returncode))
 
 
+def check_a3r1(src):
+    """A3R1 — цвет щупалец под плоть. Чекер Ревизора, зовём как подпроцесс."""
+    script = os.path.join(REPO, "tools", "tendril_flesh_match.py")
+    if not os.path.exists(script):
+        fail.append("A3R1: нет tools/tendril_flesh_match.py — не проверить")
+        print("  ✗ A3R1: чекер отсутствует")
+        return
+    py = _python_with_pillow()
+    if py is None:
+        fail.append("A3R1: нет Pillow")
+        print("  ✗ A3R1: нет Pillow")
+        return
+    r = subprocess.run([py, script, src], capture_output=True, text=True)
+    tail = [l for l in r.stdout.strip().split("\n") if l.startswith("ИТОГ")]
+    print("  %s A3R1 → код %d | %s" % ("✓" if r.returncode == 0 else "✗",
+                                       r.returncode,
+                                       tail[0] if tail else "(нет строки ИТОГ)"))
+    if r.returncode == 2:
+        # Художник мог ещё не сдать A3R1 — это блокер сборки, не дефект 3.7.0-пакета
+        fail.append("A3R1: код 2 — цвет щупалец не принят")
+        for line in r.stdout.split("\n"):
+            if "[!]" in line:
+                print("      " + line.strip())
+
+
+def check_ambient(extract_dir):
+    """Р-31.2 Архитектора: ambient-фикс должен быть в заготовке.
+
+    Сейчас в 01-coder/3.7.0/ NOT FIXED: 268 тиков, 0.85, pitch 0.9/1.1.
+    Проверяем по числам, а не «на глаз».
+    """
+    h = None
+    for dp, _, fs in os.walk(extract_dir):
+        if "HiveAmbientSoundHandler.java" in fs:
+            h = os.path.join(dp, "HiveAmbientSoundHandler.java")
+            break
+    if h is None:
+        print("  ! HiveAmbientSoundHandler.java нет — ambient не проверен")
+        warn.append("ambient: файл хендлера не найден")
+        return
+    txt = open(h, encoding="utf-8").read()
+    ok = True
+    import re
+    m = re.search(r"PULSE_INTERVAL_TICKS\s*=\s*(\d+)", txt)
+    val = int(m.group(1)) if m else -1
+    good = 420 <= val <= 480
+    print("  %s PULSE_INTERVAL_TICKS = %d (нужно 420–480)" % ("✓" if good else "✗", val))
+    if not good:
+        ok = False
+        fail.append("ambient: PULSE_INTERVAL_TICKS = %d, нужно 420–480" % val)
+    vols = re.findall(r"(\d+\.\d+)F", txt)
+    has085 = "0.85F" in txt
+    print("  %s громкость кровати: %s (нужно 0.45F)"
+          % ("✗" if has085 else "✓", "0.85F — не исправлено" if has085 else "не 0.85F"))
+    if has085:
+        ok = False
+        fail.append("ambient: громкость кровати всё ещё 0.85F, нужно 0.45F")
+
+    sj = None
+    for dp, _, fs in os.walk(extract_dir):
+        if "sounds.json" in fs:
+            sj = os.path.join(dp, "sounds.json")
+            break
+    if sj:
+        data = json.load(open(sj, encoding="utf-8"))
+        bad = []
+        for ev in ("hive.ambient", "hive.ambient_close", "hive.ambient_surface",
+                   "hive.ambient_deep", "hive.ambient_core", "hive.ambient_threshold"):
+            for s in data.get(ev, {}).get("sounds", []):
+                if isinstance(s, dict) and s.get("pitch") not in (None, 1.0):
+                    bad.append("%s: pitch %s" % (ev, s["pitch"]))
+        print("  %s pitch ambient-слоёв: %s"
+              % ("✗" if bad else "✓", "; ".join(bad) if bad else "все 1.0 или не заданы"))
+        if bad:
+            ok = False
+            fail.append("ambient: pitch не 1.0 — %s" % "; ".join(bad[:3]))
+    if ok:
+        print("      ambient-фикс выполнен")
+
+
+def check_k8s_breaths(extract_dir):
+    """Р-31.2: Архитектор вернул amalgam_breath_01/02 с volume 0.35.
+
+    Если файлов нет — это ещё не дефект (Кодер мог решить иначе), но если
+    событие на них ссылается, volume обязан быть 0.35.
+    """
+    sj = None
+    for dp, _, fs in os.walk(extract_dir):
+        if "sounds.json" in fs:
+            sj = os.path.join(dp, "sounds.json")
+            break
+    if not sj:
+        return
+    data = json.load(open(sj, encoding="utf-8"))
+    got = []
+    for s in data.get("hive.amalgam_breath", {}).get("sounds", []):
+        if isinstance(s, dict) and "amalgam_breath" in s.get("name", ""):
+            got.append((s["name"], s.get("volume")))
+    if not got:
+        print("  ! amalgam_breath_01/02 не подключены (решение Р-31.2 не применено)")
+        warn.append("amalgam_breath_01/02 не подключены — Р-31.2 не применена")
+        return
+    bad = [g for g in got if g[1] != 0.35]
+    print("  %s amalgam_breath: %d подключено, volume %s (нужно 0.35)"
+          % ("✗" if bad else "✓", len(got), sorted({g[1] for g in got})))
+    if bad:
+        fail.append("amalgam_breath: volume %s, нужно 0.35" % sorted({g[1] for g in bad}))
+
+
 def check_keep_identical(extract_dir):
     if not os.path.exists(REF_360):
         warn.append("нет эталона 3.6.0-R — Д1–Д7 не сверены")
@@ -302,7 +411,16 @@ def main():
             fail.append("tools/sound_orphans.py отсутствует — K8-S не проверить")
 
         print()
-        print("7) Д1–Д7 и принятое не тронуто")
+        print("7) A3R1 — цвет щупалец под плоть (через чекер Ревизора)")
+        check_a3r1(zip_path)
+
+        print()
+        print("8) Ambient-фикс (Р-31.2 Архитектора)")
+        check_ambient(tmp)
+        check_k8s_breaths(tmp)
+
+        print()
+        print("9) Д1–Д7 и принятое не тронуто")
         check_keep_identical(tmp)
 
         print()
