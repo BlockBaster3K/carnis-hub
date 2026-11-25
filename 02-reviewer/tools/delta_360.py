@@ -78,6 +78,11 @@ def main(argv):
     ap.add_argument('--pkgdir', default=None, help='каталог пакета в репозитории (для имени и манифеста)')
     a = ap.parse_args(argv[1:])
 
+    if not os.path.exists(a.zip):
+        print('ПАКЕТ НЕ НАЙДЕН: %s' % a.zip)
+        print('Ждём сдачу Кодера: 01-coder/3.6.0/project-3.6.0-clean.zip')
+        return 2
+
     ok = True
     def say(flag, text):
         nonlocal ok
