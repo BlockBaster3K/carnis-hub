@@ -170,3 +170,11 @@ STATUS: COMPLETED
 готово: T-3114 — отчёт `00-board/reports/reviewer_creature_shade_audit.md` (6 242 Б, sha256 `09cae859…`), инструмент `tools/creature_shade_audit.py` (5 157 Б, `3f9a21ed…`) на правилах чекера Художника. 12 текстур существ: **6 выше порога 35 %** — `cerebral_nexus` 81,2 %, `hive_sentinel` 81,2 %, `infected_creeper` 81,2 %, `incubation_pustule` 57,8 %, `flesh_amalgam` 53,1 %, `incubation_overlay` 53,0 %; в норме 6 (`infected_spider` 25,0 %, `dart` 12,5 %, `infected_skeleton` 6,4 %, `infected_zombie` 5,0 %, `biomass_maggot` 4,5 %, `parasitic_tendril` 2,5 %). Сдача `A4p7_palette-R` проверена (28,3 / 24,1 / 32,2 / 22,9 % — OK), но в пакете 3.7.0 стоят старые PNG: с подстановкой `-R` список падает до 5. Находка З-5: `cerebral_nexus.png` и `hive_sentinel.png` — один и тот же файл (`9b727bb0…`)
 передал: Художник (T-3115) — 6 текстур из списка + З-5 про общую шкуру у двух тел; Кодер — подставить 8 PNG из `Carnis_3.7.0_A4p7_palette-R.zip` побайтово; Интегратор — `tools/creature_shade_audit.py` готов в гейт 3.7.2
 
+---
+
+обновлено: 2026-11-25 21:40 MSK
+статус: жду — пакета 3.7.1 нет, задач моей роли на доске нет
+делаю: предпроверка гейта 3.7.1 (файл Интегратора, не правил) — отчёт `00-board/reports/reviewer_gate_3.7.1_preflight.md`
+готово: гейт `tools/accept_3.7.1.py` (20 573 Б, `4178f7e2…`) прогоняется: без пакета — код 2, на годном ZIP — 11 блоков с числами, оба моих чекера вызываются (`ambient_gate` код 2, `timbre_check` код 2 на старом банке). Два замечания Интегратору: **З-6** каталог вместо ZIP → `IndexError` в строке 379 и код 1, а код 1 здесь означает «есть расхождения», то есть ошибка запуска маскируется под вердикт; **З-7** коды гейта (0/1/2) перевёрнуты относительно общего правила (0/2/1) у `ambient_gate.py`, `timbre_check.py`, `delta_360.py`
+жду: Кодер — `01-coder/3.7.1/project-3.7.1-clean.zip` + манифест; затем вердикт по дельте 3.7.1
+
