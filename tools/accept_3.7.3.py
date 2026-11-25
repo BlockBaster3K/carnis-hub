@@ -968,6 +968,9 @@ def check_crest(zip_path):
 
 
 MASTERS = os.path.join(REPO, "03-sound", "masters")
+# S33: мастеры хранятся в FLAC (S31, побитово равен WAV) — .wav оставлен первым
+# для совместимости, если мастер когда-нибудь положат как WAV.
+MASTER_EXTS = (".wav", ".flac")
 CREST_TABLE = os.path.join(REPO, "00-board", "reports",
                            "sound_crest_baseline.md")
 ATTACK_TOL = 0.60
@@ -1113,15 +1116,18 @@ def check_crest_attack(extract_dir):
             # Мастер ищется в обоих корнях: канон и 3.8.0 лежат отдельно.
             master = None
             for sub in ("sounds", "sounds_380"):
-                cand = os.path.join(MASTERS, sub, rel[:-4] + ".wav")
-                if os.path.isfile(cand):
-                    master = cand
-                    break
-                # Мастера З-21 лежат ПЛОСКО в sounds/_z21/ без подкаталогов
-                # банка — искать по одному имени файла, а не по полному пути.
-                flat = os.path.join(MASTERS, sub, "_z21", f[:-4] + ".wav")
-                if os.path.isfile(flat):
-                    master = flat
+                for ext in MASTER_EXTS:
+                    cand = os.path.join(MASTERS, sub, rel[:-4] + ext)
+                    if os.path.isfile(cand):
+                        master = cand
+                        break
+                    # Мастера З-21 лежат ПЛОСКО в sounds/_z21/ без подкаталогов
+                    # банка — искать по одному имени файла, а не по полному пути.
+                    flat = os.path.join(MASTERS, sub, "_z21", f[:-4] + ext)
+                    if os.path.isfile(flat):
+                        master = flat
+                        break
+                if master is not None:
                     break
             if master is None:
                 no_master.append(rel)
