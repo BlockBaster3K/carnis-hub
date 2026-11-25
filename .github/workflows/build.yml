@@ -49,6 +49,8 @@ jobs:
         id: pkg
         shell: bash
         run: |
+          # Диагностика: если шаг упадёт, в логе будет видно состояние.
+          set -x
           set -e
           PKG="${{ github.event.inputs.package }}"
           if [ -z "$PKG" ]; then
