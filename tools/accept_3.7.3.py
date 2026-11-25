@@ -73,6 +73,10 @@ TIMBRE = os.path.join(REPO, "tools", "timbre_check.py")
 
 CREEPER = "src/main/resources/assets/carnis/textures/entity/infected_creeper.png"
 SHADE_MAX = 35.0
+
+# З-16/З-18: нижний порог числа красок (норма ТЗ «>= 7 цветов»).
+# Без него плоская текстура из 1-6 цветов проходила как «худший 12.5 %».
+SHADE_MIN_COLORS = 7
 BLOCK_DIR = "src/main/resources/assets/carnis/textures/block"
 
 # Решение Архитектора T-3142 (вариант B, волна 38): три текстуры блока
@@ -295,10 +299,25 @@ def run_tool(name, script, *args, **kw):
     # З-17: код 2 у чекеров — «ЗАМЕЧАНИЯ/пропуск», а не «расхождение».
     # Пропуск (эталон недоступен) нельзя валить в fail: иначе пакет получает
     # отказ за то, что у проверяющего устроено рабочее дерево, а не за дефект.
+    # З-24: код 2 у чекера НЕЛЬЗЯ глушить целиком. Раньше он означал
+    # «пропущено», и любой инструмент, вернувший 2 как «есть находки»,
+    # проходил незамеченным — так 11 недостижимых звуковых событий едва не
+    # уехали в релиз. Различаем по строке ИТОГ самого чекера:
+    #   «ПРОПУЩЕНО»  -> действительно не выполнено (fail-closed, З-20);
+    #   всё остальное -> ЗАМЕЧАНИЯ, то есть находки -> ✗ и в fail.
+    verdict = tail[0] if tail else ""
+    if r.returncode == 2 and "ПРОПУЩ" in verdict.upper():
+        print("  … %s → код 2 «пропущено» | %s" % (name, verdict))
+        skipped_checks.append("%s: код 2 «пропущено»" % name)
+        return
     if r.returncode == 2:
-        print("  … %s → код 2 (пропущено/замечания) | %s"
-              % (name, tail[0] if tail else "(нет строки ИТОГ)"))
-        skipped_checks.append("%s: код 2" % name)
+        print("  ✗ %s → код 2 «ЗАМЕЧАНИЯ» (не пропуск!) | %s"
+              % (name, verdict or "(нет строки ИТОГ)"))
+        for line in r.stdout.split("\n"):
+            if "недостижим" in line or "[!]" in line:
+                print("      " + line.strip()[:110])
+                break
+        fail.append("%s: замечания (код 2, не пропуск)" % name)
         return
     print("  %s %s → код %d | %s"
           % ("✓" if r.returncode == 0 else "✗", name, r.returncode,
@@ -644,6 +663,14 @@ def _shade_scan(extract_dir, subdir, tag, limit=200):
         "c = Counter(px); top, n = c.most_common(1)[0]\n"
         "print('%d %d %d' % (len(px), len(c), n))\n"
     )
+    # З-18 (Ревизор): лимит 200 обрезал скан МОЛЧА — печаталось полное
+    # число файлов, а проверялись первые 200. Теперь: если файлов больше
+    # лимита, это не «всё ок», а непроверенная часть -> fail-closed.
+    if len(files) > limit:
+        print("  ✗ %s: PNG %d > лимита %d — часть текстур НЕ проверена"
+              % (tag, len(files), limit))
+        fail.append("%s: %d PNG при лимите %d — проверены не все"
+                    % (tag, len(files), limit))
     bad = []
     worst = None
     for p in files[:limit]:
@@ -652,12 +679,24 @@ def _shade_scan(extract_dir, subdir, tag, limit=200):
             bad.append("%s: замер не прошёл" % os.path.basename(p))
             continue
         npx, ncol, top_n = (int(x) for x in r.stdout.split()[:3])
+        rel = os.path.relpath(p, os.path.join(extract_dir, subdir))
+        # З-18 (Ревизор): текстура без единого непрозрачного пикселя
+        # проходила МОЛЧА — не попадала ни в bad, ни в «худший».
+        # Затёртая альфа — это дефект, а не «нечего мерить».
         if npx == 0:
+            print("  ✗ %s — НЕТ непрозрачных пикселей (α = 0 везде)" % rel)
+            bad.append("%s — полностью прозрачная (α = 0)" % rel)
             continue
         share = 100.0 * top_n / npx
-        rel = os.path.relpath(p, os.path.join(extract_dir, subdir))
         if worst is None or share > worst[1]:
             worst = (rel, share, ncol)
+        # З-16/З-18: правило «не меньше 7 цветов». Число цветов печаталось,
+        # но ни с чем не сравнивалось — текстура в 6 цветов проходила
+        # («6 цветов» никого не смутило). Ставим нижний порог наконец.
+        if ncol < SHADE_MIN_COLORS:
+            print("  ✗ %s — %d цвет(ов) < нормы %d (плоская заливка)"
+                  % (rel, ncol, SHADE_MIN_COLORS))
+            bad.append("%s — %d цветов < %d" % (rel, ncol, SHADE_MIN_COLORS))
         if share > SHADE_MAX:
             bad.append("%s — %.1f %% > %.0f %% (%d цветов)"
                        % (rel, share, SHADE_MAX, ncol))
