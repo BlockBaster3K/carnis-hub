@@ -13,7 +13,9 @@ tendrils_check.py — независимый валидатор набора `cr
   5. читаемость в 16 px: покрытие, связность, отсутствие «каши»;
   6. торцы и углы: содержимое доходит до кромки плитки (иначе стена
      распадается на изолированные островки) и не образует прямых линий;
-  7. геометрия штрихов: толщина ≥ 8 px (2 px в 16 px), длина ≤ 32 px (половина плитки);
+  7. геометрия штрихов (методика 2026-11-25): толщина в центральных 60 % длины
+     ветви ≥ 8 px, кончики могут сходиться до 4 px и не проверяются; длина
+     ≤ 40 px у толстой ветви (медиана ≥ 12 px) и ≤ 32 px у более тонкой;
   8. палитра совпадает с исходной текстурой 16×16.
 
 Замечание о кромках (решение Архитектора, волна 28)
@@ -57,9 +59,15 @@ BASELINE_PALETTE = {
     (161, 90, 96, 255),
 }
 
-MAX_STROKE_PX = 32      # половина плитки
+MAX_STROKE_PX = 32      # половина плитки — предел для тонкой ветви
 MIN_STROKE_PX = 8       # 2 px в проекции 16×16
 THIN_STROKE_PX = 12     # ширина штриха, ниже которой он считается «линией»
+# Методика A6 от 2026-11-25 (волна 29): толщина — только в середине ветви,
+# кончики могут сходиться до 4 px, толстая ветвь может быть длиннее.
+STROKE_MIDDLE_FRACTION = 0.60   # толщина меряется в центральных 60 % длины
+LONG_THICK_STROKE_PX = 40       # предел длины для толстой ветви
+THICK_STROKE_PX = 12            # «толстая»: медианная толщина в середине ≥ 12 px
+TIP_TAPER_PX = 4                # кончик может сходиться до 4 px и не проверяется
 
 
 # ── утилиты ───────────────────────────────────────────────────────────
@@ -85,9 +93,16 @@ def is_hashing(seed):
     return h
 
 
-def mix_pattern(n, seed):
+def mix_pattern(n, seed, variants=4):
+    """Схема смешения для сетки n×n. variants — сколько вариантов реально подано.
+
+    Раньше индекс жёстко брался по модулю 4: при трёх вариантах стенд падал
+    с IndexError, хотя сам требует «минимум 3». С четырьмя вариантами
+    поведение не изменилось ни на одном пикселе.
+    """
     h = is_hashing(seed)
-    return [[int(h(y * 16 + x, 3) * 4) % 4 for x in range(n)] for y in range(n)]
+    k = max(1, int(variants))
+    return [[int(h(y * 16 + x, 3) * 4) % k for x in range(n)] for y in range(n)]
 
 
 # ── метрика расстояний (чамфер 3×4) ───────────────────────────────────
@@ -556,7 +571,7 @@ def check_lattice(images):
     names = list(images)
     for n in (3, 5):
         for seed in (977 + n, 20260101 + n, 4242 + n):
-            pat = mix_pattern(n, seed)
+            pat = mix_pattern(n, seed, len(images))
             wall = build_wall(images, pat)
             e, i, ratio = _lattice_ratio(wall, n)
             entry = {"seed": seed, "alpha_at_border": round(e, 3),
@@ -577,7 +592,7 @@ def check_mixed(images):
     names = list(images)
     for n in (3, 5):
         for seed in (977 + n, 20260101 + n, 4242 + n):
-            pat = mix_pattern(n, seed)
+            pat = mix_pattern(n, seed, len(images))
             wall = build_wall(images, pat)
             W = wall.size[0]
             wp = pixels(wall)
@@ -769,16 +784,33 @@ def check_ends_corners(images):
     return res
 
 
-def check_geometry(images):
-    """Длина непрерывной линии ≤ 32 px и толщина штриха ≥ 8 px.
+def _middle_points(path, fraction=STROKE_MIDDLE_FRACTION):
+    """Точки центральных `fraction` длины ветви: кончики в проверку не входят."""
+    n = len(path)
+    cut = int(n * (1.0 - fraction) / 2.0)
+    if cut > 0 and n - 2 * cut >= 1:
+        return path[cut:n - cut]
+    return path
 
-    Метрики (в 64×64):
-      * скелет маски — скелетизация Чжан-Суэна с удалением коротких отростков;
-      * «непрерывная линия» — ветвь скелета между узлами и концами;
-        берётся длина самой длинной ветви;
-      * толщина штриха в точке медиальной оси — диаметр вписанного круга
-        (2·d + 1, где d — расстояние до прозрачного пикселя);
-        у скруглённого конца штриха берутся только внутренние точки ветви.
+
+def check_geometry(images):
+    """Длина и толщина штриха — методика A6 от 2026-11-25 (волна 29).
+
+    Правила:
+      * толщина меряется только в **центральных 60 %** длины ветви
+        (`STROKE_MIDDLE_FRACTION`); кончики могут сходиться до 4 px
+        (`TIP_TAPER_PX`) и на толщину не проверяются;
+      * минимум толщины в середине ветви ≥ 8 px (`MIN_STROKE_PX`);
+      * длина ветви ≤ 40 px, если медианная толщина в середине ≥ 12 px,
+        иначе ≤ 32 px (как было);
+      * ветвь короче 8 px целиком считается кончиком и на толщину не
+        проверяется — иначе округление скелета даёт ложное срабатывание;
+      * отдельные тонкие фигуры (`thin_detached_parts`) — критерий не менялся.
+
+    Метрики (в 64×64): скелет Чжан-Суэна с удалением коротких отростков;
+    «непрерывная линия» — ветвь скелета между узлами и концами; толщина в
+    точке медиальной оси — диаметр вписанного круга (2·d + 1, где d —
+    расстояние до прозрачного пикселя).
     """
     res = {"ok": True, "details": [], "tiles": {}}
     for name, im in images.items():
@@ -790,23 +822,33 @@ def check_geometry(images):
         min_width = None
         long_branches = []
         thin_branches = []
+        exempt_short = 0
         for br in branches:
             path = br["path"]
             length = br["length"]
             longest = max(longest, length)
-            if length > MAX_STROKE_PX:
-                long_branches.append({"length": round(length, 2),
-                                      "from": list(path[0]), "to": list(path[-1])})
-            inner = path[2:-2] if len(path) > 4 else path
-            widths = [width_at(d, y, x) for (x, y) in inner]
+            mid = _middle_points(path)
+            widths = [width_at(d, y, x) for (x, y) in mid]
             if not widths:
                 continue
             wmin = min(widths)
-            if wmin < MIN_STROKE_PX:
-                thin_branches.append({"length": round(length, 2),
+            wmed = sorted(widths)[len(widths) // 2]
+            if length < MIN_STROKE_PX:
+                # Вся ветвь — кончик: толщина на кончиках не проверяется.
+                exempt_short += 1
+            else:
+                if wmin < MIN_STROKE_PX:
+                    thin_branches.append({"length": round(length, 2),
+                                          "min_width": round(wmin, 2),
+                                          "at": list(mid[widths.index(wmin)])})
+                min_width = wmin if min_width is None else min(min_width, wmin)
+            limit = LONG_THICK_STROKE_PX if wmed >= THICK_STROKE_PX else MAX_STROKE_PX
+            if length > limit:
+                long_branches.append({"length": round(length, 2),
+                                      "limit": limit,
+                                      "median_width": round(wmed, 2),
                                       "min_width": round(wmin, 2),
-                                      "at": list(inner[widths.index(wmin)])})
-            min_width = wmin if min_width is None else min(min_width, wmin)
+                                      "from": list(path[0]), "to": list(path[-1])})
         thin_comps = []
         for comp in components(mask):
             wmax = 0.0
@@ -817,15 +859,23 @@ def check_geometry(images):
         entry = {
             "skeleton_branches": len(branches),
             "longest_branch_px": round(longest, 2),
+            "stroke_middle_fraction": STROKE_MIDDLE_FRACTION,
+            "long_limit_thin_px": MAX_STROKE_PX,
+            "long_limit_thick_px": LONG_THICK_STROKE_PX,
+            "thick_branch_median_px": THICK_STROKE_PX,
             "branches_over_limit": long_branches,
             "min_stroke_width_px": round(min_width, 2) if min_width is not None else None,
             "branches_too_thin": thin_branches,
+            "branches_exempt_short": exempt_short,
             "thin_detached_parts": thin_comps,
         }
         res["tiles"][name] = entry
-        if longest > MAX_STROKE_PX:
+        for lb in long_branches:
             res["ok"] = False
-            res["details"].append(f"{name}: непрерывная линия {longest:.1f} px > {MAX_STROKE_PX}")
+            res["details"].append(
+                f"{name}: непрерывная линия {lb['length']:.1f} px > {lb['limit']} "
+                f"(медианная толщина {lb['median_width']:.1f} px, "
+                f"минимум {lb['min_width']:.1f} px)")
         for tb in thin_branches:
             res["ok"] = False
             res["details"].append(f"{name}: штрих толщиной {tb['min_width']:.1f} px "

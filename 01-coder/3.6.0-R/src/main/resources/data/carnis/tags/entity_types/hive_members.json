@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "carnis:parasitic_tendril",
+    "carnis:biomass_maggot",
+    "carnis:hive_sentinel",
+    "carnis:cerebral_nexus",
+    "carnis:infected_zombie",
+    "carnis:infected_skeleton",
+    "carnis:infected_creeper",
+    "carnis:infected_spider",
+    "carnis:flesh_amalgam"
+  ]
+}

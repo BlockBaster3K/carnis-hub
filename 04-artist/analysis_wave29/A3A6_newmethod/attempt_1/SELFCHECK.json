@@ -1,0 +1,523 @@
+{
+  "tool": "tendrils_check.py",
+  "tiles": [
+    "creeping_tendrils_0.png",
+    "creeping_tendrils_1.png",
+    "creeping_tendrils_2.png",
+    "creeping_tendrils_3.png"
+  ],
+  "checks": {
+    "1_format_and_palette": {
+      "ok": true,
+      "details": [
+        "creeping_tendrils_0.png: непрозрачных 2501/4096 (61.1 %), цветов 7",
+        "creeping_tendrils_1.png: непрозрачных 2760/4096 (67.4 %), цветов 8",
+        "creeping_tendrils_2.png: непрозрачных 2663/4096 (65.0 %), цветов 7",
+        "creeping_tendrils_3.png: непрозрачных 2549/4096 (62.2 %), цветов 7"
+      ]
+    },
+    "2_borders_identical": {
+      "ok": true,
+      "details": [
+        "top: одинаков у 4 вариантов",
+        "bottom: одинаков у 4 вариантов",
+        "left: одинаков у 4 вариантов",
+        "right: одинаков у 4 вариантов"
+      ]
+    },
+    "3_seam_byte_exact": {
+      "ok": true,
+      "details": [
+        "проверено 16 пар (включая самозамыкание)"
+      ],
+      "pairs": 16
+    },
+    "4_mixed_grids": {
+      "ok": false,
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "pattern": [
+            [
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              2,
+              2
+            ],
+            [
+              1,
+              3,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.042,
+          "autocorr_alpha_16px": {
+            "8": 1.1635,
+            "16": 1.0157,
+            "24": 1.0813,
+            "32": 0.8454,
+            "40": 0.719
+          },
+          "tile_period_ratio": 1.028,
+          "control_same_tile_ratio": 0.908,
+          "control_rotated_ratio": 0.554,
+          "control_noise_ratio": 1.365,
+          "irregularity_margin": 0.884
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "pattern": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.198,
+          "autocorr_alpha_16px": {
+            "8": 1.1879,
+            "16": 0.9678,
+            "24": 1.1915,
+            "32": 0.8841,
+            "40": 1.2535
+          },
+          "tile_period_ratio": 0.799,
+          "control_same_tile_ratio": 0.908,
+          "control_rotated_ratio": 0.587,
+          "control_noise_ratio": 0.252,
+          "irregularity_margin": 1.137
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "pattern": [
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              1,
+              3,
+              1
+            ],
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.156,
+          "autocorr_alpha_16px": {
+            "8": 1.0262,
+            "16": 0.9283,
+            "24": 0.9861,
+            "32": 1.0696,
+            "40": 0.9129
+          },
+          "tile_period_ratio": 0.952,
+          "control_same_tile_ratio": 0.908,
+          "control_rotated_ratio": 0.737,
+          "control_noise_ratio": -0.214,
+          "irregularity_margin": 0.954
+        },
+        "5x5_982": {
+          "seed": 982,
+          "pattern": [
+            [
+              1,
+              3,
+              1,
+              3,
+              0
+            ],
+            [
+              2,
+              0,
+              2,
+              2,
+              0
+            ],
+            [
+              3,
+              1,
+              2,
+              3,
+              3
+            ],
+            [
+              1,
+              2,
+              0,
+              3,
+              1
+            ],
+            [
+              0,
+              2,
+              1,
+              3,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.133,
+          "autocorr_alpha_16px": {
+            "8": 1.0303,
+            "16": 0.8829,
+            "24": 0.9962,
+            "32": 1.0008,
+            "40": 1.0061,
+            "48": 0.9759,
+            "56": 1.0372,
+            "64": 1.0088
+          },
+          "tile_period_ratio": 0.868,
+          "control_same_tile_ratio": 0.909,
+          "control_rotated_ratio": 0.534,
+          "control_noise_ratio": 0.412,
+          "irregularity_margin": 1.047
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "pattern": [
+            [
+              1,
+              3,
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              3,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              2,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              2,
+              0,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.078,
+          "autocorr_alpha_16px": {
+            "8": 0.9691,
+            "16": 1.0443,
+            "24": 0.9606,
+            "32": 0.9085,
+            "40": 0.9196,
+            "48": 1.0331,
+            "56": 0.9355,
+            "64": 0.9581
+          },
+          "tile_period_ratio": 1.104,
+          "control_same_tile_ratio": 0.909,
+          "control_rotated_ratio": 0.581,
+          "control_noise_ratio": -0.175,
+          "irregularity_margin": 0.823
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "pattern": [
+            [
+              3,
+              0,
+              2,
+              2,
+              2
+            ],
+            [
+              0,
+              2,
+              0,
+              1,
+              0
+            ],
+            [
+              3,
+              1,
+              1,
+              0,
+              3
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              2
+            ],
+            [
+              2,
+              3,
+              3,
+              1,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.104,
+          "autocorr_alpha_16px": {
+            "8": 1.0584,
+            "16": 0.9883,
+            "24": 1.0538,
+            "32": 0.9812,
+            "40": 1.0835,
+            "48": 0.802,
+            "56": 1.0579,
+            "64": 1.0359
+          },
+          "tile_period_ratio": 0.929,
+          "control_same_tile_ratio": 0.909,
+          "control_rotated_ratio": 0.579,
+          "control_noise_ratio": -0.389,
+          "irregularity_margin": 0.978
+        }
+      },
+      "details": [
+        "3x3 seed=980: автокорреляция с периодом плитки 1.03× (контроль «одна плитка» 0.91×, «повёрнутая» 0.55×)",
+        "3x3 seed=20260104: автокорреляция с периодом плитки 0.80× (контроль «одна плитка» 0.91×, «повёрнутая» 0.59×)",
+        "3x3 seed=4245: автокорреляция с периодом плитки 0.95× (контроль «одна плитка» 0.91×, «повёрнутая» 0.74×)",
+        "5x5 seed=982: автокорреляция с периодом плитки 0.87× (контроль «одна плитка» 0.91×, «повёрнутая» 0.53×)",
+        "5x5 seed=20260106: автокорреляция с периодом плитки 1.10× (контроль «одна плитка» 0.91×, «повёрнутая» 0.58×)",
+        "5x5 seed=4247: автокорреляция с периодом плитки 0.93× (контроль «одна плитка» 0.91×, «повёрнутая» 0.58×)"
+      ]
+    },
+    "4b_lattice": {
+      "ok": true,
+      "details": [],
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "alpha_at_border": 0.469,
+          "alpha_inside": 0.528,
+          "border_to_inside": 0.887
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "alpha_at_border": 0.468,
+          "alpha_inside": 0.497,
+          "border_to_inside": 0.941
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "alpha_at_border": 0.468,
+          "alpha_inside": 0.558,
+          "border_to_inside": 0.839
+        },
+        "5x5_982": {
+          "seed": 982,
+          "alpha_at_border": 0.468,
+          "alpha_inside": 0.543,
+          "border_to_inside": 0.862
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "alpha_at_border": 0.468,
+          "alpha_inside": 0.583,
+          "border_to_inside": 0.803
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "alpha_at_border": 0.468,
+          "alpha_inside": 0.54,
+          "border_to_inside": 0.867
+        }
+      }
+    },
+    "5_readability_16px": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "opaque_px": 220,
+          "alpha_coverage": 0.607,
+          "components": 2,
+          "components_ge3px": 2,
+          "share_in_big_components": 0.745,
+          "luma_contrast": 212.3
+        },
+        "creeping_tendrils_1.png": {
+          "opaque_px": 226,
+          "alpha_coverage": 0.671,
+          "components": 1,
+          "components_ge3px": 1,
+          "share_in_big_components": 0.796,
+          "luma_contrast": 255.0
+        },
+        "creeping_tendrils_2.png": {
+          "opaque_px": 227,
+          "alpha_coverage": 0.645,
+          "components": 1,
+          "components_ge3px": 1,
+          "share_in_big_components": 0.771,
+          "luma_contrast": 148.0
+        },
+        "creeping_tendrils_3.png": {
+          "opaque_px": 218,
+          "alpha_coverage": 0.619,
+          "components": 3,
+          "components_ge3px": 3,
+          "share_in_big_components": 0.752,
+          "luma_contrast": 198.3
+        }
+      }
+    },
+    "6_ends_and_corners": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "edge_density": 0.492,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        },
+        "creeping_tendrils_1.png": {
+          "edge_density": 0.492,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        },
+        "creeping_tendrils_2.png": {
+          "edge_density": 0.492,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        },
+        "creeping_tendrils_3.png": {
+          "edge_density": 0.492,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        }
+      }
+    },
+    "7_stroke_geometry": {
+      "ok": false,
+      "details": [
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (19, 46)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (63, 51)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 51)"
+      ],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "skeleton_branches": 112,
+          "longest_branch_px": 20.24,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 9.0,
+          "branches_too_thin": [],
+          "branches_exempt_short": 102,
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_1.png": {
+          "skeleton_branches": 142,
+          "longest_branch_px": 25.49,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 5.0,
+          "branches_too_thin": [
+            {
+              "length": 25.49,
+              "min_width": 7.0,
+              "at": [
+                19,
+                46
+              ]
+            },
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                51
+              ]
+            }
+          ],
+          "branches_exempt_short": 131,
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_2.png": {
+          "skeleton_branches": 139,
+          "longest_branch_px": 23.66,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 5.0,
+          "branches_too_thin": [
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                51
+              ]
+            }
+          ],
+          "branches_exempt_short": 128,
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_3.png": {
+          "skeleton_branches": 91,
+          "longest_branch_px": 30.73,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 11.0,
+          "branches_too_thin": [],
+          "branches_exempt_short": 83,
+          "thin_detached_parts": []
+        }
+      }
+    }
+  },
+  "all_ok": false
+}
