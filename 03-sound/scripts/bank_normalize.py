@@ -19,7 +19,7 @@ import numpy as np
 
 SR = 44100
 FF = os.environ.get('FFMPEG', 'ffmpeg')
-TARGET = -1.05
+TARGET = -1.20   # запас 0.2 дБ к норме «peak ≤ −1.00 dBFS»
 
 
 def decode(path):
@@ -94,9 +94,9 @@ def normalise(path, out_path, target=TARGET, max_tries=4):
         res = dict(before=pk_db, after=after, gain=db(g),
                    exact_len=(len(z) == want), tries=attempt + 1,
                    size=os.path.getsize(out_path))
-        if after <= -1.0:
+        if after <= target:                        # цель уже с запасом (−1.20)
             return res
-        g *= 10 ** ((-1.15 - after) / 20.0)        # кодек задрал пик — добираем
+        g *= 10 ** ((target - after) / 20.0)       # недобор запаса — добираем
     return res
 
 
