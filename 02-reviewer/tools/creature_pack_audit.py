@@ -1,0 +1,247 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""creature_pack_audit.py — независимая проверка сдачи существ (geo + текстура + glowmask).
+
+Зачем: с 3.8.0 Художник сдаёт существ пачками (`Carnis_3.8.0_*.zip`), а проверять
+их до сборки пакета нечем: гейт 3.7.3 смотрит пакет, в котором этих файлов ещё
+нет, `glowmask_r3_check.py` смотрит только маски и только при наличии тела рядом,
+`shade_density.py` — только плотность светотени. Этот чекер собирает все сдачи в
+один набор и проверяет существо целиком (ROADMAP R10/R14).
+
+Проверяется по каждому существу:
+  1. geo разбирается; есть `minecraft:geometry[0].bones`; у каждой кости есть
+     `pivot`; имена костей уникальны;
+  2. UV кубов не выходят за размер текстуры (u+size.x, v+size.y+size.z);
+  3. текстура по нормам A3R1: >= 7 непрозрачных цветов, топ-доля <= 35 %,
+     альфа только {0,255};
+  4. glowmask по правилу Р-3: файл есть, размер == текстурe, ровно один
+     непрозрачный цвет (255,92,57), альфа бинарная, свечения вне силуэта 0 px;
+  5. анимации (если сданы): каждое имя кости из `bones` существует в geo;
+     отмечено наличие idle/walk/attack/hurt/death;
+  6. число костей (для H-блока) — в таблицу, с порогом `--min-bones`.
+
+Использование:
+    python3 02-reviewer/tools/creature_pack_audit.py <zip|dir> [<zip|dir> ...] \\
+            [--min-bones 12] [--only имя,имя]
+
+Код возврата: 0 — всё в норме, 2 — есть замечания, 1 — ошибка запуска.
+"""
+
+import argparse
+import io
+import json
+import os
+import sys
+import zipfile
+from collections import Counter
+
+try:
+    from PIL import Image
+except ImportError:  # pragma: no cover
+    print("ОШИБКА: нужен Pillow")
+    sys.exit(1)
+
+GLOW = (255, 92, 57)
+REQUIRED_ANIMS = ("idle", "walk", "attack", "hurt", "death")
+
+
+def iter_files(sources):
+    """{относительный путь внутри assets/carnis: bytes} по всем источникам."""
+    out = {}
+    for src in sources:
+        if zipfile.is_zipfile(src):
+            with zipfile.ZipFile(src) as z:
+                for n in z.namelist():
+                    if n.endswith("/"):
+                        continue
+                    key = n.split("assets/carnis/", 1)[-1]
+                    out.setdefault(key, z.read(n))
+        elif os.path.isdir(src):
+            for dp, _, fs in os.walk(src):
+                for f in fs:
+                    full = os.path.join(dp, f)
+                    rel = os.path.relpath(full, src).replace(os.sep, "/")
+                    key = rel.split("assets/carnis/", 1)[-1]
+                    with open(full, "rb") as fh:
+                        out.setdefault(key, fh.read())
+    return out
+
+
+def png_stats(data):
+    im = Image.open(io.BytesIO(data)).convert("RGBA")
+    px = list(im.get_flattened_data())
+    opaque = [c for c in px if c[3] > 0]
+    cnt = Counter((c[0], c[1], c[2]) for c in opaque)
+    top = cnt.most_common(1)[0] if cnt else ((0, 0, 0), 0)
+    return {
+        "size": im.size,
+        "im": im,
+        "opaque": len(opaque),
+        "colors": len(cnt),
+        "top_share": (top[1] / len(opaque)) if opaque else 0.0,
+        "alphas": {c[3] for c in px},
+        "rgb_opaque": set(cnt),
+    }
+
+
+def geo_info(data):
+    g = json.loads(data.decode("utf-8"))
+    geos = g.get("minecraft:geometry")
+    if not geos:
+        raise ValueError("нет minecraft:geometry")
+    geo = geos[0]
+    bones = geo.get("bones") or []
+    names = [b.get("name") for b in bones]
+    problems = []
+    if len(names) != len(set(names)):
+        problems.append("имена костей повторяются")
+    for b in bones:
+        if "pivot" not in b:
+            problems.append("кость без pivot: %s" % b.get("name"))
+    uv_max_u = uv_max_v = 0
+    for b in bones:
+        for c in b.get("cubes", []) or []:
+            uv = c.get("uv")
+            size = c.get("size") or [0, 0, 0]
+            if uv and len(uv) == 2 and isinstance(uv[0], (int, float)):
+                uv_max_u = max(uv_max_u, uv[0] + (size[0] or 0) + (size[2] or 0))
+                uv_max_v = max(uv_max_v, uv[1] + (size[1] or 0) + (size[2] or 0))
+    return {
+        "bones": len(bones),
+        "names": [n for n in names if n],
+        "problems": problems,
+        "uv_max": (uv_max_u, uv_max_v),
+        "tex_size": geo.get("description", {}).get("texture_size") or [64, 64],
+    }
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("sources", nargs="+")
+    ap.add_argument("--min-bones", type=int, default=12)
+    ap.add_argument("--only", default=None,
+                    help="имена через запятую — проверять только их")
+    a = ap.parse_args()
+
+    files = iter_files(a.sources)
+    geos = sorted(k for k in files if k.startswith("geo/") and k.endswith(".geo.json"))
+    if not geos:
+        print("ОШИБКА: в источниках нет geo/*.geo.json")
+        return 1
+
+    only = set(x.strip() for x in a.only.split(",")) if a.only else None
+    creatures = []
+    for g in geos:
+        name = g.split("/")[-1].replace(".geo.json", "")
+        if only and name not in only:
+            continue
+        creatures.append(name)
+
+    fails, warns = [], []
+
+    def bad(msg):
+        fails.append(msg)
+        print("  \u2717 " + msg)
+
+    def warn(msg):
+        warns.append(msg)
+        print("  ! " + msg)
+
+    print("Источники: %s" % ", ".join(a.sources))
+    print("Существ в сдаче: %d\n" % len(creatures))
+    header = ("существо", "костей", "текстура", "цветов", "топ%", "glowmask", "UV", "анимации")
+    print("%-26s %6s %10s %6s %6s %12s %9s %s" % header)
+    print("-" * 104)
+
+    for name in creatures:
+        g = "geo/%s.geo.json" % name
+        tex = "textures/entity/%s.png" % name
+        glow = "textures/entity/%s_glowmask.png" % name
+        try:
+            info = geo_info(files[g])
+        except (ValueError, KeyError, json.JSONDecodeError) as e:
+            bad("%s: geo не разбирается (%s)" % (name, e))
+            continue
+        for p in info["problems"]:
+            bad("%s: %s" % (name, p))
+        if info["bones"] < a.min_bones:
+            warn("%s: костей %d < %d" % (name, info["bones"], a.min_bones))
+
+        if tex not in files:
+            bad("%s: нет текстуры %s" % (name, tex))
+            continue
+        st = png_stats(files[tex])
+        w, h = st["size"]
+        u, v = info["uv_max"]
+        uv_ok = u <= w and v <= h
+        if not uv_ok:
+            bad("%s: UV выходит за текстуру: нужно %dx%d, файл %dx%d" % (name, u, v, w, h))
+        if st["colors"] < 7:
+            bad("%s: цветов %d < 7 (A3R1)" % (name, st["colors"]))
+        if st["top_share"] > 0.35:
+            bad("%s: топ-доля %.1f %% > 35 %% (A3R1)" % (name, st["top_share"] * 100))
+        if not st["alphas"] <= {0, 255}:
+            bad("%s: альфа не бинарная %s" % (name, sorted(st["alphas"])[:5]))
+
+        glow_res = "нет"
+        if glow not in files:
+            bad("%s: нет glowmask (правило Р-3)" % name)
+        else:
+            gs = png_stats(files[glow])
+            if gs["size"] != st["size"]:
+                bad("%s: размер маски %s != текстуры %s" % (name, gs["size"], st["size"]))
+            elif gs["rgb_opaque"] != {GLOW}:
+                bad("%s: непрозрачные цвета маски %s, нужен только %s"
+                    % (name, sorted(gs["rgb_opaque"])[:4], GLOW))
+            elif not gs["alphas"] <= {0, 255}:
+                bad("%s: альфа маски не бинарная" % name)
+            else:
+                tim, gim = st["im"], gs["im"]
+                out = 0
+                for y in range(tim.height):
+                    for x in range(tim.width):
+                        if gim.getpixel((x, y))[3] > 0 and tim.getpixel((x, y))[3] == 0:
+                            out += 1
+                if out:
+                    bad("%s: свечение вне силуэта %d px" % (name, out))
+                glow_res = "%dpx" % gs["opaque"]
+
+        # анимации
+        anim_files = [k for k in files if k.startswith("animations/entity/")
+                      and k.endswith(".animation.json") and name in k]
+        anim_res = "—"
+        if anim_files:
+            anim_bones = set()
+            anim_names = set()
+            for af in anim_files:
+                data = json.loads(files[af].decode("utf-8"))
+                for anim_name, body in (data.get("animations") or {}).items():
+                    anim_names.add(anim_name.split(".")[-1].split(".")[0])
+                    for bname in (body.get("bones") or {}):
+                        anim_bones.add(bname)
+            unknown = sorted(anim_bones - set(info["names"]))
+            if unknown:
+                bad("%s: анимации ссылаются на несуществующие кости: %s"
+                    % (name, ", ".join(unknown[:5])))
+            missing = [x for x in REQUIRED_ANIMS if x not in anim_names]
+            anim_res = "%d/%d" % (len(REQUIRED_ANIMS) - len(missing), len(REQUIRED_ANIMS))
+            if missing:
+                warn("%s: нет анимаций %s" % (name, ", ".join(missing)))
+
+        print("%-26s %6d %10s %6d %6.1f %12s %9s %s"
+              % (name, info["bones"], "%dx%d" % (w, h), st["colors"],
+                 st["top_share"] * 100, glow_res,
+                 "%s" % ("ok" if uv_ok else "ВЫХОД"), anim_res))
+
+    print("\n" + "-" * 104)
+    print("Существ: %d, провалов: %d, предупреждений: %d"
+          % (len(creatures), len(fails), len(warns)))
+    if fails:
+        print("ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ")
+        return 2
+    print("ИТОГ: СХОДИТСЯ")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
