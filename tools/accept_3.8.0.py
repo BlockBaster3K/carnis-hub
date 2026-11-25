@@ -1110,9 +1110,25 @@ def check_crest(zip_path):
     # кодека: норма 0,05 дБ против исходного PCM недостижима для lossy —
     # Звук доказал прогоном, что 73 из 144 принятых файлов выходят за неё
     # при чистом транскоде без всякой правки.
+    # I24/З-30: допуск per-file из эталонной таблицы Звука:
+    #   допуск(файл) = max(порог_типа, baseline(файл) + 0,05 дБ)
+    # Таблица — измеренный шум перекода для каждого файла, поэтому гейт не
+    # зависит от того, каким энкодером собрана машина. Нет записи в таблице
+    # -> чекер даёт код 3 «НЕ ПРОВЕРЕН», и это валит гейт: файл без
+    # калибровки нельзя судить нормой, которой у него нет.
+    # Таблица — 00-board/reports/sound_crest_baseline.md (276 записей, формат
+    # «файл | тип | длина | разброс | baseline | порог | допуск»). Файл
+    # 03-sound/crest_reference.md — отчёт Звука с ДРУГОЙ схемой колонок
+    # (битрейт вместо типа), чекер его не разбирает: там 0 записей.
+    table = os.path.join(REPO, "00-board", "reports",
+                         "sound_crest_baseline.md")
+    if not os.path.isfile(table):
+        print("  x crest: нет эталонной таблицы "
+              "00-board/reports/sound_crest_baseline.md")
+        fail.append("crest: эталонной таблицы нет — допуск не откуда взять")
+        return
     r = subprocess.run([py, checker, archive, zip_path,
-                        "--tol", str(tol), "--top", "3", "--roundtrip",
-                        "--bitrate", "160000"],
+                        "--tol", str(tol), "--top", "3", "--table", table],
                        capture_output=True, text=True)
     out = r.stdout
     over = [ln.strip() for ln in out.splitlines() if ln.strip().startswith("! ")]
