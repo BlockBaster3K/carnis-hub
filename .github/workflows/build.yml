@@ -70,9 +70,16 @@ jobs:
                 # оба вида — reviewer_3.6.0_verdict.md и reviewer_371_verdict.md.
                 VBASE="${CAND%%-R*}"
                 VDIG=$(echo "$VBASE" | tr -d '.')
-                VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
-                           00-board/reports/reviewer_*"$VDIG"*_verdict.md \
-                           2>/dev/null | head -1)
+                # ⛔ НЕ через `ls ... | head -1`: Actions запускает bash с `-eo pipefail`,
+                # и при отсутствии совпадений ls даёт exit 2, pipefail поднимает его,
+                # а set -e валит шаг МОЛЧА — до проверки на пустоту. Это и валило CI.
+                VERD2=""
+                for F in 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
+                         00-board/reports/reviewer_*"$VDIG"*_verdict.md; do
+                  [ -f "$F" ] || continue
+                  VERD2="$F"
+                  break
+                done
                 if [ -z "$VERD2" ]; then
                   echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)"
                   echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
@@ -95,7 +102,13 @@ jobs:
               fi
             done
             test -n "$DIR" || { echo "::error::Нет ни одного принятого пакета"; echo "--- диагностика ---"; echo "каталоги с версией:"; ls -1d 01-coder/*/ 2>/dev/null | sed "s|01-coder/||; s|/$||"; echo "каталоги с ZIP:"; ls -1d 01-coder/*/ 2>/dev/null | while read d; do ls "$d"project-*-clean.zip >/dev/null 2>&1 && echo "  $d"; done; echo "вердикты:"; ls -1 00-board/reports/ | grep -i verdict; echo "pwd=$(pwd)"; exit 1; }
-            PKG=$(ls -1 "01-coder/$DIR"/project-*-clean.zip 2>/dev/null | head -1)
+            # Та же мина, что и с вердиктом.
+            PKG=""
+            for F in "01-coder/$DIR"/project-*-clean.zip; do
+              [ -f "$F" ] || continue
+              PKG="$F"
+              break
+            done
           fi
           test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
           echo "path=$PKG" >> "$GITHUB_OUTPUT"
