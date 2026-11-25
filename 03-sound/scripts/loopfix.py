@@ -168,8 +168,16 @@ def quiet_splice_point(y, guard_s=5.0, win_s=1.5):
     hop = int(0.05 * SR)
     n = len(y) // hop
     env = np.array([np.sqrt(np.mean(y[i * hop:(i + 1) * hop] ** 2)) for i in range(n)])
+    # guard_s по умолчанию 5 с — рассчитан на 120-секундные эмбиенты. Для
+    # коротких петель (2–3 с, напр. incubation_cyst_ambient_01) это больше
+    # всего файла: цикл поиска не выполнялся вовсе и best_i оставался None →
+    # TypeError. Ограничиваем охрану долей длины, для 120 с поведение прежнее.
+    guard_s = min(guard_s, 0.15 * len(y) / SR)
     k = max(1, int(win_s / 0.05))
     guard = int(guard_s / 0.05)
+    if n - 2 * guard - k < 1:
+        win_s = max(0.05, (n - 2 * guard) * 0.05 / 2)
+        k = max(1, int(win_s / 0.05))
     best, best_i = None, None
     for i in range(guard, n - guard - k):
         score = env[i:i + k].mean()
@@ -263,8 +271,12 @@ def loopfix(in_path, out_path, target_db=None, verbose=False):
               f"(разрыв {abs(h0 - t0):.2f} дБ), края 10мс {h0b:.1f} / {t0b:.1f} "
               f"(разрыв {abs(h0b - t0b):.2f} дБ)")
 
-    # 1. выравниваем медленный тренд по кругу — убирает «свелл» начала
-    out = level_normalize_loop(y, smooth_s=3.0, limit_db=6.0)
+    # 1. выравниваем медленный тренд по кругу — убирает «свелл» начала.
+    #    Окно 3 с рассчитано на 120-секундные эмбиенты. Для короткой петли
+    #    (2–3 с) окно длиннее файла: сглаживание вырождается, gain уходит в
+    #    потолок +6 дБ и RMS вырастает на 7 дБ. Привязываем окно к длине.
+    smooth_s = min(3.0, n / SR / 6.0)
+    out = level_normalize_loop(y, smooth_s=smooth_s, limit_db=6.0)
 
     # 2. переносим шов в самое тихое место: у этих файлов есть провал, и если
     #    он попадает НА стык — на стыке слышен провал; если внутрь петли —
@@ -292,7 +304,13 @@ def loopfix(in_path, out_path, target_db=None, verbose=False):
     out[:m] *= 10 ** ((mid - lv_h) / 20.0)
 
     if target_db is not None:
-        cur = rms_db(out[int(5 * SR):-int(5 * SR)])
+        # Окно 5 с от краёв — для 120-секундных эмбиентов. У короткой петли
+        # (2.3 с) срез out[5*SR:-5*SR] ПУСТОЙ: RMS пустого массива даёт
+        # -120 дБ, усиление выходит +99 дБ и упирается в лимитер, из-за чего
+        # RMS файла уезжал с -21 до -13.8 дБ и --target-db не действовал.
+        guard = int(min(5.0, len(out) / SR / 10.0) * SR)
+        core = out[guard:len(out) - guard] if guard else out
+        cur = rms_db(core)
         out *= 10 ** ((target_db - cur) / 20.0)
     peak = np.abs(out).max()
     if peak > 0.79:
