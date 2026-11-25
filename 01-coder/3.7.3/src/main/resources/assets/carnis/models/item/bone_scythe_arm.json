@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "carnis:item/bone_scythe_arm"
+  }
+}
