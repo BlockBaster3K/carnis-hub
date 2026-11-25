@@ -301,6 +301,7 @@ def norm(x, target_rms_db, peak_ceiling_db=-1.5):
 
 
 def tame(x, target_rms_db, ceiling_db=-1.5, rounds=6):
+    """target_rms_db=None или nan — менять только потолок, громкость не трогать."""
     """Громкость по RMS + мягкий лимитер по пику.
 
     У костяных существ (wither, stray, bogged) crest 25–29: щелчковый слой даёт
@@ -309,17 +310,39 @@ def tame(x, target_rms_db, ceiling_db=-1.5, rounds=6):
     возвращается к цели — crest уменьшается, энергия сохраняется.
     """
     ceil = 10 ** (ceiling_db / 20)
+    keep_rms = target_rms_db is None or not np.isfinite(target_rms_db)
     for _ in range(rounds):
         rms = np.sqrt((x ** 2).mean())
         if rms < 1e-9:
             return x
-        x = x * ((10 ** (target_rms_db / 20)) / rms)
+        if not keep_rms:
+            x = x * ((10 ** (target_rms_db / 20)) / rms)
         pk = np.abs(x).max()
         if pk <= ceil:
             return x
         x = np.tanh(x / ceil) * ceil
     rms = np.sqrt((x ** 2).mean())
-    return x * ((10 ** (target_rms_db / 20)) / rms) if rms > 1e-9 else x
+    if keep_rms or rms < 1e-9:
+        return x
+    return x * ((10 ** (target_rms_db / 20)) / rms)
+
+
+def crest_db(y):
+    return 20 * np.log10(np.abs(y).max()) - 20 * np.log10(np.sqrt((y ** 2).mean()))
+
+
+def decode(path):
+    o = subprocess.run([FF, '-v', 'quiet', '-i', path, '-f', 'f32le', '-ac', '1',
+                        '-ar', str(SR), '-'], capture_output=True).stdout
+    return np.frombuffer(o, dtype=np.float32).astype(np.float64)
+
+
+def enc_to(x, path):
+    tmp = '/tmp/rw/_enc.f32'
+    np.asarray(x, dtype=np.float32).tofile(tmp)
+    subprocess.run([FF, '-y', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1',
+                    '-i', tmp, '-c:a', 'libvorbis', '-b:a', '160k',
+                    '-map_metadata', '-1', path], check=True)
 
 
 def main():
@@ -335,13 +358,9 @@ def main():
             target_rms = {'ambient': -23.0, 'attack': -19.0, 'hurt': -19.0, 'death': -20.0}[event]
             x = tame(x, target_rms)
             name = f"{ent}_{event}_01"
-            raw = f"/tmp/rw/{name}.f32"
-            np.asarray(x, dtype=np.float32).tofile(raw)
-            br = '96k' if event == 'ambient' else '160k'
             os.makedirs('03-sound/sounds_380/entity', exist_ok=True)
             out = f"03-sound/sounds_380/entity/{name}.ogg"
-            subprocess.run([FF, '-y', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1',
-                            '-i', raw, '-c:a', 'libvorbis', '-b:a', br, '-map_metadata', '-1', out], check=True)
+            enc_to(x, out)
             made.append(name)
     print(json.dumps(made))
     print(f"сделано: {len(made)}", flush=True)
