@@ -27,9 +27,10 @@ import tempfile
 import zipfile
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_ZIP = os.path.join(REPO, "01-coder", "3.6.0", "project-3.6.0-clean.zip")
-DEFAULT_MANIFEST = os.path.join(REPO, "01-coder", "3.6.0",
-                                "project-3.6.0-clean.manifest.txt")
+DEFAULT_ZIP = os.path.join(REPO, "01-coder", "3.6.0-R",
+                           "project-3.6.0-R-clean.zip")
+DEFAULT_MANIFEST = os.path.join(REPO, "01-coder", "3.6.0-R",
+                                "project-3.6.0-R-clean.manifest.txt")
 OVERLAY = os.path.join(REPO, "06-build", "overlay.txt")
 VERSION = "3.6.0"
 
@@ -202,13 +203,57 @@ def check_k5(extract_dir):
     with open(bs, encoding="utf-8") as f:
         d = json.load(f)
     variants = d.get("variants", {})
-    print(f"  ✓ вариантов: {len(variants)}")
+    # ТЗ K5: комбинаций должно быть 4 x N (N = число вариантов содержания),
+    # то есть ключи должны содержать И facing, И variant.
+    has_variant = any("variant=" in k for k in variants)
+    n_variant = len({v for k in variants for v in re.findall(r"variant=(\d+)", k)})
+    print(f"  вариантов (записей): {len(variants)}, содержание variant: "
+          f"{n_variant if has_variant else 'НЕ ИСПОЛЬЗУЕТСЯ'}")
+
+    if not has_variant:
+        print("  ✗ K5 не выполнен: в blockstates нет свойства variant")
+        print("      по ТЗ K5 нужны комбинации facing x variant (4 x N, N = 3..4),")
+        print("      каждая со своей моделью; сейчас 4 записи по facing на одной модели")
+        fail.append("K5: нет вариантов содержания (variant) — только поворот facing")
+    elif len(variants) != 4 * n_variant:
+        print(f"  ✗ комбинаций {len(variants)}, по ТЗ должно быть 4 x {n_variant} = "
+              f"{4 * n_variant}")
+        fail.append(f"K5: комбинаций {len(variants)} вместо {4 * n_variant}")
+    else:
+        print(f"  ✓ комбинаций facing x variant: {len(variants)} = 4 x {n_variant}")
+
+    # разные варианты должны вести на РАЗНЫЕ модели
+    if has_variant:
+        per_variant = {}
+        for key, val in variants.items():
+            m = re.search(r"variant=(\d+)", key)
+            if not m:
+                continue
+            for mv in (val if isinstance(val, list) else [val]):
+                per_variant.setdefault(m.group(1), set()).add(mv.get("model", ""))
+        distinct = len({frozenset(s) for s in per_variant.values()})
+        if distinct < n_variant:
+            print(f"  ✗ вариантов моделей {distinct}, а content-вариантов {n_variant}")
+            fail.append("K5: варианты ведут на одинаковые модели")
+        else:
+            print(f"  ✓ у каждого variant своя модель: {distinct} наборов")
+
+    # файлы моделей creeping_tendrils_*
+    mdir = os.path.join(extract_dir,
+                        "src/main/resources/assets/carnis/models/block")
+    n_models = 0
+    if os.path.isdir(mdir):
+        n_models = len([f for f in os.listdir(mdir)
+                        if f.startswith("creeping_tendrils_") and f.endswith(".json")])
+    print(f"  моделей creeping_tendrils_*: {n_models}")
+
     bad_y = []
     for key, val in variants.items():
         m = re.search(r"facing=(north|south|west|east)", key)
         if not m:
             bad_y.append(f"{key}: нет facing")
             continue
+        # variant НЕ должен влиять на поворот — только facing
         expected_y = {"north": 0, "south": 180, "west": 270, "east": 90}[m.group(1)]
         models = val if isinstance(val, list) else [val]
         for mv in models:
@@ -242,6 +287,29 @@ def check_k5(extract_dir):
                 continue
         if "ladder" in str(md.get("parent", "")):
             ladder_ok = True
+    # каждая модель варианта должна ссылаться на свою текстуру tendrils_<i>
+    if has_variant and n_models:
+        tex_mismatch = []
+        for mid in sorted(model_ids):
+            mp = os.path.join(extract_dir, "src/main/resources/assets/carnis/models", mid + ".json")
+            if not os.path.exists(mp):
+                continue
+            with open(mp, encoding="utf-8") as f:
+                try:
+                    md = json.load(f)
+                except Exception:  # noqa: BLE001
+                    continue
+            tex = str(md.get("textures", {}).get("texture", ""))
+            tf = os.path.join(extract_dir, "src/main/resources/assets/carnis/textures/block",
+                              tex.split(":")[-1].split("/")[-1] + ".png")
+            if not os.path.exists(tf):
+                tex_mismatch.append(tex or "(нет текстуры)")
+        if tex_mismatch:
+            print(f"  ✗ текстуры моделей не найдены: {len(tex_mismatch)}")
+            fail.append(f"K5: нет текстур для моделей вариантов ({len(tex_mismatch)})")
+        else:
+            print("  ✓ у всех моделей вариантов есть свои текстуры")
+
     if ladder_ok:
         print("  ✓ parent minecraft:block/ladder сохранён")
     else:
