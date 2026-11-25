@@ -56,6 +56,19 @@ TIMBRE = os.path.join(REPO, "tools", "timbre_check.py")
 CREEPER = "src/main/resources/assets/carnis/textures/entity/infected_creeper.png"
 SHADE_MAX = 35.0
 BLOCK_DIR = "src/main/resources/assets/carnis/textures/block"
+
+# Решение Архитектора T-3142 (вариант B, волна 38): три текстуры блока
+# перекрашены по ТЗ 3.7.2 §4 и ИСКЛЮЧЕНЫ из KEEP_IDENTICAL (в 3.7.0/3.7.1 они
+# остаются принятыми — там перекраски нет). Разрешение не «любая текстура»,
+# а «ровно то, что сдал Художник»: каждый файл сверяется побайтово с архивом.
+RECOLOR_ACCEPTED_372 = {
+    "src/main/resources/assets/carnis/textures/block/spore_sprout.png":
+        "Carnis_3.7.2_T3115_block_recolor.zip",
+    "src/main/resources/assets/carnis/textures/block/neural_moss.png":
+        "Carnis_3.7.2_T3115_block_recolor.zip",
+    "src/main/resources/assets/carnis/textures/block/pustule_cluster.png":
+        "Carnis_3.7.2_T3115_block_recolor.zip",
+}
 SOUND_SUBDIR = "src/main/resources/assets/carnis/sounds"
 TIMBRE_FILES = 10          # 9 слоёв + стингер; пульсы вне приёмки тембра
 
@@ -66,9 +79,6 @@ KEEP_IDENTICAL = [
     "src/main/resources/assets/carnis/textures/block/ossified_flesh_1.png",
     "src/main/resources/assets/carnis/textures/block/ossified_flesh_2.png",
     "src/main/resources/assets/carnis/textures/block/ossified_flesh_3.png",
-    "src/main/resources/assets/carnis/textures/block/spore_sprout.png",
-    "src/main/resources/assets/carnis/textures/block/neural_moss.png",
-    "src/main/resources/assets/carnis/textures/block/pustule_cluster.png",
     "src/main/resources/assets/carnis/textures/mob_effect/incubating.png",
     "src/main/resources/assets/carnis/textures/mob_effect/thermal_shock.png",
     "src/main/resources/assets/carnis/models/block/creeping_tendrils_0.json",
@@ -493,6 +503,50 @@ def check_blocks(extract_dir):
     _shade_scan(extract_dir, BLOCK_DIR, "блоки")
 
 
+# ------------------------------------------- 10б. Белый список перекрасок
+def check_recolor_allowlist(extract_dir):
+    """T-3142: принятые перекраски — побайтово равны сдаче Художника.
+
+    KEEP_IDENTICAL этих трёх не защищает (исключены решением Архитектора),
+    поэтому защита переносится сюда: файл в пакете обязан совпадать с
+    архивом `Carnis_3.7.2_T3115_block_recolor.zip`. Иначе «разрешено» стало бы
+    «разрешено что угодно» — дыра шире, чем была.
+    """
+    if not RECOLOR_ACCEPTED_372:
+        return
+    archives = {}
+    ok_n = 0
+    for dst, arch in sorted(RECOLOR_ACCEPTED_372.items()):
+        zp = os.path.join(REPO, "04-artist", "deliverables", arch)
+        if zp not in archives:
+            archives[zp] = zipfile.ZipFile(zp) if os.path.exists(zp) else None
+        z = archives[zp]
+        if z is None:
+            print("  ✗ белый список: нет архива %s" % arch)
+            fail.append("перекраски: нет архива %s" % arch)
+            continue
+        cand = [n for n in z.namelist() if n.endswith(dst.split("/")[-1])]
+        cur = os.path.join(extract_dir, dst)
+        if not cand:
+            print("  ✗ белый список: %s нет в сдаче" % os.path.basename(dst))
+            fail.append("перекраски: %s нет в сдаче" % os.path.basename(dst))
+            continue
+        if not os.path.exists(cur):
+            print("  ✗ белый список: %s нет в пакете" % os.path.basename(dst))
+            fail.append("перекраски: %s нет в пакете" % os.path.basename(dst))
+            continue
+        if z.read(cand[0]) == open(cur, "rb").read():
+            ok_n += 1
+        else:
+            print("  ✗ белый список: %s НЕ совпадает со сдачей — "
+                  "«разрешено» стало «что угодно»" % os.path.basename(dst))
+            fail.append("перекраски: %s не из сдачи Художника"
+                        % os.path.basename(dst))
+    total = len(RECOLOR_ACCEPTED_372)
+    print("  %s белый список перекрасок T-3142: совпало со сдачей %d из %d"
+          % ("✓" if ok_n == total else "✗", ok_n, total))
+
+
 # ---------------------------------------------------------------- 15. Банк
 def ogg_header(data):
     """Формат Ogg Vorbis: каналы и частота из заголовка идентификации."""
@@ -726,6 +780,10 @@ def main():
         print()
         print("12) Принятые слои лежат в пакете побайтово (A4-p7-R, A3R1)")
         check_accepted_layers(tmp)
+
+        print()
+        print("10б) Перекраски T-3115 — побайтово из сдачи (T-3142)")
+        check_recolor_allowlist(tmp)
 
         print()
         print("11) Существа — плотность светотени (ТЗ 3.7.2 §9)")
