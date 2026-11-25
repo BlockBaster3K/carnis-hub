@@ -63,3 +63,40 @@
 | `sinew_shield.png` | `32×32` | 668 | 668 |
 | `tainted_sludge_bucket.png` | `64×64` | 763 | 763 |
 | `viral_dart.png` | `64×64` | 462 | 462 |
+
+## 5. Серия 3.8.0: 33 новых заражённых ванильных моба (`.geo.json` + текстура + `glowmask` Р-3)
+| Моб | Архив | Геометрия | Текстура | Glowmask (Р-3) |
+|---|---|---|---|---|
+| `infected_blaze` | `Carnis_3.8.0_infected_vanilla_mobs.zip` | `infected_blaze.geo.json` | `infected_blaze.png` (7 цв.) | `infected_blaze_glowmask.png` (`OK`) |
+| `infected_enderman` | `Carnis_3.8.0_infected_vanilla_mobs.zip` | `infected_enderman.geo.json` | `infected_enderman.png` (7 цв.) | `infected_enderman_glowmask.png` (`OK`) |
+| `infected_pillager` | `Carnis_3.8.0_infected_vanilla_mobs.zip` | `infected_pillager.geo.json` | `infected_pillager.png` (7 цв.) | `infected_pillager_glowmask.png` (`OK`) |
+| `infected_slime` | `Carnis_3.8.0_infected_vanilla_mobs.zip` | `infected_slime.geo.json` | `infected_slime.png` (7 цв.) | `infected_slime_glowmask.png` (`OK`) |
+| `infected_witch` | `Carnis_3.8.0_infected_vanilla_mobs.zip` | `infected_witch.geo.json` | `infected_witch.png` (7 цв.) | `infected_witch_glowmask.png` (`OK`) |
+| `infected_drowned` | `Carnis_3.8.0_infected_vanilla_mobs_part2.zip` | `infected_drowned.geo.json` | `infected_drowned.png` (7 цв.) | `infected_drowned_glowmask.png` (`OK`) |
+| `infected_ghast` | `Carnis_3.8.0_infected_vanilla_mobs_part2.zip` | `infected_ghast.geo.json` | `infected_ghast.png` (7 цв.) | `infected_ghast_glowmask.png` (`OK`) |
+| `infected_guardian` | `Carnis_3.8.0_infected_vanilla_mobs_part2.zip` | `infected_guardian.geo.json` | `infected_guardian.png` (7 цв.) | `infected_guardian_glowmask.png` (`OK`) |
+| `infected_phantom` | `Carnis_3.8.0_infected_vanilla_mobs_part2.zip` | `infected_phantom.geo.json` | `infected_phantom.png` (7 цв.) | `infected_phantom_glowmask.png` (`OK`) |
+| `infected_ravager` | `Carnis_3.8.0_infected_vanilla_mobs_part2.zip` | `infected_ravager.geo.json` | `infected_ravager.png` (7 цв.) | `infected_ravager_glowmask.png` (`OK`) |
+| `infected_wither_skeleton` | `Carnis_3.8.0_infected_vanilla_mobs_part2.zip` | `infected_wither_skeleton.geo.json` | `infected_wither_skeleton.png` (7 цв.) | `infected_wither_skeleton_glowmask.png` (`OK`) |
+| `infected_evoker` | `Carnis_3.8.0_infected_vanilla_mobs_part3.zip` | `infected_evoker.geo.json` | `infected_evoker.png` (7 цв.) | `infected_evoker_glowmask.png` (`OK`) |
+| `infected_hoglin` | `Carnis_3.8.0_infected_vanilla_mobs_part3.zip` | `infected_hoglin.geo.json` | `infected_hoglin.png` (7 цв.) | `infected_hoglin_glowmask.png` (`OK`) |
+| `infected_magma_cube` | `Carnis_3.8.0_infected_vanilla_mobs_part3.zip` | `infected_magma_cube.geo.json` | `infected_magma_cube.png` (7 цв.) | `infected_magma_cube_glowmask.png` (`OK`) |
+| `infected_piglin_brute` | `Carnis_3.8.0_infected_vanilla_mobs_part3.zip` | `infected_piglin_brute.geo.json` | `infected_piglin_brute.png` (7 цв.) | `infected_piglin_brute_glowmask.png` (`OK`) |
+| `infected_shulker` | `Carnis_3.8.0_infected_vanilla_mobs_part3.zip` | `infected_shulker.geo.json` | `infected_shulker.png` (7 цв.) | `infected_shulker_glowmask.png` (`OK`) |
+| `infected_vindicator` | `Carnis_3.8.0_infected_vanilla_mobs_part3.zip` | `infected_vindicator.geo.json` | `infected_vindicator.png` (7 цв.) | `infected_vindicator_glowmask.png` (`OK`) |
+| `infected_bogged` | `Carnis_3.8.0_infected_vanilla_mobs_part4.zip` | `infected_bogged.geo.json` | `infected_bogged.png` (7 цв.) | `infected_bogged_glowmask.png` (`OK`) |
+| `infected_breeze` | `Carnis_3.8.0_infected_vanilla_mobs_part4.zip` | `infected_breeze.geo.json` | `infected_breeze.png` (7 цв.) | `infected_breeze_glowmask.png` (`OK`) |
+| `infected_cave_spider` | `Carnis_3.8.0_infected_vanilla_mobs_part4.zip` | `infected_cave_spider.geo.json` | `infected_cave_spider.png` (7 цв.) | `infected_cave_spider_glowmask.png` (`OK`) |
+| `infected_husk` | `Carnis_3.8.0_infected_vanilla_mobs_part4.zip` | `infected_husk.geo.json` | `infected_husk.png` (7 цв.) | `infected_husk_glowmask.png` (`OK`) |
+| `infected_stray` | `Carnis_3.8.0_infected_vanilla_mobs_part4.zip` | `infected_stray.geo.json` | `infected_stray.png` (7 цв.) | `infected_stray_glowmask.png` (`OK`) |
+| `infected_warden` | `Carnis_3.8.0_infected_vanilla_mobs_part4.zip` | `infected_warden.geo.json` | `infected_warden.png` (7 цв.) | `infected_warden_glowmask.png` (`OK`) |
+| `infected_elder_guardian` | `Carnis_3.8.0_infected_vanilla_mobs_part5.zip` | `infected_elder_guardian.geo.json` | `infected_elder_guardian.png` (7 цв.) | `infected_elder_guardian_glowmask.png` (`OK`) |
+| `infected_endermite` | `Carnis_3.8.0_infected_vanilla_mobs_part5.zip` | `infected_endermite.geo.json` | `infected_endermite.png` (7 цв.) | `infected_endermite_glowmask.png` (`OK`) |
+| `infected_piglin` | `Carnis_3.8.0_infected_vanilla_mobs_part5.zip` | `infected_piglin.geo.json` | `infected_piglin.png` (7 цв.) | `infected_piglin_glowmask.png` (`OK`) |
+| `infected_silverfish` | `Carnis_3.8.0_infected_vanilla_mobs_part5.zip` | `infected_silverfish.geo.json` | `infected_silverfish.png` (7 цв.) | `infected_silverfish_glowmask.png` (`OK`) |
+| `infected_vex` | `Carnis_3.8.0_infected_vanilla_mobs_part5.zip` | `infected_vex.geo.json` | `infected_vex.png` (7 цв.) | `infected_vex_glowmask.png` (`OK`) |
+| `infected_zoglin` | `Carnis_3.8.0_infected_vanilla_mobs_part5.zip` | `infected_zoglin.geo.json` | `infected_zoglin.png` (7 цв.) | `infected_zoglin_glowmask.png` (`OK`) |
+| `infected_creaking` | `Carnis_3.8.0_infected_vanilla_mobs_part6.zip` | `infected_creaking.geo.json` | `infected_creaking.png` (7 цв.) | `infected_creaking_glowmask.png` (`OK`) |
+| `infected_illusioner` | `Carnis_3.8.0_infected_vanilla_mobs_part6.zip` | `infected_illusioner.geo.json` | `infected_illusioner.png` (7 цв.) | `infected_illusioner_glowmask.png` (`OK`) |
+| `infected_wither` | `Carnis_3.8.0_infected_vanilla_mobs_part6.zip` | `infected_wither.geo.json` | `infected_wither.png` (7 цв.) | `infected_wither_glowmask.png` (`OK`) |
+| `infected_zombie_villager` | `Carnis_3.8.0_infected_vanilla_mobs_part6.zip` | `infected_zombie_villager.geo.json` | `infected_zombie_villager.png` (7 цв.) | `infected_zombie_villager_glowmask.png` (`OK`) |
