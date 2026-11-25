@@ -171,6 +171,57 @@ def check_manifest(extract_dir, manifest, src="near"):
 
 
 # --------------------------------------------------------------------- 2. JSON
+EXPECTED_CHANGED_PNG = (
+    "src/main/resources/assets/carnis/textures/entity/flesh_amalgam_glowmask.png",
+)
+
+
+def check_delta_372(zip_path):
+    """Дельта к принятому 3.7.2: любое неожиданное изменение — fail.
+
+    Гейт проверял пакет «как есть» и не сверял его с эталоном, поэтому
+    внесение произвольного кода (например вызовов под T-3184) прошло бы
+    молча — именно так раньше просмотрели регресс З-16. Ожидаемое в 3.7.3:
+    15 .ogg звука (З-21), 2 новые glowmask и 2 метаданных; всё остальное
+    обязано совпасть побайтово. Код под T-3184 объявляется явно префиксом
+    src/main/java/ — без флага он валит гейт.
+    """
+    prev = os.path.join(REPO, "01-coder", "3.7.2", "project-3.7.2-clean.zip")
+    checker = os.path.join(REPO, "02-reviewer", "tools", "verify_373_delta.py")
+    archive = os.path.join(REPO, "03-sound", "archive_zapas_2026-11-26")
+    if not os.path.isfile(prev):
+        print("  x дельта: нет эталона 01-coder/3.7.2/project-3.7.2-clean.zip")
+        fail.append("дельта: эталона 3.7.2 нет — сверять не с чем")
+        return
+    if not os.path.isfile(checker):
+        print("  x дельта: нет чекера 02-reviewer/tools/verify_373_delta.py")
+        fail.append("дельта: чекер отсутствует — изменения не проверены")
+        return
+    py = _python_with("av") or sys.executable
+    cmd = [py, checker, zip_path, "--prev", prev,
+           "--originals", archive + os.sep, "--allow", "src/main/java/"]
+    # Точечно, не префиксом: маска flesh_amalgam переделана под З-22 и обязана
+    # отличаться от 3.7.2. Её цвет проверяет блок 14 по правилу Р-3, поэтому
+    # разрешение не ослабляет проверку: не тот цвет — упадёт блок 14.
+    for png in EXPECTED_CHANGED_PNG:
+        cmd += ["--allow", png]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    out = r.stdout
+    for ln in out.splitlines():
+        if "добавлено " in ln and "изменено" in ln:
+            print("  · " + ln.strip())
+    for ln in out.splitlines():
+        s = ln.strip()
+        if s.startswith("\u2717") or s.startswith("x ") or "не разрешено" in s \
+                or "неожиданные изменения" in s or "пропали файлы" in s:
+            print("      " + s)
+    if r.returncode == 0:
+        print("  v дельта: только ожидаемые изменения против 3.7.2")
+    else:
+        print("  x дельта: есть неожиданные изменения против 3.7.2")
+        fail.append("дельта: неожиданные изменения против 3.7.2")
+
+
 def check_json(extract_dir):
     n = bad = 0
     for dp, _, fs in os.walk(extract_dir):
@@ -1078,6 +1129,10 @@ def main():
         if m:
             print("   %s" % os.path.relpath(m, REPO))
         check_manifest(tmp, m, m_src)
+
+        print()
+        print("1а) Дельта к 3.7.2 — только ожидаемые изменения")
+        check_delta_372(zip_path)
 
         print()
         print("2) JSON")
