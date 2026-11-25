@@ -34,6 +34,35 @@ import re
 import sys
 import zipfile
 
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# З-26: allowlist «задел». Часть событий недостижима СОЗНАТЕЛЬНО — например
+# FLAMETHROWER_FIRE: механики огнемёта в моде ещё нет, но звук записан и лежит
+# в банке как задел. Такое событие надо отличать от недостижимого по ошибке:
+# первое печатается строкой, второе валит проверку.
+ALLOWLIST = os.path.join(REPO_ROOT, "00-board", "reports",
+                         "sound_orphans_allowlist.md")
+ALLOW_MARK = re.compile(r"^\s*[-*]\s*`?([A-Z][A-Z0-9_]+)`?\s*[\u2014-]\s*(.+)$")
+
+
+def load_allowlist(path=None):
+    """Прочитать allowlist. Возвращает {ИМЯ: причина} или None, если файла нет.
+
+    None (файла нет) — это «проверка не выполнена», а не «всё разрешено»:
+    иначе достаточно удалить файл, чтобы любое недостижимое событие
+    перестало валиться.
+    """
+    path = path or ALLOWLIST
+    if not os.path.isfile(path):
+        return None
+    allowed = {}
+    for line in open(path, encoding="utf-8"):
+        m = ALLOW_MARK.match(line)
+        if m:
+            allowed[m.group(1)] = m.group(2).strip()
+    return allowed
+
+
 ASSETS = "assets/carnis/"
 SOUNDS_JSON = ASSETS + "sounds.json"
 SOUNDS_DIR = ASSETS + "sounds/"
@@ -170,6 +199,7 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     quiet = "--quiet" in sys.argv
     assets_only = "--assets-only" in sys.argv
+    use_allow = "--no-allowlist" not in sys.argv
     if not args:
         print(__doc__)
         return 1
@@ -220,13 +250,42 @@ def main():
             print("ИТОГ: НЕ ПРОВЕРЕНО — fail-closed (для одних ассетов: --assets-only)")
             return 2
         print()
+        # З-26: разделяем «сознательный задел» и «недостижимо по ошибке».
+        allowed, allow_unknown = {}, []
+        if dead and use_allow:
+            table = load_allowlist()
+            if table is None:
+                print("ALLOWLIST НЕ НАЙДЕН: %s" % ALLOWLIST)
+                print("ИТОГ: НЕ ПРОВЕРЕНО — fail-closed (З-26: без файла "
+                      "allowlist «задел» не отличить от ошибки)")
+                return 2
+            dead_names = {n for n, _k in dead}
+            rest = []
+            for name, key in dead:
+                if name in table:
+                    allowed[name] = (key, table[name])
+                else:
+                    rest.append((name, key))
+            allow_unknown = sorted(set(table) - dead_names)
+            dead = rest
+        if allowed:
+            print("ЗАДЕЛ ПО ALLOWLIST (%d) — недостижимо сознательно (З-26):"
+                  % len(allowed))
+            for name, (key, why) in sorted(allowed.items()):
+                print("  ~ ModSounds.%-28s (ключ \"%s\") — %s" % (name, key, why))
+            print()
         if dead:
             print("НЕДОСТИЖИМЫЕ СОБЫТИЯ (%d) — объявлены в ModSounds, вызова в коде нет:"
                   % len(dead))
             for name, key in dead:
                 print("  - ModSounds.%-28s (ключ \"%s\")" % (name, key))
-        else:
+        elif not allowed:
             print("Недостижимых событий нет: 0")
+        if allow_unknown:
+            print()
+            print("! в allowlist %d записей, которых нет среди недостижимых: %s"
+                  % (len(allow_unknown), ", ".join(allow_unknown[:6])))
+            print("  (не валит проверку — устаревшие строки, стоит убрать)")
 
     print()
     if orphans or dangling or dead:
