@@ -416,7 +416,6 @@ src/main/resources/assets/carnis/sounds/block/hive_eye_screech.ogg
 src/main/resources/assets/carnis/sounds/block/hive_heartbeat.ogg
 src/main/resources/assets/carnis/sounds/block/hive_membrane_place_01.ogg
 src/main/resources/assets/carnis/sounds/block/hive_membrane_step_01.ogg
-src/main/resources/assets/carnis/sounds/block/nervous_twitch.ogg
 src/main/resources/assets/carnis/sounds/block/pustule_burst.ogg
 src/main/resources/assets/carnis/sounds/block/synapse_node_pulse_01.ogg
 src/main/resources/assets/carnis/sounds/block/synapse_rupture.ogg
@@ -468,8 +467,6 @@ src/main/resources/assets/carnis/sounds/flesh/flesh_block_step_03.ogg
 src/main/resources/assets/carnis/sounds/hallucination/phantom_creeper.ogg
 src/main/resources/assets/carnis/sounds/hallucination/phantom_footsteps.ogg
 src/main/resources/assets/carnis/sounds/hallucination/phantom_whisper.ogg
-src/main/resources/assets/carnis/sounds/hive/amalgam_breath_01.ogg
-src/main/resources/assets/carnis/sounds/hive/amalgam_breath_02.ogg
 src/main/resources/assets/carnis/sounds/hive/amalgam_shuffle_01.ogg
 src/main/resources/assets/carnis/sounds/hive/amalgam_shuffle_02.ogg
 src/main/resources/assets/carnis/sounds/hive/amalgam_shuffle_03.ogg
