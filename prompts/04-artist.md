@@ -8,72 +8,32 @@
 
 Репозиторий: `git@github.com:BlockBaster3K/carnis-hub.git` · Ветка: `arena/d474d740-carnis-hub`
 
-## Доступ по SSH (реквизиты)
+## SSH-ключ — сгенерируй сам, одна команда
 
-Репозиторий доступен **только по SSH**. Токена нет, он не нужен и использоваться
-не должен.
-
-### Вариант 1 — активировать готовый ключ (предпочтительно)
-
-Твой персональный SSH-ключ уже создан. Установи его **один раз за сессию**,
-приватную часть — только в `~/.ssh/id_ed25519` с правами `600`:
-
-```bash
-mkdir -p ~/.ssh && chmod 700 ~/.ssh
-
-cat > ~/.ssh/id_ed25519 <<'CARNIS_KEY_EOF'
-<<SSH_PRIVATE_KEY>>
-CARNIS_KEY_EOF
-chmod 600 ~/.ssh/id_ed25519
-
-cat > ~/.ssh/id_ed25519.pub <<'CARNIS_PUB_EOF'
-<<SSH_PUBLIC_KEY>>
-CARNIS_PUB_EOF
-chmod 644 ~/.ssh/id_ed25519.pub
-```
-
-Проверь, что отпечаток твой — `SHA256:AIffjTsWdsM2fKFpRHIhivkRhtFU3Y/kJ+zHt4H18zg`:
-
-```bash
-ssh-keygen -lf ~/.ssh/id_ed25519.pub
-```
-
-### Вариант 2 — сгенерировать свой ключ
-
-Если готовый ключ не подошёл (занят, отозван, не активируется) — сгенерируй свой:
+Репозиторий: `git@github.com:BlockBaster3K/carnis-hub.git`. Токенов нет и не нужно.
 
 ```bash
 mkdir -p ~/.ssh && chmod 700 ~/.ssh
 ssh-keygen -t ed25519 -N "" -C "carnis-artist" -f ~/.ssh/id_ed25519
 chmod 600 ~/.ssh/id_ed25519
+cat ~/.ssh/id_ed25519.pub
 ```
 
-И **сразу отправь публичный ключ Интегратору** — без регистрации в GitHub
-push не пройдёт. Отправь его **в отчёт на доске** (`00-board/reports/`) одной
-строкой:
+**Отправь заказчику вывод `cat` — одной строкой.** Он зарегистрирует ключ как
+write deploy key.
 
-```
-ssh-ed25519 AAAAC3N... carnis-artist
-```
+Ключ нужен **только для push**. Работу не жди — начинай сразу, ключ придёт позже.
 
-Интегратор зарегистрирует его как write deploy key и подтвердит в отчёте.
-**До подтверждения работу не начинай** — сдача всё равно не пройдёт.
-
-### Проверь аутентификацию
+Проверка после регистрации:
 
 ```bash
-ssh -T git@github.com
+ssh -o StrictHostKeyChecking=accept-new -T git@github.com
 ```
 
-Ответ должен содержать **«successfully authenticated»**.
+«successfully authenticated» — доступ есть. `Permission denied (publickey)` —
+ключ ещё не зарегистрирован: скажи заказчику и продолжай работать локально.
 
-Ответ `Permission denied (publickey)` — ключ этой роли ещё не зарегистрирован
-в GitHub. Скажи об этом Интегратору и **не начинай работу** до подтверждения.
-
-**Приватный ключ:** не печатай его в чат, не коммить, не копируй в репозиторий,
-не класть в отчёт, на доску или в логи. Он нужен только чтобы подписать
-SSH-соединение. Публичный ключ (`*.pub`) — можно упоминать свободно.
-
+Приватный ключ не коммить, не печатай в отчёты и на доску.
 ## НОВЫЙ ПРИНЦИП РАБОТЫ — прочитай первым
 
 **Задание лежит в репозитории, на доске приказов.** Заказчик запускает агентов
@@ -83,7 +43,7 @@ SSH-соединение. Публичный ключ (`*.pub`) — можно �
 
 1. **Прочитай доску** — там твоя задача целиком:
    ```bash
-   git clone --depth 1 --branch arena/d474d740-carnis-hub git@github.com:BlockBaster3K/carnis-hub.git
+   git clone --branch arena/d474d740-carnis-hub https://github.com/BlockBaster3K/carnis-hub.git
    cd carnis-hub
    git pull --rebase origin arena/d474d740-carnis-hub
    cat 00-board/ROADMAP_artist.md
@@ -124,29 +84,17 @@ SSH-соединение. Публичный ключ (`*.pub`) — можно �
 
 ## Подготовка (один раз за сессию)
 
-```bash
-# 1. SSH-доступ должен работать — иначе сдача невозможна
-ssh -T git@github.com
+Репозиторий публичный — чтение работает сразу, без токена и без ключа.
 
-# 2. Клонируем и забираем helper
-git clone --depth 1 --branch arena/d474d740-carnis-hub git@github.com:BlockBaster3K/carnis-hub.git
+```bash
+git clone --branch arena/d474d740-carnis-hub https://github.com/BlockBaster3K/carnis-hub.git
 cd carnis-hub
-mkdir -p tools
-curl -sSL -o tools/agent_push.sh https://raw.githubusercontent.com/BlockBaster3K/carnis-hub/arena/d474d740-carnis-hub/tools/agent_push.sh
-chmod +x tools/agent_push.sh
 ```
 
-> `curl` здесь без токена — это публичный raw-файл, он читается всегда.
-> Токенов у тебя нет и не нужно.
+**Начинай работу сразу.** Push — через `bash tools/agent_push.sh`, он сам
+выберет SSH-канал, когда ключ появится в `~/.ssh/id_ed25519`.
 
-> **Перед сдачей прогони `bash tools/secret_guard.sh`** — он проверит, что
-> приватный ключ случайно не попал в индекс. Код выхода 0 — чисто.
-
-> **Если `agent_push.sh` ругается, что текущий каталог не git-репозиторий** —
-> он ищет репозиторий по умолчанию в `/home/user/hub5`. Укажи свой путь:
-> `REPO_DIR=$PWD bash tools/agent_push.sh …`. Это известная особенность скрипта,
-> править его — не твоя зона.
-
+Перед сдачей: `bash tools/secret_guard.sh` (код 0 — чисто).
 ## Где работать
 
 - **Твой каталог:** `04-artist/` (внутри — `04-artist/deliverables/`).

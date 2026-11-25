@@ -8,62 +8,56 @@
 
 Репозиторий: `git@github.com:BlockBaster3K/carnis-hub.git` · Ветка: `arena/d474d740-carnis-hub`
 
-## Доступ к репозиторию
+## SSH-ключ — сгенерируй сам, одна команда
 
-Ты подключён к репозиторию **напрямую** — отдельный SSH-ключ тебе не выдаётся,
-в `~/.ssh/id_ed25519` ничего класть не нужно. Работай теми учётными данными,
-которыми уже подключён (свой токен или свой способ доступа к GitHub).
+Репозиторий: `git@github.com:BlockBaster3K/carnis-hub.git`. Токенов нет и не нужно.
 
----
+```bash
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+ssh-keygen -t ed25519 -N "" -C "carnis-integrator" -f ~/.ssh/id_ed25519
+chmod 600 ~/.ssh/id_ed25519
+cat ~/.ssh/id_ed25519.pub
+```
+
+**Отправь заказчику вывод `cat` — одной строкой.** Он зарегистрирует ключ как
+write deploy key. Ключ нужен **только для push** — работу не жди, начинай сразу.
+
+Проверка после регистрации:
+
+```bash
+ssh -o StrictHostKeyChecking=accept-new -T git@github.com
+```
+
+«successfully authenticated» — доступ есть. `Permission denied (publickey)` —
+скажи заказчику и продолжай работать локально.
+
+Приватный ключ не коммить, не печатай в отчёты и на доску.
 
 # Твои задачи волны 30 — по порядку
 
-## Задача 1 (САМАЯ ВАЖНАЯ) — зарегистрировать SSH-ключи ролей
+## Задача 1 — убедиться, что доступ ролей работает
 
-**Без этого остальные роли не могут работать.** Они все сейчас стоят.
+**Ключи ролей регистрирует заказчик**, не ты. Ты получаешь от каждой роли её
+публичный ключ и подтверждаешь, что доступ есть.
 
-Ключи уже созданы. Приватные части лежат только в `~/.ssh/id_ed25519` каждой
-роли — тебе они не нужны и выдавать их не нужно. В GitHub уходят только
-**публичные** ключи. Зарегистрируй их как **write deploy keys**
-(`read_only: false`), чтобы роли могли клонировать и сдавать работу сами:
+Проверка по ключу роли — она в своей сессии выполняет:
 
 ```bash
-REPO=BlockBaster3K/carnis-hub
-i=1
-for KEY in \
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGCE1qwfG2IYIQzuktEo5R+5eRVRrYueVfNNRMXDWxxg carnis-architect" \
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKOYZ0in6Reh3K9sgQ/0bl8nyVN5ZR3EJhbMxueDo4+d carnis-reviewer" \
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII+asc/sDJc/4iGbEjS1bd9D58LgGYnaWRox/1faw/mP carnis-coder" \
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL8EodP4JBFjCT37nLltnkOAw5cb0Ai3DZk8W7FchPUH carnis-artist" \
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMSrU+s9qlm2tl0+qkOYgu5zgrPZafw+F4CfGsw6dgRJ carnis-sound" ; do
-  case $i in
-    1) T=carnis-architect ;; 2) T=carnis-reviewer ;; 3) T=carnis-coder ;;
-    4) T=carnis-artist ;;   5) T=carnis-sound ;;
-  esac
-  curl -sS -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
-    -H "Accept: application/vnd.github+json" \
-    "https://api.github.com/repos/$REPO/keys" \
-    -d "{\"title\":\"$T\",\"key\":\"$KEY\",\"read_only\":false}"
-  echo
-  i=$((i+1))
-done
+ssh -o StrictHostKeyChecking=accept-new -T git@github.com
 ```
 
-Проверь, что все пять зарегистрированы с правом записи:
+Если роль прислала публичный ключ — перешли его заказчику одной строкой.
+Список зарегистрированных deploy keys посмотреть можно так:
 
 ```bash
-curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
-  "https://api.github.com/repos/$REPO/keys" | grep -E '"title"|read_only'
+curl -sS "https://api.github.com/repos/BlockBaster3K/carnis-hub/keys" \
+  | grep -E '"title"|"read_only"'
 ```
 
-Ожидается 5 ключей с `read_only: false`: `carnis-architect`, `carnis-reviewer`,
-`carnis-coder`, `carnis-artist`, `carnis-sound`.
+Ожидается по ключу на роль с `read_only: false`.
 
-**Если роль пришлёт свой публичный ключ** (вариант «сгенерировать свой» в её
-промпте) — зарегистрируй его так же, с `read_only: false`, и подтверди в отчёте.
-
-**Отчёт о регистрации сдай в `00-board/reports/integrator_ssh_deploy_keys.md`:**
-список из 5 ключей, `read_only: false` у каждого, дата регистрации.
+**Пока ключи не зарегистрированы — не стой.** Делай свои задачи (2–5) локально:
+репозиторий публичный, чтение и работа с файлами доступны сразу.
 
 ---
 
@@ -110,23 +104,17 @@ K5, K6-S, версию в 4 местах, манифест, JSON и overlay) —
 
 ## Шаг 1. Подготовка (один раз за сессию)
 
-```bash
-# SSH-доступ должен работать — иначе сдача невозможна
-ssh -T git@github.com
+Репозиторий публичный — чтение работает сразу, без токена и без ключа.
 
-# Клонируем и забираем helper
-git clone --depth 1 --branch arena/d474d740-carnis-hub git@github.com:BlockBaster3K/carnis-hub.git
+```bash
+git clone --branch arena/d474d740-carnis-hub https://github.com/BlockBaster3K/carnis-hub.git
 cd carnis-hub
-mkdir -p tools
-curl -sSL -o tools/agent_push.sh https://raw.githubusercontent.com/BlockBaster3K/carnis-hub/arena/d474d740-carnis-hub/tools/agent_push.sh
-chmod +x tools/agent_push.sh
 ```
 
-> `curl` здесь без токена — это публичный raw-файл, он читается всегда.
-> Токенов у тебя нет и не нужно.
+**Начинай работу сразу.** Push — через `bash tools/agent_push.sh`, он сам
+выберет SSH-канал, когда ключ появится в `~/.ssh/id_ed25519`.
 
-> **Перед сдачей прогони `bash tools/secret_guard.sh`** — он проверит, что
-> приватный ключ случайно не попал в индекс. Код выхода 0 — чисто.
+Перед сдачей: `bash tools/secret_guard.sh` (код 0 — чисто).
 
 ## Шаг 2. Сдача
 
