@@ -419,6 +419,14 @@ def main():
         print()
         print("8) Ambient-фикс (Р-31.2 Архитектора)")
         check_ambient(tmp)
+        # Гейт Ревизора строже моего (9 замечаний против 3: считает паузу между
+        # пульсами, разброс эффективных длин, суммарную громкость). Зовём его
+        # как основной, свой оставляем как быструю числовую сводку.
+        _ag = os.path.join(REPO, "tools", "ambient_gate.py")
+        if os.path.exists(_ag):
+            run_tool("ambient_gate (Ревизор)", _ag, zip_path)
+        else:
+            warn.append("ambient_gate.py нет — только моя проверка")
         check_k8s_breaths(tmp)
 
         print()
