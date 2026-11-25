@@ -1,6 +1,6 @@
-Carnis 3.7.0 source scaffold — NOT PACKAGED
-A4-p7 is pending; do not treat this as a release package.
-ZIP and external SHA-256 manifest are intentionally not generated.
+Carnis 3.7.0 source inventory — release ZIP and SHA-256 manifest generated.
+Accepted A3R1/A4-p7-R and all nine ambient loop OGGs plus redrawn stinger are integrated.
+T-3103 checks: ambient_gate 0, sound_orphans 0, accept_3.7.0 0.
 Source inventory (relative paths):
 MANIFEST.txt
 build.gradle
@@ -467,6 +467,8 @@ src/main/resources/assets/carnis/sounds/flesh/flesh_block_step_03.ogg
 src/main/resources/assets/carnis/sounds/hallucination/phantom_creeper.ogg
 src/main/resources/assets/carnis/sounds/hallucination/phantom_footsteps.ogg
 src/main/resources/assets/carnis/sounds/hallucination/phantom_whisper.ogg
+src/main/resources/assets/carnis/sounds/hive/amalgam_breath_01.ogg
+src/main/resources/assets/carnis/sounds/hive/amalgam_breath_02.ogg
 src/main/resources/assets/carnis/sounds/hive/amalgam_shuffle_01.ogg
 src/main/resources/assets/carnis/sounds/hive/amalgam_shuffle_02.ogg
 src/main/resources/assets/carnis/sounds/hive/amalgam_shuffle_03.ogg

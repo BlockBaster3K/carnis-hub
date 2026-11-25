@@ -38,7 +38,7 @@ public final class HiveAmbientSoundHandler {
     private static final int BUDGET = 2048;
     private static final int CLOSE_STRUCTURE_ENTER = 12;
     private static final int CLOSE_STRUCTURE_EXIT = 8;
-    private static final int PULSE_INTERVAL_TICKS = 268; // 13.4 seconds
+    private static final int PULSE_INTERVAL_TICKS = 450; // 22.5 seconds; at least 7.6 s silence after the longest pitch variant
     private static final int HEARTBEAT_MIN_INTERVAL = 800; // 40 seconds
     private static final int HEARTBEAT_MAX_INTERVAL = 1200; // 60 seconds
     // Sphere radius 16 contains approximately 17,077 sampled positions.
@@ -65,7 +65,6 @@ public final class HiveAmbientSoundHandler {
     private static double nearestHive = Double.POSITIVE_INFINITY;
     private static HiveAmbientSoundInstance sound;
     private static SoundEvent currentLoopEvent;
-    private static HiveAmbientSoundInstance closeSound;
     private static long nextPulseAt = NO_SCHEDULED_TIME;
     private static long nextTonalStingerAt = NO_SCHEDULED_TIME;
     private static long nextHeartbeatAt = NO_SCHEDULED_TIME;
@@ -148,52 +147,52 @@ public final class HiveAmbientSoundHandler {
             sound = null;
             currentLoopEvent = null;
         }
-        if (closeSound != null && closeSound.isStopped()) closeSound = null;
 
-        float targetVolume = 0.0F;
-        if (Double.isFinite(nearestHive)) {
-            targetVolume = 0.85F * (float) (1.0D - nearestHive / (RADIUS + 1.0D));
-        }
-        targetVolume = Mth.clamp(targetVolume, 0.0F, 0.85F);
-        SoundEvent wantedBed = targetVolume > 0.0F ? selectZoneBed() : null;
-        if (targetVolume > 0.0F && wantedBed == null) targetVolume = 0.0F;
+        // Use one continuous bed at a time: the zone bed and close bed are alternatives,
+        // not simultaneous layers. Their event gains in sounds.json cap them at 0.45/0.25.
         if (!insideStructure && closeHiveBlockCount > CLOSE_STRUCTURE_ENTER) {
             insideStructure = true;
         } else if (insideStructure && closeHiveBlockCount < CLOSE_STRUCTURE_EXIT) {
             insideStructure = false;
         }
 
+        float targetVolume = 0.0F;
+        if (Double.isFinite(nearestHive)) {
+            targetVolume = 0.45F * (float) (1.0D - nearestHive / (RADIUS + 1.0D));
+        }
+        targetVolume = Mth.clamp(targetVolume, 0.0F, 0.45F);
+        SoundEvent wantedBed = targetVolume > 0.0F
+                ? (insideStructure ? ModSounds.HIVE_AMBIENT_CLOSE.get() : selectZoneBed())
+                : null;
+        if (targetVolume > 0.0F && wantedBed == null) targetVolume = 0.0F;
+
+        // sounds.json carries the final gains (0.45 bed / 0.25 close). Convert the
+        // target gain back to the normalized SoundInstance envelope to avoid applying
+        // the event gain twice; the gate also reads these explicit target-gain limits.
+        float targetInstanceVolume = targetVolume / 0.45F;
+        if (wantedBed == ModSounds.HIVE_AMBIENT_CLOSE.get()) {
+            float closeTargetVolume = Mth.clamp(targetVolume * 0.55F, 0.0F, 0.25F);
+            targetInstanceVolume = closeTargetVolume / 0.25F;
+        }
+
         if (targetVolume > 0.0F) {
             if (sound != null && currentLoopEvent != wantedBed) {
-                sound.setTarget(0.0F);
+                // Stop before starting the replacement, so a zone/inside transition never layers loops.
+                sound.end();
                 sound = null;
                 currentLoopEvent = null;
             }
             if (sound == null) {
-                sound = new HiveAmbientSoundInstance(level, wantedBed, targetVolume);
+                sound = new HiveAmbientSoundInstance(level, wantedBed, targetInstanceVolume);
                 currentLoopEvent = wantedBed;
                 client.getSoundManager().play(sound);
             } else {
-                sound.setTarget(targetVolume);
+                sound.setTarget(targetInstanceVolume);
             }
 
-            // Keep the existing close ambience as a separate layer over the selected zonal bed.
-            if (insideStructure) {
-                if (closeSound == null) {
-                    closeSound = new HiveAmbientSoundInstance(
-                            level, ModSounds.HIVE_AMBIENT_CLOSE.get(), targetVolume * 0.6F);
-                    client.getSoundManager().play(closeSound);
-                } else {
-                    closeSound.setTarget(targetVolume * 0.6F);
-                }
-            } else if (closeSound != null) {
-                closeSound.setTarget(0.0F);
-                closeSound = null;
-            }
             playPeriodicEvents(client, level);
         } else {
             if (sound != null) sound.setTarget(0.0F);
-            if (closeSound != null) closeSound.setTarget(0.0F);
             nextPulseAt = NO_SCHEDULED_TIME;
             nextTonalStingerAt = NO_SCHEDULED_TIME;
             nextHeartbeatAt = NO_SCHEDULED_TIME;
@@ -383,10 +382,8 @@ public final class HiveAmbientSoundHandler {
     private static void reset() {
         stopHeartbeat(Minecraft.getInstance());
         if (sound != null) sound.end();
-        if (closeSound != null) closeSound.end();
         sound = null;
         currentLoopEvent = null;
-        closeSound = null;
         center = null;
         cursor = VOLUME;
         hiveDensityNearby = 0;

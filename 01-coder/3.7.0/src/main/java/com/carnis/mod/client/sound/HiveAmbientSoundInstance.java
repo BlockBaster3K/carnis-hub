@@ -10,7 +10,7 @@ import net.minecraft.util.Mth;
 
 /** Streamed non-positional Hive bed with a forty-tick fade in/out. */
 public final class HiveAmbientSoundInstance extends AbstractTickableSoundInstance {
-    private static final float MAX_VOLUME = 0.85F;
+    private static final float MAX_VOLUME = 1.0F;
     private static final float FADE_PER_TICK = MAX_VOLUME / 40.0F;
     private final ClientLevel world;
     private float desired;
