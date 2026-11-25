@@ -1205,17 +1205,35 @@ def check_bank_format(extract_dir):
         # До этого: в банке лежали 158 файлов, из них 14 дублей `_w1516`,
         # а пакет содержал 144 — то есть «пакет == банк» не выполнялось
         # никогда, и никто этого не видел, потому что не сверялось.
-        bank = os.path.join(REPO, "03-sound", "sounds")
-        if not os.path.isdir(bank):
-            print("  · банка 03-sound/sounds нет — сверка пакет==банк пропущена")
-            skipped_checks.append("банк: каталога 03-sound/sounds нет")
+        # З-27: 3.8.0 читает ДВА каталога — неизменяемый канон 3.7.x (144)
+        # и свои новые файлы (132) = 276. Инструменты принимают путь
+        # параметром, поэтому правка только здесь.
+        banks = [os.path.join(REPO, "03-sound", "sounds"),
+                 os.path.join(REPO, "03-sound", "sounds_380")]
+        present = [b for b in banks if os.path.isdir(b)]
+        if not present:
+            print("  · банков нет — сверка пакет==банк пропущена")
+            skipped_checks.append("банк: каталогов 03-sound/sounds* нет")
         else:
             bank_files = {}
-            for dp, _, fs in os.walk(bank):
-                for f in fs:
-                    if f.lower().endswith(".ogg"):
-                        full = os.path.join(dp, f)
-                        bank_files[os.path.relpath(full, bank)] = full
+            clashes = []
+            for b in present:
+                for dp, _, fs in os.walk(b):
+                    for f in fs:
+                        if f.lower().endswith(".ogg"):
+                            rel = os.path.relpath(os.path.join(dp, f), b)
+                            if rel in bank_files:
+                                clashes.append(rel)
+                            bank_files[rel] = os.path.join(dp, f)
+            if clashes:
+                print("  x банк: %d имён встречаются в двух каталогах "
+                      "(версии перекрываются)" % len(clashes))
+                for n in sorted(clashes)[:4]:
+                    print("      " + n)
+                fail.append("банк: %d имён в двух банках одновременно" % len(clashes))
+            print("  · банков: %d (%s)" % (len(present),
+                                           ", ".join(os.path.basename(x)
+                                                     for x in present)))
             pkg_files = set()
             for dp, _, fs in os.walk(root):
                 for f in fs:

@@ -158,6 +158,59 @@ def read_sources(src):
     return out
 
 
+def heard_elsewhere(dead, data, sources, files):
+    """Из недостижимых событий выбрать те, чьи файлы ЦЕЛИКОМ слышны живьём.
+
+    З-Г6: константа может не вызываться, а её звук — играться. Пример из
+    3.7.3: `FLESH_AMALGAM_AMBIENT` не вызывается вообще, но его файл
+    `entity/flesh_amalgam_ambient` входит в живое событие
+    `hive.amalgam_breath`, которое код вызывает через
+    `ModSounds.HIVE_AMALGAM_BREATH`. Считать такое событие «недостижимым по
+    ошибке» неправильно: звук слышен, работа Звука не выброшена.
+
+    Критерий строгий — покрыты ВСЕ файлы события живыми событиями. Если хотя
+    бы один файл не звучит нигде, это уже настоящая потеря, и событие валит
+    проверку как раньше.
+
+    Возвращает {константа: (ключ, живое_событие)}.
+    """
+    dead_names = {n for n, _k in dead}
+    # Живые события = всё, что в sounds.json, кроме самих недостижимых.
+    live = {}
+    for ev, spec in (data or {}).items():
+        snds = spec.get("sounds", []) if isinstance(spec, dict) else []
+        refs = set()
+        for s in snds:
+            name = s.get("name") if isinstance(s, dict) else s
+            if isinstance(name, str) and name.startswith("carnis:"):
+                refs.add(name[len("carnis:"):])
+        live[ev] = refs
+
+    # Ключ события из ModSounds -> имя константы: обратная карта.
+    key_of = {}
+    for name, key in dead:
+        key_of[name] = key
+
+    out = {}
+    for name, key in dead:
+        own = live.get(key, set())
+        if not own:
+            continue
+        # Все файлы события должны быть покрыты ХОТЯ БЫ ОДНИМ живым событием.
+        uncovered = set()
+        covering = set()
+        for f in own:
+            cov = [ev for ev, refs in live.items()
+                   if ev != key and f in refs]
+            if cov:
+                covering.update(cov)
+            else:
+                uncovered.add(f)
+        if not uncovered and covering:
+            out[name] = (key, sorted(covering)[0])
+    return out
+
+
 def unreachable_events(sources):
     """События ModSounds без единого вызова в коде -> список (константа, ключ).
 
@@ -252,6 +305,16 @@ def main():
         print()
         # З-26: разделяем «сознательный задел» и «недостижимо по ошибке».
         allowed, allow_unknown = {}, []
+        # З-Г6: третий исход — константа мертва, но файл слышен через живое
+        # событие. Это не потеря, поэтому не валит, но и молчать нельзя.
+        heard = heard_elsewhere(dead or [], data, sources, files)
+        if heard:
+            dead = [d for d in dead if d[0] not in heard]
+            print()
+            print("СЛЫШНЫ ЧЕРЕЗ ДРУГОЕ СОБЫТИЕ (%d) — константа не вызывается, "
+                  "но файл играется (З-Г6):" % len(heard))
+            for name, (key, via) in sorted(heard.items()):
+                print("  ~ ModSounds.%-28s — играется через \"%s\"" % (name, via))
         if dead and use_allow:
             table = load_allowlist()
             if table is None:
