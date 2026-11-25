@@ -22,8 +22,8 @@
 
 Текст: `00-board/ROADMAP_integrator.md`, раздел «ВОЛНА 52».
 
-- [ ] **I10** — пакет 3.8.0 (17 существ + звуки) + манифест + `baseline.resolve`
+- [ ] **I10** — пакет 3.8.0 (33 существа + звуки) + манифест + `baseline.resolve`
 - [ ] **I11** — гейт `tools/accept_3.8.0.py` (правила 3.7.3 + новые существа)
 - [ ] **I12** — manifest-check + сверка состава (манифест ↔ пакет ↔ банк ↔ реестр)
-- [ ] **I13** — сверка 17 существ с `creature_registry.md`
+- [ ] **I13** — сверка 33 существ с `creature_registry.md`
 - [ ] **I14** — отчёт `00-board/reports/integrator_380_manifest.md`

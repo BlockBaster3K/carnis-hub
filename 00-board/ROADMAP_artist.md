@@ -244,6 +244,92 @@
 ---
 
 
+
+## ВОЛНА 53 · ДЕТАЛИЗАЦИЯ И АНИМАЦИИ 33 СУЩЕСТВ (версии 3.8.1 → 3.9.0)
+
+**Факт (проверен Ревизором, инструмент `02-reviewer/tools/creature_pack_audit.py`,
+отчёт `00-board/reports/reviewer_380_creatures_preaudit.md`):** в шести сдачах
+3.8.0 лежат **99 файлов = 33 существа × (geo + текстура + glowmask)**.
+
+| Что | Факт по всем 33 | Норма |
+|---|---|---|
+| geo разбирается, `pivot` у всех костей, имена уникальны | 33/33 | ✓ |
+| UV кубов в пределах текстуры | 33/33 | ✓ |
+| A3R1: цветов / топ-доля / альфа | 7 цветов; 14,5–16,4 %; бинарная | ✓ |
+| glowmask по Р-3 | **33/33** | ✓ |
+| **костей у существа** | **1–6** | **≥ 12** (цель 14–20) |
+| **анимации** | **0** | 5 (`idle/walk/attack/hurt/death`) |
+
+Текстуры и glowmask — хорошие. **Не сделаны модели.** Пока это
+низкополигональные заготовки: геометрия **1:1 скопирована из ванильного
+моба**, заражение живёт в текстуре. Твой объём — довести их до эталона
+(`infected_zombie` — 18 костей, `infected_spider` — 24).
+
+### H24 · Инструмент проверки — сначала
+- [ ] **H24.** `04-artist/tools/geo_check.py` (шаг **H1**): UV в пределах
+  текстуры (оба формата UV), `texture_width/height` == PNG, `parent` кости
+  существует, `pivot` задан, дубли имён, кубы в границах. Код 0/1.
+- [ ] **H25.** Прогнать H24 по **всем 42 существам** (9 текущих + 33 новых) и
+  починить найденное — **до** правок геометрии.
+
+### H26 · Детализация 33 существ — 3 партии по 11
+Цель — **≥ 12 костей** у каждого, с реальными частями тела: наросты, сегменты,
+суставы, челюсти, щупальца, шипы, «руки» заражённых. Силуэт ванильного моба
+**сохраняется как база**, но кубы **не должны быть его копией 1:1**.
+
+- [ ] **H26.** Партия 1 (11 шт): `infected_zombie_villager`, `infected_husk`,
+  `infected_stray`, `infected_drowned`, `infected_bogged`,
+  `infected_illusioner`, `infected_vex`, `infected_evoker`,
+  `infected_vindicator`, `infected_pillager`, `infected_witch`.
+- [ ] **H27.** Партия 2 (11 шт): `infected_creaking`, `infected_warden`,
+  `infected_ender_mite`, `infected_cave_spider`, `infected_silverfish`,
+  `infected_enderman`, `infected_endermite`, `infected_breeze`,
+  `infected_piglin`, `infected_piglin_brute`, `infected_zoglin`.
+- [ ] **H28.** Партия 3 (11 шт): `infected_blaze`, `infected_ghast`,
+  `infected_wither`, `infected_wither_skeleton`, `infected_shulker`,
+  `infected_guardian`, `infected_elder_guardian`, `infected_magma_cube`,
+  `infected_slime`, `infected_phantom`, `infected_ravager`.
+- [ ] **H29.** Каждая партия — **превью** (`04-artist/previews/`), запись в
+  `04-artist/geo_registry.md`, `geo_check.py` → 0, текстура в палитре проекта
+  (≤ 35 % топа, ≥ 7 непрозрачных цветов, alpha 0/255), **glowmask по Р-3**
+  пересчитан под новую геометрию.
+
+### H30 · Анимации — 165 файлов
+- [ ] **H30.** По **5 анимаций** на каждое из 33 существ:
+  `animations/entity/<entity>.animation.json` — `idle`, `walk`, `attack`,
+  `hurt`, `death`. Формат Geckolib `format_version` 1.12.0, 20 fps,
+  ориентир — `04-artist/deliverables/tz3_phase_3_1_rev31/animation_contract.json`
+  (там же 6-я — `mask_twitch`, она опциональна).
+- [ ] **H31.** **Ключи анимации только по существующим костям** из H26–H28 —
+  иначе анимация не проиграется. Проверка: `geo_check.py` + **новый блок**
+  `geo_check.py --animations`: имя кости в анимации есть в geo.
+- [ ] **H32.** Порядок: сначала **партия 1 (11 существ × 5)** как образец,
+  потом партии 2 и 3.
+
+### H33 · Наши 5 существ и эталоны
+- [ ] **H33.** Довести наши 5 до эталона: `parasitic_tendril` 4→14,
+  `cerebral_nexus` 6→14, `hive_sentinel` 6→16, `biomass_maggot` 8→12,
+  `flesh_amalgam` 13→20 (шаги H3–H7 волны 51).
+- [ ] **H34.** GLB-эталоны **b020…b024** для наших 5 (`glb` + `_data.json` с
+  ролями костей + `animation.json`), валидация **Khronos glTF Validator**
+  → `numErrors: 0`, `numWarnings: 0` (шаги H18–H21 волны 51).
+- [ ] **H35.** `04-artist/geo_registry.md` — **полная таблица по 42 существам**:
+  кости, кубы, анимации (какие), источник (GLB / вручную), размер текстуры,
+  результат `geo_check.py`.
+
+### Правила
+- Геометрия — **Geckolib `format_version` 1.12.0**, как в существующих файлах.
+- **UV обязаны попадать в текстуру** — главный риск, поэтому H24 первым.
+- Текстуры — палитра проекта, ≤ 35 % топа, ≥ 7 непрозрачных цветов, alpha 0/255.
+- **Силуэт ванильного моба не ломать** (заражение добавляется, а не заменяет).
+- Сдача — `04-artist/deliverables/` (архивы) + `geo_registry.md` + отчёт с
+  числами (кости/кубы/анимации до и после).
+
+**Сроки по версиям:** детализация и анимации — **3.8.1**; GLB-эталоны и
+`geo_registry` по 42 существам — **3.9.0**.
+
+---
+
 ## Твоя задача СЕЙЧАС — T-3181 · Дальше по существам
 
 **Статус:** ASSIGNED → **IN_PROGRESS** (сразу, без ожидания команды) · **Зона:** `04-artist/` · **Приоритет 2**
