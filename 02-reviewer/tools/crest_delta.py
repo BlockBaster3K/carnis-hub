@@ -26,6 +26,7 @@ T-3130). Чистое изменение усиления сдвигает пи�
 
 import argparse
 import io
+import re
 import math
 import os
 import pathlib
@@ -112,6 +113,31 @@ def roundtrip_stats(data, bitrate):
     return stats_of_bytes(rt)
 
 
+RE_ROW = re.compile(
+    r"^\|\s*`((?:sounds|sounds_380)/[^`]+)`\s*\|\s*(стац|транз)\s*\|"
+    r"\s*[\d.]+\s*\|\s*[\d.]+\s*\|\s*([\d.]+)\s*\|\s*([\d.]+)\s*\|"
+    r"\s*\*{0,2}([\d.]+)\*{0,2}\s*\|")
+
+
+def load_table(path):
+    """Эталонная таблица crest (З-29): {хвост пути: (допуск, тип)}.
+
+    Хвост — путь после `sounds/` или `sounds_380/`, чтобы одна таблица
+    подходила и канону, и банку 3.8.0.
+    """
+    table = {}
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            m = RE_ROW.match(line)
+            if not m:
+                continue
+            full, typ, base, thr, tol = m.group(1), m.group(2), float(m.group(3)), \
+                float(m.group(4)), float(m.group(5))
+            tail = full.split("/", 1)[1]
+            table[tail] = (max(thr, base + 0.05), typ)
+    return table
+
+
 def load_target(src):
     """Банк — каталог с .ogg; пакет — zip с sounds/**/*.ogg. Возвращает {имя: bytes-функция}."""
     p = pathlib.Path(src)
@@ -135,6 +161,9 @@ def main():
                     help="эталон = перекод оригинала тем же кодеком (З-28)")
     ap.add_argument("--bitrate", type=int, default=160000,
                     help="битрейт round-trip-перекода, бит/с (З-28: 160k)")
+    ap.add_argument("--table", default=None,
+                    help="эталонная таблица З-29 (sound_crest_baseline.md): "
+                         "допуск берётся per-file; файл без записи — провал")
     a = ap.parse_args()
 
     arch = pathlib.Path(a.archive)
@@ -146,8 +175,18 @@ def main():
         print("ОШИБКА: в архиве нет .ogg")
         return 1
     target = load_target(a.target)
+    table = None
+    if a.table:
+        if not os.path.isfile(a.table):
+            print("ОШИБКА: нет эталонной таблицы %s" % a.table)
+            return 1
+        table = load_table(a.table)
+        print("Таблица crest: %s, записей %d" % (a.table, len(table)))
+        if not table:
+            print("ОШИБКА: таблица пуста — разбор не удался")
+            return 1
 
-    rows, missing, unchanged, gain_only = [], [], [], []
+    rows, missing, unchanged, gain_only, no_entry, tols = [], [], [], [], [], {}
     for f in originals:
         get = target.get(f.name)
         if get is None:
@@ -177,26 +216,35 @@ def main():
         d_gain = (b_stats[1] - ref_stats[1])        # сдвиг RMS
         d_peak = (b_stats[0] - ref_stats[0])        # сдвиг пика
         is_gain = abs(d_peak - d_gain) <= 0.15 and abs(d_gain) >= 0.1
-        rows.append((f.name, ref, new, new - ref))
+        tol = a.tol
+        if table is not None:
+            hit = next((v for k, v in table.items()
+                        if k == f.name or k.endswith("/" + f.name)), None)
+            if hit is None:
+                no_entry.append(f.name)
+                continue
+            tol = hit[0]
+            tols[f.name] = (tol, hit[1])
+        rows.append((f.name, ref, new, new - ref, tol))
         if is_gain:
             gain_only.append((f.name, d_gain))
 
     rows.sort(key=lambda r: -abs(r[3]))
-    print("%-40s %10s %11s %7s" % ("файл", "crest было", "crest стало", "Δ дБ"))
-    for name, o, n, d in rows[:a.top]:
-        mark = "  " if abs(d) <= a.tol else " !"
-        print("%-40s %10.2f %11.2f %7.2f%s" % (name, o, n, d, mark))
+    print("%-40s %10s %11s %7s %7s" % ("файл", "crest было", "crest стало", "Δ дБ", "допуск"))
+    for name, o, n, d, tol in rows[:a.top]:
+        mark = "  " if abs(d) <= tol else " !"
+        print("%-40s %10.2f %11.2f %7.2f %7.2f%s" % (name, o, n, d, tol, mark))
 
     # З-28 п.3: crest инвариантен к усилению, поэтому файл с чистым gain из
     # вердикта исключается — его судят по пику/запасу. Δcrest у такого файла
     # может быть и 0,5 дБ: это разница двух разных кодирований, а не динамика.
     gain_names = {n for n, _g in gain_only}
-    over = [r for r in rows if abs(r[3]) > a.tol and r[0] not in gain_names]
+    over = [r for r in rows if abs(r[3]) > r[4] and r[0] not in gain_names]
     diffs = sorted(abs(r[3]) for r in rows)
     median = diffs[len(diffs) // 2] if diffs else 0.0
     print("-" * 72)
-    print("Файлов сверено: %d, выходов за %.2f дБ: %d, медиана |Δ| %.3f дБ, максимум %.2f дБ"
-          % (len(rows), a.tol, len(over), median, max(diffs) if diffs else 0.0))
+    print("Файлов сверено: %d, выходов за допуск: %d, медиана |Δ| %.3f дБ, максимум %.2f дБ"
+          % (len(rows), len(over), median, max(diffs) if diffs else 0.0))
     if missing:
         print("Не сверено: %d — %s" % (len(missing), ", ".join(missing[:5])))
     if unchanged:
@@ -209,10 +257,20 @@ def main():
             print("   = %-38s RMS %+.2f дБ" % (name, g))
     if over:
         print("ИТОГ: ЕСТЬ ВЫХОДЫ — %d файлов изменили динамику, а не только уровень" % len(over))
-        for name, _o, _n, d in over:
-            print("   ! %-38s %+.2f дБ" % (name, d))
+        for name, _o, _n, d, tol in over:
+            print("   ! %-38s %+.2f дБ (допуск %.2f)" % (name, d, tol))
         return 2
-    print("ИТОГ: СХОДИТСЯ — crest сохранён в пределах %.2f дБ" % a.tol)
+    if no_entry:
+        # З-29 п.5: нет записи в таблице — это «не проверено», а не «прошло»
+        print("CREST НЕ ПРОВЕРЕН — нет записи в эталонной таблице (%d):"
+              % len(no_entry))
+        for name in no_entry[:6]:
+            print("   ? %s" % name)
+        return 3
+    if table is not None:
+        print("ИТОГ: СХОДИТСЯ — crest в пределах допусков эталонной таблицы (З-29)")
+    else:
+        print("ИТОГ: СХОДИТСЯ — crest сохранён в пределах %.2f дБ" % a.tol)
     return 0
 
 
