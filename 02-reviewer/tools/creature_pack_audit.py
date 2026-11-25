@@ -178,7 +178,31 @@ def main():
     a = ap.parse_args()
 
     files = iter_files(a.sources)
-    geos = sorted(k for k in files if k.startswith("geo/") and k.endswith(".geo.json"))
+
+    def by_tail(suffix):
+        """{базовое имя: реальный ключ} по хвосту пути.
+
+        Сдача может лежать и плоско (`geo/x.geo.json`, `textures/entity/x.png`),
+        и полным пакетом (`src/main/resources/assets/carnis/geo/entity/x.geo.json`).
+        Поэтому имя ищется по хвосту, а не собирается из шаблона пути.
+        """
+        out = {}
+        for k in files:
+            if k.endswith(suffix):
+                base = k.split("/")[-1][: -len(suffix)]
+                out.setdefault(base, k)
+        return out
+
+    geo_by_name = by_tail(".geo.json")
+    tex_by_name = {}
+    for k in files:
+        if "/textures/entity/" in ("/" + k) or k.startswith("textures/entity/"):
+            base = k.split("/")[-1][:-4]
+            if k.endswith(".png"):
+                tex_by_name.setdefault(base, k)
+    anim_by_name = by_tail(".animation.json")
+
+    geos = sorted(geo_by_name.values())
     if not geos:
         print("ОШИБКА: в источниках нет geo/*.geo.json")
         return 1
@@ -208,10 +232,12 @@ def main():
     print("-" * 104)
 
     for name in creatures:
-        g = "geo/%s.geo.json" % name
-        tex = "textures/entity/%s.png" % name
-        glow = "textures/entity/%s_glowmask.png" % name
+        g = geo_by_name.get(name, "")
+        tex = tex_by_name.get(name, "")
+        glow = tex_by_name.get(name + "_glowmask", "")
         try:
+            if not g:
+                raise ValueError("нет geo с таким именем")
             info = geo_info(files[g])
         except (ValueError, KeyError, json.JSONDecodeError) as e:
             bad("%s: geo не разбирается (%s)" % (name, e))
@@ -221,8 +247,8 @@ def main():
         if info["bones"] < a.min_bones:
             warn("%s: костей %d < %d" % (name, info["bones"], a.min_bones))
 
-        if tex not in files:
-            bad("%s: нет текстуры %s" % (name, tex))
+        if not tex or tex not in files:
+            bad("%s: нет текстуры textures/entity/%s.png" % (name, name))
             continue
         st = png_stats(files[tex])
         w, h = st["size"]
@@ -238,7 +264,7 @@ def main():
             bad("%s: альфа не бинарная %s" % (name, sorted(st["alphas"])[:5]))
 
         glow_res = "нет"
-        if glow not in files:
+        if not glow or glow not in files:
             bad("%s: нет glowmask (правило Р-3)" % name)
         else:
             gs = png_stats(files[glow])
@@ -261,9 +287,9 @@ def main():
                 glow_res = "%dpx" % gs["opaque"]
 
         # анимации
-        anim_files = [k for k in files if k.startswith("animations/")
-                      and k.endswith(".animation.json")
-                      and k.split("/")[-1] == name + ".animation.json"]
+        anim_files = ([anim_by_name[name]] if name in anim_by_name else
+                      [k for k in files if k.endswith("/" + name + ".animation.json")
+                       or k == name + ".animation.json"])
         anim_res = "—"
         if anim_files:
             anim_bones = set()
