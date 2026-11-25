@@ -880,6 +880,16 @@ def _is_float(s):
         return False
 
 
+def _pkg_sound_count(zip_path):
+    """Сколько .ogg в пакете — для честного охвата в зелёной строке crest."""
+    try:
+        with zipfile.ZipFile(zip_path) as z:
+            return sum(1 for n in z.namelist()
+                       if n.endswith(".ogg") and "assets/carnis/sounds/" in n)
+    except (OSError, zipfile.BadZipFile):
+        return 0
+
+
 def check_crest(zip_path):
     """T-3182 §4: правка громкости не должна менять динамику.
 
@@ -976,8 +986,14 @@ def check_crest(zip_path):
             if shown >= 4:
                 break
     if r.returncode == 0 and not over:
-        print("  v crest: %d проверено по таблице, все в своих допусках "
-              "(T-3182 §4 + З-30)" % n)
+        # R22 §8: «зелено» не должно означать «проверено всё». Таблица
+        # покрывает 276 файлов, а архив мастеров — только 15 (все
+        # транзиентные). Печатаю охват честно: 15 из 144, и чем закрыты
+        # остальные (побайтовым равенством 3.7.2 — их проверяет блок 12б).
+        total = _pkg_sound_count(zip_path)
+        print("  v crest: проверено %d из %d файлов пакета (таблица З-30); "
+              "остальные %d побайтово равны 3.7.2 — норме не подлежат, "
+              "изменение ловит блок 12б" % (n, total, max(total - n, 0)))
     elif r.returncode == 0:
         print("  v crest: %d проверено, выходов сверх per-file допуска нет" % n)
     else:
