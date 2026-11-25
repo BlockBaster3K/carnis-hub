@@ -100,9 +100,49 @@ def normalise(path, out_path, target=TARGET, max_tries=4):
     return res
 
 
+def lift_to_rms(path, out_path, target_rms, peak_max=-1.0):
+    """Поднять файл до target_rms, не превысив peak_max. Длина — сэмпл-в-сэмпл."""
+    y = decode(path)
+    want = len(y)
+    rms0 = 20 * np.log10(np.sqrt((y ** 2).mean()) + 1e-12)
+    pk0 = db(float(np.abs(y).max()))
+    need = target_rms - rms0
+    head = peak_max - pk0                  # сколько можно поднять до нормы пика
+    up = min(need, head)
+    if up <= 0.01:
+        return dict(f=rms0, before=rms0, after=rms0, peak=pk0, up=0.0, limited=True,
+                    exact_len=True, want=want, got=len(y))
+    br = vorbis_bitrate(path)
+    g = 10 ** (up / 20.0)
+    z = encode_exact(y * g, out_path, br, want)
+    rms1 = 20 * np.log10(np.sqrt((z ** 2).mean()) + 1e-12)
+    pk1 = db(float(np.abs(z).max()))
+    # кодек мог задрать пик — добираем вниз, если нужно
+    tries = 1
+    while pk1 > peak_max and tries < 4:
+        g *= 10 ** ((peak_max - pk1) / 20.0)
+        z = encode_exact(y * g, out_path, br, want)
+        rms1 = 20 * np.log10(np.sqrt((z ** 2).mean()) + 1e-12)
+        pk1 = db(float(np.abs(z).max()))
+        tries += 1
+    return dict(before=rms0, after=rms1, peak=pk1, up=up, limited=(up < need - 0.01),
+                exact_len=(len(z) == want), want=want, got=len(z), tries=tries)
+
+
 if __name__ == '__main__':
     a = sys.argv[1:]
     apply = '--apply' in a
+    rms_target = None
+    rest = []
+    i = 0
+    while i < len(a):
+        if a[i] == '--rms':
+            rms_target = float(a[i + 1])
+            i += 2
+        else:
+            rest.append(a[i])
+            i += 1
+    a = rest
     out_dir = None
     if '--out' in a:
         out_dir = a[a.index('--out') + 1]
@@ -112,6 +152,30 @@ if __name__ == '__main__':
         print(__doc__)
         sys.exit(1)
     changed = bad = 0
+    if rms_target is not None:
+        for f in files:
+            dst = os.path.join(out_dir, os.path.basename(f)) if out_dir else f
+            if apply:
+                r = lift_to_rms(f, dst, rms_target)
+                ok = r['after'] >= -30.0 and r['peak'] <= -1.0 and r['exact_len']
+                ln = 'точна' if r['exact_len'] else f"{r['got'] - r['want']:+d} сэмплов"
+                lim = '  ← упёрся в пик' if r['limited'] else ''
+                print(f"{f.split('/')[-1]:34s} RMS {r['before']:6.2f} -> {r['after']:6.2f}  "
+                      f"пик {r['peak']:6.2f}  подъём {r['up']:+5.2f} дБ  длина {ln}"
+                      f"  {'OK' if ok else 'ПРОВЕРИТЬ'}{lim}")
+                changed += 1
+                bad += 0 if ok else 1
+            else:
+                y = decode(f)
+                rms0 = 20 * np.log10(np.sqrt((y ** 2).mean()) + 1e-12)
+                pk0 = db(float(np.abs(y).max()))
+                up = min(rms_target - rms0, -1.0 - pk0)
+                print(f"{f.split('/')[-1]:34s} RMS {rms0:6.2f} -> {rms0 + up:6.2f}  "
+                      f"пик {pk0:6.2f}  подъём {up:+5.2f} дБ")
+                changed += 1
+        print(f"\n{'ОБРАБОТАНО' if apply else 'ПЛАН'}: {changed} файлов"
+              + (f", с замечаниями: {bad}" if apply else ""))
+        sys.exit(0)
     for f in files:
         if apply:
             dst = os.path.join(out_dir, os.path.basename(f)) if out_dir else f
