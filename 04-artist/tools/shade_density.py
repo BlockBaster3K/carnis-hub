@@ -35,12 +35,26 @@ def check_image(im: Image.Image, name: str, max_share: float, min_colors: int) -
     )
 
 
+def print_recipe(im: Image.Image, name: str) -> None:
+    rgba = im.convert("RGBA")
+    px = [p[:3] for p in rgba.getdata() if p[3] > 0]
+    if not px:
+        return
+    mr = sum(p[0] for p in px) / len(px)
+    mg = sum(p[1] for p in px) / len(px)
+    mb = sum(p[2] for p in px) / len(px)
+    clamp = lambda v: max(0, min(255, int(round(v))))
+    ramp = [(clamp(mr + d), clamp(mg + d * 0.7), clamp(mb + d * 0.7)) for d in (-30, -20, -10, 0, 10, 20, 30)]
+    print(f"    РЕЦЕПТ {name}: средний=({mr:.1f},{mg:.1f},{mb:.1f}) -> 7 квантилей по ~{100/7:.1f}%: {ramp}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Чекер плотности светотени (T-3109)")
     ap.add_argument("target", help="Путь к PNG или ZIP")
     ap.add_argument("--max-share", type=float, default=0.35, help="Макс. доля одной краски (по умолч. 0.35)")
     ap.add_argument("--min-colors", type=int, default=7, help="Мин. число непрозрачных цветов (по умолч. 7)")
     ap.add_argument("--include-glowmask", action="store_true", help="Проверять также *_glowmask.png")
+    ap.add_argument("--recipe", action="store_true", help="Печатать рецепт перекраски для текстур вне порога")
     args = ap.parse_args()
 
     p = Path(args.target)
@@ -66,12 +80,16 @@ def main() -> int:
                     print(line)
                     if not ok:
                         all_ok = False
+                        if args.recipe:
+                            print_recipe(im, Path(n).name)
         else:
             im = Image.open(p)
             ok, line = check_image(im, p.name, args.max_share, args.min_colors)
             print(line)
             if not ok:
                 all_ok = False
+                if args.recipe:
+                    print_recipe(im, p.name)
     except Exception as exc:
         print(f"ОШИБКА: {exc}", file=sys.stderr)
         return 1
