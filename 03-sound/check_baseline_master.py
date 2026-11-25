@@ -21,7 +21,8 @@ import json
 import os
 import sys
 
-SCHEMA = "carnis.baseline_master/1"
+SCHEMAS = ("carnis.baseline_master/1", "carnis.baseline_master/2")
+REQUIRED = ("file", "signal_type", "threshold", "baseline_master", "tolerance")
 
 
 def sha256_of(path):
@@ -45,13 +46,26 @@ def main(argv=None):
     except Exception as exc:  # noqa: BLE001
         print("ОШИБКА: %s не читается (%s)" % (a.json, exc))
         return 3
-    if doc.get("schema") != SCHEMA:
-        print("ОШИБКА: схема %r, ожидалась %r" % (doc.get("schema"), SCHEMA))
+    if doc.get("schema") not in SCHEMAS:
+        print("ОШИБКА: схема %r, ожидалась одна из %r" % (doc.get("schema"), SCHEMAS))
         return 3
     rows = doc.get("files") or []
     if not rows:
         print("ОШИБКА: в %s нет записей" % a.json)
         return 3
+
+    # самодостаточность записи (R23 §12: гейт не должен ходить в таблицу за типом)
+    incomplete = []
+    for r in rows:
+        lost = [k for k in REQUIRED if k not in r]
+        if lost:
+            incomplete.append((r.get("file", "?"), ",".join(lost)))
+            continue
+        # tolerance должна совпадать с формулой З-30/З-31
+        want = max(float(r["threshold"]), float(r["baseline_master"]) + 0.05)
+        if abs(float(r["tolerance"]) - want) > 5e-4:
+            incomplete.append((r["file"], "tolerance %.3f != max(%.2f, %.3f+0.05)"
+                               % (r["tolerance"], r["threshold"], r["baseline_master"])))
 
     stale, missing, untracked = [], [], []
     recorded = set()
@@ -88,6 +102,10 @@ def main(argv=None):
     if not a.quiet:
         print("baseline_master: %s, записей %d, перекод %s"
               % (a.json, total, doc.get("recode_preset", "?")))
+    if incomplete:
+        print("  x запись неполна или tolerance не по формуле: %d" % len(incomplete))
+        for r, why in incomplete[:5]:
+            print("      ? %s (%s)" % (r, why))
     if missing:
         print("  x нет файла: %d" % len(missing))
         for r in missing[:5]:
@@ -100,11 +118,11 @@ def main(argv=None):
         print("  x файл с мастером, но без записи: %d" % len(untracked))
         for r in untracked[:5]:
             print("      + %s" % r)
-    if missing or stale or untracked:
+    if missing or stale or untracked or incomplete:
         print("ИТОГ: НЕАКТУАЛЬНО — пересчитать baseline(M) и обновить JSON (S48)")
         return 2
     if not a.quiet:
-        print("ИТОГ: АКТУАЛЬНО — %d записей, все SHA256 сходятся" % total)
+        print("ИТОГ: АКТУАЛЬНО — %d записей, все SHA256 сходятся, tolerance по формуле" % total)
     return 0
 
 
