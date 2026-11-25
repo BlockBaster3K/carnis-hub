@@ -1,5 +1,5 @@
 {
-  "method": "прямой замер PNG (метод Д6), без внешнего чекера",
+  "method": "прямой замер PNG (метод Д6) + независимая проверка чекером Ревизора tools/tendril_flesh_match.py",
   "reference": "01-coder/3.6.0-R/project-3.6.0-R-clean.zip -> textures/block/living_flesh_i.png",
   "criteria": {
     "size": "64x64 RGBA",
@@ -9,13 +9,42 @@
     "delta": "(|dR|+|dG|+|dB|)/3 по непрозрачным пикселям, порог <= 12"
   },
   "files": [
-    {"file": "creeping_tendrils_0.png", "mean_rgb": [87, 33, 38], "delta": 1.00, "margin_to_12": 11.00, "colors": 7, "alpha": [255], "mask_identical": true},
-    {"file": "creeping_tendrils_1.png", "mean_rgb": [84, 32, 37], "delta": 12.00, "margin_to_12": 0.00, "colors": 7, "alpha": [255], "mask_identical": true},
-    {"file": "creeping_tendrils_2.png", "mean_rgb": [90, 35, 40], "delta": 11.00, "margin_to_12": 1.00, "colors": 7, "alpha": [255], "mask_identical": true},
-    {"file": "creeping_tendrils_3.png", "mean_rgb": [90, 35, 41], "delta": 3.67, "margin_to_12": 8.33, "colors": 7, "alpha": [255], "mask_identical": true}
+    {
+      "file": "creeping_tendrils_0.png",
+      "delta": 0.79,
+      "margin_to_12": 11.21,
+      "mask_px": 2608,
+      "mask_lost": 0,
+      "mask_added": 0
+    },
+    {
+      "file": "creeping_tendrils_1.png",
+      "delta": 11.66,
+      "margin_to_12": 0.34,
+      "mask_px": 2583,
+      "mask_lost": 0,
+      "mask_added": 0
+    },
+    {
+      "file": "creeping_tendrils_2.png",
+      "delta": 10.89,
+      "margin_to_12": 1.11,
+      "mask_px": 2529,
+      "mask_lost": 0,
+      "mask_added": 0
+    },
+    {
+      "file": "creeping_tendrils_3.png",
+      "delta": 4.11,
+      "margin_to_12": 7.89,
+      "mask_px": 2746,
+      "mask_lost": 0,
+      "mask_added": 0
+    }
   ],
-  "max_delta": 12.00,
-  "verdict": "СХОДИТСЯ",
-  "caveat": "creeping_tendrils_1.png сел ровно на порог (delta = 12.00, запас 0.00) — вариант 1 требует переделки. Целевые окна среднего RGB по вариантам опубликованы в 00-board/agents/ARCHITECT.md, раздел Р-31.1.",
-  "not_checked": "восприятие цвета в игре — за заказчиком"
+  "max_delta": 11.66,
+  "verdict": "СХОДИТСЯ (код 0)",
+  "caveat": "Кандидат не актуален: Художник сдал свой вариант (Δ 0,75–2,46), он принят Интегратором (64e2487). Этот остаётся эталоном методики и примером «маска не тронута».",
+  "not_checked": "восприятие цвета в игре — за заказчиком",
+  "_note": "Мои числа округляли средние до целых — Δ по фактическим пикселям ниже (вариант 1: 11,66, а не 12,00). Точные значения — в таблице, по замеру Ревизора (00-board/reports/reviewer_a3r1_gate_report.md). Кандидат НЕ актуален: в пакет идёт сдача Художника (Δ 0,75–2,46, принято)."
 }
