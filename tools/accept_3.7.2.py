@@ -880,11 +880,11 @@ def main():
         check_keep_identical(tmp)
 
         print()
-        print("11) З-1 — плотность светотени infected_creeper")
+        print("10в) З-1 — плотность светотени infected_creeper (наследие 3.7.0)")
         check_z1_shade(tmp)
 
         print()
-        print("12) Принятые слои лежат в пакете побайтово (A4-p7-R, A3R1)")
+        print("10г) Принятые слои лежат в пакете побайтово (A4-p7-R, A3R1)")
         check_accepted_layers(tmp)
 
         print()
