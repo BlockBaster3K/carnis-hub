@@ -898,6 +898,51 @@ def check_bank_format(extract_dir):
             print("  ✓ запас: все файлы не выше %.2f dBFS (T-3182 §1)"
                   % CEIL_DB)
 
+        # T-3188 (Архитектор): инвариант «банк = 144 .ogg, пакет == банк».
+        # До этого: в банке лежали 158 файлов, из них 14 дублей `_w1516`,
+        # а пакет содержал 144 — то есть «пакет == банк» не выполнялось
+        # никогда, и никто этого не видел, потому что не сверялось.
+        bank = os.path.join(REPO, "03-sound", "sounds")
+        if not os.path.isdir(bank):
+            print("  · банка 03-sound/sounds нет — сверка пакет==банк пропущена")
+            skipped_checks.append("банк: каталога 03-sound/sounds нет")
+        else:
+            bank_files = {}
+            for dp, _, fs in os.walk(bank):
+                for f in fs:
+                    if f.lower().endswith(".ogg"):
+                        full = os.path.join(dp, f)
+                        bank_files[os.path.relpath(full, bank)] = full
+            pkg_files = set()
+            for dp, _, fs in os.walk(root):
+                for f in fs:
+                    if f.lower().endswith(".ogg"):
+                        pkg_files.add(os.path.relpath(os.path.join(dp, f), root))
+            print("  · банк хранилища: %d .ogg | пакет: %d"
+                  % (len(bank_files), len(pkg_files)))
+            # 14 дублей _w1516 — историческая грязь банка (T-3188), не пакета
+            stray = [n for n in bank_files if n.endswith("_w1516.ogg")]
+            not_in_pkg = sorted(set(bank_files) - pkg_files - set(stray))
+            not_in_bank = sorted(pkg_files - set(bank_files))
+            if len(stray) > 20:
+                print("  ! в банке %d дублей _w1516 — чистка Звука ещё не дошла"
+                      % len(stray))
+            if not_in_pkg:
+                print("  ✗ банк: %d файлов есть в хранилище, но НЕ в пакете"
+                      % len(not_in_pkg))
+                for n in not_in_pkg[:4]:
+                    print("      " + n)
+                fail.append("банк: %d .ogg не попали в пакет" % len(not_in_pkg))
+            if not_in_bank:
+                print("  ✗ банк: %d файлов пакета НЕТ в хранилище" % len(not_in_bank))
+                for n in not_in_bank[:4]:
+                    print("      " + n)
+                fail.append("банк: %d .ogg пакета нет в банке" % len(not_in_bank))
+            if not not_in_pkg and not not_in_bank:
+                print("  ✓ пакет == банк по составу (%d из %d, 14 дублей "
+                      "_w1516 исключены как грязь хранилища)"
+                      % (len(pkg_files), len(pkg_files)))
+
 
 # ------------------------------------------------------------------------ main
 def find_manifest(zip_path, given):
