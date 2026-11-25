@@ -22,7 +22,11 @@
         [--base 01-coder/3.5.3/project-3.5.3-clean.zip] \
         [--pkgdir 01-coder/3.6.0]
 
-Код возврата: 0 — все проверки пройдены, 2 — есть расхождения.
+Код возврата: 0 — все проверки пройдены, 2 — есть расхождения **или пакет
+непригоден для проверки** (нет файла, каталог вместо ZIP, битый ZIP, нет
+обязательных файлов внутри, внутренняя ошибка чекера). Код 1 остаётся только
+за argparse: вызвали без аргумента. Правило: чекер приёмки не имеет права
+падать трейсбеком — непроверяемый пакет это замечание, а не «нет вердикта».
 """
 import argparse
 import hashlib
@@ -90,6 +94,14 @@ def main(argv):
         print('ПАКЕТ НЕ НАЙДЕН: %s' % a.zip)
         print('Ждём сдачу Кодера: 01-coder/3.6.0/project-3.6.0-clean.zip')
         return 2
+    if os.path.isdir(a.zip):
+        print('ПАКЕТ НЕ ПРИНЯТ: %s — это каталог, а приёмка идёт по ZIP' % a.zip)
+        print('Сдача — ZIP пакета: 01-coder/<версия>/project-<версия>-clean.zip')
+        return 2
+    if not zipfile.is_zipfile(a.zip):
+        print('ПАКЕТ НЕ ПРИНЯТ: %s — не читается как ZIP (%d Б)'
+              % (a.zip, os.path.getsize(a.zip)))
+        return 2
 
     ok = True
     def say(flag, text):
@@ -128,10 +140,19 @@ def main(argv):
             say(False, 'манифест не найден рядом с ZIP')
 
         print('\n[2] версия 3.6.0 в четырёх местах')
-        gp = read_text(os.path.join(tmp, 'gradle.properties'))
+
+        def read_required(rel):
+            """Обязательный файл пакета: его отсутствие — замечание, а не падение."""
+            path = os.path.join(tmp, rel)
+            if not os.path.exists(path):
+                say(False, 'в пакете нет обязательного файла: %s' % rel)
+                return ''
+            return read_text(path)
+
+        gp = read_required('gradle.properties')
         m = re.search(r'mod_version\s*=\s*(\S+)', gp)
         say(m and m.group(1) == '3.6.0', 'gradle.properties mod_version = %s' % (m.group(1) if m else '—'))
-        toml = read_text(os.path.join(tmp, 'src/main/resources/META-INF/mods.toml'))
+        toml = read_required('src/main/resources/META-INF/mods.toml')
         v = re.search(r'^\s*version\s*=\s*"([^"]+)"', toml, re.M)
         dv = re.search(r'^\s*displayVersion\s*=\s*"([^"]+)"', toml, re.M)
         say(v and v.group(1) == '3.6.0', 'mods.toml version = %s' % (v.group(1) if v else '—'))
@@ -332,4 +353,13 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv))
+    try:
+        sys.exit(main(sys.argv))
+    except SystemExit:
+        raise
+    except Exception as exc:  # fail-closed: непроверяемый пакет — это замечание
+        import traceback
+        traceback.print_exc()
+        print('\nИТОГ 3.6.0: ЕСТЬ РАСХОЖДЕНИЯ — чекер не смог проверить пакет '
+              '(%s: %s)' % (type(exc).__name__, exc))
+        sys.exit(2)
