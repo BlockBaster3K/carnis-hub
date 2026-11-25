@@ -29,6 +29,18 @@ class HeardElsewhereTests(unittest.TestCase):
             )},
         )
 
+    def test_two_unreachable_events_cannot_cover_each_other(self):
+        dead = [
+            ("ALPHA_DEAD", "alpha_dead"),
+            ("BETA_DEAD", "beta_dead"),
+        ]
+        shared = ["carnis:entity/shared"]
+        data = {
+            "alpha_dead": {"sounds": shared},
+            "beta_dead": {"sounds": shared},
+        }
+        self.assertEqual(heard_elsewhere(dead, data, {}, set()), {})
+
     def test_partial_file_coverage_is_not_accepted_as_alias(self):
         dead = [("MULTI_SAMPLE_EVENT", "multi_sample_event")]
         data = {

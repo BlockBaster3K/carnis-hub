@@ -174,8 +174,9 @@ def heard_elsewhere(dead, data, sources, files):
 
     Возвращает {константа: (ключ, живое_событие)}.
     """
-    dead_names = {n for n, _k in dead}
-    # Живые события = всё, что в sounds.json, кроме самих недостижимых.
+    # Невызванные ключи не могут считаться «живым» покрытием друг для друга.
+    dead_keys = {key for _name, key in dead}
+    event_refs = {}
     live = {}
     for ev, spec in (data or {}).items():
         snds = spec.get("sounds", []) if isinstance(spec, dict) else []
@@ -184,16 +185,13 @@ def heard_elsewhere(dead, data, sources, files):
             name = s.get("name") if isinstance(s, dict) else s
             if isinstance(name, str) and name.startswith("carnis:"):
                 refs.add(name[len("carnis:"):])
-        live[ev] = refs
-
-    # Ключ события из ModSounds -> имя константы: обратная карта.
-    key_of = {}
-    for name, key in dead:
-        key_of[name] = key
+        event_refs[ev] = refs
+        if ev not in dead_keys:
+            live[ev] = refs
 
     out = {}
     for name, key in dead:
-        own = live.get(key, set())
+        own = event_refs.get(key, set())
         if not own:
             continue
         # Все файлы события должны быть покрыты ХОТЯ БЫ ОДНИМ живым событием.
