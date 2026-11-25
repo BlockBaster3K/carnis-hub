@@ -872,6 +872,14 @@ def _crest_noise_floor(checker, archive, py):
     return ds[len(ds) // 2], ds[-1]
 
 
+def _is_float(s):
+    try:
+        float(s)
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
 def check_crest(zip_path):
     """T-3182 §4: правка громкости не должна менять динамику.
 
@@ -956,6 +964,17 @@ def check_crest(zip_path):
         print("  x crest: файлы без записи в эталонной таблице — судить нечем")
         fail.append("crest: нет калибровки для части файлов (код 3)")
         return
+    # I23 требует печатать, КАКИЕ файлы проверялись и с каким допуском:
+    # иначе «зелено» не отличить от «допуск подобрался под файл». Чекер уже
+    # печатает колонку «допуск» — показываю её строки как есть.
+    shown = 0
+    for ln in out.splitlines():
+        parts = ln.split()
+        if len(parts) >= 4 and parts[0].endswith(".ogg") and _is_float(parts[-1]):
+            print("      %-40s Δ %6s  допуск %6s" % (parts[0], parts[-2], parts[-1]))
+            shown += 1
+            if shown >= 4:
+                break
     if r.returncode == 0 and not over:
         print("  v crest: %d проверено по таблице, все в своих допусках "
               "(T-3182 §4 + З-30)" % n)
