@@ -178,6 +178,66 @@ def quiet_splice_point(y, guard_s=5.0, win_s=1.5):
     return best_i * hop, 20 * np.log10(best + 1e-12)
 
 
+def stretch_to_length(y, target_s, max_stretch=0.15):
+    """Дотянуть файл до target_s перекодировкой с изменением темпа (без питча).
+
+    Нужно, когда разница длин 2–9 с (1.8–7.5 %): «дописать материал по кругу»
+    на таком объёме даёт слышимую петлю-повтор внутри файла. Изменение темпа
+    на ≤ 8 % на эмбиенте практически неразличимо и не меняет высоту тона.
+    """
+    cur = len(y) / SR
+    ratio = cur / float(target_s)
+    if abs(ratio - 1.0) > max_stretch:
+        raise SystemExit(f"нужно растяжение {ratio:.3f} — больше предела {max_stretch}")
+    n_out = int(round(target_s * SR))
+    # линейная интерполяция по времени: читаем исходник с шагом ratio
+    idx = np.arange(n_out) * ratio
+    idx = np.clip(idx, 0, len(y) - 1)
+    i0 = np.floor(idx).astype(np.int64)
+    i1 = np.minimum(i0 + 1, len(y) - 1)
+    frac = idx - i0
+    return y[i0] * (1.0 - frac) + y[i1] * frac
+
+
+def make_loop_zonal(in_path, out_path, target_s=120.0, verbose=False):
+    """Зональный эмбиент: дотянуть до target_s и закрыть петлю без разрыва.
+
+    1. растяжение по времени до target_s (темп, не высота тона);
+    2. круговая нормализация медленной огибающей — края огибающей совпадают;
+    3. шов переносим в самое тихое место;
+    4. микро-склейка 10 мс (разрыв = 0 по построению);
+    5. согласование уровней ±100 мс.
+    """
+    y = ffmpeg_decode(in_path)
+    if verbose:
+        print(f"  исходник {os.path.basename(in_path)}: {len(y) / SR:.2f} с → цель {target_s:.2f} с")
+    y = stretch_to_length(y, target_s)
+    y = level_normalize_loop(y, smooth_s=3.0, limit_db=6.0)
+    sp, lvl = quiet_splice_point(y)
+    y = np.concatenate([y[sp:], y[:sp]])
+    w = int(XF * SR)
+    ph = np.linspace(0.0, np.pi / 2.0, w)
+    y[-w:] *= np.cos(ph)
+    y[:w] *= np.sin(ph)
+    m = int(MATCH * SR)
+    mid = 0.5 * (rms_db(y[-m:]) + rms_db(y[:m]))
+    y[-m:] *= 10 ** ((mid - rms_db(y[-m:])) / 20.0)
+    y[:m] *= 10 ** ((mid - rms_db(y[:m])) / 20.0)
+    peak = np.abs(y).max()
+    if peak > 0.79:
+        y *= 0.79 / peak
+    raw_to_ogg(y, out_path, vorbis_bitrate(in_path)[1])
+    z = ffmpeg_decode(out_path)
+    d = np.abs(np.diff(z)); jump = abs(z[-1] - z[0]); p999 = np.percentile(d, 99.9)
+    f = lambda a, b: abs(rms_db(a) - rms_db(b))
+    m100 = int(0.1 * SR)
+    print(f"  → {os.path.basename(out_path)}: {len(z) / SR:.3f} с, "
+          f"ступенька 100мс {f(z[:m100], z[-m100:]):.2f} / 10мс {f(z[:441], z[-441:]):.2f} дБ, "
+          f"скачок {jump:.5f} ({jump / p999:.2f}×), peak {20 * np.log10(np.abs(z).max() + 1e-12):.1f} дБFS, "
+          f"{os.path.getsize(out_path)} Б")
+    return 0
+
+
 def loopfix(in_path, out_path, target_db=None, verbose=False):
     """Петля без ступеньки на стыке (файлы улья).
 
@@ -256,6 +316,10 @@ def loopfix(in_path, out_path, target_db=None, verbose=False):
 
 
 def main(argv):
+    if len(argv) >= 4 and argv[1] == "--zonal":
+        # loopfix.py --zonal <вход> <выход> [цель_с]
+        tgt = float(argv[4]) if len(argv) > 4 else 120.0
+        return make_loop_zonal(argv[2], argv[3], tgt, verbose=True)
     if len(argv) < 3:
         print(__doc__)
         return 1
