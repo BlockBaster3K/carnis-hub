@@ -69,7 +69,7 @@ d3a37ee91a1efd1dd8e53babeea2cf2431e68ebe7ce129b1959ab162d03bfeb9  src/main/java/
 262f6430810454cb512f1ebdacde9522266aeaa323d707cae58972a050f544f2  src/main/java/com/carnis/mod/block/SinewSpikesBlock.java
 0334167148afbebbbde02ae8637fd02a6284337abf525c892a0fe39d57c86523  src/main/java/com/carnis/mod/block/SporeSproutBlock.java
 fb4efccc60720d651ff24decdd3c18f86884cc9bd8ea463b2f42a39d9e6955f0  src/main/java/com/carnis/mod/block/StomachPoolBlock.java
-021e5e0261950c6daf3e8b88272322cd05fed281ec010048133f754ea4ab9a96  src/main/java/com/carnis/mod/block/SynapseNodeBlock.java
+beeaedce24819d910d80ccc46b307dffbc31597ac47496af665d6d408556a861  src/main/java/com/carnis/mod/block/SynapseNodeBlock.java
 6e957c270b7595e508fb95cf77078891285d33b5525ea23933dbcf1eaa410589  src/main/java/com/carnis/mod/block/entity/FleshBulbBlockEntity.java
 f355e81b8bcc4965db6a0e58b5bc00d8045fee4b6b1d8095c10fb5ffff8f630d  src/main/java/com/carnis/mod/block/entity/HiveEyeBlockEntity.java
 c4ac08989b6991b1e9da4c1bb56772cf036996adf53fb3f2b65b9315d4c920c2  src/main/java/com/carnis/mod/block/entity/NervePillarBlockEntity.java
@@ -145,7 +145,7 @@ fda04f4269d385af2981dcfa8e565b3264fc85b1e58855dd4d320ee576099c93  src/main/java/
 885820ef21ff39c00d8b12e551704f2049f634fc38c6266575b83eb3bb9f1711  src/main/java/com/carnis/mod/client/renderer/item/BioPurifierRenderer.java
 88049a5cab2c042c2d129ad6b0009ca6fff3f2355edba274a649ecec3d19fb8b  src/main/java/com/carnis/mod/client/renderer/layer/IncubatingEntityLayer.java
 858306519204d9e43ffa78d8d9531be6addc29f56e60808c4e998dde1884134e  src/main/java/com/carnis/mod/client/renderer/layer/OptionalGlowLayer.java
-4a1b19e02196b93b186820450ebce3f1f791837ed613fea32db2595e751752c5  src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java
+82c7a019d6d12c1782fafba39aa373bf2be3b1fca3c26b88769f3301160fa446  src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java
 9b49c3a852cc7290fd8d74233c8bb687d34282b408f98b4ebdd5fdf5b223132e  src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundInstance.java
 d0e91e84ccf7a6f57f7476a39cee96b897bad66aad80705faee6161a64f35b7d  src/main/java/com/carnis/mod/client/sound/PhantomSoundManager.java
 830de00eb1d2fd6ac0424e6f34e418e6b5a8fd7ad28704a53adf94f2550cb596  src/main/java/com/carnis/mod/command/CarnisCommands.java
@@ -165,7 +165,7 @@ f31afa8d44d45c7a2231d54dd0097e6e0bda64a642ee087301589064c4f305a3  src/main/java/
 5ffe60eae51e2728eaca3e0590ea54242ce370e4be900d1b4fdd8125855a445e  src/main/java/com/carnis/mod/entity/BiomassMaggotEntity.java
 ca773014da512c1045ab4054fbb3c30b379b12953027b1c29a1ae48e4f396a4f  src/main/java/com/carnis/mod/entity/BiomassValued.java
 01cf00cbb99335345f41d068c1697577e14db2ca2af40b24d2721a47bf8d5b30  src/main/java/com/carnis/mod/entity/CerebralNexusEntity.java
-e521f4935701275ca1144199db7f15685d87c238a305c54bd537d41b59a49d2e  src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java
+749ddcedddd702cd6f57e497df92c1c76283a58780c0da38a1e9cf0d21ceaaee  src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java
 81c5a72120d20d0b7f28183a82b404b2ffbd375e615794b745c6df38e300c52b  src/main/java/com/carnis/mod/entity/FleshSpatProjectileEntity.java
 b09bcf2f66216728a5c9674d257c3d2b4cb3ae9a89929803d596a0c5ea0cb289  src/main/java/com/carnis/mod/entity/HiveEntity.java
 1a8e4800fef5689397bb478061869d743db0cce8bc60882ad057e714e1c49f6d  src/main/java/com/carnis/mod/entity/HiveEntityAttributes.java
@@ -197,7 +197,7 @@ deee16e447e94436c900786f85d27d49417baf5bdec490a4b21b90086b5ff1cd  src/main/java/
 f324e6e52b38188c319017db1195f928ce5730222e45d85b7ed9d8cd3535ece2  src/main/java/com/carnis/mod/event/AdaptationEvents.java
 a929e13fb51563303067e3b7a867225b68ce1e091935da2b814f13752c8fbef0  src/main/java/com/carnis/mod/event/AmalgamationHandler.java
 ee205bf08bdfdc03af3d1dd2a8a4cbcb416c32813577e8194f10a6dd6b36f1f9  src/main/java/com/carnis/mod/event/BootCorrosionEvents.java
-32b0257911568cc195a6ed8d5ba67ac14b23f6200c674b096d1b2f09630da3f6  src/main/java/com/carnis/mod/event/CarnisEvents.java
+957509860ae52300b0d01eb1404b6aa4688b169b4fed6500c97ccda56a0cdcb0  src/main/java/com/carnis/mod/event/CarnisEvents.java
 fe17c835324ba9c5063da5acd9e642133979a6d4363b2da8f2688733441276ca  src/main/java/com/carnis/mod/event/ChunkInfectionEvents.java
 7ab2418228bb15003a908c5b8e36ff262fd2faee495e177b6c3af96b344f0bce  src/main/java/com/carnis/mod/event/CombatItemEvents.java
 a2084012a5514378d04a4821bbb3ee2c57d6ce3747af25a0f7b32f7d7fe1aa49  src/main/java/com/carnis/mod/event/DartTreatmentEvents.java
@@ -278,7 +278,7 @@ ae52a2ed83c1effd5b988e6d7f75d3a955ac977beb6ef332990ae22ce43315dc  src/main/java/
 ee7b7d17c8d3087fdc510869fffed83c4dad254b1a417a6ee7bae39b3826f7a9  src/main/java/com/carnis/mod/world/feature/OrganicFeatureUtil.java
 3f87a5f10d44e182abb22814bf2e3d31b4904763a6965bdc7c909dc5debb86e7  src/main/java/com/carnis/mod/world/feature/SporePocketFeature.java
 b2769a56522f8b6011e2dc7a66d139e088a3a4047a026a3cbcc7ca52456c857b  src/main/java/com/carnis/mod/world/infection/InfectionTickQueue.java
-da8da0fbe8e801339339acd69ab1fb179dbcd7f3420e6761fc0ea5888e8aab05  src/main/java/com/carnis/mod/world/infection/VeinMutationEngine.java
+1630e22c121b1ae5c6e2f61e95473eeae100ea419b90f3828edbc830f70c733a  src/main/java/com/carnis/mod/world/infection/VeinMutationEngine.java
 5a2ffd1f5816ad659aa7e8dc0570a6391c3cdee27168b676c06baca73a010fee  src/main/resources/META-INF/mods.toml
 7882082857fdb11e02f158ebc3a6d3f970e2ac60d54813f0e903ee97b2293749  src/main/resources/assets/carnis/animations/armor/neuro_armor.animation.json
 7695f8cbf9cabc5d6ff8e05644f55ef0bd3f3a90ee6d4e02b99038ffffe237f5  src/main/resources/assets/carnis/animations/block/hive_eye.animation.json
@@ -385,7 +385,7 @@ eb2efdc0413f72fa8936e8a22ff4f0f1611edd1681f4e2bba1a5273e9af60174  src/main/resou
 ee0132e5f378c07a46a8beeb15eb5a5091c97b0b205b04e945858076a21ea75e  src/main/resources/assets/carnis/models/item/viral_dart.json
 e734b7cc20d6f4fea28acea79934b2aad29e8390f06ce1385f3200da2e595dca  src/main/resources/assets/carnis/particles/biomass_spark.json
 56340f344098986b85a240e28630d8345c68088525f63a34cc35dcbd9313a7ce  src/main/resources/assets/carnis/particles/purifier_flame.json
-0e31c526e3bd13c55769ae6f8aa43a2e450e89ca74c68ef102d70ec5e23ae733  src/main/resources/assets/carnis/sounds.json
+db59143ec34fc918a80c4fc1e9a09c4146dffe1ba51d5a96c34ebb9db33ddaf5  src/main/resources/assets/carnis/sounds.json
 c4e1d70612046beca0af5b78e4471a6dfd77e5b066b2487081289a09306f9b5f  src/main/resources/assets/carnis/sounds/amb/hive_ambient_01.ogg
 660d49ab2cc1e0fc3a58ffc0349b0bc88f5768680d817cded2771b8990bc8436  src/main/resources/assets/carnis/sounds/amb/hive_ambient_02.ogg
 97981e9b0051edf6d5a7bf46cdd9feda17bf2317bd54aa5c1cb541b70e76fc20  src/main/resources/assets/carnis/sounds/amb/hive_ambient_03.ogg

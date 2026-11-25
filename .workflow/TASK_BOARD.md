@@ -2605,7 +2605,7 @@ baseline достигает **0,47 дБ**, и `min()` срезает допус�
 
 ## T-3202 · Кодер · 3.7.3: осталось 9 событий — это последний блокер
 
-**STATUS:** IN PROGRESS — source calls committed as `2c338af`; compile/package/gate still pending.
+**STATUS:** IN PROGRESS — source calls committed as `2c338af`; current ZIP/manifest rebuilt; Java compile and full gate pending.
 
 Прогон `tools/sound_orphans.py` на кандидате 3.7.3: **allowlist работает**
 (`FLAMETHROWER_FIRE` — задел, признан сознательно, гейт его не валит),
@@ -3057,7 +3057,7 @@ glowmask по Р-3 **33/33**.
 **Критерий приёмки:** 11/11 событий либо вызываются из кода, либо удалены
 согласованно с Звуком; ни одного «озвученного, но недостижимого».
 
-**Текущий прогресс Кодера:** 9 реальных call sites внесены и закоммичены в `2c338af`; alias `FLESH_AMALGAM_AMBIENT` покрыт через `hive.amalgam_breath`; `FLAMETHROWER_FIRE` — осознанный allowlist. Невалидный override private `Creeper.explodeCreeper()` заменён на серверный `ExplosionEvent.Detonate` hook, но подтверждения/Java-компиляции нет. `sound_orphans.py` код 0; alias 5/5 и allowlist 4/4. Интегратор опубликовал `integrator_r15_heard_elsewhere_closed.md`: общий предикат живости внесён и оба теста подключены к CI. Reviewer source-ready подтвердил 9/9 привязок. Диагностический ZIP/manifest собран во временном `/tmp` (761/761, sound_orphans 0), но постоянный ZIP не заменял; полный gate/Java compile/игровой тест не подтверждены. Вопрос flow_01 0,45 намеренный согласно S17 map (multiplier 1,5 × вызов 0,30). Gate delta всё ещё нуждается в semantic check вместо широкого sounds.json allow; просьба Интегратору/Архитектору в `reviewer_t3202_source_ready.md`. См. `00-board/reports/coder_modsounds_audit.md`.
+**Текущий прогресс Кодера:** 9 реальных call sites внесены и закоммичены в `2c338af`; alias `FLESH_AMALGAM_AMBIENT` покрыт через `hive.amalgam_breath`; `FLAMETHROWER_FIRE` — осознанный allowlist. Невалидный override private `Creeper.explodeCreeper()` заменён на серверный `ExplosionEvent.Detonate` hook, но подтверждения/Java-компиляции нет. `sound_orphans.py` код 0; alias 5/5 и allowlist 4/4. Интегратор опубликовал `integrator_r15_heard_elsewhere_closed.md`: общий предикат живости внесён и оба теста подключены к CI. Reviewer source-ready подтвердил 9/9 привязок. Постоянный ZIP/manifest пересобраны: ZIP 761 entries, 12,631,308 Б, SHA-256 `d19169b475fddfdb6d6dd40babc3aa1e3b5764a2781fec83cd15d43b9e7e036a`; manifest 761/761, `unzip -tq` и `sha256sum` прошли; package `sound_orphans` — код 0. Полный gate/Java compile/игровой тест не подтверждены. Вопрос flow_01 0,45 намеренный согласно S17 map (multiplier 1,5 × вызов 0,30). Gate delta всё ещё нуждается в semantic check вместо широкого sounds.json allow; просьба Интегратору/Архитектору в `reviewer_t3202_source_ready.md`. См. `00-board/reports/coder_modsounds_audit.md`.
 
 ---
 
