@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "closed=false": {
+      "model": "carnis:block/spore_sprout"
+    },
+    "closed=true": {
+      "model": "carnis:block/spore_sprout_closed"
+    }
+  }
+}

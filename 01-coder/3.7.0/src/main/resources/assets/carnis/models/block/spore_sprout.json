@@ -1,0 +1,67 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "carnis:block/spore_sprout",
+    "cross": "carnis:block/spore_sprout"
+  },
+  "elements": [
+    {
+      "from": [
+        4.0,
+        0,
+        8
+      ],
+      "to": [
+        12.0,
+        14,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "texture": "#cross"
+        },
+        "south": {
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        0,
+        8
+      ],
+      "to": [
+        12.0,
+        14,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "texture": "#cross"
+        },
+        "south": {
+          "texture": "#cross"
+        }
+      }
+    }
+  ]
+}

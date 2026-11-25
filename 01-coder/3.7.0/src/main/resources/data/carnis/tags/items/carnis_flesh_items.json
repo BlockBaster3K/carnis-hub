@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "carnis:living_flesh",
+    "carnis:ossified_flesh",
+    "carnis:fireproof_flesh",
+    "carnis:charred_flesh",
+    "carnis:flesh_spat",
+    "carnis:hive_membrane",
+    "carnis:synapse_node",
+    "carnis:incubation_cyst",
+    "carnis:ossified_scythe",
+    "carnis:sinew_shield",
+    "carnis:pustule_grenade"
+  ]
+}
