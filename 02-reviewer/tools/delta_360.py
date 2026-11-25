@@ -38,6 +38,14 @@ K4_REMOVED = [
     'src/main/resources/assets/carnis/textures/item/bio_purifier_geo.png',
     'src/main/resources/assets/carnis/models/item/pulsing_heart_geometry.json',
 ]
+# K5 заменяет одиночную текстуру и модель набором вариантов, поэтому против
+# базы 3.5.3 они тоже выглядят как удаления. Правило — ровно этот набор из 4:
+# не «два удаления», не «сколько получилось», а точное совпадение множества.
+K5_REPLACED = [
+    'src/main/resources/assets/carnis/models/block/creeping_tendrils.json',
+    'src/main/resources/assets/carnis/textures/block/creeping_tendrils.png',
+]
+EXPECTED_REMOVED = K4_REMOVED + K5_REPLACED
 D17_UNTOUCHED = [
     'src/main/java/com/carnis/mod/block/entity/FleshBulbBlockEntity.java',
     'src/main/java/com/carnis/mod/client/PlayerHallucinationHandler.java',
@@ -238,6 +246,33 @@ def main(argv):
             p = os.path.join(tmp, 'src/main/resources/assets/carnis', rel)
             say(os.path.exists(p), 'файл в пакете: %s' % rel)
 
+        print('\n[5b] overlay.txt — пути и хеши источников (ожидается 2/2)')
+        overlay = os.path.join(os.path.dirname(os.path.abspath(pkgdir)), '..', '06-build', 'overlay.txt')
+        overlay = os.path.normpath(overlay)
+        if not os.path.exists(overlay):
+            overlay = '06-build/overlay.txt'
+        try:
+            lines = [l.strip() for l in read_text(overlay).splitlines()
+                     if l.strip() and not l.strip().startswith('#')]
+            good = bad = 0
+            for line in lines:
+                if '->' not in line or '|' not in line:
+                    continue
+                left, want = line.split('|', 1)
+                src, dst = [t.strip() for t in left.split('->', 1)]
+                want = want.strip()
+                ok_src = os.path.exists(src) and sha(src) == want
+                ok_dst = os.path.exists(os.path.join(tmp, dst)) and sha(os.path.join(tmp, dst)) == want
+                if ok_src and ok_dst:
+                    good += 1
+                else:
+                    bad += 1
+                    print('        %s: источник %s, назначение %s' %
+                          (src, 'OK' if ok_src else 'НЕ СОШЁЛСЯ', 'OK' if ok_dst else 'НЕ СОШЁЛСЯ'))
+            say(bad == 0 and good == 2, 'строк overlay: %d, сошлось %d, не сошлось %d' % (len(lines), good, bad))
+        except Exception as exc:
+            say(False, 'overlay не разобран: %s' % exc)
+
         print('\n[6] JSON')
         badjson = []
         for dirpath, _, files in os.walk(os.path.join(tmp, 'src')):
@@ -273,8 +308,16 @@ def main(argv):
             print('    удалено %d: %s' % (len(removed), removed))
             print('    добавлено %d: %s' % (len(added), added[:8]))
             print('    изменено %d: %s' % (len(changed), changed[:8]))
-            say(sorted(removed) == sorted(os.path.basename(r) and r for r in K4_REMOVED),
-                'K4 — ровно два удаления (%d)' % len(removed))
+            missing = [r for r in EXPECTED_REMOVED if r not in removed]
+            unexpected = [r for r in removed if r not in EXPECTED_REMOVED]
+            say(not missing and not unexpected,
+                'удаления — точно ожидаемый набор из %d (K4 2 + K5 2): удалено %d, '
+                'не хватает %d, лишних %d' % (len(EXPECTED_REMOVED), len(removed),
+                                              len(missing), len(unexpected)))
+            for r in missing:
+                print('        НЕ УДАЛЁН, а должен: %s' % r)
+            for r in unexpected:
+                print('        ЛИШНЕЕ УДАЛЕНИЕ: %s' % r)
         else:
             say(None, 'базовый пакет %s не найден — сравнение пропущено' % a.base)
     finally:
