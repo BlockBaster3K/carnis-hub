@@ -1,1 +1,4 @@
-e88447efd21e1cbdc0821b8640e3d2e182ef3748b8c82400e6af42d9d46c750f  03-sound/sounds/block/nervous_twitch.ogg
+# Копии файлов, удалённых из банка (T-3108). Пути проверки — локальные.
+# Исходный путь каждого файла — в комментарии над строкой.
+# 03-sound/sounds/block/nervous_twitch.ogg  (удалён 2026-11-25, T-3108)
+e88447efd21e1cbdc0821b8640e3d2e182ef3748b8c82400e6af42d9d46c750f  nervous_twitch.ogg
