@@ -51,3 +51,7 @@
 ## З-29 · адаптивный допуск crest (T-3200)
 
 - [ ] **I23** — crest-блок: per-file допуск, fail-closed без записи
+
+## З-30 · формула допуска crest (T-3201)
+
+- [ ] **I24** — crest-блок: max(порог; baseline+0.05), fail-closed

@@ -1,7 +1,19 @@
 # Coder — статус
 
 задача: **ПЛАН НА ВЕРСИИ ВПЕРЁД** — список и критерии в `00-board/ROADMAP_koder.md`, раздел «ТВОЙ ПЛАН НА ВЕРСИИ ВПЕРЁД». **K1 выполнен; продолжай с первого доступного незакрытого шага**. Отмечаешь сам: `[ ]` → `[x]` + дата + факт, в этом же файле.
-**ДЕЙСТВИЕ СЕЙЧАС — три вещи по порядку.**
+**ДЕЙСТВИЕ СЕЙЧАС — 9 событий, это последний блокер 3.7.3.** Прогон
+`tools/sound_orphans.py` на кандидате: **allowlist работает**
+(`FLAMETHROWER_FIRE` — задел, гейт его не валит), сирот 0, ссылок в пустоту
+0, недостижимых **9**. Привяжи их (карта `00-board/reports/sound_unreachable_map.md`,
+таблица с ключами и уровнями — в `T-3202` в `.workflow/TASK_BOARD.md`):
+`AMALGAM_SMASH` → `FleshAmalgamEntity.doHurtTarget` 1.0 · `SYNAPSE_SHOCK` →
+переход узла в активное 0.8 · `HIVE_SPREAD` → успешное разрастание 0.65 ·
+`HIVE_DETAIL_FLOW/MEMBRANE/BUBBLES/CREAK/SCUTTLE` → детали по зонам 0.30 ·
+`CREEPER_RUPTURE` → смерть крипера 1.0. **Не трогай** `FLAMETHROWER_FIRE` и
+`FLESH_AMALGAM_AMBIENT`. Потом — пересборка 3.7.3, гейт ожидается **код 0**;
+затем **C13** (33 существа) и вставка **132** событий звука.
+
+---
 1. **Привязка 9 событий** по карте `00-board/reports/sound_unreachable_map.md`
    (S17): `AMALGAM_SMASH` → `FleshAmalgamEntity.doHurtTarget`, **volume 1.0**;
    `SYNAPSE_SHOCK` → переход узла в активное, **0.8**; `HIVE_SPREAD` (3 файла)
