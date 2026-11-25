@@ -349,7 +349,7 @@ python3 tools/accept_3.7.0.py
 
 ## T-3107 · Интегратор · Гейт приёмки 3.7.1
 
-**STATUS:** ASSIGNED
+**STATUS:** COMPLETED — 2026-11-25, `tools/accept_3.7.1.py`, отчёт `00-board/reports/integrator_accept_371_ready.md`
 **Приоритет:** 1 — без гейта пакет не собрать
 **Зона:** `tools/`
 
