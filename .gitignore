@@ -24,3 +24,9 @@ logs/
 # Python
 __pycache__/
 *.pyc
+
+# SSH-ключи и секреты — никогда не коммитить
+*.pem
+*.key
+id_ed25519*
+ssh-keys/

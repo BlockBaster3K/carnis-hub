@@ -11,7 +11,7 @@
   2. альфа только 0 и 255;
   3. ровно 7 непрозрачных цветов, все из BASELINE_PALETTE (+ прозрачный = 8 RGBA);
   4. маска (альфа > 0) побитово идентична эталону из 01-coder/3.6.0-R;
-  5. glowmask — ровно один цвет свечения: (255,92,57) или цвет из BASELINE_PALETTE.
+  5. glowmask — ровно один цвет свечения: строго (255,92,57), как у принятых масок.
 
 Использование:
     python3 tools/glow_check.py <каталог|zip> [эталонный zip]
@@ -156,8 +156,7 @@ def check_candidate(src, ref_src):
                  % (name, len(opaque)))
 
     print()
-    print("3) Glowmask — один цвет свечения")
-    allowed_glow = {GLOW_COLOR} | OPAQUE_BASE
+    print("3) Glowmask — один цвет свечения, строго (255, 92, 57)")
     for name in GLOW:
         img = load_from(src, name)
         if img is None:
@@ -168,9 +167,9 @@ def check_candidate(src, ref_src):
               % (name, len(opaque), sorted(opaque)))
         if len(opaque) != 1:
             note("%s — цветов свечения %d, ТЗ требует один" % (name, len(opaque)))
-        elif not (opaque & allowed_glow):
-            note("%s — цвет %s не (255,92,57) и не из BASELINE_PALETTE"
-                 % (name, sorted(opaque)))
+        elif opaque != {GLOW_COLOR}:
+            note("%s — цвет %s, требуется (255, 92, 57, 255)"
+                 % (name, sorted(opaque)[0]))
 
     print()
     print("4) Маска побитово идентична эталону (силуэт не тронут)")
