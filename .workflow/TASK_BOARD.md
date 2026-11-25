@@ -2605,7 +2605,7 @@ baseline достигает **0,47 дБ**, и `min()` срезает допус�
 
 ## T-3202 · Кодер · 3.7.3: осталось 9 событий — это последний блокер
 
-**STATUS:** ASSIGNED — 2026-11-26
+**STATUS:** IN PROGRESS — source calls committed as `2c338af`; compile/package/gate still pending.
 
 Прогон `tools/sound_orphans.py` на кандидате 3.7.3: **allowlist работает**
 (`FLAMETHROWER_FIRE` — задел, признан сознательно, гейт его не валит),
@@ -3057,7 +3057,7 @@ glowmask по Р-3 **33/33**.
 **Критерий приёмки:** 11/11 событий либо вызываются из кода, либо удалены
 согласованно с Звуком; ни одного «озвученного, но недостижимого».
 
-**Текущий прогресс Кодера:** 9 реальных call sites внесены; alias `FLESH_AMALGAM_AMBIENT` покрыт через `hive.amalgam_breath`; `FLAMETHROWER_FIRE` — осознанный allowlist. После API-review неверный override private `Creeper.explodeCreeper()` заменён на существующий `ExplosionEvent.Detonate` hook. `sound_orphans.py` код 0; `sound_orphans_alias_test.py` — 5/5, включая защиту от взаимного покрытия двух dead events; R15 fail-open исправлен и запушен коммитом `7b9655f`; передан Интегратору для ревью. `sound_orphans_allowlist_test.py` — 4/4 (allowlist содержит только сознательный scaffold, `--no-allowlist` раскрывает его, unrelated dead event всё ещё fail). Compile/игровой тест и новый ZIP/gate пока не подтверждены. См. `00-board/reports/coder_modsounds_audit.md`.
+**Текущий прогресс Кодера:** 9 реальных call sites внесены и закоммичены в `2c338af`; alias `FLESH_AMALGAM_AMBIENT` покрыт через `hive.amalgam_breath`; `FLAMETHROWER_FIRE` — осознанный allowlist. Невалидный override private `Creeper.explodeCreeper()` заменён на серверный `ExplosionEvent.Detonate` hook, но подтверждения/Java-компиляции нет. `sound_orphans.py` код 0; alias 5/5 и allowlist 4/4. Интегратор опубликовал `integrator_r15_heard_elsewhere_closed.md`: общий предикат живости внесён и оба теста подключены к CI. Compile, игровой тест, ZIP rebuild и acceptance после source commit не подтверждены. См. `00-board/reports/coder_modsounds_audit.md`.
 
 ---
 
@@ -3083,7 +3083,7 @@ glowmask по Р-3 **33/33**.
 **Критерий приёмки:** оба направления ловятся; «недостижимое событие» =
 падение, а не строка в stderr.
 
-**Дополнение Кодера по R15:** в `tools/sound_orphans.py::heard_elsewhere` добавлен фильтр, запрещающий невызванным ключам `sounds.json` покрывать друг друга; в `sound_orphans_alias_test.py` добавлен negative test (два dead events, один общий OGG). Тесты alias — 5/5, текущий кейс `FLESH_AMALGAM_AMBIENT` по-прежнему проходит через реально вызываемый `hive.amalgam_breath`. Интегратору: проверить минимальный патч и подключить тест в acceptance/CI; задача T-3185 остаётся открытой до проверки обеих веток.
+**Дополнение Кодера по R15:** в `tools/sound_orphans.py::heard_elsewhere` добавлен фильтр, запрещающий невызванным ключам `sounds.json` покрывать друг друга; в `sound_orphans_alias_test.py` добавлен negative test (два dead events, один общий OGG). Тесты alias — 5/5, текущий кейс `FLESH_AMALGAM_AMBIENT` по-прежнему проходит через реально вызываемый `hive.amalgam_breath`. Отчёт Интегратора `integrator_r15_heard_elsewhere_closed.md` подтверждает единый `is_called` predicate и запуск alias/allowlist tests в CI; этот результат закрывает R15 finding, но board status T-3185 оставлен владельцам для формального обновления.
 
 ---
 
@@ -3678,7 +3678,7 @@ VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
 
 ## Запрос Кодера Архитектору · восстановление лимита workspace
 
-**STATUS: NEEDS_ARCHITECT_DECISION.** После последнего sync workspace около 190 MB (>128 MB), `.git` 155 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
+**STATUS: NEEDS_ARCHITECT_DECISION.** После последнего sync workspace около 191 MB (>128 MB), `.git` 155 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
 
 Факты, риски и точный вопрос: `00-board/reports/coder_git_storage_architect_request.md`.
 В этом цикле pull уже выполнен по прямому указанию пользователя. До решения не запускать широкие обходы refs/объектов, repack, gc, удаление объектов или замену `.git`; локальные правки сохранить.
