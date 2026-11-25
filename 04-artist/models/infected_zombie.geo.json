@@ -16,18 +16,18 @@
       },
       "bones": [
         {
-          "name": "body_back",
+          "name": "spine",
           "pivot": [
             0,
             12,
-            0
+            1
           ],
           "cubes": [
             {
               "origin": [
                 -4,
                 12,
-                2
+                0
               ],
               "size": [
                 8,
@@ -43,18 +43,18 @@
         },
         {
           "name": "bio_core",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             0,
             17,
-            0.5
+            0
           ],
           "cubes": [
             {
               "origin": [
                 -1.5,
                 15,
-                -1
+                -1.5
               ],
               "size": [
                 3,
@@ -69,51 +69,24 @@
           ]
         },
         {
-          "name": "cloth_flap",
-          "parent": "body_back",
-          "pivot": [
-            0,
-            12,
-            -2.1
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -4,
-                8,
-                -2.1
-              ],
-              "size": [
-                8,
-                4,
-                0
-              ],
-              "uv": [
-                0,
-                48
-              ]
-            }
-          ]
-        },
-        {
           "name": "rib_left_1",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             3.5,
             14.5,
-            2
+            0
           ],
           "cubes": [
             {
               "origin": [
                 3,
                 14,
-                -2
+                -3
               ],
               "size": [
                 1,
                 1,
-                4
+                3
               ],
               "uv": [
                 32,
@@ -124,23 +97,23 @@
         },
         {
           "name": "rib_right_1",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             -3.5,
             14.5,
-            2
+            0
           ],
           "cubes": [
             {
               "origin": [
                 -4,
                 14,
-                -2
+                -3
               ],
               "size": [
                 1,
                 1,
-                4
+                3
               ],
               "uv": [
                 32,
@@ -151,23 +124,23 @@
         },
         {
           "name": "rib_left_2",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             3.5,
             16.5,
-            2
+            0
           ],
           "cubes": [
             {
               "origin": [
                 3,
                 16,
-                -2
+                -3
               ],
               "size": [
                 1,
                 1,
-                4
+                3
               ],
               "uv": [
                 32,
@@ -178,23 +151,23 @@
         },
         {
           "name": "rib_right_2",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             -3.5,
             16.5,
-            2
+            0
           ],
           "cubes": [
             {
               "origin": [
                 -4,
                 16,
-                -2
+                -3
               ],
               "size": [
                 1,
                 1,
-                4
+                3
               ],
               "uv": [
                 32,
@@ -205,23 +178,23 @@
         },
         {
           "name": "rib_left_3",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             3.5,
             18.5,
-            2
+            0
           ],
           "cubes": [
             {
               "origin": [
                 3,
                 18,
-                -2
+                -3
               ],
               "size": [
                 1,
                 1,
-                4
+                3
               ],
               "uv": [
                 32,
@@ -232,23 +205,23 @@
         },
         {
           "name": "rib_right_3",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             -3.5,
             18.5,
-            2
+            0
           ],
           "cubes": [
             {
               "origin": [
                 -4,
                 18,
-                -2
+                -3
               ],
               "size": [
                 1,
                 1,
-                4
+                3
               ],
               "uv": [
                 32,
@@ -259,22 +232,22 @@
         },
         {
           "name": "head_base",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             0,
-            24,
+            26,
             0
           ],
           "cubes": [
             {
               "origin": [
                 -4,
-                27,
+                26,
                 -4
               ],
               "size": [
                 8,
-                5,
+                6,
                 8
               ],
               "uv": [
@@ -289,11 +262,11 @@
           "parent": "head_base",
           "pivot": [
             0,
-            25,
-            1
+            26,
+            0
           ],
           "rotation": [
-            20,
+            15,
             0,
             0
           ],
@@ -301,8 +274,8 @@
             {
               "origin": [
                 -4,
-                24,
-                -3
+                23,
+                -4
               ],
               "size": [
                 8,
@@ -317,7 +290,7 @@
           ]
         },
         {
-          "name": "cranial_growth",
+          "name": "cranial_synapse",
           "parent": "head_base",
           "pivot": [
             4,
@@ -345,9 +318,9 @@
         },
         {
           "name": "arm_right",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
-            -5,
+            -6,
             22,
             0
           ],
@@ -372,23 +345,23 @@
         },
         {
           "name": "arm_left_shoulder",
-          "parent": "body_back",
+          "parent": "spine",
           "pivot": [
             6.5,
-            21.5,
+            21,
             0
           ],
           "cubes": [
             {
               "origin": [
                 4,
-                19,
-                -2.5
+                18,
+                -2
               ],
               "size": [
                 5,
-                5,
-                5
+                6,
+                4
               ],
               "uv": [
                 16,
@@ -398,120 +371,24 @@
           ]
         },
         {
-          "name": "shelf_plate_1",
+          "name": "scythe_blade",
           "parent": "arm_left_shoulder",
           "pivot": [
-            6.5,
-            23,
-            0
-          ],
-          "rotation": [
-            0,
-            0,
-            15
-          ],
-          "cubes": [
-            {
-              "origin": [
-                5.5,
-                23,
-                -2
-              ],
-              "size": [
-                4,
-                0,
-                4
-              ],
-              "uv": [
-                96,
-                16
-              ]
-            }
-          ]
-        },
-        {
-          "name": "shelf_plate_2",
-          "parent": "arm_left_shoulder",
-          "pivot": [
-            6.5,
-            22,
-            0
-          ],
-          "rotation": [
-            0,
-            0,
-            30
-          ],
-          "cubes": [
-            {
-              "origin": [
-                5.5,
-                22,
-                -2
-              ],
-              "size": [
-                4,
-                0,
-                4
-              ],
-              "uv": [
-                96,
-                16
-              ]
-            }
-          ]
-        },
-        {
-          "name": "shelf_plate_3",
-          "parent": "arm_left_shoulder",
-          "pivot": [
-            6.5,
-            21,
-            0
-          ],
-          "rotation": [
-            0,
-            0,
-            -15
-          ],
-          "cubes": [
-            {
-              "origin": [
-                5.5,
-                21,
-                -2
-              ],
-              "size": [
-                4,
-                0,
-                4
-              ],
-              "uv": [
-                96,
-                16
-              ]
-            }
-          ]
-        },
-        {
-          "name": "scythe_elbow",
-          "parent": "arm_left_shoulder",
-          "pivot": [
-            6.5,
-            19,
-            0
+            6,
+            18,
+            -1.5
           ],
           "cubes": [
             {
               "origin": [
                 5,
-                15,
-                -1.5
+                4,
+                -4
               ],
               "size": [
-                3,
-                4,
-                3
+                2,
+                14,
+                5
               ],
               "uv": [
                 32,
@@ -521,82 +398,28 @@
           ]
         },
         {
-          "name": "scythe_blade_main",
-          "parent": "scythe_elbow",
+          "name": "scythe_hook",
+          "parent": "scythe_blade",
           "pivot": [
-            6.5,
-            15,
-            0
+            6,
+            4,
+            -3.5
           ],
           "cubes": [
             {
               "origin": [
-                5.5,
                 5,
-                -2
-              ],
-              "size": [
-                2,
-                10,
-                4
-              ],
-              "uv": [
-                32,
-                36
-              ]
-            }
-          ]
-        },
-        {
-          "name": "scythe_tip",
-          "parent": "scythe_blade_main",
-          "pivot": [
-            6.25,
-            5,
-            -2
-          ],
-          "cubes": [
-            {
-              "origin": [
-                5.5,
-                0,
-                -3
-              ],
-              "size": [
-                1.5,
-                5,
-                2
-              ],
-              "uv": [
-                32,
-                54
-              ]
-            }
-          ]
-        },
-        {
-          "name": "scythe_barb",
-          "parent": "scythe_blade_main",
-          "pivot": [
-            6.5,
-            12,
-            2
-          ],
-          "cubes": [
-            {
-              "origin": [
-                6,
-                11,
-                2
-              ],
-              "size": [
                 1,
+                -5
+              ],
+              "size": [
                 2,
-                2
+                3,
+                3
               ],
               "uv": [
                 32,
-                62
+                52
               ]
             }
           ]
