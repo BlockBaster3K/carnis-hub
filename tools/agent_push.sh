@@ -2,11 +2,11 @@
 # agent_push.sh — безопасная отправка изменений в репозиторий carnis-hub.
 #
 # Использование:
-#   export GITHUB_TOKEN=github_pat_xxx   # fine-grained PAT, repo-scoped
 #   bash agent_push.sh <ветка> "<сообщение коммита>" [путь ...]
 #
-#   Если GITHUB_TOKEN не задан, но есть ключ ~/.ssh/id_ed25519 — используется SSH.
-#   Канал выбирается автоматически; оба проверены.
+#   Канал по умолчанию — SSH-ключ ~/.ssh/id_ed25519. Он предпочтительнее PAT:
+#   ключ можно отозвать для конкретной роли, токен — общий для всех.
+#   PAT используется, только если SSH-ключа нет (режим совместимости).
 #
 # Что гарантирует скрипт:
 #   * токен НЕ попадает в argv (нет процесса в ps), в .git/config и в reflog —
@@ -32,7 +32,6 @@ INTEGRATOR_OWNED="^(STATUS\.md|VERIFICATIONS/|06-build/|07-project/|\.github/|RE
 usage() {
   cat >&2 <<'EOF'
 Использование:
-  export GITHUB_TOKEN=ghp_xxx
   bash agent_push.sh <ветка> "<сообщение коммита>" [путь ...]
 
 Пример:
@@ -48,15 +47,21 @@ BRANCH="$1"; shift
 MESSAGE="$1"; shift
 PATHS=("$@")
 
-if [ -z "${GITHUB_TOKEN:-}" ]; then
-  if [ -f "$HOME/.ssh/id_ed25519" ]; then
-    echo "Токен не задан — используется SSH-ключ ~/.ssh/id_ed25519."
-  else
-    echo "ОШИБКА: нет ни GITHUB_TOKEN, ни SSH-ключа." >&2
-    echo "       export GITHUB_TOKEN=github_pat_...   (fine-grained PAT)" >&2
-    echo "  или: создайте ключ  ssh-keygen -t ed25519 -N \"\" -f ~/.ssh/id_ed25519" >&2
-    exit 1
+HAS_SSH_KEY=0
+if [ -f "$HOME/.ssh/id_ed25519" ]; then HAS_SSH_KEY=1; fi
+
+if [ "$HAS_SSH_KEY" = "1" ]; then
+  echo "Канал: SSH-ключ ~/.ssh/id_ed25519 (предпочтительно)."
+  if [ -n "${GITHUB_TOKEN:-}" ]; then
+    echo "       GITHUB_TOKEN в окружении есть, но SSH приоритетнее."
+    echo "       Чтобы работать по токену: unset GITHUB_TOKEN"
   fi
+elif [ -n "${GITHUB_TOKEN:-}" ]; then
+  echo "Канал: токен GITHUB_TOKEN (режим совместимости — SSH-ключа нет)."
+else
+  echo "ОШИБКА: нет ни SSH-ключа, ни GITHUB_TOKEN." >&2
+  echo "  Создай ключ:  ssh-keygen -t ed25519 -N \"\" -f ~/.ssh/id_ed25519" >&2
+  exit 1
 fi
 
 if [ ! -d "$REPO_DIR/.git" ]; then
@@ -130,18 +135,17 @@ echo "Коммит: $COMMIT"
 # файлы в .github/workflows/. Если push по PAT отклонён именно по этой причине,
 # скрипт сам переключается на SSH-ключ (он право на запись в репозиторий имеет).
 SSH_REMOTE="git@github.com:$REPO_SLUG.git"
-HAS_SSH=0
-if [ -f "$HOME/.ssh/id_ed25519" ]; then HAS_SSH=1; fi
+HAS_SSH="$HAS_SSH_KEY"
 
-if [ -n "${GITHUB_TOKEN:-}" ]; then
+if [ "$HAS_SSH" = "1" ]; then
+  REMOTE="$SSH_REMOTE"
+  PUSH_ARGS=()
+  CHANNEL="SSH"
+else
   CRED_HELPER='!f() { echo username=x-access-token; echo password=$GITHUB_TOKEN; }; f'
   REMOTE="https://github.com/$REPO_SLUG.git"
   PUSH_ARGS=(-c "credential.helper=$CRED_HELPER")
   CHANNEL="PAT"
-else
-  REMOTE="$SSH_REMOTE"
-  PUSH_ARGS=()
-  CHANNEL="SSH"
 fi
 
 git fetch -q origin "$BRANCH" 2>/dev/null || true
