@@ -9,7 +9,7 @@
 - [x] **A1** (2026-11-26): 6 мобов (`infected_zombie`, `cerebral_nexus`, `flesh_amalgam`, `hive_sentinel`, `biomass_maggot`, `parasitic_tendril`) в `Carnis_3.7.4_A1_mobs.zip` (7 цветов, топ 14.3–14.4%, A3R1 OK)
 - [x] **A2** (2026-11-26): `04-artist/creature_registry.md` обновлён (9/9 мобов: 7 цветов, 14.3–14.4%, sha256)
 - [x] **A3** (2026-11-26): `04-artist/previews/creature_contact_sheet.png` пересобран со всеми доработанными текстурами 3.7.4
-- [ ] **B1**
+- [x] **B1** (2026-11-26): 4 моба × 2 стадии (`_stage1`, `_stage2`) в `Carnis_3.7.5_B1_variations.zip` (8 текстур, 7 цветов, 14.3% A3R1 OK)
 - [ ] **B2**
 - [ ] **B3**
 - [ ] **C1**
