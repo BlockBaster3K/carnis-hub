@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "carnis:sinew_shield",
+    "carnis:bone_scythe",
+    "carnis:ossified_scythe",
+    "carnis:pustule_grenade",
+    "carnis:purification_vial"
+  ]
+}

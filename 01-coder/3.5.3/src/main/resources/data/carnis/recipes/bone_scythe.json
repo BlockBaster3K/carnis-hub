@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BA",
+    "BS",
+    " S"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bone"
+    },
+    "A": {
+      "item": "carnis:bone_scythe_arm"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "carnis:bone_scythe",
+    "count": 1
+  }
+}
