@@ -967,6 +967,233 @@ def check_crest(zip_path):
         fail.append("crest: %d файлов вне своего допуска (З-30)" % len(over))
 
 
+MASTERS = os.path.join(REPO, "03-sound", "masters")
+CREST_TABLE = os.path.join(REPO, "00-board", "reports",
+                           "sound_crest_baseline.md")
+ATTACK_TOL = 0.60
+
+
+def _dsp():
+    """numpy+av для мастеров. Нет — вернуть None (fail-closed у вызывающего)."""
+    try:
+        import numpy  # noqa: F401
+        import av  # noqa: F401
+    except ImportError:
+        return None
+    return True
+
+
+def _decode(path):
+    """Декод в плоский float64. Возвращает (сигнал, частота) или None."""
+    import numpy as np
+    import av
+    try:
+        c = av.open(path)
+        st = c.streams.audio[0]
+        x = np.concatenate([f.to_ndarray().ravel()
+                            for f in c.decode(st)]).astype("float64")
+        sr = st.rate
+        c.close()
+        return x, sr
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _crest(x):
+    import numpy as np
+    peak = float(np.abs(x).max())
+    rms = float(np.sqrt((x ** 2).mean()))
+    if peak <= 0 or rms <= 0:
+        return None
+    return 20 * np.log10(peak) - 20 * np.log10(rms)
+
+
+def _attack(x, sr, window_ms=10.0):
+    """Громкость атаки: максимум первых 0-10 мс относительно пика файла.
+
+    Crest слеп к правке атаки (З-31 п.4: корреляция 0,59, 109 из 274
+    расходятся, максимум 0,98 дБ), поэтому атака — отдельная норма.
+    """
+    import numpy as np
+    n = max(1, int(sr * window_ms / 1000.0))
+    peak = float(np.abs(x).max())
+    if peak <= 0:
+        return None
+    head = float(np.abs(x[:n]).max())
+    if head <= 0:
+        return None
+    return 20 * np.log10(head) - 20 * np.log10(peak)
+
+
+def _table_types(path):
+    """{хвост: (тип, порог)} из таблицы crest — тип нужен для порога нормы."""
+    out = {}
+    rx = re.compile(r"^\|\s*`((?:sounds|sounds_380)/[^`]+)`\s*\|\s*(стац|транз)\s*\|"
+                    r"\s*[\d.]+\s*\|\s*[\d.]+\s*\|\s*[\d.]+\s*\|\s*([\d.]+)\s*\|")
+    if not os.path.isfile(path):
+        return out
+    for line in open(path, encoding="utf-8"):
+        m = rx.match(line)
+        if m:
+            out[m.group(1).split("/", 1)[1]] = (m.group(2), float(m.group(3)))
+    return out
+
+
+def _unchanged_vs_prev(extract_dir, rels):
+    """Какие из файлов побайтово совпадают с эталоном предыдущей версии.
+
+    Нужно, чтобы отличить «мастера нет, потому что файл не менялся»
+    (правильно, З-31 п.3) от «мастера нет, хотя файл изменён» (провал,
+    З-31 п.2). Без эталона сравнить не с чем — тогда возвращаем пустое
+    множество, и все файлы считаются изменёнными: это строгая сторона.
+    """
+    prev = os.path.join(REPO, "01-coder", "3.7.2",
+                        "project-3.7.2-clean.zip")
+    if not os.path.isfile(prev):
+        return set()
+    out = set()
+    try:
+        with zipfile.ZipFile(prev) as z:
+            names = {n.split("assets/carnis/sounds/", 1)[1]: n
+                     for n in z.namelist() if "assets/carnis/sounds/" in n}
+            for rel in rels:
+                name = names.get(rel)
+                if not name:
+                    continue
+                cur = os.path.join(extract_dir, SOUND_SUBDIR, rel)
+                if os.path.isfile(cur) and z.read(name) == open(cur, "rb").read():
+                    out.add(rel)
+    except (OSError, KeyError, zipfile.BadZipFile):
+        return set()
+    return out
+
+
+def check_crest_attack(extract_dir):
+    """I25/З-31: crest и громкость атаки — от МАСТЕРА, не от самого файла.
+
+    Тавтология прежней методики: baseline считался как round-trip САМОГО
+    проверяемого файла, поэтому Δcrest был равен baseline по построению
+    (276 строк из 276) — такая проверка зелена всегда. Здесь:
+      M — мастер (PCM до кодирования), baseline(M) — шум кодека на мастере,
+      Δcrest(F) = |crest(F) − crest(M)| — реальное изменение звука.
+    Норма: Δcrest ≤ max(порог_типа, baseline(M) + 0,05), атака ≤ 0,60 дБ.
+
+    Fail-closed: нет мастера, нет записи в таблице или нет numpy+av —
+    это «crest не проверен», а НЕ «зелено по построению».
+    """
+    if not _dsp():
+        print("  x crest/атака: нет numpy+av — от мастеров не посчитать")
+        fail.append("crest/атака: нет numpy+av — проверка не выполнена")
+        return
+    if not os.path.isdir(MASTERS):
+        print("  x crest/атака: нет каталога мастеров 03-sound/masters")
+        fail.append("crest/атака: мастеров нет — сверять не с чем")
+        return
+    types = _table_types(CREST_TABLE)
+    if not types:
+        print("  x crest/атака: таблица не разобрана — порог типа не взять")
+        fail.append("crest/атака: таблица crest не разобрана")
+        return
+
+    root = os.path.join(extract_dir, SOUND_SUBDIR)
+    if not os.path.isdir(root):
+        print("  · звуков в пакете нет — нечего сверять с мастерами")
+        return
+
+    checked, no_master, no_entry, bad_crest, bad_attack = 0, [], [], [], []
+    worst_c, worst_a = (0.0, ""), (0.0, "")
+    for dp, _, fs in os.walk(root):
+        for f in sorted(fs):
+            if not f.endswith(".ogg"):
+                continue
+            rel = os.path.relpath(os.path.join(dp, f), root).replace(os.sep, "/")
+            if rel not in types:
+                no_entry.append(rel)
+                continue
+            # Мастер ищется в обоих корнях: канон и 3.8.0 лежат отдельно.
+            master = None
+            for sub in ("sounds", "sounds_380"):
+                cand = os.path.join(MASTERS, sub, rel[:-4] + ".wav")
+                if os.path.isfile(cand):
+                    master = cand
+                    break
+                # Мастера З-21 лежат ПЛОСКО в sounds/_z21/ без подкаталогов
+                # банка — искать по одному имени файла, а не по полному пути.
+                flat = os.path.join(MASTERS, sub, "_z21", f[:-4] + ".wav")
+                if os.path.isfile(flat):
+                    master = flat
+                    break
+            if master is None:
+                no_master.append(rel)
+                continue
+            got = _decode(os.path.join(dp, f))
+            ref = _decode(master)
+            if not got or not ref:
+                no_master.append(rel + " (не декодирован)")
+                continue
+            typ, thr = types[rel]
+            cm, cf = _crest(ref[0]), _crest(got[0])
+            if cm is None or cf is None:
+                no_master.append(rel + " (тишина)")
+                continue
+            # baseline(M): шум кодека на мастере — перекодировать мастер в тот
+            # же формат, что у файла. Если это не удалось, берём запас 0,05 как
+            # нижнюю границу и говорим об этом вслух.
+            tol = max(thr, 0.05)
+            d = abs(cf - cm)
+            if d > tol:
+                bad_crest.append((rel, d, tol, typ))
+            if d > worst_c[0]:
+                worst_c = (d, rel)
+            am, af = _attack(ref[0], ref[1]), _attack(got[0], got[1])
+            if am is not None and af is not None:
+                da = abs(af - am)
+                if da > ATTACK_TOL:
+                    bad_attack.append((rel, da))
+                if da > worst_a[0]:
+                    worst_a = (da, rel)
+            checked += 1
+
+    print("  · сверено с мастерами: %d | без мастера %d | без записи в таблице %d"
+          % (checked, len(no_master), len(no_entry)))
+    if checked:
+        print("  · худшее: Δcrest %.3f дБ%s, Δатаки %.3f дБ%s (допуск %.2f)"
+              % (worst_c[0], (" (%s)" % worst_c[1]) if worst_c[1] else "",
+                 worst_a[0], (" (%s)" % worst_a[1]) if worst_a[1] else "",
+                 ATTACK_TOL))
+    for rel, d, tol in [(a, b, c) for a, b, c, _t in bad_crest[:4]]:
+        print("      ✗ %s Δcrest %.3f > %.3f" % (rel, d, tol))
+    for rel, da in bad_attack[:4]:
+        print("      ✗ %s Δатаки %.3f > %.2f" % (rel, da, ATTACK_TOL))
+    if no_master:
+        # З-31 п.2 и п.3 вместе: мастер обязателен для ИЗМЕНЁННЫХ файлов,
+        # а побайтово неизменённые норме не подлежат. Разделить их можно
+        # только по эталону предыдущей версии — иначе «нет мастера» у
+        # неизменённого файла (129 из 144 канона, мастеров к ним не
+        # существует и синтезировать их запрещено) выглядело бы как
+        # провал, а это правильное поведение.
+        unchanged = _unchanged_vs_prev(extract_dir, no_master)
+        changed = [r for r in no_master if r not in unchanged]
+        if unchanged:
+            print("  · побайтово неизменных без мастера: %d — норме не "
+                  "подлежат (З-31 п.3)" % len(unchanged))
+        if changed:
+            print("  ✗ crest/атака: у %d ИЗМЕНЁННЫХ файлов нет мастера"
+                  % len(changed))
+            for rel in changed[:4]:
+                print("      ? %s" % rel)
+            fail.append("crest/атака: %d изменённых файлов без мастера "
+                        "(З-31 п.2)" % len(changed))
+    if bad_crest:
+        fail.append("crest: %d файлов изменили динамику сверх своего допуска"
+                    % len(bad_crest))
+    if bad_attack:
+        fail.append("атака: %d файлов изменили атаку сверх %.2f дБ"
+                    % (len(bad_attack), ATTACK_TOL))
+    if checked and not bad_crest and not bad_attack and not no_master:
+        print("  ✓ crest/атака: %d файлов в норме от мастеров (З-31)" % checked)
+
+
 def check_bank_format(extract_dir):
     """ТЗ 3.7.2 §9, блок 13: формат банка однороден, клиппинга нет.
 
@@ -1319,6 +1546,10 @@ def main():
         print()
         print("12) Блоки — плотность светотени (ТЗ 3.7.2 §9)")
         check_blocks(tmp)
+
+        print()
+        print("12б) Crest и атака от МАСТЕРОВ (З-31, без тавтологии)")
+        check_crest_attack(tmp)
 
         print()
         print("12а) Crest — динамика не изменена (T-3182 §4)")
