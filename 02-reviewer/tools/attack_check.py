@@ -1,31 +1,34 @@
 #!/usr/bin/env python3
-"""Проверка «громкости атаки» с формальным предусловием (R22 / S29).
+"""ДИАГНОСТИКА «громкости атаки» (S29/S40). В ГЕЙТ НЕ СТАВИТЬ — см. R22 §7.
 
-Метрика Звука из S29: `атака = max|x| в первых 10 мс` относительно пика файла.
-Величина полезная (crest правку атаки не видит — подтверждено R22), но
-**не определена** на части банка: если в первых 10 мс сигнала нет, отношение
-двух чисел около нуля даёт мусор (у Звука 123 дБ на `zone_stinger_*`).
+Итог R22: как НОРМА метрика не годится ни с постоянным порогом 0.60 (S40),
+ни с допуском per-file (мой §7.3): на файле с плавным входом чистый gain даёт
+ложный провал −13 дБ из-за сдвига онсета после перекода. Как ОТЧЁТНАЯ метрика
+полезна: она показывает, что crest слеп к правке атаки там, где пик вне первых
+10 мс (60 % банка), и сколько файлов имеет дрожание окна выше 0.60 дБ (39 из 144).
 
-Здесь предусловие не «файл неудобный, выкинем», а проверяемое:
+Определение (S29): `атака = max|x| в первых 10 мс` относительно пика файла.
+Два дефекта, найденных в R22 и исправленных здесь:
 
-  1) УРОВЕНЬ:  окно должно содержать сигнал — `max|окно| ≥ пик − 40 дБ`.
-  2) УСТОЙЧИВОСТЬ: метрика не должна зависеть от того, где именно в окне
-     стоит максимум. Считаем её же со сдвигом окна на +1 мс; если расхождение
-     больше 0.30 дБ — у файла «атака на границе окна», и величина не
-     определена (именно так ведёт себя `infected_illusioner_death_01`:
-     уровень −5.4 дБ «здоровый», а дрейф перекода −41 дБ).
+1. **Окно от сэмпла 0 попадает в ведущую цифровую тишину.** В каноне 6 файлов
+   начинаются с тишины (у `hive/hive_spread_01_creep` — 246 мс), и метрика
+   мерила тишину: `heart_pulse` давал −237 дБ при реальной атаке −2,4 дБ.
+   Здесь окно начинается с **онсета** — первого сэмпла не тише «пик − 40 дБ».
 
-Только при выполнении обоих условий значение годится для нормы. Остальные
-файлы попадают в список «не определено» — и гейт обязан **сверить их число**
-с ожидаемым (fail-closed), а не молча пропустить.
+2. **Жёсткое окно разрывно по времени.** Сдвиг окна на 1 мс меняет величину до
+   16 дБ (`hive/spawn_skeleton_blade_03`). Поэтому метрика возвращает ещё и
+   **дрожание** (расхождение при сдвиге ±1 мс) — гейт обязан учитывать его в
+   допуске per-file (`max(порог; baseline + 0.05; дрожание)`), а не полагаться
+   на постоянный 0.60.
 
-Коды возврата: 0 — все файлы определены и в допуске; 2 — есть выходы за
-допуск; 3 — есть файлы с неопределённой метрикой (или нет записи в таблице).
+Коды возврата: 0 — в допуске; 2 — есть выходы; 3 — метрика не определена
+(нет сигнала в файле) или нет эталона. Строки с уровнями ниже −20 дБ печатаются
+как предупреждение «тихая атака» (решение по ним — за таблицей Звука).
 
 Использование:
     attack_check.py --selftest
     attack_check.py --survey 03-sound/sounds
-    attack_check.py <эталон.ogg|каталог> <сданное.ogg|каталог> [--table T]
+    attack_check.py <эталон.ogg|каталог> <сданное.ogg|каталог> [--tol 0.60]
 """
 from __future__ import annotations
 
@@ -37,13 +40,13 @@ import numpy as np
 
 WIN_MS = 10.0
 SHIFT_MS = 1.0
-LEVEL_GUARD_DB = 40.0     # окно должно быть не тише «пик − 40 дБ»
-STABILITY_DB = 0.30       # расхождение при сдвиге окна на 1 мс
-DEFAULT_TOL = 0.60        # порог транзиента (З-30: max(порог; baseline+0.05))
+ONSET_DB = -40.0        # онсет = первый сэмпл не тише «пик − 40 дБ»
+QUIET_DB = -20.0        # ниже — «тихая атака», предупреждение
+DEFAULT_TOL = 0.60
 
 
 def decode(path):
-    import av  # PyAV, как в tools/timbre_check.py
+    import av  # PyAV, как в tools/timbre_check.py и гейте
 
     container = av.open(str(path))
     stream = container.streams.audio[0]
@@ -57,92 +60,99 @@ def decode(path):
     container.close()
     if not chunks:
         raise ValueError(f"пусто: {path}")
-    x = np.concatenate(chunks)
-    return x, sr
+    return np.concatenate(chunks), sr
 
 
-def _win_max(x, sr, start_ms, win_ms):
-    n0 = max(0, int(sr * start_ms / 1000.0))
-    n1 = min(len(x), n0 + max(1, int(sr * win_ms / 1000.0)))
-    if n1 <= n0:
+def onset(x, rel_db=ONSET_DB):
+    """Первый сэмпл не тише «пик − rel_db»; так ведущая тишина не съедает окно."""
+    peak = float(np.abs(x).max())
+    if peak <= 0.0:
+        return 0
+    idx = np.flatnonzero(np.abs(x) >= peak * 10.0 ** (rel_db / 20.0))
+    return int(idx[0]) if len(idx) else 0
+
+
+def _win_max(x, sr, start, win_ms=WIN_MS):
+    n1 = min(len(x), start + max(1, int(sr * win_ms / 1000.0)))
+    if n1 <= start:
         return 0.0
-    return float(np.abs(x[n0:n1]).max())
+    return float(np.abs(x[start:n1]).max())
 
 
-def attack_metric(x, sr):
-    """(значение дБ относительно пика, уровень окна дБ отн. пика, запас устойчивости дБ)."""
+def attack(x, sr):
+    """(значение дБ отн. пика, уровень, дрожание при сдвиге ±1 мс) или None."""
     peak = float(np.abs(x).max())
     if peak <= 0.0:
         return None
-    a0 = _win_max(x, sr, 0.0, WIN_MS)
-    a1 = _win_max(x, sr, SHIFT_MS, WIN_MS)
-    level = 20.0 * np.log10(max(a0, 1e-12) / peak)
+    o = onset(x)
+    a0 = _win_max(x, sr, o)
     if a0 <= 0.0:
-        return None, level, float("inf")
-    dev = abs(20.0 * np.log10(max(a1, 1e-12) / max(a0, 1e-12)))
-    return 20.0 * np.log10(a0 / peak), level, dev
+        return None, -np.inf, float("inf")
+    level = 20.0 * np.log10(a0 / peak)
+    n_shift = int(sr * SHIFT_MS / 1000.0)
+    a_minus = _win_max(x, sr, max(0, o - n_shift))
+    a_plus = _win_max(x, sr, o + n_shift)
+    jitter = max(abs(20.0 * np.log10(max(a_minus, 1e-12) / a0)),
+                 abs(20.0 * np.log10(max(a_plus, 1e-12) / a0)))
+    return level, level, jitter
 
 
-def defined(x, sr):
-    """(годна ли метрика, значение или None, причина)."""
-    got = attack_metric(x, sr)
-    if got is None:
-        return False, None, "тишина"
-    val, level, dev = got
-    if level < -LEVEL_GUARD_DB:
-        return False, None, f"нет атаки (уровень {level:.0f} дБ)"
-    if dev > STABILITY_DB:
-        return False, None, f"атака на границе окна (сдвиг 1 мс → {dev:.2f} дБ)"
-    return True, val, ""
+def tolerance(jitter, base=None, thr=DEFAULT_TOL):
+    """Допуск per-file по З-30 + измеренное дрожание (R22)."""
+    tol = thr
+    if base is not None:
+        tol = max(tol, base + 0.05)
+    if jitter is not None and np.isfinite(jitter):
+        tol = max(tol, min(jitter, 6.0) + 0.05)
+    return tol
 
 
 # ---------------------------------------------------------------- selftest
 
 def _selftest():
     sr = 48000
-    t = np.arange(sr, dtype="float32") / sr
+    n_total = sr
+    t = np.arange(n_total, dtype="float32") / sr
     cases = []
 
-    # 1. явная атака: короткий щелчок в начале, дальше тише
+    # 1. явная атака в начале
     x = 0.05 * np.sin(2 * np.pi * 200 * t).astype("float32")
     x[: int(sr * 0.004)] = 0.9 * np.sin(2 * np.pi * 900 * t[: int(sr * 0.004)])
-    cases.append(("явная атака", x, True))
+    cases.append(("явная атака", x, True, False))
 
-    # 2. фейд-ин из тишины 30 мс — атаки нет
-    x = np.zeros_like(t)
-    ramp = np.linspace(0, 1, int(sr * 0.03), dtype="float32")
-    body = 0.8 * np.sin(2 * np.pi * 300 * t[int(sr * 0.03):]).astype("float32")
-    body[: len(ramp)] *= ramp
-    x[int(sr * 0.03):] = body
-    cases.append(("фейд-ин 30 мс", x, False))
+    # 2. инвариантность к усилению — главное: gain не должен ловиться
+    cases.append(("инвариант к gain", x * 0.5, True, False))
 
-    # 3. максимум ровно на последнем сэмпле окна, сразу после — спад:
-    #    сдвиг окна на 1 мс теряет пик → величина неустойчива
-    x = (0.02 * np.sin(2 * np.pi * 200 * t)).astype("float32")
-    x[int(sr * 0.0008)] = 0.9   # узкий пик у самого начала окна
-    cases.append(("пик на границе окна", x, False))
+    # 3. ведущая тишина 50 мс, затем атака: окно от 0 мерило бы тишину
+    y = np.zeros(n_total, dtype="float32")
+    y[int(sr * 0.05):] = x[: n_total - int(sr * 0.05)]
+    cases.append(("тишина 50 мс + атака", y, True, False))
 
-    # 4. тихая атака (−45 дБ от пика внутри окна) — ниже порога уровня
-    x = 0.9 * np.sin(2 * np.pi * 200 * t).astype("float32")
-    x[: int(sr * 0.010)] = 0.005 * np.sin(2 * np.pi * 5000 * t[: int(sr * 0.010)])
-    cases.append(("атака −45 дБ", x, False))
+    # 4. плавный фейд-ин без тишины — величина есть, но она «тихая»
+    z = (0.9 * np.linspace(0, 1, n_total, dtype="float32")
+         * np.sin(2 * np.pi * 200 * t)).astype("float32")
+    cases.append(("плавный фейд 1 с", z, True, True))
 
-    # 5. метрика инвариантна к общему усилению (gain не должен ловиться)
-    base = cases[0][1]
-    ok, v0, _ = defined(base, sr)
-    ok2, v1, _ = defined(base * 0.5, sr)
-    cases.append(("инвариант к gain", base * 0.5, True))
+    # 5. полная тишина — метрика не определена
+    cases.append(("тишина", np.zeros(n_total, dtype="float32"), False, False))
 
     failed = 0
-    for name, sig, expect in cases:
-        ok, val, why = defined(sig, sr)
-        if name == "инвариант к gain":
-            good = ok and ok2 and abs(v1 - v0) < 1e-6
-            print(f"  {'✓' if good else '✗'} {name}: Δ = {v1 - v0:+.2e} дБ")
+    for name, sig, expect_def, expect_quiet in cases:
+        got = attack(sig, sr)
+        if got is None:
+            ok, val, jit = False, None, None
         else:
-            good = ok == expect
-            shown = f"{val:+.2f} дБ" if val is not None else why
-            print(f"  {'✓' if good else '✗'} {name}: определена={ok} ({shown})")
+            val, _lvl, jit = got
+            ok = True
+        quiet = ok and val < QUIET_DB
+        good = (ok == expect_def) and (quiet == expect_quiet)
+        if name == "инвариант к gain":
+            v0 = attack(x, sr)[0]
+            good = good and abs(val - v0) < 1e-6
+            shown = f"Δ = {val - v0:+.2e} дБ"
+        else:
+            shown = f"{val:+.2f} дБ, дрожание {jit:.2f}" if ok else "не определена"
+        print(f"  {'✓' if good else '✗'} {name}: {shown}")
         failed += 0 if good else 1
     print(f"итог: {len(cases) - failed}/{len(cases)}")
     return 0 if failed == 0 else 1
@@ -152,20 +162,27 @@ def _selftest():
 
 def survey(root):
     root = pathlib.Path(root)
-    ok_list, bad_list = [], []
+    rows = []
     for p in sorted(root.rglob("*.ogg")):
         x, sr = decode(p)
-        ok, val, why = defined(x, sr)
-        (ok_list if ok else bad_list).append((str(p.relative_to(root)), val, why))
+        got = attack(x, sr)
+        rows.append((str(p.relative_to(root)), got))
+    undef = [r for r in rows if r[1] is None]
+    quiet = [r for r in rows if r[1] is not None and r[1][0] < QUIET_DB]
+    vals = np.array([r[1][0] for r in rows if r[1] is not None])
+    jits = np.array([r[1][2] for r in rows if r[1] is not None])
     print(f"каталог: {root}")
-    print(f"метрика определена: {len(ok_list)}, не определена: {len(bad_list)}")
-    for name, _, why in bad_list:
-        print(f"  ! {name:52s} {why}")
-    if ok_list:
-        vals = np.array([v for _, v, _ in ok_list])
+    print(f"файлов {len(rows)}: метрика определена {len(vals)}, "
+          f"не определена {len(undef)}, тихая атака (<{QUIET_DB:.0f} дБ) {len(quiet)}")
+    if len(vals):
         print(f"уровень атаки: медиана {np.median(vals):+.1f} дБ, "
-              f"диапазон {vals.min():+.1f}…{vals.max():+.1f} дБ")
-    return 3 if bad_list else 0
+              f"диапазон {vals.min():+.1f}…{vals.max():+.1f}")
+        print(f"дрожание окна: медиана {np.median(jits):.2f} дБ, "
+              f"p95 {np.percentile(jits, 95):.2f}, макс {jits.max():.2f}; "
+              f"больше 0.60: {(jits > 0.60).sum()}")
+    for name, got in undef:
+        print(f"  ! {name}: не определена")
+    return 3 if undef else 0
 
 
 def main(argv=None):
@@ -174,9 +191,9 @@ def main(argv=None):
     ap.add_argument("--survey", metavar="DIR")
     ap.add_argument("ref", nargs="?")
     ap.add_argument("got", nargs="?")
-    ap.add_argument("--tol", type=float, default=None,
-                    help="единый допуск, если нет таблицы")
-    ap.add_argument("--table", help="таблица допусков attack (per-file)")
+    ap.add_argument("--tol", type=float, default=DEFAULT_TOL)
+    ap.add_argument("--flat-tol", action="store_true",
+                    help="не учитывать дрожание окна (только --tol)")
     a = ap.parse_args(argv)
 
     if a.selftest:
@@ -187,36 +204,45 @@ def main(argv=None):
         ap.print_help()
         return 1
 
-    ref_dir = pathlib.Path(a.ref)
-    got_dir = pathlib.Path(a.got)
-    if not got_dir.is_dir():
-        print("сданное должно быть каталогом .ogg", file=sys.stderr)
+    ref, got = pathlib.Path(a.ref), pathlib.Path(a.got)
+    pairs = []
+    if ref.is_dir() and got.is_dir():
+        for p in sorted(got.rglob("*.ogg")):
+            rel = p.relative_to(got)
+            rp = ref / rel if (ref / rel).exists() else ref / rel.name
+            if not rp.exists():
+                print(f"нет эталона для {rel}", file=sys.stderr)
+                return 3
+            pairs.append((rp, p))
+    elif ref.is_file() and got.is_file():
+        pairs.append((ref, got))
+    else:
+        print("нужны либо два каталога, либо два файла", file=sys.stderr)
         return 1
-    out = []
-    for p in sorted(got_dir.rglob("*.ogg")):
-        rel = p.relative_to(got_dir)
-        rp = ref_dir / rel
-        if not rp.exists():
-            print(f"нет эталона для {rel}", file=sys.stderr)
-            return 3
-        x0, sr = decode(rp)
-        x1, _ = decode(p)
-        ok0, v0, why0 = defined(x0, sr)
-        ok1, v1, why1 = defined(x1, sr)
-        if not (ok0 and ok1):
-            out.append((str(rel), None, None))
-            continue
-        tol = a.tol if a.tol is not None else DEFAULT_TOL
-        out.append((str(rel), v1 - v0, tol))
 
-    undef = [n for n, d, _ in out if d is None]
-    over = [(n, d, t) for n, d, t in out if d is not None and abs(d) > t]
-    print(f"Файлов: {len(out)}, метрика не определена: {len(undef)}, "
+    over, undef, quiet = [], [], []
+    for rp, gp in pairs:
+        x0, sr = decode(rp)
+        x1, _ = decode(gp)
+        g0, g1 = attack(x0, sr), attack(x1, sr)
+        if g0 is None or g1 is None:
+            undef.append(str(gp.name))
+            continue
+        d = g1[0] - g0[0]
+        tol = a.tol if a.flat_tol else tolerance(g1[2], None, a.tol)
+        if g1[0] < QUIET_DB:
+            quiet.append(str(gp.name))
+        if abs(d) > tol:
+            over.append((str(gp.name), d, tol, g1[2]))
+
+    print(f"Файлов: {len(pairs)}, метрика не определена: {len(undef)}, "
           f"выходов за допуск: {len(over)}")
     for n in undef:
         print(f"  ? {n}")
-    for n, d, t in sorted(over, key=lambda r: -abs(r[1])):
-        print(f"  ! {n:52s} {d:+.2f} дБ (допуск {t:.2f})")
+    for n, d, tol, jit in sorted(over, key=lambda r: -abs(r[1])):
+        print(f"  ! {n:52s} {d:+.2f} дБ (допуск {tol:.2f}, дрожание {jit:.2f})")
+    if quiet:
+        print(f"  i тихая атака (<{QUIET_DB:.0f} дБ): {len(quiet)} файлов")
     if undef:
         return 3
     return 2 if over else 0
