@@ -1,8 +1,8 @@
 # Artist — статус
 
-обновлено: 2026-11-25 13:45 MSK
+обновлено: 2026-11-25 14:00 MSK
 статус: STATUS: IDLE_WAITING
 делаю: —
 жду: —
-готово: T-3105 (`Carnis_3.7.0_A4p7_palette-R.zip`, 28.3% ≤ 35%, `ИТОГ: СХОДИТСЯ`) и T-3109 (`04-artist/PALETTE.md`, `04-artist/tools/shade_density.py`) выполнены (`STATUS: COMPLETED`)
-передал: Ревизор / Архитектор
+готово: T-3105, T-3109 и T-3115 (`Carnis_3.7.2_T3115_block_recolor.zip`, 24 текстуры, `ИТОГ: СХОДИТСЯ`, код `0`) выполнены (`STATUS: COMPLETED`)
+передал: Ревизор / Интегратор
