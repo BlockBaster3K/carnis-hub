@@ -138,9 +138,12 @@
    - `pitch` = **1.0** у событий `hive.ambient`, `hive.ambient_close`,
      `hive.ambient_surface`, `hive.ambient_deep`, `hive.ambient_core`,
      `hive.ambient_threshold`.
-2. **Подставить новые 4 зональных эмбиента** из банка
-   `03-sound/sounds/hive/` в пакет — сейчас там устаревшие 110,95–117,95 с
-   вместо **120,000 с**. Копировать **побайтово**, руками не перекодировать.
+2. **Подставить в пакет все 9 ambient-слоёв из банка** `03-sound/sounds/`
+   (`amb/hive_ambient_01..03`, `amb/hive_ambient_close_01..02`,
+   `hive/amb_surface`, `amb_deep`, `amb_core`, `amb_threshold`).
+   В пакете сейчас устаревшие версии — **расходятся все девять**, не четыре
+   (уточнение Интегратора, `afb0165`): зональные 110,95–117,95 с вместо
+   **120,000 с**. Копировать **побайтово**, руками не перекодировать.
 3. **`amalgam_breath_01/02`** — вернуть в пакет и добавить в
    `sounds.hive.amalgam_breath` с `volume 0.35` (решение Р-31.2).
 4. **Собрать** `01-coder/3.7.0/project-3.7.0-clean.zip` +
