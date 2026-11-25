@@ -491,6 +491,15 @@ def new_creature_names(extract_dir):
     return names
 
 
+def _px(im):
+    """Плоский список пикселей RGBA — для сверки маски с телом по координатам."""
+    w, h = im.size
+    data = list(im.getdata())
+    for y in range(h):
+        for x in range(w):
+            yield x, y, data[y * w + x]
+
+
 def check_new_creatures(extract_dir):
     """Каждое новое существо 3.8.0: geo валиден, текстура цела, glowmask Р-3.
 
@@ -524,8 +533,11 @@ def check_new_creatures(extract_dir):
                 break
         tex = os.path.join(tex_dir, name + ".png")
         mask = os.path.join(tex_dir, name + "_glowmask.png")
-        absent = [os.path.basename(x) for x in (geo, tex, mask)
-                  if x is None or not os.path.exists(x)]
+        absent = []
+        for label, path_ in (("geo", geo), ("текстура", tex),
+                             ("glowmask", mask)):
+            if path_ is None or not os.path.exists(path_):
+                absent.append(label)
         if absent:
             print("  ✗ %-22s нет: %s" % (name, ", ".join(absent)))
             fail.append("новые существа: %s — нет %s" % (name, ", ".join(absent)))
@@ -546,7 +558,7 @@ def check_new_creatures(extract_dir):
             print("  ✗ %-22s geo без костей" % name)
             fail.append("новые существа: %s — geo без костей" % name)
             continue
-        im = Image.open(tex)
+        im = Image.open(tex).convert("RGBA")
         iw, ih = im.size
         if tw is None or th is None:
             print("  ✗ %-22s geo без texture_width/height" % name)
@@ -558,14 +570,36 @@ def check_new_creatures(extract_dir):
             fail.append("новые существа: %s — размер текстуры в geo (%sx%s) "
                         "не совпал с PNG (%dx%d)" % (name, tw, th, iw, ih))
             continue
+        # З-Г5(A): цвет текстуры считается по НЕПРОЗРАЧНЫМ пикселям. Наивный
+        # подсчёт по RGBA-кортежам давал 11 «цветов» там, где их 3: под
+        # alpha=0 художник может насорить произвольным RGB, и плоская
+        # текстура проходила норму «>= 7 цветов».
+        body = im.convert("RGBA")
+        ncol = len({px[:3] for px in body.getdata() if px[3] > 0})
+        # З-Г5(B): маска обязана быть того же размера, что тело. Маска 8x8 при
+        # теле 64x64 — «свечение где-то в углу», а палитра у неё правильная.
         mim = Image.open(mask).convert("RGBA")
+        if mim.size != body.size:
+            print("  ✗ %-22s glowmask %dx%d, тело %dx%d"
+                  % (name, mim.size[0], mim.size[1], body.size[0], body.size[1]))
+            fail.append("новые существа: %s — размер glowmask не совпал с телом" % name)
+            continue
         cols = {c for _, c in mim.getcolors(1 << 20)}
         bad = cols - GLOW_EXPECT
         if bad:
             print("  ✗ %-22s glowmask вне палитры: %s" % (name, sorted(bad)[:3]))
             fail.append("новые существа: %s — glowmask вне палитры Р-3" % name)
             continue
-        ncol = len({c for _, c in im.convert("RGBA").getcolors(1 << 20)})
+        # З-Г5(C): свечение на прозрачных пикселях тела = светящийся воздух.
+        outside = 0
+        for (_mx, _my, mp), (_bx, _by, bp) in zip(_px(mim), _px(body)):
+            if mp[3] > 0 and bp[3] == 0:
+                outside += 1
+        if outside:
+            print("  ✗ %-22s свечение вне силуэта: %d px" % (name, outside))
+            fail.append("новые существа: %s — свечение вне силуэта (%d px)"
+                        % (name, outside))
+            continue
         if ncol < SHADE_MIN_COLORS:
             print("  ✗ %-22s текстура из %d цветов (норма ≥ %d)"
                   % (name, ncol, SHADE_MIN_COLORS))
@@ -577,6 +611,65 @@ def check_new_creatures(extract_dir):
               % (name, len(bones), iw, ih, ncol))
     print("  новые существа: в реестре %d, полный комплект %d, с изъянами %d"
           % (len(names), ok, len(names) - ok))
+    check_creature_pack(extract_dir, names)
+
+
+# Порог костей: в 3.8.0 действует решение З-25 — базовая геометрия допустима,
+# детализация (>= 12 костей) уходит в 3.8.1. Держу это константой, чтобы
+# смена версии была одной строкой, а не переписыванием блока.
+MIN_BONES = 1
+
+
+def check_creature_pack(extract_dir, names):
+    """Глубокий аудит существ чекером Ревизора (З-Г5, четыре дыры блока 16).
+
+    Мой блок 16 проверял палитру, размер PNG против geo и наличие файлов, но
+    пропускал четыре вещи, которые Ревизор собрал руками и прогнал:
+      A) цвета считались по RGBA-кортежам — под alpha=0 можно «насорить» RGB
+         и текстура из 3 непрозрачных цветов выглядела как 11-цветная;
+      B) размер glowmask не сверялся с текстурой (маска 8x8 при теле 64x64);
+      C) свечение вне силуэта тела не считалось;
+      D) UV внутри кубов не проверялись вовсе — только объявленный размер.
+    Ни одна из четырёх не видна глазами, и все четыре проходили как «✓».
+    Вместо дублирования логики вызываю creature_pack_audit.py Ревизора:
+    он проверяет всё перечисленное и вдобавок анимации.
+    """
+    checker = os.path.join(REPO, "02-reviewer", "tools", "creature_pack_audit.py")
+    if not os.path.isfile(checker):
+        print("  x пак существ: нет чекера 02-reviewer/tools/creature_pack_audit.py")
+        fail.append("пак существ: чекер отсутствует — глубокий аудит не выполнен")
+        return
+    py = _python_with("PIL") or sys.executable
+    r = subprocess.run([py, checker, extract_dir,
+                        "--min-bones", str(MIN_BONES),
+                        "--only", ",".join(names)],
+                       capture_output=True, text=True)
+    lines = [ln.rstrip() for ln in r.stdout.splitlines()]
+    for ln in lines:
+        s = ln.strip()
+        if s.startswith("\u2717") or s.startswith("x ") or "изъян" in s.lower() \
+                or "ИТОГ" in s:
+            print("      " + s)
+    # Fail-closed по счёту: чекер на пустом наборе печатает «Существ: 0»
+    # и «ИТОГ: СХОДИТСЯ» с кодом 0. Пустая проверка не имеет права выглядеть
+    # как успешная — иначе достаточно разойтись именам, и гейт промолчит.
+    m = re.search(r"Существ:\s*(\d+)", r.stdout)
+    covered = int(m.group(1)) if m else -1
+    if covered < len(names):
+        print("  x пак существ: проверено %d из %d — имена разошлись, "
+              "аудит неполный" % (max(covered, 0), len(names)))
+        fail.append("пак существ: проверено %d из %d комплектов"
+                    % (max(covered, 0), len(names)))
+        return
+    if r.returncode == 0:
+        print("  v пак существ: geo/UV/A3R1/Р-3/анимации — чисто, %d существ (З-Г5)"
+              % covered)
+    elif r.returncode == 2:
+        print("  x пак существ: есть изъяны сверх блока 16 (З-Г5)")
+        fail.append("пак существ: изъяны по глубокому аудиту (З-Г5)")
+    else:
+        print("  x пак существ: чекер не смог отработать (код %d)" % r.returncode)
+        fail.append("пак существ: чекер упал (код %d)" % r.returncode)
 
 
 # --------------------------------------------- 15. Реестр существ (16 комплектов)
