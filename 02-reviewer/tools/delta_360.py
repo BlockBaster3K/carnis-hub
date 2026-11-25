@@ -128,8 +128,11 @@ def main(argv):
         dv = re.search(r'^\s*displayVersion\s*=\s*"([^"]+)"', toml, re.M)
         say(v and v.group(1) == '3.6.0', 'mods.toml version = %s' % (v.group(1) if v else '—'))
         say(dv and dv.group(1) == '3.6.0', 'mods.toml displayVersion = %s' % (dv.group(1) if dv else '—'))
-        say(os.path.basename(os.path.normpath(pkgdir)) == '3.6.0',
-            'каталог пакета = %s' % os.path.basename(os.path.normpath(pkgdir)))
+        # Суффикс пересдачи (-R, -R2, -R5) отбрасывается ровно как в CI
+        # (.github/workflows/build.yml: EXPECT="${DIR%%-R*}").
+        folder = os.path.basename(os.path.normpath(pkgdir))
+        expect = re.sub(r'-R.*$', '', folder)
+        say(expect == '3.6.0', 'каталог пакета = %s → ожидаемая версия %s' % (folder, expect))
 
         print('\n[3] K4 — мёртвые ресурсы')
         for rel in K4_REMOVED:
