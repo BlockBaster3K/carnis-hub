@@ -20,7 +20,9 @@
 Использование:
     python3 tools/accept_3.7.1.py [путь_к_zip] [путь_к_манифесту]
 
-Коды: 0 — ПРИНЯТО, 1 — ЕСТЬ РАСХОЖДЕНИЯ, 2 — нет пакета / ошибка запуска.
+Коды (гейт приёмки, см. tools/README.md): 0 — ПРИНЯТО,
+1 — ЕСТЬ РАСХОЖДЕНИЯ, 2 — нет пакета / каталог вместо ZIP / битый архив /
+ошибка запуска. Ни один неверный путь не даёт трейсбек.
 """
 import json
 import math  # noqa: F401  (используется в блоке 15)
@@ -619,6 +621,24 @@ def main():
         print("Ждём: T-3115 (блоки), T-3122 (существа), T-3121 (банк) →")
         print("      Кодер собирает 01-coder/%s/project-%s-clean.zip + манифест"
               % (VERSION, VERSION))
+        return 2
+
+    # --- З-6 (T-3125): ни один неверный путь не даёт трейсбек и не даёт
+    # код 1. Код 1 по контракту = «ЕСТЬ РАСХОЖДЕНИЯ» (приговор пакету),
+    # поэтому ошибка запуска обязана быть кодом 2.
+    if os.path.isdir(zip_path):
+        print()
+        print("ЭТО КАТАЛОГ, А НЕ ZIP: %s" % zip_path)
+        print("Приёмка идёт по ZIP-пакету. Пример:")
+        print("  python3 tools/%s %s/project-%s-clean.zip"
+              % (os.path.basename(__file__), 
+                 os.path.relpath(os.path.join(REPO, "01-coder", VERSION), REPO),
+                 VERSION))
+        return 2
+    if not zipfile.is_zipfile(zip_path):
+        print()
+        print("НЕ ZIP ИЛИ БИТЫЙ АРХИВ: %s" % zip_path)
+        print("Код 2 — ошибка запуска, а не приговор пакету.")
         return 2
 
     print("Пакет:   %s" % os.path.relpath(zip_path, REPO))
