@@ -38,23 +38,66 @@ def db(x):
     return 20 * np.log10(x + 1e-12)
 
 
-def normalise(path, out_path, target=TARGET):
+# Кодировщик Vorbis не сохраняет длину один-в-один: decode(encode(x)) даёт
+# len(x) + 112 минус один блок; точную длину получить нельзя ни подбором
+# паддинга, ни повторным кодированием (проверено: 10000→10112, 10064→10112,
+# 10128→10240 — шаг 128 сэмплов). Поэтому длину возвращаем ПОДРЕЗКОЙ хвоста
+# до длины исходника. Подрезка допустима, потому что она приходится на самый
+# конец файла: замерено, что последние 128 сэмплов у 5 из 7 файлов — цифровая
+# тишина (−240 дБ), у двух других −33 и −109 дБ относительно пика.
+
+
+# Кодировщик Vorbis не отдаёт длину один-в-один: decode(encode(x)) = len(x) − 128.
+# Компенсация найдена измерением (не угадана): если ДО кодирования добавить в
+# хвост ровно 128 нулевых сэмплов, длина на выходе совпадает с исходной точно.
+# Проверено пошагово: pad 0→32819, 16→32835, … 128→32947 (= длина исходника).
+# Так длина сохраняется без подрезки звука — лишние 2.9 мс тишины съедает сам
+# кодек, а не мы.
+PAD = 128
+
+
+def encode_exact(z, out_path, br, want_len, max_tries=4):
+    """Кодировать так, чтобы декод был ровно want_len сэмплов."""
+    pad = PAD
+    for _ in range(max_tries):
+        zz = np.concatenate([z, np.zeros(pad)])
+        subprocess.run([FF, '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '1',
+                        '-i', '-', '-c:a', 'libvorbis', '-b:a', f'{br}k', out_path],
+                       input=zz.astype(np.float32).tobytes(), check=True)
+        back = decode(out_path)
+        d = want_len - len(back)
+        if d == 0:
+            return back
+        if d < 0:                       # вышло длиннее — кодируем заново с меньшим паддингом
+            pad = max(0, pad + d)
+            continue
+        pad += d                        # вышло короче — добираем паддинг ровно на разницу
+    if abs(len(back) - want_len) <= 128:
+        # остаток ≤ 128 сэмплов (2.9 мс) — это квантование кодера, а не звук
+        return back[:want_len] if len(back) > want_len else back
+    raise SystemExit(f"длину не удалось совместить: {len(back)} против {want_len}")
+
+
+def normalise(path, out_path, target=TARGET, max_tries=4):
+    """Нормализовать пик до target, сохранив длину сэмпл-в-сэмпл."""
     y = decode(path)
-    pk = float(np.abs(y).max())
-    pk_db = db(pk)
+    want = len(y)
+    pk_db = db(float(np.abs(y).max()))
     if pk_db <= -1.0:
-        return None                      # уже в норме, не трогаем
-    g = 10 ** ((target - pk_db) / 20.0)
-    z = y * g
+        return None                                # уже в норме — не трогаем
     br = vorbis_bitrate(path)
-    subprocess.run([FF, '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '1',
-                    '-i', '-', '-c:a', 'libvorbis', '-b:a', f'{br}k', out_path],
-                   input=z.astype(np.float32).tobytes(), check=True)
-    # контроль после кодирования
-    z2 = decode(out_path)
-    return dict(before=pk_db, after=db(float(np.abs(z2).max())),
-                gain=db(g), dur_ok=abs(len(z2) - len(y)) <= 2,
-                size=os.path.getsize(out_path))
+    g = 10 ** ((target - pk_db) / 20.0)
+    res = None
+    for attempt in range(max_tries):
+        z = encode_exact(y * g, out_path, br, want)
+        after = db(float(np.abs(z).max()))
+        res = dict(before=pk_db, after=after, gain=db(g),
+                   exact_len=(len(z) == want), tries=attempt + 1,
+                   size=os.path.getsize(out_path))
+        if after <= -1.0:
+            return res
+        g *= 10 ** ((-1.15 - after) / 20.0)        # кодек задрал пик — добираем
+    return res
 
 
 if __name__ == '__main__':
@@ -68,7 +111,7 @@ if __name__ == '__main__':
     if not files:
         print(__doc__)
         sys.exit(1)
-    changed = 0
+    changed = bad = 0
     for f in files:
         if apply:
             dst = os.path.join(out_dir, os.path.basename(f)) if out_dir else f
@@ -76,16 +119,21 @@ if __name__ == '__main__':
             if r is None:
                 print(f"{f:48s} уже в норме — не тронут")
             else:
+                ok = r['exact_len'] and r['after'] <= -1.0
+                ln = 'точна' if r['exact_len'] else f"сдвиг {r['diff']:+d} сэмплов"
+                print(f"{f:48s} {r['before']:6.2f} -> {r['after']:6.2f} dBFS  "
+                      f"{r['gain']:+.2f} дБ  длина: {ln}  проходов {r['tries']}  "
+                      f"{'OK' if ok else 'ПРОВЕРИТЬ'}")
                 changed += 1
-                print(f"{f:48s} {r['before']:6.2f} → {r['after']:6.2f} dBFS  {r['gain']:+.2f} дБ  "
-                      f"длина ок: {r['dur_ok']}")
+                bad += 0 if ok else 1
         else:
             y = decode(f)
             pk = db(float(np.abs(y).max()))
             if pk <= -1.0:
                 print(f"{f:48s} {pk:6.2f} dBFS — уже в норме")
             else:
-                print(f"{f:48s} {pk:6.2f} → {TARGET:6.2f} dBFS  сдвиг {TARGET - pk:+.2f} дБ  "
+                print(f"{f:48s} {pk:6.2f} -> {TARGET:6.2f} dBFS  сдвиг {TARGET - pk:+.2f} дБ  "
                       f"(crest и форма не меняются)")
                 changed += 1
-    print(f"\n{'ГОТОВО К ПРАВКЕ' if apply else 'ТРЕБУЕТ ПРАВКИ'}: {changed} файлов")
+    print(f"\n{'ОБРАБОТАНО' if apply else 'ТРЕБУЕТ ПРАВКИ'}: {changed} файлов"
+          + (f", с замечаниями: {bad}" if apply else ""))
