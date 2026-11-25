@@ -52,9 +52,18 @@ jobs:
           set -e
           PKG="${{ github.event.inputs.package }}"
           if [ -z "$PKG" ]; then
-            DIR=$(ls -1d 01-coder/*/ 2>/dev/null | sed 's|01-coder/||; s|/$||' \
-                  | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V | tail -1)
-            test -n "$DIR" || { echo "::error::Не найдено ни одного каталога версии в 01-coder/"; exit 1; }
+            # Каталог версии без ZIP — ещё не сдача (например заготовка 3.7.0,
+            # в которой нет project-*-clean.zip). Такой каталог НЕ выбираем:
+            # иначе сборка падает или, хуже, соберёт не тот пакет.
+            DIR=""
+            for CAND in $(ls -1d 01-coder/*/ 2>/dev/null | sed 's|01-coder/||; s|/$||' \
+                          | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V -r); do
+              if ls -1 "01-coder/$CAND"/project-*-clean.zip >/dev/null 2>&1; then
+                DIR="$CAND"
+                break
+              fi
+            done
+            test -n "$DIR" || { echo "::error::Не найдено ни одного каталога версии с project-*-clean.zip в 01-coder/"; exit 1; }
             PKG=$(ls -1 "01-coder/$DIR"/project-*-clean.zip 2>/dev/null | head -1)
           fi
           test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
