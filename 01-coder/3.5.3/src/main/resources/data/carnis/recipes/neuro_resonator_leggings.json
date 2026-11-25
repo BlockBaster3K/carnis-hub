@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_leggings"
+    },
+    {
+      "item": "carnis:ossified_flesh"
+    },
+    {
+      "item": "carnis:sinew_spikes"
+    }
+  ],
+  "result": {
+    "item": "carnis:neuro_resonator_leggings"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:moss_carpet"
+    },
+    {
+      "item": "minecraft:glow_berries"
+    },
+    {
+      "item": "carnis:living_flesh"
+    }
+  ],
+  "result": {
+    "item": "carnis:neural_moss",
+    "count": 2
+  }
+}
