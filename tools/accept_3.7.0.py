@@ -325,6 +325,51 @@ def check_k8s_breaths(extract_dir):
         fail.append("amalgam_breath: volume %s, нужно 0.35" % sorted({g[1] for g in bad}))
 
 
+def check_accepted_layers(extract_dir):
+    """Слои A4-p7 и A3R1 должны лежать в пакете ПОБАЙТОВО как в принятых архивах.
+
+    Чекеры (glow_check, tendril_flesh_match) сами по себе могут дать зелень,
+    если Художник сдаст «похожий» вариант повторно. Здесь жёстко: то, что
+    принято актом, обязано оказаться в пакете без изменений.
+    """
+    layers = [
+        (os.path.join(REPO, "04-artist", "deliverables",
+                      "Carnis_3.7.0_A4p7_palette.zip"),
+         "A4-p7", 8),
+        (os.path.join(REPO, "04-artist", "deliverables",
+                      "Carnis_3.7.0_A3R1_tendrils_recolor.zip"),
+         "A3R1", 4),
+    ]
+    for zp, tag, expect in layers:
+        if not os.path.exists(zp):
+            warn.append("%s: архива нет в 04-artist/deliverables" % tag)
+            print("  ! %s: архива нет — слой не сверить" % tag)
+            continue
+        same = diff = missing = 0
+        with zipfile.ZipFile(zp) as z:
+            names = [n for n in z.namelist() if n.lower().endswith(".png")]
+            for n in names:
+                cur = os.path.join(extract_dir, n)
+                if not os.path.exists(cur):
+                    missing += 1
+                    print("  ✗ %s: в пакете нет %s" % (tag, os.path.basename(n)))
+                elif z.read(n) == open(cur, "rb").read():
+                    same += 1
+                else:
+                    diff += 1
+                    print("  ✗ %s: файл изменён против принятого — %s"
+                          % (tag, os.path.basename(n)))
+        ok = (diff == 0 and missing == 0 and same == expect)
+        print("  %s %s: файлов в архиве %d, в пакете идентично %d, изменено %d, нет %d"
+              % ("✓" if ok else "✗", tag, len(names), same, diff, missing))
+        if diff:
+            fail.append("%s: в пакете изменены принятые файлы (%d)" % (tag, diff))
+        if missing:
+            fail.append("%s: в пакете не хватает файлов (%d)" % (tag, missing))
+        if same != expect:
+            fail.append("%s: ожидалось %d файлов, совпало %d" % (tag, expect, same))
+
+
 def check_keep_identical(extract_dir):
     if not os.path.exists(REF_360):
         warn.append("нет эталона 3.6.0-R — Д1–Д7 не сверены")
@@ -430,7 +475,11 @@ def main():
         check_k8s_breaths(tmp)
 
         print()
-        print("9) Д1–Д7 и принятое не тронуто")
+        print("9) Принятые слои лежат в пакете побайтово")
+        check_accepted_layers(tmp)
+
+        print()
+        print("10) Д1–Д7 и принятое не тронуто")
         check_keep_identical(tmp)
 
         print()
