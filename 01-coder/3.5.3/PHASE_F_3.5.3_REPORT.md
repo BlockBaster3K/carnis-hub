@@ -50,7 +50,7 @@ SHA-256 01-coder/3.5.3/src/main/resources/assets/carnis/textures/block/ossified_
 
 - `project-3.5.3-clean.zip` — 12 294 477 Б, SHA-256 `ba14b913808c5bd12010005aba5ba458d4092124c9e32652cdb70c334daa2557`.
 - `project-3.5.3-clean.manifest.txt` — 757 строк, SHA-256 `48d1dce75a00027de6f185455d27aed2615d34a3836c9f49905c762af709f6c0`.
-- CI: ожидается запуск после push; сюда будет внесена ссылка на прогон и итог.
+- CI: [прогон #45584880837](https://github.com/BlockBaster3K/carnis-hub/actions/runs/45584880837) для коммита `ba0ceae4763134d3f233ba5093e269a3a599f2fe` — **success**. `Build`, `Verify overlay reached the jar`, публикация JAR — успешно.
 
 ## Контроль пакета
 
