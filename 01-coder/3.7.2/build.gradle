@@ -4,7 +4,7 @@ plugins {
     id 'net.minecraftforge.gradle'
 }
 
-// mod_version=3.5.2 is read from gradle.properties and expanded into mods.toml.
+// mod_version is read from gradle.properties and expanded into mods.toml.
 version = project.property('mod_version')
 group = "com.carnis.mod"
 base {

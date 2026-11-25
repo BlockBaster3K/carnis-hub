@@ -1,6 +1,6 @@
 Carnis 3.7.2 source scaffold — NOT PACKAGED.
-Copied from the accepted 3.7.1 scaffold; version bumped in four required locations.
-T-3116 complete; ZIP/release manifest intentionally not generated (T-3118).
+Copied from accepted 3.7.1; integrated 24 T3115 block recolors and 5 T3122 creature redraws.
+Version 3.7.2 is set in the four required locations; release ZIP/manifest deferred to T-3128.
 Source inventory (relative paths):
 MANIFEST.txt
 build.gradle
