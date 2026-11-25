@@ -226,3 +226,20 @@ JAR под тегом `280468e0…` 12 622 475 Б — **идентичен** п�
 если приёмка скажет «нет Pillow», сначала `python3 -m venv /tmp/vv && /tmp/vv/bin/pip install Pillow`.
 Отчёт: `00-board/reports/integrator_accept_370_ready.md`.
 
+### Ключ сгенерирован (12:50) — ждёт регистрации
+
+Прежние ключи из задания отозваны. Сгенерировал **свой** ключ
+`ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIdAjcZW55s4qnOQDKqOrdlxOpK1GZlbM8K5GhhStJ2y carnis-integrator`,
+отправил публичную часть заказчику. Приватная — `~/.ssh/id_ed25519`, права 600,
+в репозиторий не попадала.
+
+`tools/agent_push.sh` правок **не требует**: без `$GITHUB_TOKEN` при наличии
+`~/.ssh/id_ed25519` он сам выбирает SSH (строки 51–56, 132–144).
+`ssh` есть (OpenSSH 9.2p1), `github.com:22` доступен.
+Зарегистрирован ли ключ — через API не видно (403 на `/repos/.../keys`);
+проверка — `ssh -T git@github.com` или успешный push без токена.
+
+⚠️ **Расхождение инструкции с репозиторием:** `00-board/agents/ARCHITECT.md`
+**не существует**; `ROADMAP_*.md` есть, но они прошлой волны (3.5.3), а не 3.7.0.
+Источник правды для 3.7.0 — `05-architect/TZ_3.7.0.md` + `00-board/agents/README.md`.
+
