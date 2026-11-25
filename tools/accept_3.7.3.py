@@ -209,6 +209,10 @@ def check_delta_372(zip_path):
         cmd += ["--allow", png]
     # S17: единственный реестр событий звука, где добавлены привязки к
     # геймплейным действиям. Разрешаем только этот файл, не каталог ресурсов.
+    # Разрешение ШИРОКОЕ (файл целиком), поэтому сразу после дельты идёт
+    # смысловая проверка: она не даст через него протащить удаление события,
+    # смену набора файлов или правку вне volume. Ревизор и Кодер указали на
+    # этот разрыв независимо.
     cmd += ["--allow", "src/main/resources/assets/carnis/sounds.json"]
     r = subprocess.run(cmd, capture_output=True, text=True)
     out = r.stdout
@@ -226,6 +230,25 @@ def check_delta_372(zip_path):
         print("  x дельта: есть неожиданные изменения против 3.7.2")
         fail.append("дельта: неожиданные изменения против 3.7.2")
 
+
+    # Смысл правки sounds.json: разрешение выше широкое, проверяем узко.
+    sem = os.path.join(REPO, "tools", "sounds_json_semantic.py")
+    if not os.path.isfile(sem):
+        print("  x sounds.json: нет проверки tools/sounds_json_semantic.py")
+        fail.append("дельта: смысловая проверка sounds.json отсутствует")
+        return
+    rs = subprocess.run([sys.executable, sem, zip_path],
+                        capture_output=True, text=True)
+    for ln in (rs.stdout or "").splitlines():
+        if ln.strip():
+            print("      " + ln.rstrip())
+    if rs.returncode == 0:
+        pass
+    elif rs.returncode == 2:
+        fail.append("дельта: правка sounds.json выходит за S17")
+    else:
+        fail.append("дельта: смысловая проверка sounds.json не выполнена "
+                    "(код %d)" % rs.returncode)
 
 def check_json(extract_dir):
     n = bad = 0
