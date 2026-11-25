@@ -118,6 +118,9 @@ def main():
     ap.add_argument("--tol", type=float, default=0.05)
     ap.add_argument("--originals", default="03-sound/archive_zapas_2026-11-26/",
                     help="каталог оригиналов .ogg (эталон для crest, З-21)")
+    ap.add_argument("--allow", action="append", default=[],
+                    metavar="ПРЕФИКС",
+                    help="разрешённое (ожидаемое) изменение/добавление с таким префиксом; можно повторять")
     a = ap.parse_args()
 
     try:
@@ -148,23 +151,40 @@ def main():
     added = sorted(set(cur) - set(prev))
     removed = sorted(set(prev) - set(cur))
     changed = sorted(k for k in cur if k in prev and sha(cur[k]) != sha(prev[k]))
+
+    def allowed(path):
+        return any(path.startswith(pref) for pref in a.allow)
+
+    changed_snd = [p for p in changed if p.startswith(SOUNDS_PREFIX) and p.endswith(".ogg")]
+    changed_other = [p for p in changed if p not in changed_snd]
+    allowed_changed = [p for p in changed_other if allowed(p)]
+    unexpected = [p for p in changed_other
+                  if p not in ALLOWED_CHANGED_OTHER and not allowed(p)]
+    added_unexpected = [p for p in added if p not in set(NEW_GLOWMASKS) and not allowed(p)]
     print("  добавлено %d, изменено %d, удалено %d" % (len(added), len(changed), len(removed)))
     for p in added:
         print("    + %s" % p)
     for p in removed:
         print("    \u2212 %s" % p)
-    if added == sorted(NEW_GLOWMASKS):
-        ok("добавлены ровно 2 новые glowmask")
+    if allowed_changed:
+        print("  разрешено флагом --allow: изменено %d" % len(allowed_changed))
+        for p in allowed_changed:
+            print("    ~ %s" % p)
+    extra_added = [p for p in added if p not in set(NEW_GLOWMASKS)]
+    if added_unexpected:
+        bad("добавлено %d файлов, не разрешено: %s"
+            % (len(added), ", ".join(added_unexpected[:5])))
+    elif extra_added:
+        ok("добавлено %d: 2 glowmask ожидаемы, %d разрешены --allow"
+           % (len(added), len(extra_added)))
     else:
-        bad("набор добавленных файлов не совпадает с ожидаемым (%d)" % len(added))
+        ok("добавлены ровно 2 новые glowmask")
     if not removed:
         ok("удалённых файлов нет")
     else:
         bad("пропали файлы: %d" % len(removed))
 
-    changed_snd = [p for p in changed if p.startswith(SOUNDS_PREFIX) and p.endswith(".ogg")]
-    changed_other = [p for p in changed if p not in changed_snd]
-    unexpected = [p for p in changed_other if p not in ALLOWED_CHANGED_OTHER]
+
     if unexpected:
         bad("неожиданные изменения содержимого: %s" % ", ".join(unexpected))
     else:
