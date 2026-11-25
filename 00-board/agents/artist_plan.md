@@ -13,8 +13,8 @@
 - [x] **B2** (2026-11-26): `04-artist/creature_registry.md` дополнен разделом 3 (стадии `_stage1`/`_stage2` и порядок спавна)
 - [x] **B3** (2026-11-26): `glowmask_r3_check.py` по 8 вариациям — 8/8 `OK` (`ALL_OK: True`)
 - [x] **C1** (2026-11-26): инвентаризация 26 текстур `textures/item/` в `04-artist/creature_registry.md` (все 26 вне `BASELINE_PALETTE`)
-- [ ] **C2**
-- [ ] **C3**
+- [x] **C2** (2026-11-26): перекрашены 25 предметных текстур `textures/item/` в `BASELINE_PALETTE` (7 цветов, A3R1) → `Carnis_3.7.5_C2_items.zip`
+- [x] **C3** (2026-11-26): `SHA256SUMS.txt` и план обновлены
 - [ ] **D1**
 - [ ] **D2**
 - [ ] **D3**
