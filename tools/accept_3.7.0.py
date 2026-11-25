@@ -333,9 +333,12 @@ def check_accepted_layers(extract_dir):
     принято актом, обязано оказаться в пакете без изменений.
     """
     layers = [
+        # Партия -R (T-3119): З-1 перерисован, 28,3 % доли топа. Старая
+        # Carnis_3.7.0_A4p7_palette.zip — ДО З-1 (81,2 %), сверять по ней
+        # нельзя: пакет собран из -R.
         (os.path.join(REPO, "04-artist", "deliverables",
-                      "Carnis_3.7.0_A4p7_palette.zip"),
-         "A4-p7", 8),
+                      "Carnis_3.7.0_A4p7_palette-R.zip"),
+         "A4-p7-R", 8),
         (os.path.join(REPO, "04-artist", "deliverables",
                       "Carnis_3.7.0_A3R1_tendrils_recolor.zip"),
          "A3R1", 4),
@@ -406,7 +409,7 @@ def main():
     if not os.path.exists(zip_path):
         print()
         print("ПАКЕТ НЕ НАЙДЕН: %s" % zip_path)
-        print("Ждём сдачу: 04-artist/deliverables/Carnis_3.7.0_A4p7_palette.zip")
+        print("Ждём сдачу: 04-artist/deliverables/Carnis_3.7.0_A4p7_palette-R.zip")
         print("            → сборка пакета Кодером → 01-coder/3.7.0/")
         return 2
 

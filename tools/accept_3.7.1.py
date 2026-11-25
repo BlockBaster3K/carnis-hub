@@ -10,6 +10,7 @@
     10. принятое не тронуто — 14 файлов 3.6.0-R побайтово (Д1–Д7 и др.).
     11. З-1 — доля самой частой непрозрачной краски `infected_creeper.png`
         <= 35 % (было 81,2 % в 3.7.0; ТЗ называет 84,2 %, см. отчёт).
+    12. принятые слои побайтово: A4-p7-**R** (8 PNG) и A3R1 (4 PNG) — T-3119.
 
 Использование:
     python3 tools/accept_3.7.1.py [путь_к_zip] [путь_к_манифесту]
@@ -349,6 +350,52 @@ def check_z1_shade(extract_dir):
                     % (share, SHADE_MAX))
 
 
+# ------------------------------------------------- 12. Принятые слои побайтово
+def check_accepted_layers(extract_dir):
+    """Слои A4-p7-R и A3R1 обязаны лежать в пакете ПОБАЙТОВО.
+
+    Блок 5 (glow_check) проверяет свечение, а не побайтовость: он пропустит
+    вручную перекрашенный infected_creeper, если свечение и палитра совпали.
+    Блок 12 жёстко сверяет с принятыми архивами. Партия именно `-R` (T-3119):
+    старая A4p7_palette.zip — ДО З-1 (81,2 %), пакет собран из -R (28,3 %).
+    """
+    layers = [
+        (os.path.join(REPO, "04-artist", "deliverables",
+                      "Carnis_3.7.0_A4p7_palette-R.zip"), "A4-p7-R", 8),
+        (os.path.join(REPO, "04-artist", "deliverables",
+                      "Carnis_3.7.0_A3R1_tendrils_recolor.zip"), "A3R1", 4),
+    ]
+    for zp, tag, expect in layers:
+        if not os.path.exists(zp):
+            warn.append("%s: архива нет в 04-artist/deliverables" % tag)
+            print("  ! %s: архива нет — слой не сверить" % tag)
+            continue
+        same = diff = missing = 0
+        with zipfile.ZipFile(zp) as z:
+            names = [n for n in z.namelist() if n.lower().endswith(".png")]
+            for n in names:
+                cur = os.path.join(extract_dir, n)
+                if not os.path.exists(cur):
+                    missing += 1
+                    print("  ✗ %s: в пакете нет %s" % (tag, os.path.basename(n)))
+                elif z.read(n) == open(cur, "rb").read():
+                    same += 1
+                else:
+                    diff += 1
+                    print("  ✗ %s: файл изменён против принятого — %s"
+                          % (tag, os.path.basename(n)))
+        ok = (diff == 0 and missing == 0 and same == expect)
+        print("  %s %s: в архиве %d, в пакете идентично %d, изменено %d, нет %d"
+              % ("✓" if ok else "✗", tag, len(names), same, diff, missing))
+        if diff:
+            fail.append("%s: в пакете изменены принятые файлы (%d)" % (tag, diff))
+        if missing:
+            fail.append("%s: в пакете не хватает файлов (%d)" % (tag, missing))
+        if same != expect:
+            fail.append("%s: ожидалось %d файлов, совпало %d"
+                        % (tag, expect, same))
+
+
 # ------------------------------------------------------------------------ main
 def find_manifest(zip_path, given):
     if given and os.path.exists(given):
@@ -451,6 +498,10 @@ def main():
         print()
         print("11) З-1 — плотность светотени infected_creeper")
         check_z1_shade(tmp)
+
+        print()
+        print("12) Принятые слои лежат в пакете побайтово (A4-p7-R, A3R1)")
+        check_accepted_layers(tmp)
 
         print()
         if warn:
