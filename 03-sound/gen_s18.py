@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 """S18 — генератор 132 файлов для 33 заражённых ванильных мобов (3.8.0).
 
+ВАЖНО (S24, З-27): пишет ТОЛЬКО в `03-sound/sounds_380/entity/`. Каталог
+`03-sound/sounds/` — НЕИЗМЕНЯЕМЫЙ канон 3.7.x (144 файла), и гейт 3.7.3
+сверяет пакет именно с ним. Раньше скрипт писал в канон и этим ломал гейт
+принятой версии.
+
 По 4 события на существо: ambient / attack / hurt / death.
 Стиль: единая «заражённая» сигнатура — низкий резонанс тела, влажная
 нестабильность, ВЧ-дыхание; характер задаётся профилем тела (желе, хитин,
@@ -11,6 +16,7 @@
 Громкость не выставляется «на глаз»: после рендера пик приводится к целевому
 значению по факту замера.
 """
+import os
 import numpy as np
 import json
 import subprocess
@@ -332,7 +338,8 @@ def main():
             raw = f"/tmp/rw/{name}.f32"
             np.asarray(x, dtype=np.float32).tofile(raw)
             br = '96k' if event == 'ambient' else '160k'
-            out = f"03-sound/sounds/entity/{name}.ogg"
+            os.makedirs('03-sound/sounds_380/entity', exist_ok=True)
+            out = f"03-sound/sounds_380/entity/{name}.ogg"
             subprocess.run([FF, '-y', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1',
                             '-i', raw, '-c:a', 'libvorbis', '-b:a', br, '-map_metadata', '-1', out], check=True)
             made.append(name)
