@@ -68,23 +68,44 @@ def encode_exact(z, out_path, br, want_len, max_tries=4):
         d = want_len - len(back)
         if d == 0:
             return back
-        if d < 0:                       # вышло длиннее — кодируем заново с меньшим паддингом
-            pad = max(0, pad + d)
+        if d > 0:                       # вышло короче — добираем паддинг
+            pad += d
             continue
-        pad += d                        # вышло короче — добираем паддинг ровно на разницу
+        # вышло длиннее: уменьшаем паддинг шагом 32 (кодер квантует длину
+        # блоками), пока не попадём точно или не упрёмся в 0
+        pad -= 32
+        if pad < 0:
+            break
+    if len(back) > want_len:
+        # Квантование кодера: ближайший достижимый паддинг даёт длину чуть
+        # больше нужной (у flesh_block_step_01 шаг скачет 17416 → 17984,
+        # промежуточных значений кодек не выдаёт). Подрезка допустима ТОЛЬКО
+        # если отрезаемый хвост — тишина. Проверяем, а не верим на слово.
+        tail = back[want_len:]
+        rel = db(float(np.abs(tail).max())) - db(float(np.abs(back).max()))
+        if rel <= -50.0:
+            return back[:want_len]
+        raise SystemExit(f"хвост не тишина ({rel:.1f} дБ) — подрезать нельзя, "
+                         f"длина {len(back)} против {want_len}")
     if abs(len(back) - want_len) <= 128:
-        # остаток ≤ 128 сэмплов (2.9 мс) — это квантование кодера, а не звук
-        return back[:want_len] if len(back) > want_len else back
+        return back                      # короче на ≤2.9 мс — квантование
     raise SystemExit(f"длину не удалось совместить: {len(back)} против {want_len}")
 
 
-def normalise(path, out_path, target=TARGET, max_tries=4):
-    """Нормализовать пик до target, сохранив длину сэмпл-в-сэмпл."""
+def normalise(path, out_path, target=TARGET, max_tries=4, skip_below=-1.0):
+    """Нормализовать пик до target, сохранив длину сэмпл-в-сэмпл.
+
+    skip_below — порог «уже не трогаем». По умолчанию −1.00 (норма банка).
+    Для T-3163 (З-Г2) он задаётся целевым: файлы у самой нормы (−1.01…−1.18)
+    формально проходят норму, но не выдерживают запас 0.20 дБ, и старый
+    порог −1.00 отсекал их как «уже в норме». Задаётся = target, тогда
+    обрабатываются все, кто выше цели.
+    """
     y = decode(path)
     want = len(y)
     pk_db = db(float(np.abs(y).max()))
-    if pk_db <= -1.0:
-        return None                                # уже в норме — не трогаем
+    if pk_db <= skip_below:
+        return None                                # уже не трогаем
     br = vorbis_bitrate(path)
     g = 10 ** ((target - pk_db) / 20.0)
     res = None
@@ -95,9 +116,82 @@ def normalise(path, out_path, target=TARGET, max_tries=4):
                    exact_len=(len(z) == want), tries=attempt + 1,
                    size=os.path.getsize(out_path))
         if after <= target:                        # цель уже с запасом (−1.20)
-            return res
+            break
         g *= 10 ** ((target - after) / 20.0)       # недобор запаса — добираем
+    # ВАЖНО (T-3163). encode_exact возвращает массив нужной длины, но НА ДИСКЕ
+    # может остаться перекодировка длиннее: кодер выдаёт длину блоками, и у
+    # части файлов ближайший достижимый вариант — на 32…600 сэмплов больше.
+    # Проверка «длина точна» по массиву давала ложное «OK», а в банк попадал
+    # файл неверной длины. Поэтому длину проверяем ПО ФАЙЛУ и при расхождении
+    # переписываем из проверенного массива до точного совпадения.
+    # После возможной перезаписи другим путём пик мог сдвинуться (VBR-кодер
+    # поднимает его иначе) — добираем усиление заново, пока не в цели.
+    for _ in range(4):
+        got = len(decode(out_path))
+        if got != want:
+            _rewrite_exact(z, out_path, want, br)
+            got = len(decode(out_path))
+        cur = decode(out_path)
+        after = db(float(np.abs(cur).max()))
+        if after <= target and got == want:
+            break
+        if after > target:                    # перелёт — приглушаем и переписываем
+            z = cur * 10 ** ((target - after) / 20.0)
+            if got == want:
+                _enc(z, out_path, br, PAD)
+                cur = decode(out_path)
+                after = db(float(np.abs(cur).max()))
+                got = len(cur)
+    res["got"] = got
+    res["exact_len"] = (got == want)
+    res["after"] = after
     return res
+
+
+def _enc(w, out_path, br, pad):
+    subprocess.run([FF, "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1",
+                    "-i", "-", "-c:a", "libvorbis", "-b:a", f"{br}k", out_path],
+                   input=np.concatenate([w, np.zeros(pad)]).astype(np.float32).tobytes(),
+                   check=True)
+
+
+def _enc_q(w, out_path, q, pad):
+    subprocess.run([FF, "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1",
+                    "-i", "-", "-c:a", "libvorbis", "-q:a", q, out_path],
+                   input=np.concatenate([w, np.zeros(pad)]).astype(np.float32).tobytes(),
+                   check=True)
+
+
+def _rewrite_exact(z, out_path, want, br):
+    """Переписать файл из массива z, чтобы декод дал РОВНО want сэмплов.
+
+    У CBR (-b:a N k) длина выдаётся блоками, и у части коротких файлов
+    точного значения не существует ни при каком паддинге (замерено:
+    flesh_block_step_01 даёт 17256 или 17984, между ними — ничего).
+    Резервный путь — VBR (-q:a 3): у него другая сетка блоков, и для этих
+    файлов точная длина достигается. Проверено на всех трёх проблемных.
+    """
+    w = z[:want] if len(z) > want else np.concatenate([z, np.zeros(want - len(z))])
+    for pad in range(0, 1025, 32):
+        _enc(w, out_path, br, pad)
+        got = len(decode(out_path))
+        if got == want:
+            return True
+        if got > want:                       # длиннее — подрезать хвост, если он тишина
+            full = decode(out_path)
+            tail = full[want:]
+            rel = db(float(np.abs(tail).max())) - db(float(np.abs(full).max()))
+            if rel <= -50.0:
+                for pad2 in range(0, 1025, 32):
+                    _enc(full[:want], out_path, br, pad2)
+                    if len(decode(out_path)) == want:
+                        return True
+    for q in ("3", "4"):                     # резерв: VBR-сетка блоков
+        for pad in range(0, 513, 32):
+            _enc_q(w, out_path, q, pad)
+            if len(decode(out_path)) == want:
+                return True
+    return len(decode(out_path)) == want
 
 
 def lift_to_rms(path, out_path, target_rms, peak_max=-1.0):
@@ -179,7 +273,7 @@ if __name__ == '__main__':
     for f in files:
         if apply:
             dst = os.path.join(out_dir, os.path.basename(f)) if out_dir else f
-            r = normalise(f, dst)
+            r = normalise(f, dst, skip_below=TARGET)
             if r is None:
                 print(f"{f:48s} уже в норме — не тронут")
             else:
@@ -193,8 +287,8 @@ if __name__ == '__main__':
         else:
             y = decode(f)
             pk = db(float(np.abs(y).max()))
-            if pk <= -1.0:
-                print(f"{f:48s} {pk:6.2f} dBFS — уже в норме")
+            if pk <= TARGET:
+                print(f"{f:48s} {pk:6.2f} dBFS — уже в норме (запас {-1.0-pk:.2f})")
             else:
                 print(f"{f:48s} {pk:6.2f} -> {TARGET:6.2f} dBFS  сдвиг {TARGET - pk:+.2f} дБ  "
                       f"(crest и форма не меняются)")

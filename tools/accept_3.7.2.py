@@ -573,7 +573,7 @@ def check_bank_format(extract_dir):
     root = os.path.join(extract_dir, SOUND_SUBDIR)
     if not os.path.isdir(root):
         print("  ! каталога звуков нет — пропущено")
-        warn.append("банк: каталога звуков нет")
+        fail.append("банк: каталога звуков нет — проверять нечего")
         return
     total = 0
     bad_fmt = []
@@ -607,10 +607,14 @@ def check_bank_format(extract_dir):
         fail.append("банк: пустых файлов %d" % len(empty))
 
     # клиппинг — только если есть декодер
-    py = _python_with("numpy")
+    # З-Г1 (T-3163): искать надо интерпретатор с ТЕМ ЖЕ набором, что требует
+    # код декодера ниже (`import sys, av, numpy`). Раньше проверялся только
+    # numpy: без PyAV проверка молча выключалась и гейт оставался зелёным.
+    py = _python_with("av, numpy")
     if py is None:
-        print("  · клиппинг не проверен: нет numpy+av (не «ок», а «не проверено»)")
-        warn.append("банк: клиппинг не проверен — нет декодера")
+        print("  ✗ клиппинг НЕ ПРОВЕРЕН: нет интерпретатора с av+numpy")
+        print("      это не «ок»: проверку уровней выполнить нечем")
+        fail.append("банк: клиппинг не проверен — нет декодера av+numpy")
         return
     code = (
         "import sys, av, numpy as np\n"
@@ -641,8 +645,8 @@ def check_bank_format(extract_dir):
             except ValueError:
                 failed += 1
     if failed:
-        print("  · клиппинг: %d файлов не декодированы" % failed)
-        warn.append("банк: %d файлов не декодированы" % failed)
+        print("  ✗ клиппинг: %d файлов НЕ ДЕКОДИРОВАНЫ" % failed)
+        fail.append("банк: %d файлов не декодированы" % failed)
     clip = [n for n, pk in peaks if pk >= 1.0]
     if peaks:
         mx = max(pk for _, pk in peaks)
