@@ -8,6 +8,10 @@ on:
         required: false
         default: ''
   push:
+    # Пушим только ветки. Push ТЕГА сюда попадать не должен: шаг публикации
+    # сам двигает тег `vX.Y.Z` — иначе каждый прогон запускал бы следующий.
+    branches:
+      - '**'
     paths:
       - '01-coder/**'
       - '04-artist/**'
@@ -185,23 +189,8 @@ jobs:
           path: build-src/build/libs/*.jar
           if-no-files-found: error
 
-      - name: Publish release with jar
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          TAG="v${{ steps.jar.outputs.ver }}"
-          if ! gh release view "$TAG" >/dev/null 2>&1; then
-            gh release create "$TAG" \
-              --title "Carnis ${{ steps.jar.outputs.ver }}" \
-              --notes "Автосборка модового jar. Файл обновляется при каждом прогоне из актуального пакета."
-          fi
-          gh release upload "$TAG" "${{ steps.jar.outputs.file }}" --clobber
-          echo "- **Релиз:** [ $TAG ](https://github.com/${{ github.repository }}/releases/tag/$TAG)" >> "$GITHUB_STEP_SUMMARY"
-          echo "- **Прямая ссылка на jar (через Azure, может не открываться):** https://github.com/${{ github.repository }}/releases/download/$TAG/${{ steps.jar.outputs.name }}" >> "$GITHUB_STEP_SUMMARY"
-
       - name: Commit jar into repository
+        id: commitjar
         shell: bash
         run: |
           set -e
@@ -238,3 +227,40 @@ jobs:
           else
             echo "- **JAR в репозитории:** без изменений (содержимое совпадает с текущим в \`main\`)" >> "$GITHUB_STEP_SUMMARY"
           fi
+          # Коммит, в котором физически лежит именно этот JAR. На него встанет тег.
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release with jar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="v${{ steps.jar.outputs.ver }}"
+          JAR_NAME="${{ steps.jar.outputs.name }}"
+          TARGET="${{ steps.commitjar.outputs.commit }}"
+
+          # Тег обязан указывать на коммит, СОДЕРЖАЩИЙ этот JAR.
+          # Раньше шаг шёл до коммита JAR в main и тег вставал на предыдущий
+          # коммит: релиз ссылался на сборку, которой в нём не было.
+          git fetch --no-tags origin main
+          git merge-base --is-ancestor "$TARGET" origin/main || {
+            echo "::error::коммит $TARGET не в origin/main — тег ставить нельзя"; exit 1; }
+          git cat-file -e "$TARGET:06-build/jars/$JAR_NAME" || {
+            echo "::error::в коммите $TARGET нет 06-build/jars/$JAR_NAME — тег ставить нельзя"; exit 1; }
+
+          git tag -f "$TAG" "$TARGET"
+          git push --force origin "refs/tags/$TAG"
+
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --verify-tag \
+              --title "Carnis ${{ steps.jar.outputs.ver }}" \
+              --notes "Автосборка модового jar. Файл обновляется при каждом прогоне из актуального пакета."
+          fi
+          gh release upload "$TAG" "${{ steps.jar.outputs.file }}" --clobber
+
+          # Самопроверка: тег действительно на нужном коммите.
+          NOW="$(git rev-parse "refs/tags/$TAG")"
+          [ "$NOW" = "$TARGET" ] || { echo "::error::тег $TAG указывает на $NOW, ожидался $TARGET"; exit 1; }
+          echo "- **Релиз:** [ $TAG ](https://github.com/${{ github.repository }}/releases/tag/$TAG) → коммит \`${TARGET:0:7}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Прямая ссылка на jar (через Azure, может не открываться):** https://github.com/${{ github.repository }}/releases/download/$TAG/$JAR_NAME" >> "$GITHUB_STEP_SUMMARY"
