@@ -319,7 +319,10 @@ def main(argv):
             for r in unexpected:
                 print('        ЛИШНЕЕ УДАЛЕНИЕ: %s' % r)
         else:
-            say(None, 'базовый пакет %s не найден — сравнение пропущено' % a.base)
+            # fail-closed: без базы не проверить ни Д1–Д7, ни правило удалений,
+            # поэтому «пакета нет» — замечание, а не «пропущено»
+            say(False, 'базовый пакет %s не найден — дельту и правило удалений '
+                       'проверить нельзя' % a.base)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
         shutil.rmtree(basetmp, ignore_errors=True)
