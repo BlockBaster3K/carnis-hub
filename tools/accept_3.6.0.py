@@ -191,6 +191,100 @@ def summary_k4(extract_dir):
         print(f"  {'✗' if present else '✓'} удалён: {name}")
 
 
+def check_k5(extract_dir):
+    """K5 — blockstates = 4 x N, y по facing, parent лестницы сохранён."""
+    bs = os.path.join(extract_dir,
+                      "src/main/resources/assets/carnis/blockstates/creeping_tendrils.json")
+    if not os.path.exists(bs):
+        warn.append("K5: blockstates/creeping_tendrils.json отсутствует")
+        print("  ⚠ blockstates/creeping_tendrils.json отсутствует")
+        return
+    with open(bs, encoding="utf-8") as f:
+        d = json.load(f)
+    variants = d.get("variants", {})
+    print(f"  ✓ вариантов: {len(variants)}")
+    bad_y = []
+    for key, val in variants.items():
+        m = re.search(r"facing=(north|south|west|east)", key)
+        if not m:
+            bad_y.append(f"{key}: нет facing")
+            continue
+        expected_y = {"north": 0, "south": 180, "west": 270, "east": 90}[m.group(1)]
+        models = val if isinstance(val, list) else [val]
+        for mv in models:
+            got = mv.get("y", 0)
+            if got != expected_y:
+                bad_y.append(f"{key}: y={got}, ожидалось {expected_y}")
+    if bad_y:
+        print(f"  ✗ y не соответствует facing: {len(bad_y)} случаев")
+        for b in bad_y[:3]:
+            print(f"      {b}")
+        fail.append(f"K5: y/facing расхождений {len(bad_y)}")
+    else:
+        print("  ✓ y соответствует facing во всех вариантах")
+    # parent лестницы задаётся в ФАЙЛАХ МОДЕЛЕЙ, на которые ссылается blockstates,
+    # а не в самом blockstates — проверяем там.
+    model_ids = set()
+    for mv in variants.values():
+        for m_ in (mv if isinstance(mv, list) else [mv]):
+            mid = m_.get("model", "")
+            if mid:
+                model_ids.add(mid.split(":")[-1])
+    ladder_ok = False
+    for mid in model_ids:
+        mp = os.path.join(extract_dir, "src/main/resources/assets/carnis/models", mid + ".json")
+        if not os.path.exists(mp):
+            continue
+        with open(mp, encoding="utf-8") as f:
+            try:
+                md = json.load(f)
+            except Exception:  # noqa: BLE001
+                continue
+        if "ladder" in str(md.get("parent", "")):
+            ladder_ok = True
+    if ladder_ok:
+        print("  ✓ parent minecraft:block/ladder сохранён")
+    else:
+        print("  ✗ parent minecraft:block/ladder не найден в моделях вариантов")
+        fail.append("K5: parent minecraft:block/ladder не сохранён")
+
+
+def check_k6s(extract_dir):
+    """K6-S — 82 события, файлы косы в пакете, константы не в вызовах."""
+    sj = os.path.join(extract_dir, "src/main/resources/assets/carnis/sounds.json")
+    if os.path.exists(sj):
+        with open(sj, encoding="utf-8") as f:
+            d = json.load(f)
+        n = len(d)
+        mark = "✓" if n == 82 else "⚠"
+        if n != 82:
+            warn.append(f"K6-S: событий {n}, ожидалось 82")
+        print(f"  {mark} событий в sounds.json: {n} (ТЗ ждёт 82)")
+        for name in ("ossified_scythe_hit", "ossified_scythe_swing"):
+            for k, v in d.items():
+                if name in k:
+                    snd = v.get("sounds", [{}])
+                    has = any("pitch" in s or "volume" in s for s in snd)
+                    print(f"  {'✗' if has else '✓'} {k}: без pitch/volume"
+                          if not has else f"  ✗ {k}: заданы pitch/volume")
+                    if has:
+                        fail.append(f"K6-S: {k} имеет pitch/volume")
+    else:
+        warn.append("K6-S: sounds.json отсутствует")
+    # константы не должны вызываться в ScytheItem / CombatItemEvents
+    for rel in ("src/main/java/com/carnis/mod/item/ScytheItem.java",
+                "src/main/java/com/carnis/mod/event/CombatItemEvents.java"):
+        p_ = os.path.join(extract_dir, rel)
+        if not os.path.exists(p_):
+            continue
+        with open(p_, encoding="utf-8") as f:
+            src = f.read()
+        for const in ("OSSIFIED_SCYTHE_HIT", "OSSIFIED_SCYTHE_SWING"):
+            if const in src:
+                print(f"  ✗ {const} осталась в {os.path.basename(rel)}")
+                fail.append(f"K6-S: {const} в {os.path.basename(rel)}")
+
+
 def summary_k6s(extract_dir):
     """K6-S — файлы косы в пакете."""
     d = os.path.join(extract_dir, "src/main/resources/assets/carnis/sounds")
@@ -255,11 +349,16 @@ def main():
         summary_k4(tmp)
         print()
 
-        print("6) K6-S — файлы косы")
-        summary_k6s(tmp)
+        print("6) K5 — blockstates и facing")
+        check_k5(tmp)
         print()
 
-        print("7) Число файлов пакета")
+        print("7) K6-S — звук косы")
+        summary_k6s(tmp)
+        check_k6s(tmp)
+        print()
+
+        print("8) Число файлов пакета")
         count = sum(len(files) for _r, _d, files in os.walk(tmp))
         print(f"  файлов: {count}")
         print()
