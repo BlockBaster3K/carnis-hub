@@ -14,7 +14,9 @@
 Использование:
     python3 tools/accept_3.7.0.py [путь_к_zip] [путь_к_манифесту]
 
-Коды: 0 — ПРИНЯТО, 1 — ЕСТЬ РАСХОЖДЕНИЯ, 2 — нет пакета / ошибка запуска.
+Коды (гейт приёмки, см. tools/README.md): 0 — ПРИНЯТО,
+1 — ЕСТЬ РАСХОЖДЕНИЯ, 2 — нет пакета / каталог вместо ZIP / битый архив /
+ошибка запуска. Ни один неверный путь не даёт трейсбек.
 """
 
 import json
@@ -333,9 +335,12 @@ def check_accepted_layers(extract_dir):
     принято актом, обязано оказаться в пакете без изменений.
     """
     layers = [
+        # Партия -R (T-3119): З-1 перерисован, 28,3 % доли топа. Старая
+        # Carnis_3.7.0_A4p7_palette.zip — ДО З-1 (81,2 %), сверять по ней
+        # нельзя: пакет собран из -R.
         (os.path.join(REPO, "04-artist", "deliverables",
-                      "Carnis_3.7.0_A4p7_palette.zip"),
-         "A4-p7", 8),
+                      "Carnis_3.7.0_A4p7_palette-R.zip"),
+         "A4-p7-R", 8),
         (os.path.join(REPO, "04-artist", "deliverables",
                       "Carnis_3.7.0_A3R1_tendrils_recolor.zip"),
          "A3R1", 4),
@@ -406,8 +411,26 @@ def main():
     if not os.path.exists(zip_path):
         print()
         print("ПАКЕТ НЕ НАЙДЕН: %s" % zip_path)
-        print("Ждём сдачу: 04-artist/deliverables/Carnis_3.7.0_A4p7_palette.zip")
+        print("Ждём сдачу: 04-artist/deliverables/Carnis_3.7.0_A4p7_palette-R.zip")
         print("            → сборка пакета Кодером → 01-coder/3.7.0/")
+        return 2
+
+    # --- З-6 (T-3125): ни один неверный путь не даёт трейсбек и не даёт
+    # код 1. Код 1 по контракту = «ЕСТЬ РАСХОЖДЕНИЯ» (приговор пакету),
+    # поэтому ошибка запуска обязана быть кодом 2.
+    if os.path.isdir(zip_path):
+        print()
+        print("ЭТО КАТАЛОГ, А НЕ ZIP: %s" % zip_path)
+        print("Приёмка идёт по ZIP-пакету. Пример:")
+        print("  python3 tools/%s %s/project-%s-clean.zip"
+              % (os.path.basename(__file__), 
+                 os.path.relpath(os.path.join(REPO, "01-coder", VERSION), REPO),
+                 VERSION))
+        return 2
+    if not zipfile.is_zipfile(zip_path):
+        print()
+        print("НЕ ZIP ИЛИ БИТЫЙ АРХИВ: %s" % zip_path)
+        print("Код 2 — ошибка запуска, а не приговор пакету.")
         return 2
 
     print("Пакет:   %s" % os.path.relpath(zip_path, REPO))

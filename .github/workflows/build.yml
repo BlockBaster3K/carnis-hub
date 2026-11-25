@@ -49,6 +49,8 @@ jobs:
         id: pkg
         shell: bash
         run: |
+          # Диагностика: если шаг упадёт, в логе будет видно состояние.
+          set -x
           set -e
           PKG="${{ github.event.inputs.package }}"
           if [ -z "$PKG" ]; then
@@ -59,12 +61,54 @@ jobs:
             for CAND in $(ls -1d 01-coder/*/ 2>/dev/null | sed 's|01-coder/||; s|/$||' \
                           | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V -r); do
               if ls -1 "01-coder/$CAND"/project-*-clean.zip >/dev/null 2>&1; then
+                # ⛔ Пакет без ВЕРДИКТА РЕВИЗОРА не становится релизом.
+                # Инцидент 2026-11-25: заготовка 3.7.2 (отладочная, гейт давал
+                # код 1) оказалась старшей версией с ZIP — и CI выпустил
+                # релиз v3.7.2 из непринятого пакета. Отсутствие файла
+                # вердикта здесь — это «не принято», а не «принято по умолчанию».
+                # Вердикт ищем по номеру версии БЕЗ точек: у ролей встречаются
+                # оба вида — reviewer_3.6.0_verdict.md и reviewer_371_verdict.md.
+                VBASE="${CAND%%-R*}"
+                VDIG=$(echo "$VBASE" | tr -d '.')
+                # ⛔ НЕ через `ls ... | head -1`: Actions запускает bash с `-eo pipefail`,
+                # и при отсутствии совпадений ls даёт exit 2, pipefail поднимает его,
+                # а set -e валит шаг МОЛЧА — до проверки на пустоту. Это и валило CI.
+                VERD2=""
+                for F in 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
+                         00-board/reports/reviewer_*"$VDIG"*_verdict.md; do
+                  [ -f "$F" ] || continue
+                  VERD2="$F"
+                  break
+                done
+                if [ -z "$VERD2" ]; then
+                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)"
+                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
+                  continue
+                fi
+                # grep в условии возвращает 1 при «не найдено», а set -e на
+                # некоторых раннерах валит шаг. `|| true` делает проверку
+                # чисто логической: пусто = вердикт положительный.
+                NEG=""
+                NEG=$(grep -oiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2" 2>/dev/null || true)
+                if [ -n "$NEG" ]; then
+                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю"
+                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю" >> "$GITHUB_STEP_SUMMARY"
+                  continue
+                fi
                 DIR="$CAND"
+                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята"
+                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята" >> "$GITHUB_STEP_SUMMARY"
                 break
               fi
             done
-            test -n "$DIR" || { echo "::error::Не найдено ни одного каталога версии с project-*-clean.zip в 01-coder/"; exit 1; }
-            PKG=$(ls -1 "01-coder/$DIR"/project-*-clean.zip 2>/dev/null | head -1)
+            test -n "$DIR" || { echo "::error::Нет ни одного принятого пакета"; echo "--- диагностика ---"; echo "каталоги с версией:"; ls -1d 01-coder/*/ 2>/dev/null | sed "s|01-coder/||; s|/$||"; echo "каталоги с ZIP:"; ls -1d 01-coder/*/ 2>/dev/null | while read d; do ls "$d"project-*-clean.zip >/dev/null 2>&1 && echo "  $d"; done; echo "вердикты:"; ls -1 00-board/reports/ | grep -i verdict; echo "pwd=$(pwd)"; exit 1; }
+            # Та же мина, что и с вердиктом.
+            PKG=""
+            for F in "01-coder/$DIR"/project-*-clean.zip; do
+              [ -f "$F" ] || continue
+              PKG="$F"
+              break
+            done
           fi
           test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
           echo "path=$PKG" >> "$GITHUB_OUTPUT"

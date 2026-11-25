@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "carnis:item/parasitic_tendril_spawn_egg"
+  }
+}

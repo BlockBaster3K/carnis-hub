@@ -98,7 +98,9 @@
     "sounds": [
       {
         "name": "carnis:block/heartbeat_loop",
-        "stream": true
+        "stream": true,
+        "volume": 0.05,
+        "pitch": 1.0
       }
     ]
   },
@@ -471,8 +473,23 @@
     "sounds": [
       {
         "name": "carnis:entity/flesh_amalgam_ambient",
-        "volume": 0.25,
+        "volume": 0.35,
         "pitch": 1.0,
+        "stream": false,
+        "weight": 1
+      },
+      {
+        "name": "carnis:hive/amalgam_breath_01",
+        "volume": 0.35,
+        "pitch": 1.0,
+        "stream": false,
+        "weight": 1
+      },
+      {
+        "name": "carnis:hive/amalgam_breath_02",
+        "volume": 0.35,
+        "pitch": 1.0,
+        "stream": false,
         "weight": 1
       }
     ]
@@ -737,17 +754,17 @@
       {
         "name": "carnis:amb/hive_ambient_01",
         "stream": true,
-        "pitch": 0.9
+        "volume": 0.45
       },
       {
         "name": "carnis:amb/hive_ambient_02",
         "stream": true,
-        "pitch": 1.0
+        "volume": 0.45
       },
       {
         "name": "carnis:amb/hive_ambient_03",
         "stream": true,
-        "pitch": 1.1
+        "volume": 0.45
       }
     ]
   },
@@ -757,12 +774,12 @@
       {
         "name": "carnis:amb/hive_ambient_close_01",
         "stream": true,
-        "pitch": 0.95
+        "volume": 0.25
       },
       {
         "name": "carnis:amb/hive_ambient_close_02",
         "stream": true,
-        "pitch": 1.05
+        "volume": 0.25
       }
     ]
   },
@@ -771,7 +788,9 @@
     "sounds": [
       {
         "name": "carnis:amb/hive_ambient_tonal_stinger",
-        "stream": false
+        "stream": false,
+        "volume": 0.05,
+        "pitch": 1.0
       }
     ]
   },
@@ -790,7 +809,9 @@
     "subtitle": "carnis.subtitle.hive_heartbeat",
     "sounds": [
       {
-        "name": "carnis:block/hive_heartbeat"
+        "name": "carnis:block/hive_heartbeat",
+        "volume": 0.05,
+        "pitch": 1.0
       }
     ]
   },
@@ -800,17 +821,20 @@
       {
         "name": "carnis:amb/hive_pulse_01",
         "stream": false,
-        "pitch": 0.9
+        "volume": 0.1,
+        "pitch": 1.0
       },
       {
         "name": "carnis:amb/hive_pulse_02",
         "stream": false,
+        "volume": 0.1,
         "pitch": 1.0
       },
       {
         "name": "carnis:amb/hive_pulse_03",
         "stream": false,
-        "pitch": 1.1
+        "volume": 0.1,
+        "pitch": 1.0
       }
     ]
   },
@@ -819,7 +843,8 @@
     "sounds": [
       {
         "name": "carnis:hive/amb_surface",
-        "stream": true
+        "stream": true,
+        "volume": 0.45
       }
     ]
   },
@@ -828,7 +853,8 @@
     "sounds": [
       {
         "name": "carnis:hive/amb_deep",
-        "stream": true
+        "stream": true,
+        "volume": 0.45
       }
     ]
   },
@@ -837,7 +863,8 @@
     "sounds": [
       {
         "name": "carnis:hive/amb_core",
-        "stream": true
+        "stream": true,
+        "volume": 0.45
       }
     ]
   },
@@ -846,7 +873,8 @@
     "sounds": [
       {
         "name": "carnis:hive/amb_threshold",
-        "stream": true
+        "stream": true,
+        "volume": 0.45
       }
     ]
   },
@@ -855,7 +883,7 @@
     "sounds": [
       {
         "name": "carnis:hive/zone_stinger_intensify",
-        "volume": 0.65,
+        "volume": 0.05,
         "pitch": 1.0
       }
     ]
@@ -865,7 +893,7 @@
     "sounds": [
       {
         "name": "carnis:hive/zone_stinger_release",
-        "volume": 0.65,
+        "volume": 0.05,
         "pitch": 1.0
       }
     ]
@@ -875,7 +903,7 @@
     "sounds": [
       {
         "name": "carnis:hive/zone_stinger_deep",
-        "volume": 0.65,
+        "volume": 0.05,
         "pitch": 1.0
       }
     ]
