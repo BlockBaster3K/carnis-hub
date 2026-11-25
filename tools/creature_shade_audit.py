@@ -9,6 +9,10 @@
 
     python3 tools/creature_shade_audit.py [каталог пакета] [--include-glowmask]
                                           [--max-share 0.35] [--min-colors 7]
+                                          [--tex-dir textures/block]
+
+`--tex-dir` переключает набор: по умолчанию `textures/entity` (существа),
+`textures/block` — текстуры блоков (T-3131). Правила те же, чекер тот же.
 
 По умолчанию каталог — `01-coder/3.7.0`, сканируется
 `src/main/resources/assets/carnis/textures/entity/*.png`.
@@ -48,6 +52,8 @@ def main():
     ap.add_argument("--include-glowmask", action="store_true", help="включить *_glowmask.png")
     ap.add_argument("--max-share", type=float, default=0.35)
     ap.add_argument("--min-colors", type=int, default=7)
+    ap.add_argument("--tex-dir", default="textures/entity",
+                    help="каталог внутри assets/carnis (по умолч. textures/entity)")
     a = ap.parse_args()
 
     mod = load_artist_checker()
@@ -59,7 +65,7 @@ def main():
         print("ОШИБКА: нужен Pillow (python3 -m pip install pillow)")
         return 1
 
-    ent = Path(a.root) / "src/main/resources/assets/carnis/textures/entity"
+    ent = Path(a.root) / "src/main/resources/assets/carnis" / a.tex_dir
     if not ent.is_dir():
         print("ОШИБКА: нет каталога текстур существ %s" % ent)
         return 1
@@ -88,7 +94,8 @@ def main():
             print("ОШИБКА: %s не прочитан: %s" % (p.name, exc))
             return 1
 
-    print("Ревизия светотени существ — T-3114")
+    subject = "существ" if a.tex_dir.endswith("entity") else "блоков"
+    print("Ревизия светотени %s" % subject)
     print("Источник: %s" % ent)
     print("Правила чекера Художника %s: доля одной краски ≤ %.0f %%, цветов ≥ %d"
           % (ARTIST_CHECKER, a.max_share * 100, a.min_colors))

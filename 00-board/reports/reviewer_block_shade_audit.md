@@ -1,0 +1,88 @@
+# Ревизор · T-3131: аудит светотени блоков — COMPLETED
+
+**Дата:** 2026-11-26 · **База:** `0b580be` · **Пакет:** `01-coder/3.7.2` (sha256 zip `d6aa26bcb591ab4f…`)
+**Инструмент:** чекер Художника `04-artist/tools/shade_density.py` (правила не дублирую, импортирую `check_image`) + мой раннер `tools/creature_shade_audit.py --tex-dir textures/block`.
+**Правила:** доля самой частой непрозрачной краски ≤ 35 %, непрозрачных цветов ≥ 7. Глоумаски исключены — это одноцветные маски по построению.
+
+## 1. Итог
+
+- Проверено **54** текстуры блоков (все `.png` в `textures/block` минус 4 `*_glowmask.png`).
+- **Выше порога: 1** — `incubation_cyst.png`: доля **32,8 %** (в пределах 35 %), но **6 цветов** при минимуме 7. То есть замечание по числу красок, а не по плотности.
+- Остальные 53 в норме: максимум доли 32,8 % (`nerve_pillar_0`), все с ≥ 7 цветами.
+
+## 2. Сдача T-3115 (24 текстуры) — проверена фактически
+
+| Проверка | Результат |
+|---|---|
+| доля ≤ 15,5 % | ✅ **24 из 24**, худший случай `spore_sprout` ровно **15,5 %** |
+| число цветов ≥ 7 | ✅ 7 в каждой |
+| побайтово в пакете 3.7.2 | ✅ **24 из 24** совпадают с архивом сдачи |
+
+## 3. Полная таблица (54 текстуры, по убыванию доли)
+
+```
+текстура                        цветов      доля  краска           вывод
+--------------------------------------------------------------------------------
+incubation_cyst.png                  6     32.8%  #251B1C          ВЫШЕ ПОРОГА
+nerve_pillar_0.png                   7     32.8%  #1E0E15          OK
+creeping_tendrils_1.png              7     32.2%  #56252D          OK
+creeping_tendrils_2.png              7     32.2%  #3A191C          OK
+creeping_tendrils_0.png              7     32.1%  #4A1D22          OK
+nerve_pillar_1.png                   7     31.6%  #1E0E15          OK
+nerve_pillar.png                     7     31.3%  #1E0E15          OK
+nerve_pillar_3.png                   7     31.2%  #1E0E15          OK
+creeping_tendrils_3.png              7     30.7%  #4B1A20          OK
+nerve_pillar_2.png                   7     29.7%  #1E0E15          OK
+spore_sprout.png                     7     15.5%  #7B8484          OK
+flesh_veins_tier1.png                7     15.3%  #682C3C          OK
+flesh_veins_tier2.png                7     15.0%  #62091B          OK
+flesh_veins.png                      7     14.8%  #8C2B36          OK
+biomass_remains.png                  7     14.5%  #630C16          OK
+biomass_remains_bone.png             7     14.5%  #ADA18A          OK
+hive_eye.png                         7     14.5%  #340F1B          OK
+hive_membrane.png                    7     14.5%  #78403D          OK
+neural_moss.png                      7     14.5%  #999999          OK
+purifier_lamp.png                    7     14.5%  #514925          OK
+sinew_spikes_0.png                   7     14.5%  #3C2117          OK
+sinew_spikes_1.png                   7     14.5%  #392115          OK
+sinew_spikes_2.png                   7     14.5%  #4C2F22          OK
+sinew_spikes_3.png                   7     14.5%  #321A10          OK
+stomach_pool_0.png                   7     14.5%  #421805          OK
+stomach_pool_1.png                   7     14.5%  #431806          OK
+stomach_pool_2.png                   7     14.5%  #401604          OK
+stomach_pool_3.png                   7     14.5%  #421805          OK
+synapse_node.png                     7     14.5%  #1D2F2A          OK
+flesh_veins_tier3.png                7     14.4%  #430211          OK
+flesh_veins_tier4.png                7     14.4%  #56111D          OK
+sinew_spikes.png                     7     14.4%  #381F14          OK
+stomach_pool.png                     7     14.4%  #421805          OK
+pustule_cluster.png                  7     14.3%  #7B8484          OK
+flesh_bulb.png                      62      5.7%  #A42E3C          OK
+charred_flesh_0.png               3102      3.9%  #080506          OK
+charred_flesh_2.png               3102      3.9%  #080506          OK
+pulsing_heart.png                  461      3.5%  #6B0D21          OK
+charred_flesh_3.png               3208      2.9%  #080506          OK
+tainted_sludge_still.png           100      2.6%  #B7B7B7          OK
+charred_flesh_1.png               3293      2.4%  #080506          OK
+tainted_sludge_flow.png            103      2.1%  #ABABAB          OK
+ossified_flesh_2.png              3430      0.8%  #080506          OK
+ossified_flesh_0.png              3540      0.4%  #080506          OK
+living_flesh_2.png                2921      0.3%  #0F0506          OK
+ossified_flesh_1.png              3107      0.2%  #351C17          OK
+fireproof_flesh_1.png             2760      0.2%  #382C2D          OK
+living_flesh_1.png                3289      0.2%  #1E0506          OK
+fireproof_flesh_0.png             2767      0.2%  #3F383D          OK
+fireproof_flesh_3.png             2829      0.2%  #352D31          OK
+fireproof_flesh_2.png             2820      0.2%  #3C3133          OK
+living_flesh_3.png                3516      0.2%  #47151A          OK
+ossified_flesh_3.png              3205      0.1%  #492622          OK
+living_flesh_0.png                3421      0.1%  #3C141C          OK
+```
+
+## 4. Важное для Архитектора: три файла из `KEEP_IDENTICAL` перекрашены (З-10)
+
+`spore_sprout` (15,5 %), `neural_moss` (14,5 %), `pustule_cluster` (14,3 %) входят в блок 10 гейтов `accept_3.7.1.py`/`accept_3.7.2.py` как «принятые в 3.6.0-R, не должны меняться», но перекрашены в T-3115 и лежат в пакете 3.7.2 **новыми**. По числам это улучшение (было 45,1 % / 64,1 % / 69,8 %), но правило «побайтово идентичны» при этом нарушено — гейт 3.7.2 законно даёт по ним код 1. Решение ваше: либо снять защиту с этих трёх, либо вернуть их в принятом виде. Я фиксирую конфликт и не могу одновременно требовать оба варианта.
+
+## 5. Передал
+
+**Художник** — `incubation_cyst.png`: 6 цветов при минимуме 7 (доля в норме, 32,8 %); для блоков правило «≥ 7 цветов» формально то же, что для тел. **Архитектор** — З-10 (§4). **Интегратор** — блок «светотень блоков» в гейте 3.7.2 при текущем пакете даёт **код 2** из-за `incubation_cyst`; если решите ослабить правило для блоков — это ваше решение, я его только измеряю.
