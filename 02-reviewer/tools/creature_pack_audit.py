@@ -104,7 +104,13 @@ def geo_info(data):
             uv = c.get("uv")
             size = c.get("size") or [0, 0, 0]
             if uv and len(uv) == 2 and isinstance(uv[0], (int, float)):
-                uv_max_u = max(uv_max_u, uv[0] + (size[0] or 0) + (size[2] or 0))
+                # Развёртка коробки в Bedrock-геометрии (uv задан парой = box UV):
+                # по ширине коробка занимает 2*(size.x+size.z), по высоте
+                # size.y+size.z. Мягкая формула (size.x+size.z) НЕДООЦЕНИВАЕТ
+                # ширину вдвое: на сдаче 3.8.0 она пропустила 3 из 4 реальных
+                # переполнений (witch/evoker/illusioner, uv 40 + 2*(16+4) = 80
+                # при текстуре 64). Проверено сравнением с эталоном Художника.
+                uv_max_u = max(uv_max_u, uv[0] + 2 * ((size[0] or 0) + (size[2] or 0)))
                 uv_max_v = max(uv_max_v, uv[1] + (size[1] or 0) + (size[2] or 0))
     return {
         "bones": len(bones),

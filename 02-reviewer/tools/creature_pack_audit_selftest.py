@@ -30,8 +30,8 @@ NAME = "infected_probe"
 BASE = "src/main/resources/assets/carnis"
 
 
-def _geo(pivot=True, uv=(0, 0)):
-    bone = {"name": "body", "cubes": [{"uv": list(uv), "size": [8, 8, 8]}]}
+def _geo(pivot=True, uv=(0, 0), size=(8, 8, 8)):
+    bone = {"name": "body", "cubes": [{"uv": list(uv), "size": list(size)}]}
     if pivot:
         bone["pivot"] = [0, 0, 0]
     return {"minecraft:geometry": [{
@@ -101,6 +101,9 @@ CASES = [
      dict(tex=_tex_normal(), mask=_mask_ok(), anim=_anim(bone="хвост_которого_нет"))),
     ("G: анимация без ключевых кадров", 2,
      dict(tex=_tex_normal(), mask=_mask_ok(), anim=_anim(keyframes=0))),
+    # I: мягкая формула UV (size.x+size.z) пропускала это; box-UV обязан ловить
+    ("I: box-UV шириной 2*(sx+sz) вылезает за текстуру", 2,
+     dict(tex=_tex_normal(), mask=_mask_ok(), geo=_geo(uv=(40, 38), size=(16, 4, 4)))),
     ("H: --require-anims при одной анимации из пяти", 2,
      dict(tex=_tex_normal(), mask=_mask_ok(), anim=_anim(),
           extra=["--require-anims"])),
