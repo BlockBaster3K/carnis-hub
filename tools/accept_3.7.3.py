@@ -1207,273 +1207,31 @@ def _unchanged_vs_prev(extract_dir, rels):
     return out
 
 
+# Блок 12б живёт в tools/crest_master.py — ОДНА реализация на оба гейта.
+# Копия внутри гейта давала два определения нормы, и гейты расходились
+# (Ревизор I23 §9). Здесь только адаптер: модуль возвращает список провалов.
 def check_crest_attack(extract_dir):
-    """I25/З-31: crest и громкость атаки — от МАСТЕРА, не от самого файла.
-
-    Тавтология прежней методики: baseline считался как round-trip САМОГО
-    проверяемого файла, поэтому Δcrest был равен baseline по построению
-    (276 строк из 276) — такая проверка зелена всегда. Здесь:
-      M — мастер (PCM до кодирования), baseline(M) — шум кодека на мастере,
-      Δcrest(F) = |crest(F) − crest(M)| — реальное изменение звука.
-    Норма: Δcrest ≤ max(порог_типа, baseline(M) + 0,05), атака ≤ 0,60 дБ.
-
-    Fail-closed: нет мастера, нет записи в таблице или нет numpy+av —
-    это «crest не проверен», а НЕ «зелено по построению».
-    """
-    if not _dsp():
-        print("  x crest/атака: нет numpy+av — от мастеров не посчитать")
-        fail.append("crest/атака: нет numpy+av — проверка не выполнена")
+    _cm = _load_crest_master()
+    if _cm is None:
+        print("  x crest/атака: нет модуля tools/crest_master.py")
+        fail.append("crest/атака: модуль проверки отсутствует")
         return
-    if not os.path.isdir(MASTERS):
-        print("  x crest/атака: нет каталога мастеров 03-sound/masters")
-        fail.append("crest/атака: мастеров нет — сверять не с чем")
-        return
-    types = _table_types(CREST_TABLE)
-    if not types:
-        print("  x crest/атака: таблица не разобрана — порог типа не взять")
-        fail.append("crest/атака: таблица crest не разобрана")
-        return
+    for msg in _cm.check_crest_attack(extract_dir):
+        fail.append(msg)
 
-    root = os.path.join(extract_dir, SOUND_SUBDIR)
-    if not os.path.isdir(root):
-        print("  · звуков в пакете нет — нечего сверять с мастерами")
-        return
 
-    global _BM
-    if _BM is None:
-        _BM = _baseline_master()
-    if "__error__" in _BM:
-        print("  x baseline(M): файл 03-sound/baseline_master.json недоступен "
-              "или битый — %s" % _BM["__error__"])
-        print("    без него норма стационарных недоказуема (З-29 п.5), "
-              "тихое понижение до отчёта запрещено")
-        fail.append("crest/атака: baseline_master.json не прочитан (%s) — "
-                    "норма стационарных недоказуема" % _BM["__error__"])
-        return
-    checked, no_master, no_entry, bad_crest = 0, [], [], []
-    attack_report, no_attack, taut = [], [], []
-    used_prev = 0
-    unchanged_now = []
-    stationary_unmeasured = []
-    worst_c, worst_a = (0.0, ""), (0.0, "")
-    for dp, _, fs in os.walk(root):
-        for f in sorted(fs):
-            if not f.endswith(".ogg"):
-                continue
-            rel = os.path.relpath(os.path.join(dp, f), root).replace(os.sep, "/")
-            if rel not in types:
-                no_entry.append(rel)
-                continue
-            # Мастер ищется в обоих корнях: канон и 3.8.0 лежат отдельно.
-            master = None
-            for sub in ("sounds", "sounds_380"):
-                for ext in MASTER_EXTS:
-                    cand = os.path.join(MASTERS, sub, rel[:-4] + ext)
-                    if os.path.isfile(cand):
-                        master = cand
-                        break
-                    # Мастера З-21 лежат ПЛОСКО в sounds/_z21/ без подкаталогов
-                    # банка — искать по одному имени файла, а не по полному пути.
-                    flat = os.path.join(MASTERS, sub, "_z21", f[:-4] + ext)
-                    if os.path.isfile(flat):
-                        master = flat
-                        break
-                if master is not None:
-                    break
-            # S44 (Звук): если PCM-мастера нет, мастером может служить
-            # ДЕКОД ПРЕДЫДУЩЕЙ ВЕРСИИ — это два разных сигнала, не тавтология.
-            # Звук измерил зазор на правках: громкость −3 дБ даёт Δcrest
-            # 0,007–0,060, порча формы лимитером 1,986–2,262, то есть правка и
-            # порча расходятся в 33–100 раз.
-            # Fail-closed по его же требованию: если архивная версия
-            # побайтово равна проверяемому файлу — это была бы тавтология,
-            # и такой «мастер» не принимается.
-            if master is None:
-                prev_ok, prev_bytes = _prev_version_bytes(rel)
-                if prev_ok is None:
-                    no_master.append(rel)
-                    continue
-                if prev_bytes == open(os.path.join(dp, f), "rb").read():
-                    # S44: «мастер == файл» — тавтология, НО только если файл
-                    # вообще менялся. Если он побайтово равен принятой 3.7.2,
-                    # это З-31 п.3: файл принят предыдущей версией и норме не
-                    # подлежит — проверять его нечем и не нужно. Тавтологией
-                    # было бы брать такой «мастер» для ИЗМЕНЁННОГО файла.
-                    unchanged_now.append(rel)
-                    continue
-                master = _write_temp_decodable(prev_bytes, rel)
-                if master is None:
-                    no_master.append(rel + " (архив не декодирован)")
-                    continue
-                used_prev += 1
-            got = _decode(os.path.join(dp, f))
-            ref = _decode(master)
-            if not got or not ref:
-                no_master.append(rel + " (не декодирован)")
-                continue
-            bm_rec = _BM.get(rel) or {}
-            if rel in types:
-                typ, thr, base_tbl = types[rel]
-            elif bm_rec:
-                # Записи в таблице нет, но JSON её заменяет (S52 просил брать
-                # тип отсюда). Таблицу читать второй раз незачем.
-                typ = bm_rec.get("type") or "стац"
-                thr = float(bm_rec.get("threshold") or 0.05)
-                base_tbl = 0.0
-            else:
-                no_entry.append(rel)
-                continue
-            cm, cf = _crest(ref[0]), _crest(got[0])
-            if cm is None or cf is None:
-                no_master.append(rel + " (тишина)")
-                continue
-            # Допуск по З-30/З-31: max(порог_типа, baseline(M) + 0,05).
-            # Ревизор (I23 §9) поймал, что код брал max(thr, 0.05) — то есть
-            # игнорировал baseline мастера, и 23 из 33 стационарных файлов
-            # валились на собственном шуме кодека 0,13-0,24 дБ при пороге
-            # 0,05. Теперь baseline(M) считается: перекодировать мастер тем
-            # же кодеком и сравнить crest с мастером. Не удалось — берём
-            # табличный baseline как нижнюю границу (он не меньше шума).
-            # Baseline: приоритет у baseline(M) от Звука (S46/S48) — это шум
-            # ПЕРВОГО кодирования на мастере, ровно та величина, что нужна
-            # норме от PCM. Табличный baseline (шум второй генерации) —
-            # только запасной, и тогда это печатается.
-            bm = _BM.get(rel)
-            if bm is not None:
-                base_used, src = bm["baseline"], "baseline(M)"
-            else:
-                base_used, src = base_tbl, "таблица"
-            # tolerance из JSON (S52) — уже посчитанный max(порог, baseline+0,05);
-            # пересчитываю сам намеренно: если формула когда-нибудь изменится,
-            # гейт не должен молча унаследовать старое число.
-            tol = max(thr, base_used + 0.05)
-            if bm is not None and bm.get("tolerance") is not None:
-                if abs(float(bm["tolerance"]) - tol) > 0.001:
-                    print("  ! %s: допуск JSON %.3f != формулы %.3f — беру формулу"
-                          % (rel, float(bm["tolerance"]), tol))
-            d = abs(cf - cm)
-            if d > tol:
-                # R23 (I23 §10.2): ТАБЛИЧНЫЙ baseline измерен на перекоде
-                # УЖЕ ЗАКОДИРОВАННОГО файла (шум второй генерации), а мастер —
-                # PCM до первого кодирования. Для стационарных сигналов шум
-                # первого кодирования больше табличного (Ревизор: 12 нетронутых
-                # файлов 3.8.0 «падают» на нём, Δ RMS −0,11…+0,01 дБ — то есть
-                # файл не трогали). Пока Звук не измерит baseline(M) своим
-                # энкодером (S46), стационарные идут ОТЧЁТОМ, а не провалом;
-                # транзиентные (порог 0,60) валят как раньше — у них запас
-                # 2-3x и ложных провалов нет.
-                # Стационарный валит, ЕСЛИ допуск посчитан от измеренного
-                # baseline(M) — тогда шум учтён и превышение реально. Если
-                # baseline(M) нет и взят табличный, остаётся отчётом: таблица
-                # меряет шум другой генерации (см. выше).
-                if typ == "стац" and src == "таблица":
-                    # Ревизор (I23 s14): страж обязан быть ПОФАЙЛОВЫМ, не
-                    # потиповым. Пока проверялось «есть ли в JSON хоть одна
-                    # стационарная запись», достаточно было оставить одну —
-                    # и остальные тихо уходили в отчёт при зелёном вердикте.
-                    # С S48 измерены все стационарные, у которых есть мастер,
-                    # поэтому файл с мастером и БЕЗ своей записи — провал:
-                    # нормы для него нет, а «нет нормы» здесь = fail-closed.
-                    stationary_unmeasured.append((rel, d, tol, base_tbl))
-                else:
-                    bad_crest.append((rel, d, tol, typ))
-            if d > worst_c[0]:
-                worst_c = (d, rel)
-            am, af = _attack(ref[0], ref[1]), _attack(got[0], got[1])
-            if am is not None and af is not None:
-                da = abs(af - am)
-                # R22 (Ревизор): «атака» КАК НОРМА не выдерживает собственных
-                # негативов — ни постоянный допуск 0,60 (13 из 132 файлов
-                # выходят при простом перекоде), ни per-file допуск (не ловит
-                # gain). Причины: ведущая цифровая тишина, сдвиг окна на 1 мс
-                # даёт до 9,90 дБ, сдвиг онсета. Поэтому здесь она НЕ валит, а
-                # печатается как отчётная цифра — вместе с двумя колонками,
-                # которые действительно являются нормой (crest + timbre).
-                if am < -20.0:
-                    no_attack.append((rel, am))
-                elif da > ATTACK_TOL:
-                    attack_report.append((rel, da))
-                if da > worst_a[0] and am >= -20.0:
-                    worst_a = (da, rel)
-            checked += 1
-
-    print("  · сверено с мастерами: %d | без мастера %d | без записи в таблице %d"
-          % (checked, len(no_master), len(no_entry)))
-    if checked:
-        print("  · худшее: Δcrest %.3f дБ%s, Δатаки %.3f дБ%s (допуск %.2f)"
-              % (worst_c[0], (" (%s)" % worst_c[1]) if worst_c[1] else "",
-                 worst_a[0], (" (%s)" % worst_a[1]) if worst_a[1] else "",
-                 ATTACK_TOL))
-    for rel, d, tol in [(a, b, c) for a, b, c, _t in bad_crest[:4]]:
-        print("      ✗ %s Δcrest %.3f > %.3f" % (rel, d, tol))
-    # Атака — ОТЧЁТ, не вердикт (R22). Печатается всегда, чтобы цифра была
-    # видна, но fail по ней не выставляется.
-    if no_attack:
-        print("  · атака ниже -20 дБ (окно 0-10 мс не имеет смысла): %d файлов"
-              % len(no_attack))
-    if attack_report:
-        print("  · Δатаки > %.2f дБ — отчётная метрика, не норма (R22): %d файлов"
-              % (ATTACK_TOL, len(attack_report)))
-        for rel, da in attack_report[:3]:
-            print("      ~ %s %.3f дБ" % (rel, da))
-    if used_prev:
-        print("  · мастером служил декод 3.7.2 (S44): %d файлов — два разных "
-              "сигнала, не тавтология" % used_prev)
-    if unchanged_now:
-        print("  · побайтово равны 3.7.2 без мастера: %d — норме не подлежат "
-              "(З-31 п.3)" % len(unchanged_now))
-    if taut:
-        # S44 требование Звука: архивная версия, равная проверяемому файлу, —
-        # тавтология, а не мастер. Такое не принимается молча.
-        print("  ✗ crest/атака: у %d файлов архивная версия равна файлу — "
-              "сравнение было бы тавтологией" % len(taut))
-        for rel in taut[:4]:
-            print("      ? %s" % rel)
-        fail.append("crest/атака: %d файлов, у которых «мастер» == файл "
-                    "(тавтология, S44)" % len(taut))
-    if no_master:
-        # З-31 п.2 и п.3 вместе: мастер обязателен для ИЗМЕНЁННЫХ файлов,
-        # а побайтово неизменённые норме не подлежат. Разделить их можно
-        # только по эталону предыдущей версии — иначе «нет мастера» у
-        # неизменённого файла (129 из 144 канона, мастеров к ним не
-        # существует и синтезировать их запрещено) выглядело бы как
-        # провал, а это правильное поведение.
-        unchanged = _unchanged_vs_prev(extract_dir, no_master)
-        changed = [r for r in no_master if r not in unchanged]
-        if unchanged:
-            print("  · побайтово неизменных без мастера: %d — норме не "
-                  "подлежат (З-31 п.3)" % len(unchanged))
-        if changed:
-            print("  ✗ crest/атака: у %d ИЗМЕНЁННЫХ файлов нет мастера"
-                  % len(changed))
-            for rel in changed[:4]:
-                print("      ? %s" % rel)
-            fail.append("crest/атака: %d изменённых файлов без мастера "
-                        "(З-31 п.2)" % len(changed))
-    if bad_crest:
-        fail.append("crest: %d файлов изменили динамику сверх своего допуска"
-                    % len(bad_crest))
-    if stationary_unmeasured:
-        print("  x crest: у %d стационарных файлов есть мастер, но нет своей "
-              "записи baseline(M) — норма недоказуема (I23 s14)" %
-              len(stationary_unmeasured))
-        for rel, d, tol, base in stationary_unmeasured[:5]:
-            print("      ✗ %-38s Δ %.3f, табличный допуск %.3f — не замерен"
-                  % (rel, d, tol))
-        fail.append("crest/атака: %d стационарных файлов без своей записи "
-                    "baseline(M) — норма недоказуема"
-                    % len(stationary_unmeasured))
-    # Зелёная строка печатается ТОЛЬКО когда провалов нет вовсе. Иначе
-    # получалось «✓ 132 в норме» рядом с «x 11 не замерены» — и читающий
-    # верил зелёной (Ревизор I23 s14).
-    if checked and not bad_crest and not no_master and not stationary_unmeasured:
-        print("  ✓ crest/атака: %d файлов в норме от мастеров (З-31)" % checked)
-    for path in _TEMP_MASTERS:
-        try:
-            os.unlink(path)
-        except OSError:
-            pass
-
+def _load_crest_master():
+    import importlib.util
+    path = os.path.join(REPO, "tools", "crest_master.py")
+    if not os.path.isfile(path):
+        return None
+    spec = importlib.util.spec_from_file_location("crest_master", path)
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:  # noqa: BLE001
+        return None
+    return mod
 
 def check_bank_format(extract_dir):
     """ТЗ 3.7.2 §9, блок 13: формат банка однороден, клиппинга нет.

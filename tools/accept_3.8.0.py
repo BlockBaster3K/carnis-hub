@@ -1113,6 +1113,19 @@ def _crest_noise_floor(checker, archive, py):
     return ds[len(ds) // 2], ds[-1]
 
 
+def _load_crest_master():
+    path = os.path.join(REPO, "tools", "crest_master.py")
+    if not os.path.isfile(path):
+        return None
+    spec = importlib.util.spec_from_file_location("crest_master", path)
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:  # noqa: BLE001
+        return None
+    return mod
+
+
 def check_crest(zip_path):
     """T-3182 §4: правка громкости не должна менять динамику.
 
@@ -1600,6 +1613,20 @@ def main():
         print()
         print("12а) Crest — динамика не изменена (T-3182 §4)")
         check_crest(zip_path)
+
+        print()
+        print("12б) Crest и атака от МАСТЕРОВ (З-31, без тавтологии)")
+        # Тот же модуль, что и в 3.7.3: одна реализация нормы на оба гейта.
+        # Прежний блок 12а в этом гейте остался со старым «rescue» (шум+допуск)
+        # и расходился с 3.7.3 — Ревизор I23 §9 назвал это consistency debt.
+        # 12б не заменяет 12а, а добавляет сверку от PCM-мастеров.
+        _cm = _load_crest_master()
+        if _cm is None:
+            print("  x crest/атака: нет модуля tools/crest_master.py")
+            fail.append("crest/атака: модуль проверки отсутствует")
+        else:
+            for msg in _cm.check_crest_attack(tmp):
+                fail.append(msg)
 
         print()
         print("13) Банк — формат и клиппинг (ТЗ 3.7.2 §9)")
