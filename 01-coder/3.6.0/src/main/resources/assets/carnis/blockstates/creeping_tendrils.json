@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "carnis:block/creeping_tendrils"
+    },
+    "facing=east": {
+      "model": "carnis:block/creeping_tendrils",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "carnis:block/creeping_tendrils",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "carnis:block/creeping_tendrils",
+      "y": 270
+    }
+  }
+}
