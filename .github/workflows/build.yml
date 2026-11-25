@@ -94,7 +94,7 @@ jobs:
                 break
               fi
             done
-            test -n "$DIR" || { echo "::error::Нет ни одного принятого пакета: каталоги с project-*-clean.zip есть, но вердикта Ревизора (00-board/reports/reviewer_*_verdict.md) нет ни у одного"; exit 1; }
+            test -n "$DIR" || { echo "::error::Нет ни одного принятого пакета"; echo "--- диагностика ---"; echo "каталоги с версией:"; ls -1d 01-coder/*/ 2>/dev/null | sed "s|01-coder/||; s|/$||"; echo "каталоги с ZIP:"; ls -1d 01-coder/*/ 2>/dev/null | while read d; do ls "$d"project-*-clean.zip >/dev/null 2>&1 && echo "  $d"; done; echo "вердикты:"; ls -1 00-board/reports/ | grep -i verdict; echo "pwd=$(pwd)"; exit 1; }
             PKG=$(ls -1 "01-coder/$DIR"/project-*-clean.zip 2>/dev/null | head -1)
           fi
           test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
