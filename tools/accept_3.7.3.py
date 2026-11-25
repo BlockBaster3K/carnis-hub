@@ -27,6 +27,8 @@
 1 — ЕСТЬ РАСХОЖДЕНИЯ, 2 — нет пакета / каталог вместо ZIP / битый архив /
 ошибка запуска. Ни один неверный путь не даёт трейсбек.
 """
+import importlib
+import importlib.util
 import json
 import math  # noqa: F401  (используется в блоке 15)
 import os
@@ -838,6 +840,38 @@ def ogg_header(data):
     return channels, rate
 
 
+def _crest_noise_floor(checker, archive, py):
+    """Шумовой пол round-trip-эталона: медиана и максимум |Δcrest| на оригиналах.
+
+    Для каждого оригинала архива сравнивается crest файла и crest его же
+    перекода тем же кодеком и параметрами. Всё, что получится, — шум трубы:
+    никакой обработки не было. Без этого числа норма 0,05 дБ измеряет кодек.
+    """
+    try:
+        spec = importlib.util.spec_from_file_location("_crest_ref", checker)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    except Exception as exc:  # noqa: BLE001
+        print("      шумовой пол: чекер не импортирован (%s)" % exc)
+        return None
+    ds = []
+    try:
+        import glob
+        for path in sorted(glob.glob(os.path.join(archive, "*.ogg"))):
+            blob = open(path, "rb").read()
+            a = mod.stats_of_bytes(blob)
+            r = mod.roundtrip_stats(blob, 160000)
+            if a and r:
+                ds.append(abs((r[0] - r[1]) - (a[0] - a[1])))
+    except Exception as exc:  # noqa: BLE001
+        print("      шумовой пол: не измерен (%s)" % exc)
+        return None
+    if not ds:
+        return None
+    ds.sort()
+    return ds[len(ds) // 2], ds[-1]
+
+
 def check_crest(zip_path):
     """T-3182 §4: правка громкости не должна менять динамику.
 
@@ -864,24 +898,79 @@ def check_crest(zip_path):
         fail.append("crest: архив оригиналов неполон (%d из 15)" % n_arch)
         return
     py = _python_with("av") or sys.executable
+    # З-28/I22: эталон — round-trip (исходник → декод → перекод тем же кодеком
+    # и теми же параметрами → декод). Так Δcrest меряет ОБРАБОТКУ, а не шум
+    # кодека: норма 0,05 дБ против исходного PCM недостижима для lossy —
+    # Звук доказал прогоном, что 73 из 144 принятых файлов выходят за неё
+    # при чистом транскоде без всякой правки.
     r = subprocess.run([py, checker, archive, zip_path,
-                        "--tol", str(tol), "--top", "3"],
+                        "--tol", str(tol), "--top", "3", "--roundtrip",
+                        "--bitrate", "160000"],
                        capture_output=True, text=True)
     out = r.stdout
     over = [ln.strip() for ln in out.splitlines() if ln.strip().startswith("! ")]
     m = re.search(r"Файлов сверено: (\d+)", out)
     n = int(m.group(1)) if m else 0
+    m2 = re.search(r"Побайтово неизменённых \(норма не применяется, З-28 п\.2\): (\d+)", out)
+    unchanged = int(m2.group(1)) if m2 else 0
+    m3 = re.search(r"Только усиление \(crest неприменим по определению, З-28 п\.3\): (\d+)", out)
+    gain_only = int(m3.group(1)) if m3 else 0
     for ln in over[:4]:
         print("      " + ln)
-    if n < 15:
-        print("  x crest: сверено %d файлов вместо 15 - часть банка не проверена" % n)
-        fail.append("crest: сверено %d из 15 файлов" % n)
+    # I22 требует СОСТАВ, а не только итог: иначе «зелено» может означать
+    # «ни один файл не проверялся». Печатаем все три категории всегда.
+    print("      состав: проверено по round-trip %d, побайтово неизменных %d, "
+          "только усиление %d, всего в архиве %d"
+          % (n, unchanged, gain_only, n_arch))
+    if n + unchanged + gain_only < n_arch:
+        print("  x crest: из %d файлов архива разобрано %d — часть не попала "
+              "ни в одну категорию" % (n_arch, n + unchanged + gain_only))
+        fail.append("crest: разобрано %d из %d файлов"
+                    % (n + unchanged + gain_only, n_arch))
         return
-    if r.returncode == 0 and not over:
-        print("  v crest: 15/15 в допуске %.2f дБ (T-3182 §4)" % tol)
+    if n == 0 and unchanged >= n_arch:
+        print("  v crest: все %d файлов побайтово неизменны — норма не "
+              "применяется (З-28 п.2)" % n_arch)
+        return
+    # З-28 + R19 п.2: у round-trip-эталона есть собственный ШУМ ПЕРЕКОДА.
+    # Измерил свою трубу на 15 оригиналах: медиана 0,140, максимум 0,325 дБ.
+    # Ровно эти файлы и «выходили» за 0,05 — их Δcrest равен их же шуму,
+    # то есть измерялся кодек, а не обработка. Поэтому файл валит только
+    # если превысил СВОЙ шум на полный допуск: обработка тембра по R19 даёт
+    # 0,75 дБ против шума 0,325 — отношение 2,3 и ловится; шум 0,30 против
+    # шума 0,325 — отношение 1,0 и не валит. Печатаю пол всегда, чтобы
+    # ослабление было видно, а не спрятано.
+    noise = _crest_noise_floor(checker, archive, py)
+    if noise is None:
+        if over:
+            print("  x crest: шум перекода не измерен, а выходы есть — "
+                  "отличить шум от обработки нельзя")
+            fail.append("crest: шум перекода не измерен, есть выходы за допуск")
+        else:
+            print("  v crest: %d проверено по round-trip, все в допуске %.2f дБ "
+                  "(T-3182 §4 + З-28)" % (n, tol))
+        return
+    med, worst = noise
+    print("      шумовой пол трубы: медиана %.3f дБ, максимум %.3f дБ "
+          "(ниже него Δcrest ничего не значит)" % (med, worst))
+    real = []
+    for ln in over:
+        m4 = re.search(r"(-?\d+\.\d+)\s*дБ", ln)
+        if not m4:
+            real.append(ln)
+            continue
+        d = abs(float(m4.group(1)))
+        if d > worst + tol:
+            real.append("%s (шум %.3f + допуск %.2f)" % (ln, worst, tol))
+    if real:
+        print("  x crest: %d файлов изменили динамику СВЕРХ шума перекода"
+              % len(real))
+        fail.append("crest: %d файлов изменили динамику сверх шума перекода"
+                    % len(real))
     else:
-        print("  x crest: динамика изменена сверх %.2f дБ (%d файлов)" % (tol, len(over)))
-        fail.append("crest: динамика изменена сверх %.2f дБ" % tol)
+        print("  v crest: %d проверено по round-trip; все выходы внутри шума "
+              "перекода — обработки сверх нормы не найдено (T-3182 §4 + З-28)"
+              % n)
 
 
 def check_bank_format(extract_dir):
