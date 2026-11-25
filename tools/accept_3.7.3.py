@@ -1135,14 +1135,6 @@ def _baseline_master():
     return out
 
 
-def _BM_has_type(sig_type):
-    """Есть ли в baseline_master.json хоть одна запись этого типа сигнала.
-
-    Нужно, чтобы отличить «вопрос к Архитектору» от «JSON устарел/испорчен».
-    """
-    return any(rec.get("type") == sig_type for rec in _BM.values())
-
-
 def _prev_version_bytes(rel):
     """Байты того же файла из принятой 3.7.2: (True, bytes) или (None, None).
 
@@ -1259,8 +1251,7 @@ def check_crest_attack(extract_dir):
     attack_report, no_attack, taut = [], [], []
     used_prev = 0
     unchanged_now = []
-    stationary_cand = []
-    missing_type = []
+    stationary_unmeasured = []
     worst_c, worst_a = (0.0, ""), (0.0, "")
     for dp, _, fs in os.walk(root):
         for f in sorted(fs):
@@ -1373,13 +1364,14 @@ def check_crest_attack(extract_dir):
                 # baseline(M) нет и взят табличный, остаётся отчётом: таблица
                 # меряет шум другой генерации (см. выше).
                 if typ == "стац" and src == "таблица":
-                    # ПОЧЕМУ записи нет: JSON вообще не содержит стационарных
-                    # по этому банку (порча/устаревание) — это провал, а не
-                    # «отчёт». Отчёт допустим, только когда JSON полон и
-                    # вопрос открыт у Архитектора по существу порога.
-                    stationary_cand.append((rel, d, tol, base_tbl))
-                    if not _BM_has_type(typ):
-                        missing_type.append(rel)
+                    # Ревизор (I23 s14): страж обязан быть ПОФАЙЛОВЫМ, не
+                    # потиповым. Пока проверялось «есть ли в JSON хоть одна
+                    # стационарная запись», достаточно было оставить одну —
+                    # и остальные тихо уходили в отчёт при зелёном вердикте.
+                    # С S48 измерены все стационарные, у которых есть мастер,
+                    # поэтому файл с мастером и БЕЗ своей записи — провал:
+                    # нормы для него нет, а «нет нормы» здесь = fail-closed.
+                    stationary_unmeasured.append((rel, d, tol, base_tbl))
                 else:
                     bad_crest.append((rel, d, tol, typ))
             if d > worst_c[0]:
@@ -1458,22 +1450,20 @@ def check_crest_attack(extract_dir):
     if bad_crest:
         fail.append("crest: %d файлов изменили динамику сверх своего допуска"
                     % len(bad_crest))
-    if missing_type:
-        print("  x baseline(M): стационарных в JSON нет, хотя они там быть "
-              "обязаны (%d файлов) — файл измерений устарел" % len(missing_type))
-        fail.append("crest/атака: в baseline_master.json нет записей для "
-                    "стационарных (%d файлов) — норма недоказуема"
-                    % len(missing_type))
-    if stationary_cand:
-        print("  · стационарные сверх табличного baseline — ОТЧЁТ, не провал "
-              "(%d; таблица меряет шум 2-й генерации, мастер — PCM до 1-й, "
-              "S46):" % len(stationary_cand))
-        for rel, d, tol, base in stationary_cand[:5]:
-            print("      ~ %-38s Δ %.3f > %.3f (baseline таблицы %.3f)"
-                  % (rel, d, tol, base))
-        if len(stationary_cand) > 5:
-            print("      ~ … ещё %d" % (len(stationary_cand) - 5))
-    if checked and not bad_crest and not no_master:
+    if stationary_unmeasured:
+        print("  x crest: у %d стационарных файлов есть мастер, но нет своей "
+              "записи baseline(M) — норма недоказуема (I23 s14)" %
+              len(stationary_unmeasured))
+        for rel, d, tol, base in stationary_unmeasured[:5]:
+            print("      ✗ %-38s Δ %.3f, табличный допуск %.3f — не замерен"
+                  % (rel, d, tol))
+        fail.append("crest/атака: %d стационарных файлов без своей записи "
+                    "baseline(M) — норма недоказуема"
+                    % len(stationary_unmeasured))
+    # Зелёная строка печатается ТОЛЬКО когда провалов нет вовсе. Иначе
+    # получалось «✓ 132 в норме» рядом с «x 11 не замерены» — и читающий
+    # верил зелёной (Ревизор I23 s14).
+    if checked and not bad_crest and not no_master and not stationary_unmeasured:
         print("  ✓ crest/атака: %d файлов в норме от мастеров (З-31)" % checked)
     for path in _TEMP_MASTERS:
         try:
