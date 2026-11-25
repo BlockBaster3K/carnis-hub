@@ -2603,11 +2603,11 @@ baseline достигает **0,47 дБ**, и `min()` срезает допус�
 
 ---
 
-## T-3202 · Кодер · 3.7.3: осталось 9 событий — это последний блокер
+## T-3202 · Кодер · 3.7.3: 9 событий привязаны; review принятия в процессе
 
-**STATUS:** IN REVIEW — source calls committed as `2c338af`; updated permanent ZIP/manifest include S17-only `sounds.json` delta. Awaiting Integrator's full-checkout rerun; local acceptance and Java compile remain blocked/unconfirmed.
+**STATUS:** IN REVIEW — source calls committed as `2c338af`; permanent ZIP/manifest rebuilt with S17-only volume edits. Reviewer full-checkout rerun pending; local gate and Java compile remain blocked/unconfirmed.
 
-На постоянном ZIP `sound_orphans` возвращает **код 0**: сирот 0, ссылок в пустоту 0, недостижимых событий 0 (`FLAMETHROWER_FIRE` — документированный scaffold allowlist). Интегратор проверил сдачу `1446005` и обнаружил pitch-only delta `hive.detail_flow` (0.95/1.05 → 1.0); Кодер восстановил исходные pitch 0.95/1.05, сохранив S17 volume multipliers 1.5/1.0. Новый ZIP/manifest пересобраны и проходят целостность/manifest, см. `coder_373_build.md`. Локальный gate code 1 из-за отсутствующих независимых inputs в sparse checkout; просить Интегратора повторить полный gate на новом ZIP `052c2e0c…`.
+На постоянном ZIP `sound_orphans` возвращает **код 0**: сирот 0, ссылок в пустоту 0, недостижимых событий 0 (`FLAMETHROWER_FIRE` — документированный scaffold allowlist). После acceptance report `05a305a` pitch `hive.detail_flow` восстановлен к 0.95/1.05. Reviewer verdict `9967fef` о громкости опирается на `forAmbientAddition`, однако source и ZIP показывают, что detail path использует `level.playLocalSound(..., 0.30F, ...)`; `forAmbientAddition` здесь относится к pulse/stinger/heartbeat. Spread/shock также передают 0.65F/0.8F в Java calls. JSON multipliers для этих событий не добавлял, чтобы не умножать уровни повторно; попросил Ревизора сверить точные call sites. Текущий ZIP/manifest — 761/761, SHA `052c2e0c…`; source semantic compare passes. Локальный gate code 1 из-за missing independent inputs в sparse checkout; полный reviewer rerun ожидается, см. `coder_373_build.md`.
 
 | Событие | Ключ в `sounds.json` | Куда привязать (карта S17) | volume |
 |---|---|---|---|
@@ -2624,9 +2624,9 @@ baseline достигает **0,47 дБ**, и `min()` срезает допус�
 **Не трогать:** `FLAMETHROWER_FIRE` (задел, в allowlist), `FLESH_AMALGAM_AMBIENT`
 (жив через общий ключ).
 
-**После привязки:** пересобрать 3.7.3 и прогнать гейт — ожидается **код 0**.
-Затем — **C13** (регистрация 33 существ) и вставка **132** событий звука
-(фрагмент Звука `03-sound/3.8.0/sounds_json_infected_33.json`).
+**После привязки:** permanent ZIP/manifest пересобраны; локальный gate code 1 из-за отсутствующих независимых inputs в sparse checkout. Полный acceptance по новой сдаче ожидает Reviewer/Integrator в полном checkout.
+После приёмки — **C13** (регистрация 33 существ) и вставка **132** событий звука
+(фрагмент Звука `03-sound/3.8.0/sounds_json_infected_33.json`), когда будет доступна стартовая база 3.8.0.
 
 ---
 
@@ -3675,7 +3675,7 @@ VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
 
 ## Запрос Кодера Архитектору · восстановление лимита workspace
 
-**STATUS: NEEDS_ARCHITECT_DECISION.** После последнего sync workspace около 191 MB (>128 MB), `.git` 156 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
+**STATUS: NEEDS_ARCHITECT_DECISION.** Последний замер workspace — 217 MB (>128 MB), `.git` 182 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
 
 Факты, риски и точный вопрос: `00-board/reports/coder_git_storage_architect_request.md`.
 В этом цикле pull уже выполнен по прямому указанию пользователя. До решения не запускать широкие обходы refs/объектов, repack, gc, удаление объектов или замену `.git`; локальные правки сохранить.

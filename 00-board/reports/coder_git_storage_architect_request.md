@@ -24,3 +24,7 @@
 ## Повторная проверка после pull до `0be643c`
 
 Workspace: **205 MB**, `.git`: **169 MB**, pack: **152.56 MiB**, garbage: **0 bytes**. Дерево вне `.git` около 36 MB. Внутри проекта не обнаружены `build/`, `tmp/`, `temp/`, `__pycache__`, логи или временные архивы; найдены только семь ZIP-deliverables. В `/tmp` удалены три небольших тестовых лога от регрессионных проверок и удалён `tools/__pycache__`. Цель `<128 MB` остаётся недостигнутой: безопасных временных файлов для удаления больше нет. Четыре autostash refs и два набора незакоммиченных пользовательских изменений сохранены. Никаких операций с Git object storage, stash или deliverables не выполнялось; по-прежнему требуется решение Архитектора.
+
+## Latest workspace snapshot (after sync through `a61c791`)
+
+Measured workspace **217 MB**, `.git` **182 MB** (tree outside Git about 35 MB). No `build/`, `tmp/`, `temp/`, `__pycache__`, project-local logs, or temporary archives remain; package ZIPs are deliverables. Small test logs created during this cycle were deleted from `/tmp`. Four autostash refs and owner-local edits remain preserved. `<128 MB` is still unmet, and no object-store/stash/deliverable deletion or repack/gc was attempted. Architect decision remains required.

@@ -1,6 +1,6 @@
 # Кодер · T-3184 — аудит и привязка 11 недостижимых ModSounds
 
-**Состояние после upstream sync `225a750`, fix `7b9655f` и API review:** исходниковый `sound_orphans.py` код 0; 9 игровых событий привязаны, `FLESH_AMALGAM_AMBIENT` покрывается через `hive.amalgam_breath`, `FLAMETHROWER_FIRE` — разрешённый задел. Точка `CREEPER_RUPTURE` перенесена с невозможного override private-метода на существующий серверный `ExplosionEvent.Detonate` hook. Свежий ZIP/gate и Java compile после этого изменения не выполнялись; принятие пакета не заявляю. Старые ниже приведённые статусы сохранены как история.
+**Текущее состояние после Reviewer verdict `9967fef`:** source-level `sound_orphans` code 0; 9 игровых событий привязаны, `FLESH_AMALGAM_AMBIENT` покрывается через `hive.amalgam_breath`, `FLAMETHROWER_FIRE` — разрешённый задел. `CREEPER_RUPTURE` перенесён с невозможного override private-метода на серверный `ExplosionEvent.Detonate` hook; Java compile всё ещё не выполнен. Permanent ZIP/manifest последнего build SHA `052c2e0c…`, 761/761, package `sound_orphans` code 0. Reviewer `9967fef` считает уровни ambient events не реализованными; source и ZIP показывают прямые playback arguments для details/spread/shock, поэтому расхождение передано на точечную перепроверку с конкретными call sites. Локальный acceptance code 1 из-за отсутствующих независимых inputs sparse checkout; зелёную приёмку не заявляю. Старые ниже приведённые статусы — история.
 
 Карта Sound S17: `sound_unreachable_map.md` (база `243e598`).
 
@@ -16,7 +16,7 @@
 | `HIVE_DETAIL_SCUTTLE` | там же, строки 344,387, фактический client playback на строках 345–347; зона SURFACE | 50/50 с `HIVE_DETAIL_MEMBRANE`, interval 160–280 тиков, volume 0.30 / pitch 1.0 |
 | `HIVE_DETAIL_MEMBRANE` | там же, строки 344,388, фактический client playback на строках 345–347; зона SURFACE | вариант A из карты Sound: 50/50 с SCUTTLE, volume 0.30 / pitch 1.0 |
 | `HIVE_DETAIL_BUBBLES` | там же, строки 344,389, фактический client playback на строках 345–347; зона DEEP | interval 160–280 тиков, volume 0.30 / pitch 1.0 |
-| `HIVE_DETAIL_FLOW` | там же, строки 344,390, фактический client playback на строках 345–347; зона CORE | вызов volume 0.30; `sounds.json` задаёт flow_01 multiplier 1.5 (итог 0.45), flow_02 multiplier 1.0 (итог 0.30); pitch 1.0 для обоих |
+| `HIVE_DETAIL_FLOW` | там же, `playPeriodicEvents` lines 344–348 → `selectHiveDetail`, зона CORE | `level.playLocalSound(..., 0.30F, 1.0F, false)`; JSON multiplier flow_01 1.5 (effective 0.45), flow_02 1.0 (effective 0.30); pitches 0.95 / 1.05 |
 | `FLAMETHROWER_FIRE` | — | Sound указывает, что механики огнемёта нет. Архитектор T-3196/Z-26 решил оставить событие сознательным заделом и внести в allowlist; Integrator добавил это исключение, checker показывает его отдельной строкой и не валит. Не стал подменять звук Bio Purifier. |
 | `FLESH_AMALGAM_AMBIENT` | — (общий ресурс играет через `HIVE_AMALGAM_BREATH`, `entity/FleshAmalgamEntity.java:614`) | Архитектор T-3196 подтвердил, что отдельный вызов не нужен; alias/shared-resource покрытие проверяется отдельными регрессионными тестами. |
 
@@ -31,7 +31,7 @@
 - `01-coder/3.7.3/src/main/java/com/carnis/mod/event/CarnisEvents.java` — обработчик реального explosion event для `CREEPER_RUPTURE`.
 
 **Ресурс по карте Sound:**
-- `01-coder/3.7.3/src/main/resources/assets/carnis/sounds.json` — для вариантов `hive.detail_flow` задан pitch 1.0 и per-sample multiplier 1.5/1.0, чтобы при volume вызова 0.30 получить уровни 0.45/0.30 из карты.
+- `01-coder/3.7.3/src/main/resources/assets/carnis/sounds.json` — для `hive.detail_flow` сохранён baseline pitch 0.95/1.05; per-sample volume multipliers 1.5/1.0 combined with Java `playLocalSound` volume 0.30F produce 0.45/0.30 from S17. Other events retain default JSON volume; their Java call sites supply target volumes.
 
 Java-список и ресурсный diff должны быть перечислены в build report/manifest при сборке. T-3190 разрешает Java-дельту; `accept_3.7.3.py` ограничивает ресурсный allowlist точными путями, включая только `sounds.json` для S17. `.jar` не собирался.
 
