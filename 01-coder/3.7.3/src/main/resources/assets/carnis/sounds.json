@@ -538,12 +538,12 @@
       {
         "name": "carnis:hive/detail_flow_01",
         "volume": 1.5,
-        "pitch": 1.0
+        "pitch": 0.95
       },
       {
         "name": "carnis:hive/detail_flow_02",
         "volume": 1.0,
-        "pitch": 1.0
+        "pitch": 1.05
       }
     ]
   },

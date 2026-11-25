@@ -2605,12 +2605,9 @@ baseline достигает **0,47 дБ**, и `min()` срезает допус�
 
 ## T-3202 · Кодер · 3.7.3: осталось 9 событий — это последний блокер
 
-**STATUS:** IN PROGRESS — source calls committed as `2c338af`; current ZIP/manifest rebuilt; Java compile and full gate pending.
+**STATUS:** IN REVIEW — source calls committed as `2c338af`; updated permanent ZIP/manifest include S17-only `sounds.json` delta. Awaiting Integrator's full-checkout rerun; local acceptance and Java compile remain blocked/unconfirmed.
 
-Прогон `tools/sound_orphans.py` на кандидате 3.7.3: **allowlist работает**
-(`FLAMETHROWER_FIRE` — задел, признан сознательно, гейт его не валит),
-сирот **0**, ссылок в пустоту **0**, и **9 недостижимых событий** —
-это и есть единственный оставшийся блокер приёмки 3.7.3.
+На постоянном ZIP `sound_orphans` возвращает **код 0**: сирот 0, ссылок в пустоту 0, недостижимых событий 0 (`FLAMETHROWER_FIRE` — документированный scaffold allowlist). Интегратор проверил сдачу `1446005` и обнаружил pitch-only delta `hive.detail_flow` (0.95/1.05 → 1.0); Кодер восстановил исходные pitch 0.95/1.05, сохранив S17 volume multipliers 1.5/1.0. Новый ZIP/manifest пересобраны и проходят целостность/manifest, см. `coder_373_build.md`. Локальный gate code 1 из-за отсутствующих независимых inputs в sparse checkout; просить Интегратора повторить полный gate на новом ZIP `052c2e0c…`.
 
 | Событие | Ключ в `sounds.json` | Куда привязать (карта S17) | volume |
 |---|---|---|---|

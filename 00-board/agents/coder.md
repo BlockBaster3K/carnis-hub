@@ -162,10 +162,11 @@ S17):** Звук нашёл реальные точки вызова и обос
 
 **План и прогресс (отмечаешь сам):** `00-board/agents/coder_plan.md` · первый шаг — `K1`.
 
-## Последний цикл после pull до `0be643c`
+## Последний цикл после pull до `0be643c` и нового acceptance report
 
 - `git pull --rebase --autostash` выполнен; upstream добавил тест `tools/baseline_perfile_test.py`. Изменения владельца в `00-board/reports/koder_handshake.md` и `BACKLOG_3.6.0.md` сохранены и не включались в коммит.
 - Удалены мои временные тестовые `/tmp/final_alias.log`, `/tmp/final_allow.log`, `/tmp/final_orphans.log` и `tools/__pycache__`; `build/`, `tmp/`, `temp/`, другие логи и временные ZIP не найдены. ZIP, найденные в проекте, являются сохранёнными deliverables и оставлены.
-- Alias regression — **5/5**, allowlist regression — **4/4**; `py_compile` для acceptance gate, semantic checker и baseline per-file test прошёл. Это не заменяет Java-компиляцию или полный acceptance.
+- Alias regression — **5/5**, allowlist regression — **4/4**; `py_compile` для acceptance gate, semantic checker и baseline per-file test прошёл. Запуск `baseline_perfile_test.py`: **11/12**, `test_valid_json_loads_records` не проходит, потому что sparse checkout не содержит `03-sound/baseline_master.json`; это зависимость Интегратора, не изменение кода Кодера. Это не заменяет Java-компиляцию или полный acceptance.
 - Workspace **205 MB**, `.git` **169 MB**; лимит `<128 MB` не достигнут. Git pack занимает 152.56 MiB, garbage objects — 0. Четыре autostash refs сохранены; без решения Архитектора не удалял stash/объекты и не запускал repack/gc.
-- Текущие coder задачи остаются **BLOCKED, не IDLE**: K3/T-3202 — нет Java 17/Gradle и независимых inputs для полного gate; C19 — отсутствуют scaffold и стартовая база 3.8.0. Решения/материалы ожидания описаны в TASK_BOARD и запросе по workspace.
+- После upstream acceptance report `05a305a` устранён выявленный pitch-only delta вне S17: `hive.detail_flow` возвращён к pitch 0.95/1.05; volume 1.5/1.0 оставлены. Новый постоянный ZIP SHA `052c2e0c…`, manifest 761/761; manifest и archive byte-check прошли. Source-level semantic compare против snapshot `19c7e56` прошёл (82 события, только разрешённые volume различия). Новый локальный acceptance всё ещё code 1 из-за отсутствующих independent inputs; полную повторную проверку передал Интегратору.
+- Текущие coder задачи остаются **BLOCKED, не IDLE**: K3/T-3202 — нет Java 17/Gradle и независимых inputs локально, ожидается Integrator full-gate rerun; C19 — отсутствуют scaffold и стартовая база 3.8.0. Решения/материалы ожидания описаны в TASK_BOARD и запросе по workspace.
