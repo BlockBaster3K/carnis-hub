@@ -151,18 +151,36 @@ def _motion_values(node, out):
             _motion_values(v, out)
 
 
+def _molang(node):
+    """Есть ли в канале выражение Molang (строка) — его числом не измерить."""
+    if isinstance(node, str):
+        return True
+    if isinstance(node, list):
+        return any(_molang(x) for x in node)
+    if isinstance(node, dict):
+        return any(_molang(v) for v in node.values())
+    return False
+
+
 def anim_stats(body):
-    """(костей в ключах, из них реально двигаются, есть ли статика)."""
+    """(костей в ключах, из них реально двигаются, есть ли статика).
+
+    R14 §7: канал может быть задан выражением Molang (строкой). Такое
+    движение существует, но числом не измеряется — считать его «без ключевых
+    кадров» было бы ложным провалом (нашлось на `infected_zombie.pulsing`).
+    """
     bones = body.get("bones") or {}
     keyed = 0
     moving = 0
     for chans in bones.values():
         vals = []
+        mol = False
         for v in chans.values():
             _motion_values(v, vals)
-        if vals:
+            mol = mol or _molang(v)
+        if vals or mol:
             keyed += 1
-            if max(vals) - min(vals) > EPS:
+            if mol or (vals and max(vals) - min(vals) > EPS):
                 moving += 1
     return keyed, moving
 
