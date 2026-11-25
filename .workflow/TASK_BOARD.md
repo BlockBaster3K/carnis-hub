@@ -143,7 +143,55 @@
 **Приоритет:** 1
 **Зона:** `01-coder/3.7.0/`, `sounds.json` в заготовке, `07-project/`
 
-**ТЗ (все числа — в `00-board/agents/ARCHITECT.md`, Р-31.2/Р-31.6/Р-31.8):**
+### Делай по шагам — ровно эти правки, больше ничего
+
+**Шаг 1. `01-coder/3.7.0/src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java`**
+
+| Что | Где | Было | Стало |
+|---|---|---|---|
+| Интервал пульса | строка ~41 | `private static final int PULSE_INTERVAL_TICKS = 268; // 13.4 seconds` | `private static final int PULSE_INTERVAL_TICKS = 450; // 22.5 seconds` |
+| Громкость кровати | строка ~155 | `0.85F * (float) (1.0D - nearestHive / (RADIUS + 1.0D))` | `0.45F * (float) (1.0D - nearestHive / (RADIUS + 1.0D))` |
+| Кламп кровати | строка ~157 | `Mth.clamp(targetVolume, 0.0F, 0.85F)` | `Mth.clamp(targetVolume, 0.0F, 0.45F)` |
+| Громкость close-слоя | строка ~184 | `targetVolume * 0.6F` | `Mth.clamp(targetVolume * 0.55F, 0.0F, 0.25F)` |
+
+Сумма одновременно играющих слоёв: 0,45 + 0,25 = **0,70 ≤ 0,7**. ✓
+
+**Шаг 2. `01-coder/3.7.0/src/main/resources/assets/carnis/sounds.json`** —
+убрать `pitch` у всех шести ambient-событий (`hive.ambient`, `hive.ambient_close`,
+`hive.ambient_surface`, `hive.ambient_deep`, `hive.ambient_core`,
+`hive.ambient_threshold`), чтобы все были 1,0. Заодно задать **явный**
+`volume` для ambient-слоёв (кровать 0.45, close 0.25).
+
+**Шаг 3. Скопировать в пакет все 9 ambient- `.ogg`** из `03-sound/sounds/` —
+`amb/hive_ambient_01..03`, `amb/hive_ambient_close_01..02`, `hive/amb_surface`,
+`amb_deep`, `amb_core`, `amb_threshold`. **Все девять** в пакете устаревшие
+(Интегратор, `afb0165`), в банке они по 120,000 с. Копировать **побайтово**.
+
+**Шаг 4. `amalgam_breath_01/02`** — вернуть в пакет и добавить в
+`sounds.hive.amalgam_breath` с `volume 0.35`.
+
+**Шаг 5. Версия 3.7.0** — уже проставлена в четырёх местах, проверь.
+
+**Шаг 6. Собрать** `01-coder/3.7.0/project-3.7.0-clean.zip` +
+`project-3.7.0-clean.manifest.txt` (sha256 каждого файла, строк = файлов).
+
+**Шаг 7. Проверить себя — три команды, все должны дать код 0:**
+
+```bash
+python3 tools/ambient_gate.py 01-coder/3.7.0
+python3 tools/sound_orphans.py 01-coder/3.7.0
+python3 tools/accept_3.7.0.py
+```
+
+**Шаг 8. Отчёт** `00-board/reports/coder_3.7.0_ambient_fix.md` — таблица
+«было → стало» по шагам 1–4 с числами.
+
+> **Шаги 1–2 и 4 — только код и JSON.** `.ogg` руками не трогать (шаг 3 — это
+> копирование из банка, побайтово).
+
+### Подробное ТЗ
+
+(все числа — в `00-board/agents/ARCHITECT.md`, Р-31.2/Р-31.6/Р-31.8)
 
 1. **Ambient-фикс в коде:**
    - `PULSE_INTERVAL_TICKS` 268 → **450** (допустимо 420–480, но проверка
