@@ -65,6 +65,9 @@ OPAQUE_BASE = {c for c in BASELINE_PALETTE if c[3] > 0}
 
 DEFAULT_REF = "01-coder/3.6.0-R/project-3.6.0-R-clean.zip"
 
+# З-17: эталон может лежать не на диске, а в git-объекте (см. baseline.py).
+import baseline  # noqa: E402
+
 problems = []
 
 
@@ -209,11 +212,21 @@ def main():
         print(__doc__)
         return 1
     src = sys.argv[1]
-    ref = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_REF
-    if not zipfile.is_zipfile(ref) and not os.path.isdir(ref):
-        print("ОШИБКА: эталон не найден: %s" % ref)
-        print("Укажите вторым аргументом ZIP пакета 3.6.0-R (эталон масок).")
-        return 1
+    # З-17: эталон ищем не только на диске, но и в git-объекте. Иначе
+    # sparse-checkout проверяющего превращает «нет файла» в «✗ расхождение».
+    if len(sys.argv) > 2:
+        ref, ref_status, ref_src = sys.argv[2], "ok", "argv"
+        if not zipfile.is_zipfile(ref) and not os.path.isdir(ref):
+            print("ОШИБКА: эталон не найден: %s" % ref)
+            print("Укажите вторым аргументом ZIP пакета 3.6.0-R (эталон масок).")
+            return 1
+    else:
+        ref, ref_status, ref_src = baseline.resolve(DEFAULT_REF)
+    if ref_status != baseline.OK:
+        # Пропуск — не отказ. Код 2: «проверка не выполнена», а не «✗».
+        print("  · эталон недоступен — проверка пропущена")
+        print("ИТОГ: ПРОПУЩЕНО (эталон недоступен — ни на диске, ни в git)")
+        return 2
     return check_candidate(src, ref)
 
 

@@ -48,9 +48,9 @@ jobs:
       - name: Resolve package
         id: pkg
         shell: bash
+        env:
+          INPUT_PKG: ${{ github.event.inputs.package }}
         run: |
-          # Диагностика: если шаг упадёт, в логе будет видно состояние.
-          set -x
           set -e
           PKG="${{ github.event.inputs.package }}"
           if [ -z "$PKG" ]; then
@@ -73,13 +73,25 @@ jobs:
                 # ⛔ НЕ через `ls ... | head -1`: Actions запускает bash с `-eo pipefail`,
                 # и при отсутствии совпадений ls даёт exit 2, pipefail поднимает его,
                 # а set -e валит шаг МОЛЧА — до проверки на пустоту. Это и валило CI.
+                # ⛔ З-CИ-1: ТОЛЬКО точные имена, никаких подстановок. Раньше
+                # `reviewer_*3.1.2*` находил reviewer_3120_delta_verdict.md (вердикт
+                # про 3.12.0) — пакет без своего вердикта становился релизом.
                 VERD2=""
-                for F in 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
-                         00-board/reports/reviewer_*"$VDIG"*_verdict.md; do
+                for F in "00-board/reports/reviewer_${VBASE}_verdict.md" \
+                         "00-board/reports/reviewer_${VDIG}_verdict.md"; do
                   [ -f "$F" ] || continue
                   VERD2="$F"
                   break
                 done
+                # ⛔ З-CИ-3: файл без СОДЕРЖАНИЯ (заглушка из переводов строки
+                # и пробелов) — это НЕ вердикт. `[ -s ]` такое пропускает:
+                # файл с одним переводом строки не пуст по размеру, но пуст по смыслу.
+                if [ -n "$VERD2" ]; then
+                  if ! grep -qE '[^[:space:]]' "$VERD2" 2>/dev/null; then
+                    echo "::error::вердикт $VERD2 пуст по содержанию — считать принятым нельзя"
+                    exit 1
+                  fi
+                fi
                 if [ -z "$VERD2" ]; then
                   echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)"
                   echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
@@ -111,6 +123,36 @@ jobs:
             done
           fi
           test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
+
+          # ⛔ З-CИ-2: ручной запуск (workflow_dispatch) с путём в package тоже
+          # обязан иметь вердикт. Раньше защита стояла только в ветке автопоиска,
+          # и ручной прогон мог опубликовать любой пакет, обойдя её целиком.
+          if [ -n "$INPUT_PKG" ]; then
+            VD=$(basename "$(dirname "$PKG")")
+            VB="${VD%%-R*}"
+            VDG=$(echo "$VB" | tr -d '.')
+            MANUAL_VERDICT=""
+            for F in "00-board/reports/reviewer_${VB}_verdict.md" \
+                     "00-board/reports/reviewer_${VDG}_verdict.md"; do
+              [ -f "$F" ] || continue
+              MANUAL_VERDICT="$F"
+              break
+            done
+            if [ -z "$MANUAL_VERDICT" ]; then
+              echo "::error::ручной запуск: у пакета $VD нет вердикта Ревизора — публиковать нельзя"
+              exit 1
+            fi
+            if ! grep -qE '[^[:space:]]' "$MANUAL_VERDICT" 2>/dev/null; then
+              echo "::error::ручной запуск: вердикт $MANUAL_VERDICT пуст по содержанию"
+              exit 1
+            fi
+            if grep -qiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$MANUAL_VERDICT"; then
+              echo "::error::ручной запуск: вердикт $MANUAL_VERDICT отрицательный"
+              exit 1
+            fi
+            echo "- ✅ Ручной запуск: вердикт \`$MANUAL_VERDICT\` найден (З-CИ-2)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           echo "path=$PKG" >> "$GITHUB_OUTPUT"
           echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
 

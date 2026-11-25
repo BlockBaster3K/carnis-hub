@@ -28,12 +28,25 @@ import tempfile
 import zipfile
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# З-17: эталон 3.6.0-R берём через общий резолвер (диск → git).
+sys.path.insert(0, os.path.join(REPO, "tools"))
+import baseline  # noqa: E402
 DEFAULT_ZIP = os.path.join(REPO, "01-coder", "3.7.0",
                            "project-3.7.0-clean.zip")
 DEFAULT_MANIFEST = os.path.join(REPO, "01-coder", "3.7.0",
                                 "project-3.7.0-clean.manifest.txt")
 REF_360 = os.path.join(REPO, "01-coder", "3.6.0-R",
                        "project-3.6.0-R-clean.zip")
+REF_360_REAL, REF_STATUS, REF_SRC = None, baseline.UNAVAILABLE, "none"
+
+
+def resolve_ref():
+    """Разрешить эталон 3.6.0-R (диск → git-объект). None = недоступен."""
+    try:
+        return baseline.resolve(REF_360)
+    except Exception as exc:  # noqa: BLE001
+        print("  ! baseline.resolve упал: %s" % exc)
+        return None, baseline.UNAVAILABLE, "error"
 
 VERSION = "3.7.0"
 GLOW_CHECK = os.path.join(REPO, "tools", "glow_check.py")
@@ -376,12 +389,14 @@ def check_accepted_layers(extract_dir):
 
 
 def check_keep_identical(extract_dir):
-    if not os.path.exists(REF_360):
+    ref = REF_360_REAL
+    if ref is None:
+        # Пропуск, а не расхождение: эталона нет ни на диске, ни в git.
         warn.append("нет эталона 3.6.0-R — Д1–Д7 не сверены")
         print("  ! эталона 3.6.0-R нет, пропущено")
         return
     same = diff = missing = 0
-    with zipfile.ZipFile(REF_360) as z:
+    with zipfile.ZipFile(ref) as z:
         names = set(z.namelist())
         for rel in KEEP_IDENTICAL:
             cand = [n for n in names if n.endswith(rel)]
@@ -404,8 +419,12 @@ def check_keep_identical(extract_dir):
 
 
 def main():
+    global REF_360_REAL, REF_STATUS, REF_SRC
     zip_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_ZIP
     man_arg = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_MANIFEST
+
+    # З-17: эталон разрешаем ОДИН раз до блоков.
+    REF_360_REAL, REF_STATUS, REF_SRC = resolve_ref()
 
     print("Приёмка пакета %s (ТЗ 3.7.0)" % VERSION)
     if not os.path.exists(zip_path):
@@ -469,7 +488,10 @@ def main():
         print()
         print("5) A4-p7 — палитра существ (ТЗ §2.3)")
         if os.path.exists(GLOW_CHECK):
-            run_tool("glow_check", GLOW_CHECK, zip_path, REF_360)
+            glow_args = [zip_path]
+            if REF_360_REAL:
+                glow_args.append(REF_360_REAL)
+            run_tool("glow_check", GLOW_CHECK, *glow_args)
         else:
             fail.append("tools/glow_check.py отсутствует — A4-p7 не проверить")
 

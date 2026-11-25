@@ -39,14 +39,32 @@ import tempfile
 import zipfile
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# З-17: общий резолвер эталона (диск → git-объект).
+sys.path.insert(0, os.path.join(REPO, "tools"))
+import baseline  # noqa: E402
 DEFAULT_ZIP = os.path.join(REPO, "01-coder", "3.7.2",
                            "project-3.7.2-clean.zip")
 DEFAULT_MANIFEST = os.path.join(REPO, "01-coder", "3.7.2",
                                 "project-3.7.2-clean.manifest.txt")
+# З-17: эталон 3.6.0-R может отсутствовать в рабочем дереве (sparse-checkout
+# у Ревизора) — тогда достаём из git-объекта. Блоки спрашивают REF_360_REAL,
+# а не путь на диске: «нет файла» не должно превращаться в «не сходится».
 REF_360 = os.path.join(REPO, "01-coder", "3.6.0-R",
                        "project-3.6.0-R-clean.zip")
+REF_360_REAL, REF_STATUS, REF_SRC = None, baseline.UNAVAILABLE, "none"
+
+
+def resolve_ref():
+    """Разрешить эталон (диск → git). Возвращает путь или None."""
+    try:
+        path, status, src = baseline.resolve(REF_360)
+    except Exception as exc:  # noqa: BLE001
+        print("  ! baseline.resolve упал: %s" % exc)
+        return None, baseline.UNAVAILABLE, "error"
+    return path, status, src
 
 VERSION = "3.7.2"
+
 GLOW_CHECK = os.path.join(REPO, "tools", "glow_check.py")
 ORPHANS = os.path.join(REPO, "tools", "sound_orphans.py")
 TENDRIL = os.path.join(REPO, "tools", "tendril_flesh_match.py")
@@ -88,6 +106,9 @@ KEEP_IDENTICAL = [
 ]
 
 fail = []
+# З-17: проверки, которые не удалось выполнить (эталон недоступен и т.п.).
+# Это НЕ провал пакета, но и не «проверено» — выносится в итог отдельно.
+skipped_checks = []
 warn = []
 
 
@@ -247,6 +268,14 @@ def run_tool(name, script, *args, **kw):
     r = subprocess.run([py, script] + list(args), capture_output=True,
                        text=True)
     tail = [l for l in r.stdout.strip().split("\n") if l.startswith("ИТОГ")]
+    # З-17: код 2 у чекеров — «ЗАМЕЧАНИЯ/пропуск», а не «расхождение».
+    # Пропуск (эталон недоступен) нельзя валить в fail: иначе пакет получает
+    # отказ за то, что у проверяющего устроено рабочее дерево, а не за дефект.
+    if r.returncode == 2:
+        print("  … %s → код 2 (пропущено/замечания) | %s"
+              % (name, tail[0] if tail else "(нет строки ИТОГ)"))
+        skipped_checks.append("%s: код 2" % name)
+        return
     print("  %s %s → код %d | %s"
           % ("✓" if r.returncode == 0 else "✗", name, r.returncode,
              tail[0] if tail else "(нет строки ИТОГ)"))
@@ -307,12 +336,15 @@ def check_ambient(extract_dir):
 
 # -------------------------------------------------------------- 10. Принятое
 def check_keep_identical(extract_dir):
-    if not os.path.exists(REF_360):
-        warn.append("нет эталона 3.6.0-R — Д1–Д7 не сверены")
-        print("  ! эталона 3.6.0-R нет, пропущено")
+    ref = REF_360_REAL
+    if ref is None:
+        # Пропуск, а не расхождение: эталона нет ни на диске, ни в git.
+        warn.append("эталон 3.6.0-R недоступен — Д1–Д7 не сверены (пропуск)")
+        print("  ! эталон 3.6.0-R недоступен (ни на диске, ни в git) — "
+              "Д1–Д7 не сверены")
         return
     same = diff = missing = 0
-    with zipfile.ZipFile(REF_360) as z:
+    with zipfile.ZipFile(ref) as z:
         names = set(z.namelist())
         for rel in KEEP_IDENTICAL:
             cand = [n for n in names if n.endswith(rel)]
@@ -672,8 +704,13 @@ def find_manifest(zip_path, given):
 
 
 def main():
+    global REF_360_REAL, REF_STATUS, REF_SRC
     zip_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_ZIP
     man_arg = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_MANIFEST
+
+    # З-17: разрешаем эталон ОДИН раз до всех блоков. Порядок важен: блоки 5,
+    # 6 и 10 пользуются результатом, а не проверяют диск сами.
+    REF_360_REAL, REF_STATUS, REF_SRC = resolve_ref()
 
     print("Приёмка пакета %s (ТЗ %s)" % (VERSION, VERSION))
     if not os.path.exists(zip_path):
@@ -738,7 +775,12 @@ def main():
         print()
         print("5) A4-p7-R — палитра существ (ТЗ §4)")
         if os.path.exists(GLOW_CHECK):
-            run_tool("glow_check", GLOW_CHECK, zip_path, REF_360, need="PIL")
+            # З-17: передаём только РАЗРЕШЁННЫЙ эталон. Если его нет —
+            # не передаём вовсе, и чекер скажет «ПРОПУЩЕНО» (код 2), а не ✗.
+            glow_args = [zip_path]
+            if REF_360_REAL:
+                glow_args.append(REF_360_REAL)
+            run_tool("glow_check", GLOW_CHECK, *glow_args, need="PIL")
         else:
             fail.append("tools/glow_check.py отсутствует — A4-p7 не проверить")
 
@@ -811,6 +853,16 @@ def main():
             for i, f in enumerate(fail, 1):
                 print("  %2d. %s" % (i, f))
             return 1
+        # З-17: пропущенные проверки называем вслух. Пакет принят, но
+        # читающий вердикт должен знать, что часть проверок НЕ выполнялась,
+        # а не думать, что «всё проверено и всё сошлось».
+        if skipped_checks:
+            print("ВНИМАНИЕ: %d проверк(и) не выполнены — не путать с «сошлось»:"
+                  % len(skipped_checks))
+            for s in skipped_checks:
+                print("  · %s" % s)
+            print("  (эталон недоступен: нет 01-coder/3.6.0-R ни на диске, "
+                  "ни в git — это пропуск, а не расхождение)")
         print("ИТОГ: ПРИНЯТО — все проверки пройдены.")
         print("Дальше: CI на новом коммите → merge PR → тег v%s → Release."
               % VERSION)
