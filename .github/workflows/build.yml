@@ -59,11 +59,35 @@ jobs:
             for CAND in $(ls -1d 01-coder/*/ 2>/dev/null | sed 's|01-coder/||; s|/$||' \
                           | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V -r); do
               if ls -1 "01-coder/$CAND"/project-*-clean.zip >/dev/null 2>&1; then
+                # ⛔ Пакет без ВЕРДИКТА РЕВИЗОРА не становится релизом.
+                # Инцидент 2026-11-25: заготовка 3.7.2 (отладочная, гейт давал
+                # код 1) оказалась старшей версией с ZIP — и CI выпустил
+                # релиз v3.7.2 из непринятого пакета. Отсутствие файла
+                # вердикта здесь — это «не принято», а не «принято по умолчанию».
+                # Вердикт ищем по номеру версии БЕЗ точек: у ролей встречаются
+                # оба вида — reviewer_3.6.0_verdict.md и reviewer_371_verdict.md.
+                VBASE="${CAND%%-R*}"
+                VDIG=$(echo "$VBASE" | tr -d '.')
+                VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
+                           00-board/reports/reviewer_*"$VDIG"*_verdict.md \
+                           2>/dev/null | head -1)
+                if [ -z "$VERD2" ]; then
+                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)"
+                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
+                  continue
+                fi
+                if grep -qiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2"; then
+                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю"
+                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю" >> "$GITHUB_STEP_SUMMARY"
+                  continue
+                fi
                 DIR="$CAND"
+                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята"
+                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята" >> "$GITHUB_STEP_SUMMARY"
                 break
               fi
             done
-            test -n "$DIR" || { echo "::error::Не найдено ни одного каталога версии с project-*-clean.zip в 01-coder/"; exit 1; }
+            test -n "$DIR" || { echo "::error::Нет ни одного принятого пакета: каталоги с project-*-clean.zip есть, но вердикта Ревизора (00-board/reports/reviewer_*_verdict.md) нет ни у одного"; exit 1; }
             PKG=$(ls -1 "01-coder/$DIR"/project-*-clean.zip 2>/dev/null | head -1)
           fi
           test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
