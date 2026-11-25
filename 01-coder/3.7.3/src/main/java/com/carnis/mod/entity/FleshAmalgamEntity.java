@@ -298,12 +298,12 @@ public final class FleshAmalgamEntity extends HiveEntity
     public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
 
-        if (
-                hit
-                        && target instanceof ServerPlayer player
-                        && level() instanceof ServerLevel serverLevel
-        ) {
-            tryAcidSplash(serverLevel, player);
+        if (hit && level() instanceof ServerLevel serverLevel) {
+            serverLevel.playSound(null, getX(), getY(), getZ(), ModSounds.AMALGAM_SMASH.get(),
+                    SoundSource.HOSTILE, 1.0F, 1.0F);
+            if (target instanceof ServerPlayer player) {
+                tryAcidSplash(serverLevel, player);
+            }
         }
 
         return hit;

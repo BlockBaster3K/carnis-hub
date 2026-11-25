@@ -41,6 +41,8 @@ public final class HiveAmbientSoundHandler {
     private static final int PULSE_INTERVAL_TICKS = 450; // 22.5 seconds
     private static final int HEARTBEAT_MIN_INTERVAL = 800; // 40 seconds
     private static final int HEARTBEAT_MAX_INTERVAL = 1200; // 60 seconds
+    private static final int DETAIL_MIN_TICKS = 160; // 8 seconds
+    private static final int DETAIL_MAX_TICKS = 280; // 14 seconds
     // Sphere radius 16 contains approximately 17,077 sampled positions.
     private static final int DENSITY_SURFACE = 85;
     private static final int DENSITY_CORE = 1366;
@@ -69,6 +71,7 @@ public final class HiveAmbientSoundHandler {
     private static long nextPulseAt = NO_SCHEDULED_TIME;
     private static long nextTonalStingerAt = NO_SCHEDULED_TIME;
     private static long nextHeartbeatAt = NO_SCHEDULED_TIME;
+    private static long nextHiveDetailAt = NO_SCHEDULED_TIME;
     private static boolean nextHiveHeartbeatEvent = true;
     private static SimpleSoundInstance heartbeatSound;
     private static boolean heartbeatPlaying = false;
@@ -197,6 +200,7 @@ public final class HiveAmbientSoundHandler {
             nextPulseAt = NO_SCHEDULED_TIME;
             nextTonalStingerAt = NO_SCHEDULED_TIME;
             nextHeartbeatAt = NO_SCHEDULED_TIME;
+            nextHiveDetailAt = NO_SCHEDULED_TIME;
             nextHiveHeartbeatEvent = true;
             stopHeartbeat(client);
         }
@@ -334,6 +338,17 @@ public final class HiveAmbientSoundHandler {
             nextTonalStingerAt = now + 1200L + level.random.nextInt(1201);
         }
 
+        if (nextHiveDetailAt == NO_SCHEDULED_TIME) {
+            nextHiveDetailAt = now + nextHiveDetailDelay(level);
+        } else if (now >= nextHiveDetailAt) {
+            SoundEvent detail = selectHiveDetail(level);
+            if (detail != null && client.player != null) {
+                level.playLocalSound(client.player.getX(), client.player.getY(), client.player.getZ(),
+                        detail, SoundSource.AMBIENT, 0.30F, 1.0F, false);
+            }
+            nextHiveDetailAt = now + nextHiveDetailDelay(level);
+        }
+
         if (insideStructure) {
             if (nextHeartbeatAt == NO_SCHEDULED_TIME) {
                 nextHeartbeatAt = now + nextHeartbeatDelay(level);
@@ -363,6 +378,23 @@ public final class HiveAmbientSoundHandler {
             nextHiveHeartbeatEvent = true;
             stopHeartbeat(client);
         }
+    }
+
+    private static SoundEvent selectHiveDetail(ClientLevel level) {
+        return switch (currentZone) {
+            case ZONE_THRESHOLD -> ModSounds.HIVE_DETAIL_CREAK.get();
+            case ZONE_SURFACE -> level.random.nextBoolean()
+                    ? ModSounds.HIVE_DETAIL_SCUTTLE.get()
+                    : ModSounds.HIVE_DETAIL_MEMBRANE.get();
+            case ZONE_DEEP -> ModSounds.HIVE_DETAIL_BUBBLES.get();
+            case ZONE_CORE -> ModSounds.HIVE_DETAIL_FLOW.get();
+            default -> null;
+        };
+    }
+
+    private static int nextHiveDetailDelay(ClientLevel level) {
+        return DETAIL_MIN_TICKS
+                + level.random.nextInt(DETAIL_MAX_TICKS - DETAIL_MIN_TICKS + 1);
     }
 
     private static int nextHeartbeatDelay(ClientLevel level) {
@@ -398,6 +430,7 @@ public final class HiveAmbientSoundHandler {
         nextPulseAt = NO_SCHEDULED_TIME;
         nextTonalStingerAt = NO_SCHEDULED_TIME;
         nextHeartbeatAt = NO_SCHEDULED_TIME;
+        nextHiveDetailAt = NO_SCHEDULED_TIME;
         nextHiveHeartbeatEvent = true;
 
         currentZone = -1;

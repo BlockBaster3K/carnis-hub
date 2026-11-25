@@ -537,11 +537,13 @@
     "sounds": [
       {
         "name": "carnis:hive/detail_flow_01",
-        "pitch": 0.95
+        "volume": 1.5,
+        "pitch": 1.0
       },
       {
         "name": "carnis:hive/detail_flow_02",
-        "pitch": 1.05
+        "volume": 1.0,
+        "pitch": 1.0
       }
     ]
   },

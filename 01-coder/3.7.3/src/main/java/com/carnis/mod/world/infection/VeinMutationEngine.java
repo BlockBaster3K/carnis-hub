@@ -1,11 +1,13 @@
 package com.carnis.mod.world.infection;
 
 import com.carnis.mod.init.ModBlocks;
+import com.carnis.mod.init.ModSounds;
 import com.carnis.mod.network.ModMessages;
 import com.carnis.mod.world.CarnisWorldData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -113,7 +115,11 @@ public final class VeinMutationEngine {
                 BlockState placementBase = vein ? existing : Blocks.AIR.defaultBlockState();
                 BlockState result = ModBlocks.FLESH_VEINS.get().getStateForPlacement(
                         placementBase, level, outside, face.getOpposite());
-                if (result != null && !result.equals(existing) && level.setBlockAndUpdate(outside, result)) return;
+                if (result != null && !result.equals(existing) && level.setBlockAndUpdate(outside, result)) {
+                    level.playSound(null, outside, ModSounds.HIVE_SPREAD.get(),
+                            SoundSource.BLOCKS, 0.65F, 1.0F);
+                    return;
+                }
             }
         }
     }

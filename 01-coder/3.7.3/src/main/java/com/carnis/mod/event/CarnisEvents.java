@@ -8,10 +8,12 @@ import com.carnis.mod.entity.BiomassValued;
 import com.carnis.mod.entity.HivemindLinkedMob;
 import com.carnis.mod.entity.InfectedCreeperEntity;
 import com.carnis.mod.init.ModBlocks;
+import com.carnis.mod.init.ModSounds;
 import com.carnis.mod.network.ModMessages;
 import com.carnis.mod.world.CarnisWorldData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +43,15 @@ public final class CarnisEvents {
         var explosion = event.getExplosion();
         Entity exploder = explosion.getExploder();
         if (exploder == null) exploder = explosion.getIndirectSourceEntity();
-        if (!(exploder instanceof InfectedCreeperEntity)) return;
+        if (!(exploder instanceof InfectedCreeperEntity creeper)) return;
+
+        // Creeper.explodeCreeper() is private in Minecraft 1.20.1; Detonate
+        // is the Forge hook after the explosion has collected its impact set.
+        if (event.getLevel() instanceof ServerLevel serverLevel) {
+            serverLevel.playSound(null, creeper.getX(), creeper.getY(), creeper.getZ(),
+                    ModSounds.CREEPER_RUPTURE.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+        }
+
         event.getAffectedBlocks().removeIf(pos -> {
             var state = event.getLevel().getBlockState(pos);
             return state.is(ModBlocks.LIVING_FLESH.get())

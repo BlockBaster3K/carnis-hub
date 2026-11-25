@@ -65,6 +65,10 @@ public final class SynapseNodeBlock extends Block {
             level.setBlock(pos, state.setValue(POWER, nextPower), 3);
             level.updateNeighborsAt(pos, this);
             level.updateNeighbourForOutputSignal(pos, this);
+            if (nextPower > 0) {
+                level.playSound(null, pos, ModSounds.SYNAPSE_SHOCK.get(),
+                        SoundSource.BLOCKS, 0.8F, 1.0F);
+            }
         }
         if (nearbyTargets > 0 && Math.floorMod(level.getGameTime(), 40L) == 0L) {
             level.playSound(null, pos, ModSounds.SYNAPSE_NODE_PULSE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);

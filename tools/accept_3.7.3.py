@@ -207,6 +207,9 @@ def check_delta_372(zip_path):
     # разрешение не ослабляет проверку: не тот цвет — упадёт блок 14.
     for png in EXPECTED_CHANGED_PNG:
         cmd += ["--allow", png]
+    # S17: единственный реестр событий звука, где добавлены привязки к
+    # геймплейным действиям. Разрешаем только этот файл, не каталог ресурсов.
+    cmd += ["--allow", "src/main/resources/assets/carnis/sounds.json"]
     r = subprocess.run(cmd, capture_output=True, text=True)
     out = r.stdout
     for ln in out.splitlines():
