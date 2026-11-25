@@ -119,6 +119,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("sources", nargs="+")
     ap.add_argument("--min-bones", type=int, default=12)
+    ap.add_argument("--require-anims", action="store_true",
+                    help="отсутствие idle/walk/attack/hurt/death — провал, "
+                         "а не предупреждение (приёмка 3.8.1/H-блока)")
     ap.add_argument("--only", default=None,
                     help="имена через запятую — проверять только их")
     a = ap.parse_args()
@@ -213,10 +216,12 @@ def main():
         if anim_files:
             anim_bones = set()
             anim_names = set()
+            _anim_bodies = []
             for af in anim_files:
                 data = json.loads(files[af].decode("utf-8"))
                 for anim_name, body in (data.get("animations") or {}).items():
                     anim_names.add(anim_name.split(".")[-1].split(".")[0])
+                    _anim_bodies.append((anim_name, body))
                     for bname in (body.get("bones") or {}):
                         anim_bones.add(bname)
             unknown = sorted(anim_bones - set(info["names"]))
@@ -226,7 +231,21 @@ def main():
             missing = [x for x in REQUIRED_ANIMS if x not in anim_names]
             anim_res = "%d/%d" % (len(REQUIRED_ANIMS) - len(missing), len(REQUIRED_ANIMS))
             if missing:
-                warn("%s: нет анимаций %s" % (name, ", ".join(missing)))
+                (bad if a.require_anims else warn)(
+                    "%s: нет анимаций %s" % (name, ", ".join(missing)))
+            # Пустая анимация (есть имя, нет ключевых кадров) — та же болванка,
+            # только выглядит как выполненная работа: ловится здесь.
+            for anim_name, body in _anim_bodies:
+                kf = 0
+                for chans in (body.get("bones") or {}).values():
+                    for val in chans.values():
+                        if isinstance(val, list):
+                            kf += len(val)
+                        elif isinstance(val, dict):
+                            kf += sum(len(x) for x in val.values()
+                                      if isinstance(x, list))
+                if kf == 0:
+                    bad("%s: анимация %s без ключевых кадров" % (name, anim_name))
 
         print("%-26s %6d %10s %6d %6.1f %12s %9s %s"
               % (name, info["bones"], "%dx%d" % (w, h), st["colors"],

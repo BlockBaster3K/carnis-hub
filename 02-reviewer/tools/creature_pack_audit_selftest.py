@@ -16,6 +16,7 @@
 Код 0 — все ожидания сошлись (чекер строг там, где надо), 1 — расхождение.
 """
 
+import json
 import os
 import shutil
 import subprocess
@@ -79,6 +80,14 @@ def _mask_outside():
     return m
 
 
+def _anim(bone="body", keyframes=2):
+    """Анимация на одну кость: `keyframes` кадров поворота."""
+    return {"animations": {"animation.%s.idle" % NAME: {
+        "loop": True,
+        "animation_length": 1.0,
+        "bones": {bone: {"rotation": [[0, 0, 0]] * max(keyframes, 0)}}}}}
+
+
 CASES = [
     ("A: 3 непрозрачных цвета + 8 «пустых» RGB", 2,
      dict(tex=_tex_three_colors(), mask=_mask_ok())),
@@ -87,6 +96,14 @@ CASES = [
     ("D: кость без pivot + UV за пределами", 2,
      dict(tex=_tex_normal(), mask=_mask_ok(), geo=_geo(pivot=False, uv=(200, 200)))),
     ("E: контроль — всё в норме", 0, dict(tex=_tex_normal(), mask=_mask_ok())),
+    # Ниже — случаи H-блока/3.8.1: «анимация есть, а работать не будет».
+    ("F: анимация ссылается на несуществующую кость", 2,
+     dict(tex=_tex_normal(), mask=_mask_ok(), anim=_anim(bone="хвост_которого_нет"))),
+    ("G: анимация без ключевых кадров", 2,
+     dict(tex=_tex_normal(), mask=_mask_ok(), anim=_anim(keyframes=0))),
+    ("H: --require-anims при одной анимации из пяти", 2,
+     dict(tex=_tex_normal(), mask=_mask_ok(), anim=_anim(),
+          extra=["--require-anims"])),
 ]
 
 
@@ -103,12 +120,18 @@ def main():
             tex_dir = os.path.join(d, BASE, "textures", "entity")
             os.makedirs(geo_dir)
             os.makedirs(tex_dir)
-            import json
             with open(os.path.join(geo_dir, NAME + ".geo.json"), "w", encoding="utf-8") as f:
                 json.dump(kw.get("geo", _geo()), f)
             kw["tex"].save(os.path.join(tex_dir, NAME + ".png"))
             kw["mask"].save(os.path.join(tex_dir, NAME + "_glowmask.png"))
-            r = subprocess.run([sys.executable, TOOL, d, "--min-bones", "1"],
+            if kw.get("anim"):
+                anim_dir = os.path.join(d, BASE, "animations", "entity")
+                os.makedirs(anim_dir)
+                with open(os.path.join(anim_dir, NAME + ".animation.json"), "w",
+                          encoding="utf-8") as f:
+                    json.dump(kw["anim"], f)
+            r = subprocess.run([sys.executable, TOOL, d, "--min-bones", "1"]
+                               + kw.get("extra", []),
                                capture_output=True, text=True)
             ok = r.returncode == expect
             print("%-40s ожидался код %d, получен %d  %s"
