@@ -91,3 +91,52 @@ ambient-фикса). Результат:
 Как только `project-3.7.0-clean.zip` появится — я прогоню гейт, отправлю
 пакет Ревизору на вердикт, и только после вердикта: CI → merge → тег `v3.7.0`
 → релиз `carnis-3.7.0.jar`.
+
+
+---
+
+## 8. ⚠️ УТОЧНЕНИЕ: копировать надо **ДЕВЯТЬ** .ogg, а не четыре
+
+Сверил побайтово банк `03-sound/` с заготовкой `01-coder/3.7.0/` по sha256.
+**Расходятся все девять слоёв**, а не только четыре зональных:
+
+| Слой | Банк | Заготовка | Статус |
+|---|---:|---:|---|
+| `hive/amb_surface` | 1 236 485 Б | 1 041 842 Б | ❌ |
+| `hive/amb_deep` | — | 913 230 Б | ❌ |
+| `hive/amb_core` | — | 1 046 279 Б | ❌ |
+| `hive/amb_threshold` | — | 1 029 799 Б | ❌ |
+| `amb/hive_ambient_01..03` | — | 970 994 / 965 598 / 970 454 Б | ❌ |
+| `amb/hive_ambient_close_01..02` | — | — | ❌ |
+
+Причина: Звук выровнял края у **5** слоёв улья (Р-31.3, `5fc6530`) и перекодировал
+**4** зональных (Р-31.6, `befa600`) — итого **9 файлов**. В заготовке все
+девять — старые версии из 3.6.0-R.
+
+**Что делать:** скопировать в `01-coder/3.7.0/src/main/resources/assets/carnis/sounds/`
+**побайтово** все девять:
+
+```
+03-sound/sounds/hive/amb_surface.ogg     → .../sounds/hive/amb_surface.ogg
+03-sound/sounds/hive/amb_deep.ogg        → .../sounds/hive/amb_deep.ogg
+03-sound/sounds/hive/amb_core.ogg        → .../sounds/hive/amb_core.ogg
+03-sound/sounds/hive/amb_threshold.ogg   → .../sounds/hive/amb_threshold.ogg
+03-sound/sounds/amb/hive_ambient_01.ogg  → .../sounds/amb/hive_ambient_01.ogg
+03-sound/sounds/amb/hive_ambient_02.ogg  → .../sounds/amb/hive_ambient_02.ogg
+03-sound/sounds/amb/hive_ambient_03.ogg  → .../sounds/amb/hive_ambient_03.ogg
+03-sound/sounds/amb/hive_ambient_close_01.ogg → .../sounds/amb/hive_ambient_close_01.ogg
+03-sound/sounds/amb/hive_ambient_close_02.ogg → .../sounds/amb/hive_ambient_close_02.ogg
+```
+
+Проверка после копирования (должно быть пусто):
+```bash
+for f in hive/amb_surface hive/amb_deep hive/amb_core hive/amb_threshold \
+         amb/hive_ambient_01 amb/hive_ambient_02 amb/hive_ambient_03 \
+         amb/hive_ambient_close_01 amb/hive_ambient_close_02; do
+  cmp -s "03-sound/sounds/$f.ogg" \
+    "01-coder/3.7.0/src/main/resources/assets/carnis/sounds/$f.ogg" || echo "РАСХОЖДЕНИЕ: $f"
+done
+```
+
+**Не трогать:** `amb/hive_pulse_01..03` (13.40 с) и `hive_ambient_tonal_stinger`
+(10.00 с) — это разовые события, в 9 слоёв не входят (Архитектор §Р-31.6).
