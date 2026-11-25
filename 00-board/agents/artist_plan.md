@@ -42,3 +42,31 @@
 - [ ] **G9** — текстуры брони neuro_resonator
 - [ ] **G10** — инвентаризация частиц и эффектов
 - [ ] **G11** — 10 вариантов декора — геометрией, не только текстурой
+
+## Волна 51 · 3D-фронт: от эталона к игре (3.8.0 → 3.9.0)
+
+Текст: `00-board/ROADMAP_artist.md`, раздел «ВОЛНА 51 · 3D-ФРОНТ».
+
+- [ ] **H1** — geo_check.py — UV/кости/pivot/текстура
+- [ ] **H2** — прогнать geo_check по 14 существам и починить
+- [ ] **H3** — parasitic_tendril 4→14 костей
+- [ ] **H4** — cerebral_nexus 6→14
+- [ ] **H5** — hive_sentinel 6→16
+- [ ] **H6** — biomass_maggot 8→12
+- [ ] **H7** — flesh_amalgam 13→20
+- [ ] **H8** — превью + реестр по расширенным
+- [ ] **H9** — infected_slime 1→12
+- [ ] **H10** — infected_blaze 2→14
+- [ ] **H11** — infected_enderman 6→14
+- [ ] **H12** — infected_pillager 6→16
+- [ ] **H13** — infected_witch 5→16
+- [ ] **H14** — geo_check 0 на всех 5 новых
+- [ ] **H15** — 4 анимации на 5 новых существ
+- [ ] **H16** — hurt/mask_twitch на 5 наших
+- [ ] **H17** — анимации в формате Geckolib 1.12.0
+- [ ] **H18** — GLB-эталоны b020..b024 (glb+data+anim)
+- [ ] **H19** — валидация Khronos 0 ошибок
+- [ ] **H20** — visibility_budget/coplanar/контакт-аудит
+- [ ] **H21** — превью front/side/threequarter45
+- [ ] **H22** — сверить игровую geo с GLB-эталонами
+- [ ] **H23** — geo_registry.md — таблица по 14 существам
