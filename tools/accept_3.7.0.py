@@ -121,7 +121,7 @@ def check_manifest(extract_dir, manifest, src="near"):
         print("    сверка sha256 не выполнена")
         skipped_checks.append("манифест: не найден — сверка sha256 не выполнена")
         return
-    r = subprocess.run(["sha256sum", "-c", manifest], cwd=extract_dir,
+    r = subprocess.run(["sha256sum", "-c", os.path.abspath(manifest)], cwd=extract_dir,
                        capture_output=True, text=True)
     ok = r.stdout.count(": OK")
     bad = r.stdout.count("FAILED")
@@ -576,6 +576,16 @@ def main():
             for i, f in enumerate(fail, 1):
                 print("  %2d. %s" % (i, f))
             return 1
+        # З-20 (fail-closed): пропуск — не успех. Гейт, зелёный при
+        # непроведённой проверке, даёт ложную гарантию, и CI выпускает релиз.
+        if skipped_checks:
+            print("ИТОГ: ПРОВЕРКА НЕ ВЫПОЛНЕНА — fail-closed (З-20), %d:"
+                  % len(skipped_checks))
+            for s in skipped_checks:
+                print("  · %s" % s)
+            print("Пакет НЕ отвергнут по существу, но и не принят: часть")
+            print("проверок не выполнена. Код 2 — «не проверено», не «принято».")
+            return 2
         print("ИТОГ: ПРИНЯТО — все проверки пройдены.")
         print("Дальше: CI на новом коммите → merge PR → тег v%s → Release." % VERSION)
         return 0

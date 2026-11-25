@@ -112,7 +112,11 @@ def check_manifest(extract_dir, manifest, src="near"):
         if len(parts) < 2:
             continue
         files += 1
-    r = subprocess.run(["sha256sum", "-c", "--quiet", manifest],
+    # Путь к манифесту АБСОЛЮТНЫЙ: cwd=extract_dir, и относительный путь
+    # из корня репозитория там не разрешается (проверка молча «не находила»
+    # файл и выдавала расхождение на корректном пакете).
+    manifest_abs = os.path.abspath(manifest)
+    r = subprocess.run(["sha256sum", "-c", "--quiet", manifest_abs],
                        cwd=extract_dir, capture_output=True, text=True)
     bad = [l for l in (r.stdout + r.stderr).split("\n")
            if l.strip() and "OK" not in l]
@@ -599,6 +603,16 @@ def main():
             for i, f in enumerate(fail, 1):
                 print("  %2d. %s" % (i, f))
             return 1
+        # З-20 (fail-closed): пропуск — не успех. Гейт, зелёный при
+        # непроведённой проверке, даёт ложную гарантию, и CI выпускает релиз.
+        if skipped_checks:
+            print("ИТОГ: ПРОВЕРКА НЕ ВЫПОЛНЕНА — fail-closed (З-20), %d:"
+                  % len(skipped_checks))
+            for s in skipped_checks:
+                print("  · %s" % s)
+            print("Пакет НЕ отвергнут по существу, но и не принят: часть")
+            print("проверок не выполнена. Код 2 — «не проверено», не «принято».")
+            return 2
         print("ИТОГ: ПРИНЯТО — все проверки пройдены.")
         print("Дальше: CI на новом коммите → merge PR → тег v%s → Release."
               % VERSION)
