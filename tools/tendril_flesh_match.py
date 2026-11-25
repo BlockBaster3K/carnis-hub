@@ -42,6 +42,9 @@ THRESHOLD = 12.0
 # бы критерий 5 невыполнимым. Печатаем фактические цвета, но не запрещаем их.
 DEFAULT_REF = os.path.join("01-coder", "3.6.0-R", "project-3.6.0-R-clean.zip")
 
+# З-17: эталон может быть только в git-объекте (см. baseline.py).
+import baseline  # noqa: E402
+
 
 def load_from(src, name):
     """Возвращает PIL.Image или None. src — каталог или zip."""
@@ -93,7 +96,19 @@ def main():
         print("использование: python3 tools/tendril_flesh_match.py <каталог|zip> [эталон]")
         return 1
     src = sys.argv[1]
-    ref = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_REF
+    # З-17: эталон ищем и в git-объекте — иначе sparse-checkout проверяющего
+    # даёт ложное «эталон НЕ НАЙДЕН», а за ним ложные расхождения.
+    if len(sys.argv) > 2:
+        ref = sys.argv[2]
+    else:
+        ref, _ref_status, _ref_src = baseline.resolve(DEFAULT_REF)
+        if ref is None:
+            # Пропуск — не отказ: код 2 «не проверено», а не 1 «не сходится».
+            print("A3R1 — цвет щупалец под плоть (ТЗ 3.7.0, СРОЧНО 1)")
+            print("Кандидат:  %s" % src)
+            print("  · эталон недоступен — проверка пропущена")
+            print("ИТОГ: ПРОПУЩЕНО (эталон недоступен — ни на диске, ни в git)")
+            return 2
     if not os.path.exists(src):
         print("ОШИБКА: нет такого каталога или zip: %s" % src)
         return 1
