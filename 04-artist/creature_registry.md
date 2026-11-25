@@ -31,3 +31,35 @@
 | `infected_skeleton` | Первичный заражённый скелет (7 цветов, 14.3%) | Мутировавший скелет (7 цветов, 14.3%) | `28 px`, `outside=0` — **OK** |
 | `infected_spider` | Первичный заражённый паук (7 цветов, 14.3%) | Мутировавший паук (7 цветов, 14.3%) | `520 px`, `outside=0` — **OK** |
 | `infected_zombie` | Первичный заражённый зомби (7 цветов, 14.3%) | Мутировавший зомби (7 цветов, 14.3%) | `64 px`, `outside=0` — **OK** |
+
+## 4. Инвентаризация предметных текстур `textures/item/` (C1)
+Всего: **26** текстур; в `BASELINE_PALETTE`: **0**; вне палитры: **26**.
+
+| Файл | Размер | Цветов | Вне `BASELINE_PALETTE` |
+|---|---|---:|---:|
+| `amalgam_bile_glob.png` | `64×64` | 2150 | 2150 |
+| `antibiotics.png` | `64×64` | 1008 | 1008 |
+| `bio_purifier.png` | `64×64` | 143 | 143 |
+| `bio_purifier_glowmask.png` | `64×64` | 2 | 2 |
+| `bone_scythe.png` | `32×32` | 58 | 58 |
+| `bone_scythe_arm.png` | `64×64` | 827 | 827 |
+| `cerebral_nexus_spawn_egg.png` | `64×64` | 1710 | 1710 |
+| `creeping_tendrils.png` | `16×16` | 7 | 5 |
+| `flesh_spat.png` | `64×64` | 1419 | 1419 |
+| `hive_sentinel_spawn_egg.png` | `64×64` | 1456 | 1456 |
+| `neural_binding_matrix.png` | `64×64` | 2315 | 2315 |
+| `neuro_resonator_boots.png` | `64×64` | 973 | 973 |
+| `neuro_resonator_chestplate.png` | `64×64` | 1161 | 1161 |
+| `neuro_resonator_helmet.png` | `64×64` | 1621 | 1621 |
+| `neuro_resonator_leggings.png` | `64×64` | 1640 | 1640 |
+| `ossified_scythe.png` | `32×32` | 62 | 62 |
+| `parasitic_tendril_spawn_egg.png` | `64×64` | 1751 | 1751 |
+| `pneumatic_inoculator_geo.png` | `64×64` | 191 | 191 |
+| `purification_dart.png` | `64×64` | 378 | 378 |
+| `purification_serum.png` | `64×64` | 1322 | 1322 |
+| `purification_vial.png` | `64×64` | 1054 | 1054 |
+| `pustule_grenade.png` | `64×64` | 1794 | 1794 |
+| `research_journal.png` | `64×64` | 971 | 971 |
+| `sinew_shield.png` | `32×32` | 668 | 668 |
+| `tainted_sludge_bucket.png` | `64×64` | 763 | 763 |
+| `viral_dart.png` | `64×64` | 462 | 462 |

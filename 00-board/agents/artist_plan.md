@@ -12,7 +12,7 @@
 - [x] **B1** (2026-11-26): 4 моба × 2 стадии (`_stage1`, `_stage2`) в `Carnis_3.7.5_B1_variations.zip` (8 текстур, 7 цветов, 14.3% A3R1 OK)
 - [x] **B2** (2026-11-26): `04-artist/creature_registry.md` дополнен разделом 3 (стадии `_stage1`/`_stage2` и порядок спавна)
 - [x] **B3** (2026-11-26): `glowmask_r3_check.py` по 8 вариациям — 8/8 `OK` (`ALL_OK: True`)
-- [ ] **C1**
+- [x] **C1** (2026-11-26): инвентаризация 26 текстур `textures/item/` в `04-artist/creature_registry.md` (все 26 вне `BASELINE_PALETTE`)
 - [ ] **C2**
 - [ ] **C3**
 - [ ] **D1**
