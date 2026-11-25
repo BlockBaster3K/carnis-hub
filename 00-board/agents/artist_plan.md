@@ -6,7 +6,7 @@
 
 Полный текст шагов и критерии: `00-board/ROADMAP_artist.md`, раздел «ТВОЙ ПЛАН НА ВЕРСИИ ВПЕРЁД».
 
-- [ ] **A1**
+- [x] **A1** (2026-11-26): 6 мобов (`infected_zombie`, `cerebral_nexus`, `flesh_amalgam`, `hive_sentinel`, `biomass_maggot`, `parasitic_tendril`) в `Carnis_3.7.4_A1_mobs.zip` (7 цветов, топ 14.3–14.4%, A3R1 OK)
 - [ ] **A2**
 - [ ] **A3**
 - [ ] **B1**
