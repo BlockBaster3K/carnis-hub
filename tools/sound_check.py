@@ -2,7 +2,13 @@
 """Сверка банка звуков: манифесты против диска + поиск мёртвых дублей.
 
 Использование: python3 tools/sound_check.py [каталог_банка]
-Каталог по умолчанию: /home/user/hub5/03-sound
+Каталог банка по умолчанию — `03-sound` рядом с репозиторием, вычисляется
+от расположения самого скрипта (`<repo>/tools/../03-sound`), а не берётся
+из константы. Явный аргумент имеет приоритет.
+
+Код возврата: 0 — проверки пройдены; 1 — есть ошибки ИЛИ банк пуст.
+Пустой банк (0 файлов .ogg) считается ОШИБКОЙ, а не «всё хорошо»:
+скрипт не должен молча подтверждать проверку, которую не выполнил.
 
 Проверяет:
   * SHA256SUMS_all.txt  — каждая запись совпадает с диском;
@@ -16,7 +22,12 @@ import os
 import sys
 from collections import defaultdict
 
-BANK = sys.argv[1] if len(sys.argv) > 1 else "/home/user/hub5/03-sound"
+# Каталог банка: аргумент → иначе <repo>/03-sound, где <repo> — родитель каталога
+# скрипта. Скрипт лежит в <repo>/tools/, поэтому ../03-sound от него.
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_DEFAULT_BANK = os.path.normpath(os.path.join(_SCRIPT_DIR, os.pardir, "03-sound"))
+
+BANK = sys.argv[1] if len(sys.argv) > 1 else _DEFAULT_BANK
 SOUNDS = os.path.join(BANK, "sounds")
 
 fail = 0
@@ -43,6 +54,17 @@ def disk_ogg():
 files = disk_ogg()
 print(f"банк: {BANK}")
 print(f"файлов .ogg на диске: {len(files)}\n")
+
+# Пустой банк — это ошибка, а не «проверок не требуется». Иначе скрипт печатает
+# «все проверки пройдены» на каталоге, которого нет или в котором нет звуков,
+# и приёмка банка проходит, не выполнившись. Так уже случалось: bank указывал
+# на чужой путь, файлов 0, итог — «все проверки пройдены».
+if not os.path.isdir(BANK):
+    print(f"ИТОГ: ошибок 1 — каталог банка не существует: {BANK}")
+    sys.exit(1)
+if not files:
+    print(f"ИТОГ: ошибок 1 — в банке нет ни одного .ogg: {SOUNDS}")
+    sys.exit(1)
 
 listed = defaultdict(set)
 
