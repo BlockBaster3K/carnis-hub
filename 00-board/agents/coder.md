@@ -1,5 +1,5 @@
 # Coder — статус
-STATUS: IDLE_WAITING_TASK
+STATUS: IN_PROGRESS
 
 обновлено: после синхронизации с `b0afd7c` (волна 43)
 
