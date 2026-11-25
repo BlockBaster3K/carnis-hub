@@ -582,7 +582,7 @@ sha256 трёх удалённых файлов в отчёте `00-board/report
 
 ## T-3117 · Интегратор · Ревизия `99-incoming/` и доска в `main`
 
-**STATUS:** ASSIGNED
+**STATUS:** COMPLETED — 2026-11-25, `main = a000b665`, отчёт `00-board/reports/integrator_main_board.md`
 **Приоритет:** 3
 **Зона:** `99-incoming/`, `main`
 
