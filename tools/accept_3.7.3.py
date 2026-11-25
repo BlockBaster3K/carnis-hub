@@ -1126,9 +1126,21 @@ def _baseline_master():
                         "threshold": rec.get("threshold"),
                         "tolerance": rec.get("tolerance"),
                     }
-    except (OSError, ValueError, TypeError):
-        return {}
+    except (OSError, ValueError, TypeError) as exc:
+        # З-29 п.5 (Ревизор R24): отсутствующий или битый baseline не может
+        # тихо понижать стационарные до отчёта — иначе порча файла измерений
+        # делает гейт зеленее, а не краснее. Возвращаем маркер ошибки; гейт
+        # обязан на нём упасть.
+        return {"__error__": "%s: %s" % (type(exc).__name__, exc)}
     return out
+
+
+def _BM_has_type(sig_type):
+    """Есть ли в baseline_master.json хоть одна запись этого типа сигнала.
+
+    Нужно, чтобы отличить «вопрос к Архитектору» от «JSON устарел/испорчен».
+    """
+    return any(rec.get("type") == sig_type for rec in _BM.values())
 
 
 def _prev_version_bytes(rel):
@@ -1235,11 +1247,20 @@ def check_crest_attack(extract_dir):
     global _BM
     if _BM is None:
         _BM = _baseline_master()
+    if "__error__" in _BM:
+        print("  x baseline(M): файл 03-sound/baseline_master.json недоступен "
+              "или битый — %s" % _BM["__error__"])
+        print("    без него норма стационарных недоказуема (З-29 п.5), "
+              "тихое понижение до отчёта запрещено")
+        fail.append("crest/атака: baseline_master.json не прочитан (%s) — "
+                    "норма стационарных недоказуема" % _BM["__error__"])
+        return
     checked, no_master, no_entry, bad_crest = 0, [], [], []
     attack_report, no_attack, taut = [], [], []
     used_prev = 0
     unchanged_now = []
     stationary_cand = []
+    missing_type = []
     worst_c, worst_a = (0.0, ""), (0.0, "")
     for dp, _, fs in os.walk(root):
         for f in sorted(fs):
@@ -1352,7 +1373,13 @@ def check_crest_attack(extract_dir):
                 # baseline(M) нет и взят табличный, остаётся отчётом: таблица
                 # меряет шум другой генерации (см. выше).
                 if typ == "стац" and src == "таблица":
+                    # ПОЧЕМУ записи нет: JSON вообще не содержит стационарных
+                    # по этому банку (порча/устаревание) — это провал, а не
+                    # «отчёт». Отчёт допустим, только когда JSON полон и
+                    # вопрос открыт у Архитектора по существу порога.
                     stationary_cand.append((rel, d, tol, base_tbl))
+                    if not _BM_has_type(typ):
+                        missing_type.append(rel)
                 else:
                     bad_crest.append((rel, d, tol, typ))
             if d > worst_c[0]:
@@ -1431,6 +1458,12 @@ def check_crest_attack(extract_dir):
     if bad_crest:
         fail.append("crest: %d файлов изменили динамику сверх своего допуска"
                     % len(bad_crest))
+    if missing_type:
+        print("  x baseline(M): стационарных в JSON нет, хотя они там быть "
+              "обязаны (%d файлов) — файл измерений устарел" % len(missing_type))
+        fail.append("crest/атака: в baseline_master.json нет записей для "
+                    "стационарных (%d файлов) — норма недоказуема"
+                    % len(missing_type))
     if stationary_cand:
         print("  · стационарные сверх табличного baseline — ОТЧЁТ, не провал "
               "(%d; таблица меряет шум 2-й генерации, мастер — PCM до 1-й, "
