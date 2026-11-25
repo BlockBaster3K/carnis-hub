@@ -1032,6 +1032,14 @@ def _decode(path):
                             for f in c.decode(st)]).astype("float64")
         sr = st.rate
         c.close()
+        # Ревизор (I23 §9): мастера PCM16 приходят в int16-шкале (max 13639),
+        # банк — во float (0.42). Crest считается по ОТНОШЕНИЮ пик/RMS и
+        # масштаб ему безразличен, но атака — тоже отношение, а вот сравнение
+        # «файл vs мастер» по абсолютным числам разваливалось бы. Приводим
+        # любой вход к [-1, 1], чтобы единицы были одни и те же.
+        peak = float(np.abs(x).max()) if x.size else 0.0
+        if peak > 1.5:
+            x = x / 32768.0
         return x, sr
     except Exception:  # noqa: BLE001
         return None
@@ -1067,14 +1075,57 @@ def _table_types(path):
     """{хвост: (тип, порог)} из таблицы crest — тип нужен для порога нормы."""
     out = {}
     rx = re.compile(r"^\|\s*`((?:sounds|sounds_380)/[^`]+)`\s*\|\s*(стац|транз)\s*\|"
-                    r"\s*[\d.]+\s*\|\s*[\d.]+\s*\|\s*[\d.]+\s*\|\s*([\d.]+)\s*\|")
+                    r"\s*[\d.]+\s*\|\s*[\d.]+\s*\|\s*([\d.]+)\s*\|\s*([\d.]+)\s*\|")
     if not os.path.isfile(path):
         return out
     for line in open(path, encoding="utf-8"):
         m = rx.match(line)
         if m:
-            out[m.group(1).split("/", 1)[1]] = (m.group(2), float(m.group(3)))
+            # (тип, порог, baseline) — baseline нужен для формулы З-30:
+            # допуск = max(порог_типа, baseline + 0,05).
+            out[m.group(1).split("/", 1)[1]] = (m.group(2), float(m.group(4)),
+                                                float(m.group(3)))
     return out
+
+
+def _prev_version_bytes(rel):
+    """Байты того же файла из принятой 3.7.2: (True, bytes) или (None, None).
+
+    None означает «предыдущей версии нет» — тогда мастер отсутствует
+    по-настоящему, и это провал (З-31 п.2), а не «норма неприменима».
+    """
+    prev = os.path.join(REPO, "01-coder", "3.7.2",
+                        "project-3.7.2-clean.zip")
+    if not os.path.isfile(prev):
+        return None, None
+    try:
+        with zipfile.ZipFile(prev) as z:
+            name = "assets/carnis/sounds/" + rel
+            for n in z.namelist():
+                if n.endswith(name):
+                    return True, z.read(n)
+    except (OSError, zipfile.BadZipFile):
+        return None, None
+    return None, None
+
+
+_TEMP_MASTERS = []
+
+
+def _write_temp_decodable(blob, rel):
+    """Положить байты во временный файл, чтобы декодер их прочитал.
+
+    Файлы удаляются в конце прогона — это копии ради декода, не эталоны.
+    """
+    import tempfile
+    fd, path = tempfile.mkstemp(suffix=os.path.splitext(rel)[1] or ".ogg")
+    try:
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(blob)
+    except OSError:
+        return None
+    _TEMP_MASTERS.append(path)
+    return path
 
 
 def _unchanged_vs_prev(extract_dir, rels):
@@ -1139,7 +1190,9 @@ def check_crest_attack(extract_dir):
         return
 
     checked, no_master, no_entry, bad_crest = 0, [], [], []
-    attack_report, no_attack = [], []
+    attack_report, no_attack, taut = [], [], []
+    used_prev = 0
+    unchanged_now = []
     worst_c, worst_a = (0.0, ""), (0.0, "")
     for dp, _, fs in os.walk(root):
         for f in sorted(fs):
@@ -1165,23 +1218,54 @@ def check_crest_attack(extract_dir):
                         break
                 if master is not None:
                     break
+            # S44 (Звук): если PCM-мастера нет, мастером может служить
+            # ДЕКОД ПРЕДЫДУЩЕЙ ВЕРСИИ — это два разных сигнала, не тавтология.
+            # Звук измерил зазор на правках: громкость −3 дБ даёт Δcrest
+            # 0,007–0,060, порча формы лимитером 1,986–2,262, то есть правка и
+            # порча расходятся в 33–100 раз.
+            # Fail-closed по его же требованию: если архивная версия
+            # побайтово равна проверяемому файлу — это была бы тавтология,
+            # и такой «мастер» не принимается.
             if master is None:
-                no_master.append(rel)
-                continue
+                prev_ok, prev_bytes = _prev_version_bytes(rel)
+                if prev_ok is None:
+                    no_master.append(rel)
+                    continue
+                if prev_bytes == open(os.path.join(dp, f), "rb").read():
+                    # S44: «мастер == файл» — тавтология, НО только если файл
+                    # вообще менялся. Если он побайтово равен принятой 3.7.2,
+                    # это З-31 п.3: файл принят предыдущей версией и норме не
+                    # подлежит — проверять его нечем и не нужно. Тавтологией
+                    # было бы брать такой «мастер» для ИЗМЕНЁННОГО файла.
+                    unchanged_now.append(rel)
+                    continue
+                master = _write_temp_decodable(prev_bytes, rel)
+                if master is None:
+                    no_master.append(rel + " (архив не декодирован)")
+                    continue
+                used_prev += 1
             got = _decode(os.path.join(dp, f))
             ref = _decode(master)
             if not got or not ref:
                 no_master.append(rel + " (не декодирован)")
                 continue
-            typ, thr = types[rel]
+            typ, thr, base_tbl = types[rel]
             cm, cf = _crest(ref[0]), _crest(got[0])
             if cm is None or cf is None:
                 no_master.append(rel + " (тишина)")
                 continue
-            # baseline(M): шум кодека на мастере — перекодировать мастер в тот
-            # же формат, что у файла. Если это не удалось, берём запас 0,05 как
-            # нижнюю границу и говорим об этом вслух.
-            tol = max(thr, 0.05)
+            # Допуск по З-30/З-31: max(порог_типа, baseline(M) + 0,05).
+            # Ревизор (I23 §9) поймал, что код брал max(thr, 0.05) — то есть
+            # игнорировал baseline мастера, и 23 из 33 стационарных файлов
+            # валились на собственном шуме кодека 0,13-0,24 дБ при пороге
+            # 0,05. Теперь baseline(M) считается: перекодировать мастер тем
+            # же кодеком и сравнить crest с мастером. Не удалось — берём
+            # табличный baseline как нижнюю границу (он не меньше шума).
+            # Baseline берём из таблицы Звука: это измеренный шум кодека
+            # для этого файла. Своими руками его не пересчитываю — Ревизор
+            # доказал (R21), что пол зависит от энкодера машины, а таблица
+            # посчитана энкодером Звука тем же битрейтом, что у файла.
+            tol = max(thr, base_tbl + 0.05)
             d = abs(cf - cm)
             if d > tol:
                 bad_crest.append((rel, d, tol, typ))
@@ -1224,6 +1308,21 @@ def check_crest_attack(extract_dir):
               % (ATTACK_TOL, len(attack_report)))
         for rel, da in attack_report[:3]:
             print("      ~ %s %.3f дБ" % (rel, da))
+    if used_prev:
+        print("  · мастером служил декод 3.7.2 (S44): %d файлов — два разных "
+              "сигнала, не тавтология" % used_prev)
+    if unchanged_now:
+        print("  · побайтово равны 3.7.2 без мастера: %d — норме не подлежат "
+              "(З-31 п.3)" % len(unchanged_now))
+    if taut:
+        # S44 требование Звука: архивная версия, равная проверяемому файлу, —
+        # тавтология, а не мастер. Такое не принимается молча.
+        print("  ✗ crest/атака: у %d файлов архивная версия равна файлу — "
+              "сравнение было бы тавтологией" % len(taut))
+        for rel in taut[:4]:
+            print("      ? %s" % rel)
+        fail.append("crest/атака: %d файлов, у которых «мастер» == файл "
+                    "(тавтология, S44)" % len(taut))
     if no_master:
         # З-31 п.2 и п.3 вместе: мастер обязателен для ИЗМЕНЁННЫХ файлов,
         # а побайтово неизменённые норме не подлежат. Разделить их можно
@@ -1248,6 +1347,11 @@ def check_crest_attack(extract_dir):
                     % len(bad_crest))
     if checked and not bad_crest and not no_master:
         print("  ✓ crest/атака: %d файлов в норме от мастеров (З-31)" % checked)
+    for path in _TEMP_MASTERS:
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
 
 
 def check_bank_format(extract_dir):
