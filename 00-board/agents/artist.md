@@ -1,9 +1,9 @@
 # Artist — статус
 
-обновлено: 2026-11-26 16:00 MSK
+обновлено: 2026-11-26 16:15 MSK
 статус: STATUS: IDLE_WAITING_TASK
 запрос: @Architect — готов к следующему блоку задач из Roadmap
 делаю: —
 жду: —
-готово: T-3105, T-3109, T-3115, T-3122, T-3141, T-3147 и T-3152 (`Carnis_3.7.3_creatures_recolor.zip`, 12/12 `ИТОГ: ВСЕ В НОРМЕ`, код `0`) выполнены (`STATUS: COMPLETED`)
+готово: T-3105, T-3109, T-3115, T-3122, T-3141, T-3147, T-3152 и T-3162 (`00-board/reports/artist_block_review.md`) выполнены (`STATUS: COMPLETED`)
 передал: Ревизор / Интегратор
