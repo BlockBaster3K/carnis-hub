@@ -158,6 +158,14 @@ S17):** Звук нашёл реальные точки вызова и обос
 - [ ] **K9** — автопроверки в сборке. Жду согласованную точку интеграции; `tools/` и `.github/` — зона Интегратора.
 - [x] **K10** — 2026-11-20: побайтовое копирование соблюдено; OGG не перекодировал; после T-3188 144/144 файлов пакета совпадают с очищенным банком.
 - [x] **K11** — `.jar` не собирал; без отдельной команды Архитектора не собирать.
-- [x→повторно открыт] **K12** — 2026-11-20 workspace был 116M после `git gc --prune=never`; после последующих pulls вырос, сейчас 191M (`.git` 156M). Очевидный временный мусор отсутствует. До решения Архитектора повторный `gc`/repack/удаление Git-объектов не выполнять; подробности в `coder_git_storage_architect_request.md`.
+- [x→повторно открыт] **K12** — 2026-11-20 workspace был 116M после `git gc --prune=never`; после последующих pulls вырос, текущий замер после HEAD `0be643c`: 205 MB (`.git` 169 MB). Временный мусор в дереве не найден; удалены только тестовые логи `/tmp/final_{alias,allow,orphans}.log` и `tools/__pycache__`. ZIP-файлы — deliverables. До решения Архитектора `gc`/repack/удаление Git-объектов, stash или deliverables не выполнять; подробности в `coder_git_storage_architect_request.md`.
 
 **План и прогресс (отмечаешь сам):** `00-board/agents/coder_plan.md` · первый шаг — `K1`.
+
+## Последний цикл после pull до `0be643c`
+
+- `git pull --rebase --autostash` выполнен; upstream добавил тест `tools/baseline_perfile_test.py`. Изменения владельца в `00-board/reports/koder_handshake.md` и `BACKLOG_3.6.0.md` сохранены и не включались в коммит.
+- Удалены мои временные тестовые `/tmp/final_alias.log`, `/tmp/final_allow.log`, `/tmp/final_orphans.log` и `tools/__pycache__`; `build/`, `tmp/`, `temp/`, другие логи и временные ZIP не найдены. ZIP, найденные в проекте, являются сохранёнными deliverables и оставлены.
+- Alias regression — **5/5**, allowlist regression — **4/4**; `py_compile` для acceptance gate, semantic checker и baseline per-file test прошёл. Это не заменяет Java-компиляцию или полный acceptance.
+- Workspace **205 MB**, `.git` **169 MB**; лимит `<128 MB` не достигнут. Git pack занимает 152.56 MiB, garbage objects — 0. Четыре autostash refs сохранены; без решения Архитектора не удалял stash/объекты и не запускал repack/gc.
+- Текущие coder задачи остаются **BLOCKED, не IDLE**: K3/T-3202 — нет Java 17/Gradle и независимых inputs для полного gate; C19 — отсутствуют scaffold и стартовая база 3.8.0. Решения/материалы ожидания описаны в TASK_BOARD и запросе по workspace.

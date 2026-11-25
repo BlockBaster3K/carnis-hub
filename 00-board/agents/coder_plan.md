@@ -1,6 +1,6 @@
 ## Твоя задача сейчас
 
-**Пакет 3.7.3** — 9 игровых call sites внесены; исходниковый `sound_orphans` код 0, alias-тест 5/5 (включая R15 взаимный dead-alias) и allowlist-тест 4/4. **T-3184/K3** ещё открыта: hook `CREEPER_RUPTURE` ждёт API подтверждения и Java-компиляции; постоянный ZIP/manifest и gate на актуальных входах не выполнены. `S24` и `R18` имеют отчёты о выполнении; I20 implementation report опубликован, но checkout sparse не содержит `03-sound/sounds`, поэтому независимый current gate не запускался. K4 зависит от принятия 3.7.3; K8 не менять до финальной спецификации.
+**Пакет 3.7.3** — 9 игровых call sites внесены; исходниковый `sound_orphans` код 0, alias-тест 5/5 и allowlist-тест 4/4. **T-3184/K3** ещё открыта: hook `CREEPER_RUPTURE` ждёт API подтверждения и Java-компиляции; gate на постоянном ZIP запущен, код 1 из-за отсутствия независимых inputs (ZIP 3.7.2 для delta, overlay masters, `03-sound/masters`, archive crest). Java 17/Gradle недоступны; имеется javac 11. Сверка с банком и registry пропущена из-за sparse checkout. K4 зависит от принятия 3.7.3; K8 не менять до финальной спецификации.
 
 ## План на версии вперёд — отмечаю сам
 
@@ -8,7 +8,8 @@
 
 - [x] **K1** — 2026-11-20: после банка T-3188 `9ea5c82` и T-3186 пересобран 761-файловый ZIP, SHA `d392d604…`; 144/144 OGG==банк, отчёт `coder_373_build.md`.
 - [x] **K2** — 2026-11-20: `incubation_cyst.png` восстановлен до SHA `7d30ac39…` в заготовке.
-- [ ] **K3** — после upstream `5b2c321` и fix `7b9655f`: девять точек S17 закоммичены в `2c338af`; allowlist/alias проходят статические проверки (`sound_orphans` код 0; alias 5/5 (R15 mutual-dead fix); allowlist 4/4). API review подтвердил, что `Creeper.explodeCreeper()` private; звук перенесён в `ExplosionEvent.Detonate`, но hook не компилировался и ждёт подтверждения Архитектора/Звука. S24 и R18 опубликованы как выполненные; I20 имеет implementation report. Ревизор подтвердил source-ready в `reviewer_t3202_source_ready.md`; permanent ZIP/manifest пересобраны (761/761, SHA `d19169b4…`), package orphan check code 0. Полный gate на актуальном кандидате не запускался: sparse checkout не материализует required independent sound inputs. JDK17/Gradle нет (есть javac11). Workspace сейчас 191 MB, `.git` 156 MB; после sync до `ae0e697` source commit `2c338af` запушен; временного мусора не найдено, object store/deliverables не удалялись. В дереве нет `build/tmp`, `.gradle`, `__pycache__`, логов или временных ZIP; лимит <128 MB не соблюдён, Git objects и deliverables не удалять без решения Архитектора. Закрыть K3 после compile без JAR, актуальных ZIP/manifest и зелёного полного gate на реально доступном банке.
+- [ ] **K3** — девять точек S17 закоммичены в `2c338af`; `sound_orphans` код 0, alias 5/5, allowlist 4/4. `Creeper.explodeCreeper()` private; `CREEPER_RUPTURE` перенесён в `ExplosionEvent.Detonate`, hook не компилировался и ждёт API confirmation Архитектора/Звука. Permanent ZIP/manifest: 761/761, SHA `d19169b4…`. Gate на постоянном ZIP запущен (код 1): независимые ZIP 3.7.2 для delta, двух overlay masters, `03-sound/masters` и archive crest отсутствуют; сверки package==bank и registry пропущены. Java 17/Gradle нет (javac 11). Закрыть K3 после подтверждения API, Java compile без JAR, актуальных независимых inputs и зелёного полного gate.
+
 - [ ] **K4** — заблокирован: нет финальной принятой базы 3.7.3.
 - [ ] **K5** — зависит от K4 и сдач Художника/Звука.
 - [ ] **K6** — зависит от K4–K5 и acceptance gate.
@@ -17,7 +18,7 @@
 - [ ] **K9** — жду согласованную точку интеграции от владельца `tools/` / `.github/`.
 - [x] **K10** — побайтовое копирование использовано; аудио не перекодировалось.
 - [x] **K11** — JAR не собирался; правило отдельного разрешения соблюдено.
-- [ ] **K12** — после sync (`badde68`, fix `7b9655f`, report `ebb6304`) workspace 191 MB, `.git` 156 MB; лимит <128 MB не соблюдён. Удалены 24 временных `/tmp/baseline-*.zip` и `tools/__pycache__`; `build/tmp/temp` не найдено. ZIP-пакеты и Git-объекты не удалялись; stash `af01469` оставлен как страховочная копия после autostash-конфликта. Запрос решения Архитектора — `coder_git_storage_architect_request.md`; без решения не выполнять repack/gc/удаление объектов/замену клона.
+- [ ] **K12** — после pull до `0be643c` workspace 205 MB, `.git` 169 MB; лимит <128 MB не соблюдён. Удалены три тестовых лога из `/tmp` и `tools/__pycache__`; `build/tmp/temp` и временные ZIP в checkout не найдены. Сохранённые ZIP и четыре autostash refs не трогал; Git garbage 0. Запрос решения Архитектора — `coder_git_storage_architect_request.md`; без решения не выполнять repack/gc/удаление объектов/stash/замену клона.
 
 **Правило:** берёшь первый невыполненный шаг → доводишь → ставишь `[x]` + дата + одна строка факта → коммит + push → следующий. Не ждёшь волну. Шаг, которому нужен чужой код, — оставь `[ ]` с пометкой «жду» и возьми следующий.
 
