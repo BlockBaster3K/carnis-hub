@@ -97,6 +97,10 @@ def main():
     ap.add_argument("--bank", default="03-sound/sounds")
     ap.add_argument("--margin", type=float, default=0.20)
     ap.add_argument("--norm", type=float, default=-1.00)
+    ap.add_argument("--expect-added", type=int, default=None,
+                    help="сколько добавленных файлов считать ожидаемыми "
+                         "(например 2 новые glowmask в 3.7.3); по умолчанию "
+                         "любое добавление — замечание")
     a = ap.parse_args()
 
     if not os.path.exists(a.package):
@@ -164,8 +168,13 @@ def main():
         print("   из них звуковых %d, прочих %d" % (len(audio_changed), len(other)))
         if other:
             NOTE.append("пересборка задела не только звук: %s" % ", ".join(other[:5]))
-        if added or removed:
+        exp = a.expect_added
+        if removed:
+            NEG.append("дельта: удалено %d файлов" % len(removed))
+        elif added and (exp is None or len(added) != exp):
             NEG.append("дельта: добавлено %d, удалено %d файлов" % (len(added), len(removed)))
+        elif added and exp is not None:
+            print("   добавлено %d — ожидаемо (--expect-added %d)" % (len(added), exp))
 
     # 4. З-16
     key = TEX_IN_ZIP + CYST
