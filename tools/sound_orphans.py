@@ -9,15 +9,28 @@
 Также ловит обратную ошибку: ссылка в sounds.json на несуществующий файл
 («ссылка в пустоту») — она ломает звук на клиенте.
 
+С T-3185 ловит и **третье** направление, которое раньше не проверял никто:
+событие `ModSounds` объявлено, звук в банке есть, а **вызова в коде нет** —
+звук загружен, но недостижим (находка Звука: 11 событий / 15 файлов).
+Такое событие теперь **проваливает проверку** (fail-closed), а не пишется
+предупреждением.
+
 Использование:
     python3 tools/sound_orphans.py <каталог|zip> [--quiet]
 
-Код возврата: 0 — сирот 0 и ссылок в пустоту 0, 2 — есть замечания, 1 — ошибка.
+Код возврата:
+    0 — сирот 0, ссылок в пустоту 0, недостижимых событий 0;
+    2 — есть замечания по ассетам (сироты/ссылки в пустоту) — исторический код;
+    3 — есть **недостижимые события** (T-3185): отдельный код нужен потому, что
+        гейты `accept_3.7.x.py` трактуют код 2 как «пропущено/замечания» и
+        пакет проходит (это и была дыра). Код 3 гейт валит как ✗;
+    1 — ошибка запуска / нечего проверять (fail-closed).
 """
 
 import io
 import json
 import os
+import re
 import sys
 import zipfile
 
@@ -87,9 +100,76 @@ def collect(src):
     return refs, files, data
 
 
+RE_CONST = re.compile(
+    r"RegistryObject\s*<\s*SoundEvent\s*>\s+([A-Z0-9_]+)\s*=\s*[^;]*?\"([^\"]+)\"",
+    re.S)
+
+
+def read_sources(src):
+    """Вернуть {имя файла: текст} для всех .java в пакете/каталоге."""
+    out = {}
+    if zipfile.is_zipfile(src):
+        with zipfile.ZipFile(src) as z:
+            for n in z.namelist():
+                if n.endswith(".java"):
+                    try:
+                        out[n.split("/")[-1]] = z.read(n).decode("utf-8", "replace")
+                    except (KeyError, OSError):
+                        pass
+    else:
+        for dp, _, fs in os.walk(src):
+            for f in fs:
+                if f.endswith(".java"):
+                    try:
+                        with open(os.path.join(dp, f), encoding="utf-8",
+                                  errors="replace") as fh:
+                            out[f] = fh.read()
+                    except OSError:
+                        pass
+    return out
+
+
+def unreachable_events(sources):
+    """События ModSounds без единого вызова в коде -> список (константа, ключ).
+
+    Достижимо, если имя константы встречается как `ModSounds.ИМЯ` вне
+    ModSounds.java либо импортировано статически и используется по имени.
+    """
+    mod = sources.get("ModSounds.java")
+    if not mod:
+        return None
+    consts = RE_CONST.findall(mod)
+    if not consts:
+        return None
+    others = {k: v for k, v in sources.items() if k != "ModSounds.java"}
+    static_imported = set()
+    for text in others.values():
+        for m in re.finditer(r"import\s+static\s+[\w.]*ModSounds\.([A-Z0-9_]+)\s*;", text):
+            static_imported.add(m.group(1))
+    dead = []
+    for name, key in consts:
+        used = False
+        pat_qual = re.compile(r"\bModSounds\s*\.\s*" + name + r"\b")
+        for text in others.values():
+            if pat_qual.search(text):
+                used = True
+                break
+        if not used and name in static_imported:
+            pat_bare = re.compile(r"(?<![\w.])" + name + r"\b")
+            for text in others.values():
+                body = re.sub(r"import\s+static[^;]*;", "", text)
+                if pat_bare.search(body):
+                    used = True
+                    break
+        if not used:
+            dead.append((name, key))
+    return dead
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     quiet = "--quiet" in sys.argv
+    assets_only = "--assets-only" in sys.argv
     if not args:
         print(__doc__)
         return 1
@@ -128,12 +208,34 @@ def main():
         for d in dangling:
             print("  - %s" % d)
 
+    # --- третье направление: событие объявлено, но не вызывается (T-3185)
+    dead = None
+    if not assets_only:
+        sources = read_sources(src)
+        dead = unreachable_events(sources)
+        if dead is None:
+            print()
+            print("ПРОВЕРКА НЕДОСТИЖИМЫХ СОБЫТИЙ НЕ ВЫПОЛНЕНА: в источнике нет "
+                  "ModSounds.java (нужен пакет/каталог с кодом)")
+            print("ИТОГ: НЕ ПРОВЕРЕНО — fail-closed (для одних ассетов: --assets-only)")
+            return 2
+        print()
+        if dead:
+            print("НЕДОСТИЖИМЫЕ СОБЫТИЯ (%d) — объявлены в ModSounds, вызова в коде нет:"
+                  % len(dead))
+            for name, key in dead:
+                print("  - ModSounds.%-28s (ключ \"%s\")" % (name, key))
+        else:
+            print("Недостижимых событий нет: 0")
+
     print()
-    if orphans or dangling:
-        print("ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ — сирот %d, ссылок в пустоту %d"
-              % (len(orphans), len(dangling)))
-        return 2
-    print("ИТОГ: СХОДИТСЯ — сирот 0, ссылок в пустоту 0")
+    if orphans or dangling or dead:
+        print("ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ — сирот %d, ссылок в пустоту %d, "
+              "недостижимых событий %d"
+              % (len(orphans), len(dangling), len(dead or [])))
+        # 3 — чтобы гейт (для которого 2 = «пропущено») не пропустил пакет
+        return 3 if dead else 2
+    print("ИТОГ: СХОДИТСЯ — сирот 0, ссылок в пустоту 0, недостижимых событий 0")
     return 0
 
 
