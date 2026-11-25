@@ -1,8 +1,13 @@
-Дельта-пакет волны 22 (пути относительно assets/carnis/sounds/).
-3.5.2 — сердце (блокирует сборку): 2 файла
-block/heartbeat_loop.ogg
-block/pulsing_heart_beat.ogg
+Дельта-пакет волны 22 — пересобран 2026-11-25 (волна 29) по фактическому состоянию диска.
+Пути — относительно каталога банка 03-sound/sounds/ (и assets/carnis/sounds/ в моде).
+Проверка: cd 03-sound/sounds && sha256sum -c ../transfer/SHA256SUMS_delta22.txt -> 0 FAILED, 4 строки = 4 файла.
+Волна 29: мёртвое имя block/pulsing_heart_beat.ogg заменено на рабочее block/heart_pulse.ogg (тот же файл, 17f42e30),
+          хеши пары косы приведены к диску (11cbb014… / b0f6504a…).
 
-3.6.0 — голос лёгкой косы: 2 файла
+3.5.2 — сердце (принято; в overlay): 2 файла
+block/heartbeat_loop.ogg
+block/heart_pulse.ogg
+
+3.6.0 — голос лёгкой косы (НЕ в overlay до объявления событий и правки ScytheItem): 2 файла
 combat/bone_scythe_swing_01.ogg
 combat/bone_scythe_hit_01.ogg
