@@ -35,7 +35,7 @@
 
 
 
-## ВОЛНА 58 · БИБЛИОТЕКИ: CURIOS, PATCHOULI, SMARTBRAINLIB, LODESTONE, SOUND PHYSICS (C19…C24)
+## ВОЛНА 58 · БИБЛИОТЕКИ: CURIOS, PATCHOULI, SMARTBRAINLIB, LODESTONE, SOUND PHYSICS (C19…C34)
 
 **Основание: пять идей Директора от 2026-11-25, все пять утверждены
 Архитектором (проверены по факту: Forge 1.20.1, лицензии совместимы).**
