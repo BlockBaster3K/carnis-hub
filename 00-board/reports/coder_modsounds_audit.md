@@ -1,50 +1,82 @@
-# Кодер · T-3184 — аудит 11 недостижимых ModSounds
+# Кодер · T-3184 — аудит и привязка 11 недостижимых ModSounds
 
-**Статус:** аудит источника выполнен; исправление кода **не завершено**. В текущем исходнике подтверждено 0/11 call sites. До реализации требуется согласовать звукоряд/точки вызова и разрешённую файловую дельту.
+**Состояние после upstream sync `225a750`, fix `7b9655f` и API review:** исходниковый `sound_orphans.py` код 0; 9 игровых событий привязаны, `FLESH_AMALGAM_AMBIENT` покрывается через `hive.amalgam_breath`, `FLAMETHROWER_FIRE` — разрешённый задел. Точка `CREEPER_RUPTURE` перенесена с невозможного override private-метода на существующий серверный `ExplosionEvent.Detonate` hook. Свежий ZIP/gate и Java compile после этого изменения не выполнялись; принятие пакета не заявляю. Старые ниже приведённые статусы сохранены как история.
 
-## Фактическая проверка
+Карта Sound S17: `sound_unreachable_map.md` (база `243e598`).
 
-Просканированы все 228 `.java` в доступном исходнике `01-coder/3.7.3/src/main/java`, исключая декларации `ModSounds.java`. Все 11 констант объявлены, но ни одна нигде больше не упоминается. При этом каталог `07-project/` в checkout содержит документацию и старые архивы, Java-исходников там нет; фактическая копия Java проекта находится в scaffold 3.7.3.
+## Реализации по карте Sound
 
-| Константа / событие | Декларация | Call sites вне `ModSounds.java` | Возможный реальный триггер (не внесён) |
-|---|---|---:|---|
-| `FLAMETHROWER_FIRE` / `flamethrower_fire` | `ModSounds.java:22` | 0 | Длительный огонь Bio Purifier; нужен выбор между этим событием и текущим `PURIFIER_LOOP`. |
-| `AMALGAM_SMASH` / `amalgam_smash` | `:23` | 0 | Успешный обычный melee-hit Flesh Amalgam (`FleshAmalgamEntity.doHurtTarget`). |
-| `SYNAPSE_SHOCK` / `synapse_shock` | `:44` | 0 | Переход Synapse Node из неактивного состояния в активное; сейчас есть отдельный периодический `SYNAPSE_NODE_PULSE`. |
-| `HIVE_SPREAD` / `hive.spread` | `:88` | 0 | Успешное размещение новой vein в `VeinMutationEngine.spread`. |
-| `HIVE_DETAIL_FLOW` / `hive.detail_flow` | `:101` | 0 | Hive-ambient one-shot. |
-| `HIVE_DETAIL_MEMBRANE` / `hive.detail_membrane` | `:103` | 0 | Hive-ambient one-shot. |
-| `HIVE_DETAIL_BUBBLES` / `hive.detail_bubbles` | `:105` | 0 | Hive-ambient one-shot. |
-| `HIVE_DETAIL_CREAK` / `hive.detail_creak` | `:107` | 0 | Hive-ambient one-shot. |
-| `HIVE_DETAIL_SCUTTLE` / `hive.detail_scuttle` | `:109` | 0 | Hive-ambient one-shot. |
-| `CREEPER_RUPTURE` / `creeper_rupture` | `:143` | 0 | Взрыв Infected Creeper; сейчас отдельно звучит fuse warning `HIVE_SPAWN_CREEPER_DETONATE`. |
-| `FLESH_AMALGAM_AMBIENT` / `flesh_amalgam_ambient` | `:158` | 0 | Ambient Flesh Amalgam; его `getAmbientSound()` сейчас возвращает `HIVE_AMALGAM_BREATH`, который ссылается на тот же ресурс. |
+| Событие | Реальный вызов (путь:строка) | Параметры / статус |
+|---|---|---|
+| `AMALGAM_SMASH` | `entity/FleshAmalgamEntity.java:302`, `doHurtTarget` после успешного melee-hit | HOSTILE, volume/pitch 1.0; позиция амальгамы |
+| `SYNAPSE_SHOCK` | `block/SynapseNodeBlock.java:69`, `tick`, после изменения POWER, если новое значение > 0 | BLOCKS, volume 0.8, pitch 1.0 |
+| `HIVE_SPREAD` | `world/infection/VeinMutationEngine.java:119`, `spread` после успешного размещения новой vein; входы — random tick `block/FleshVeinsBlock.java:143` → `tickVein` и `block/FleshBlock.java:73` → `tickFlesh` | BLOCKS, volume 0.65, pitch 1.0, позиция поставленного блока; один звук максимум на успешный вызов spread, но события могут идти от многих random-ticked блоков; cooldown не добавлял без игрового замера, как требует Sound |
+| `CREEPER_RUPTURE` | `event/CarnisEvents.java:52`, `protectHiveTissueFromInfectedCreeper`, `ExplosionEvent.Detonate` для `InfectedCreeperEntity` | HOSTILE, volume/pitch 1.0; серверный реальный взрыв |
+| `HIVE_DETAIL_CREAK` | `client/sound/HiveAmbientSoundHandler.java:344,383`, зона THRESHOLD | редкая деталь, случайный интервал 160–280 тиков, volume 0.30 / pitch 1.0 |
+| `HIVE_DETAIL_SCUTTLE` | там же, строки 344,387, фактический client playback на строках 345–347; зона SURFACE | 50/50 с `HIVE_DETAIL_MEMBRANE`, interval 160–280 тиков, volume 0.30 / pitch 1.0 |
+| `HIVE_DETAIL_MEMBRANE` | там же, строки 344,388, фактический client playback на строках 345–347; зона SURFACE | вариант A из карты Sound: 50/50 с SCUTTLE, volume 0.30 / pitch 1.0 |
+| `HIVE_DETAIL_BUBBLES` | там же, строки 344,389, фактический client playback на строках 345–347; зона DEEP | interval 160–280 тиков, volume 0.30 / pitch 1.0 |
+| `HIVE_DETAIL_FLOW` | там же, строки 344,390, фактический client playback на строках 345–347; зона CORE | вызов volume 0.30; `sounds.json` задаёт flow_01 multiplier 1.5 (итог 0.45), flow_02 multiplier 1.0 (итог 0.30); pitch 1.0 для обоих |
+| `FLAMETHROWER_FIRE` | — | Sound указывает, что механики огнемёта нет. Архитектор T-3196/Z-26 решил оставить событие сознательным заделом и внести в allowlist; Integrator добавил это исключение, checker показывает его отдельной строкой и не валит. Не стал подменять звук Bio Purifier. |
+| `FLESH_AMALGAM_AMBIENT` | — (общий ресурс играет через `HIVE_AMALGAM_BREATH`, `entity/FleshAmalgamEntity.java:614`) | Архитектор T-3196 подтвердил, что отдельный вызов не нужен; alias/shared-resource покрытие проверяется отдельными регрессионными тестами. |
 
-## Почему код пока не менялся
+### Изменённые файлы исходника
 
-1. У пяти `hive.detail_*` нет найденного решения Sound о размещении в ambient. Контекстом установлен запрет менять ambient/one-shot `hive.pulse` без предварительной сверки с владельцем. В `ROADMAP_sound.md`/решениях доски отдельного одобрения для этих пяти событий нет. Поэтому не менял `HiveAmbientSoundHandler` и не трогал `hive.pulse`.
-2. Для `flamethrower_fire` в коде нет отдельного flamethrower; наиболее близок Bio Purifier, у которого уже есть `PURIFIER_IGNITE`/`PURIFIER_LOOP`. Замена или наложение звука меняет дизайн.
-3. Для `flesh_amalgam_ambient` нужно решить, использовать ли дублирующее событие вместо `HIVE_AMALGAM_BREATH` либо чередовать события; обе записи указывают на один ресурс. Удаление требует согласования с Sound.
-4. Правило приёмки 3.7.3 сейчас требует строго ограниченную delta. Внесение Java-файлов изменит перечень дельты пакета; прежде чем включать код, Архитектор/Ревизор должны согласовать обновлённый allowlist и чекер `verify_373_delta.py`.
+**Java:**
+- `01-coder/3.7.3/src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java`
+- `01-coder/3.7.3/src/main/java/com/carnis/mod/block/SynapseNodeBlock.java`
+- `01-coder/3.7.3/src/main/java/com/carnis/mod/world/infection/VeinMutationEngine.java`
+- `01-coder/3.7.3/src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java`
+- `01-coder/3.7.3/src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java`
+- `01-coder/3.7.3/src/main/java/com/carnis/mod/event/CarnisEvents.java` — обработчик реального explosion event для `CREEPER_RUPTURE`.
 
-Оставшиеся 5 прямых кандидатов выше также не внесены до согласования поведения и аудио-частоты; никаких файлов `.ogg` или регистраций не удалял.
+**Ресурс по карте Sound:**
+- `01-coder/3.7.3/src/main/resources/assets/carnis/sounds.json` — для вариантов `hive.detail_flow` задан pitch 1.0 и per-sample multiplier 1.5/1.0, чтобы при volume вызова 0.30 получить уровни 0.45/0.30 из карты.
 
-## Связанные аудиофайлы и повторное подтверждение гейтом
+Java-список и ресурсный diff должны быть перечислены в build report/manifest при сборке. T-3190 разрешает Java-дельту; `accept_3.7.3.py` ограничивает ресурсный allowlist точными путями, включая только `sounds.json` для S17. `.jar` не собирался.
 
-| Событие | Связанные файлы в `sounds.json` |
-|---|---|
-| `flamethrower_fire` | `entity/flamethrower_fire.ogg` |
-| `amalgam_smash` | `entity/flesh_amalgam_smash_01.ogg`, `_02.ogg` |
-| `synapse_shock` | `block/synapse_shock.ogg` |
-| `hive.spread` | `hive/hive_spread_01_creep.ogg`, `_02_pulse.ogg`, `_03_swell.ogg` |
-| `hive.detail_flow` | `hive/detail_flow_01.ogg`, `_02.ogg` |
-| `hive.detail_membrane` | `hive/detail_membrane_01.ogg` |
-| `hive.detail_bubbles` | `hive/detail_bubbles_01.ogg` |
-| `hive.detail_creak` | `hive/detail_creak_01.ogg` |
-| `hive.detail_scuttle` | `hive/detail_scuttle_01.ogg` |
-| `creeper_rupture` | `block/creeper_rupture.ogg` |
-| `flesh_amalgam_ambient` | `entity/flesh_amalgam_ambient.ogg` |
+## Проверка достижимости исходников
 
-Это **15 файлов под 11 событиями**. После интеграции T-3185 гейт `tools/accept_3.7.3.py` был повторно запущен на текущем (ещё не обновлённом) ZIP: блок `sound_orphans` вернул код 3 и перечислил те же 11 констант как недостижимые; сирот 0 и ссылок в пустоту 0. Значит диагностика воспроизведена самим гейтом, не только внешним поиском.
+Повторная проверка исходников после синхронизации до fix commit `7b9655f`:
 
-**Итог:** подтверждено **0/11 вызываемых**, **11/11 зарегистрированных**; ни одно событие не удалялось. Для закрытия T-3184 требуется разрешение/решение по точкам вызова и обновлённой файловой дельте. После согласования внести выбранные `файл:строка`, пересобрать/проверить после разблокировки 3.7.3 и закрыть 11/11.
+- `python3 tools/sound_orphans.py 01-coder/3.7.3 --quiet` — код 0; **82** события, **144** ссылок/OGG; сирот **0**, ссылок в пустоту **0**, недостижимых событий **0**;
+- `FLESH_AMALGAM_AMBIENT` распознаётся как покрытый общим ресурсом `hive.amalgam_breath`;
+- `FLAMETHROWER_FIRE` остаётся единственным сознательным заделом в allowlist и показывается отдельно;
+- `python3 tools/sound_orphans_alias_test.py` — **5/5** тестов пройдены (полное alias-покрытие принимается; частичное покрытие, самопокрытие, пустое событие и взаимное покрытие двух недостижимых событий отвергаются);
+- `python3 tools/sound_orphans_allowlist_test.py` — **4/4** интеграционных теста: allowlist содержит только `FLAMETHROWER_FIRE`, задел освобождается, `--no-allowlist` выявляет его как недостижимый, постороннее событие всё равно возвращает код 3;
+- `python3 -m json.tool .../sounds.json`, `git diff --check` и статические assertions для серверной точки `CREEPER_RUPTURE` прошли.
+
+Это проверка исходников/статических условий, не Java-компиляция и не игровой тест. В окружении доступен `javac` 11, а проект требует Java 17; Gradle/wrapper отсутствуют. Игрового замера частоты `VeinMutationEngine.spread()` нет.
+
+## Что блокирует окончание T-3184 / принятие 3.7.3
+
+1. Подтверждение Архитектора/Звука для `CREEPER_RUPTURE`: карта предлагала override `Creeper.explodeCreeper()`, но метод `private` в Minecraft 1.20.1. Вместо невалидного override используется серверный `ExplosionEvent.Detonate`; текущий hook ещё не компилировался.
+2. T-3197 продвинут upstream: S24 сообщает 144 канонических OGG и 132 файла в `sounds_380/`, R18 независимо подтверждает SHA-256 канона, I20 опубликован с разделением гейтов. Однако sparse checkout не материализует `03-sound/sounds/`; текущий acceptance gate fail-closed пропустит проверку банка, если его нет на диске. Нужны доступные актуальные входы перед полным прогоном.
+3. Workspace около 205 MB (`.git` 169 MB, `.git/objects` 168 MB) при лимите `<128 MB`. Удалены 24 временных `/tmp/baseline-*.zip` и `tools/__pycache__`; `build/tmp/temp` отсутствовали. Постоянные ZIPы и Git objects не удалялись. Запрос Архитектору по безопасному уменьшению размера сохранён в `coder_git_storage_architect_request.md`.
+4. Нет Java 17/Gradle/Forge classpath для компиляции; игрового прогона и замера частоты spread-звука нет.
+5. Постоянные ZIP/manifest старые; полный gate на актуальном кандидате после корректировки CREEPER hook не выполнялся. Следующий шаг — получить/подготовить безопасно актуальные входы, compile без JAR, затем ZIP/manifest и полный gate. Пакет принимать только при зелёных проверках актуальных входов.
+6. R15 выявил fail-open в `heard_elsewhere`: два невызванных события с общим OGG оправдывали друг друга. Добавил фильтр dead keys и регрессионный тест взаимного покрытия; alias suite теперь 5/5, включая настоящий `FLESH_AMALGAM_AMBIENT` alias. Минимальный source/test fix закоммичен и запушен как `7b9655f`. Изменение относится к зоне Интегратора/T-3185: ему нужно проверить патч и встроить регрессионные тесты в acceptance/CI; сам T-3185 не закрыт.
+
+## Продолжение после HEAD `487057a`
+
+Предыдущие выводы о ложном срабатывании FLESH и неразрешённом `sounds.json` устарели: обновлённый `sound_orphans.py` считает общий ключ `hive.amalgam_breath` покрытием `FLESH_AMALGAM_AMBIENT`; локальный аудит исходников теперь код 0. В `accept_3.7.3.py` разрешён только точный путь `src/main/resources/assets/carnis/sounds.json` в delta.
+
+Полный acceptance gate был успешно выполнен на временном кандидате в `/tmp` (код 0), с недостающими sparse-checkout inputs и 144-файловым Sound-банком из `9ea5c82`; временные файлы удалены. Этот результат относился к прежней версии Java-дельты: последующий API review выявил невалидный override `Creeper.explodeCreeper()`, поэтому код 0 не подтверждает текущую версию исходников. ZIP/manifest в рабочем каталоге не обновлялись; в HEAD банк всё ещё 276 файлов (S24/T-3197). Java-компиляция/игровой тест не выполнялись; `.jar` не собирался.
+
+## Дополнение · статический review игровых точек
+
+Повторно просмотрены тела всех шести изменённых Java-классов (без Git-обхода):
+
+- `AMALGAM_SMASH` срабатывает только после успешного `super.doHurtTarget` на сервере.
+- `SYNAPSE_SHOCK` вызывается из серверного `SynapseNodeBlock.tick` при изменении POWER и ненулевом новом значении, согласно карте S17.
+- `HIVE_SPREAD` вызывается только после успешного `setBlockAndUpdate`, в серверном `VeinMutationEngine`; частотный лимит не добавлял, потому что в карте Sound он требует замера частоты в игре, а измерения нет.
+- `CREEPER_RUPTURE` перенесён в серверную ветку существующего `CarnisEvents.protectHiveTissueFromInfectedCreeper(ExplosionEvent.Detonate)` после проверки источника взрыва; вызов теперь опирается на реальный Forge event, а не на невозможный override private method.
+- `HIVE_DETAIL_*` играют локально на клиенте с задержкой 160–280 тиков по активной зоне.
+
+Это статическая проверка достижимых gameplay hooks, не игровое подтверждение. Дополнительно подтвердил: проект требует Java toolchain 17 (`build.gradle`), в среде доступен только `javac` 11; Gradle wrapper/system Gradle и Gradle cache отсутствуют. Поэтому компиляцию Forge sources выполнить нельзя: не хватает и нужного JDK, и Minecraft/Forge classpath. Ничего не менял по cooldown/механике без игрового замера.
+
+## Коррекция CREEPER_RUPTURE после проверки API Minecraft 1.20.1
+
+Таблица Sound S17 предлагает переопределить `Creeper.explodeCreeper()`. В mappings для целевой версии Minecraft 1.20.1 этот метод имеет модификатор `private`, поэтому такой `@Override` не компилируется. Удалил его из `InfectedCreeperEntity` и перенёс вызов `CREEPER_RUPTURE` в уже существующий серверный обработчик `CarnisEvents.protectHiveTissueFromInfectedCreeper(ExplosionEvent.Detonate)`: он уже фильтрует настоящий взрыв по `InfectedCreeperEntity`, после чего играет звук один раз. Добавлен шестой Java-файл к T-3184: `event/CarnisEvents.java`.
+
+После этой правки `tools/sound_orphans.py` — код 0. Добавил автономный тест `tools/sound_orphans_alias_test.py`; все 4 сценария прошли: полное покрытие файлов alias принимается, частичное покрытие/самопокрытие/пустое событие не принимаются. Тест использует только стандартную библиотеку, Git-объекты и аудио не читает. Старый временный acceptance-код 0 невалиден для текущих исходников, потому что кандидат включал ошибочный override. Новый ZIP/gate не запускал: S24 и storage decision всё ещё открыты. Не менял Sound-карту; расхождение по недоступности override сообщено в этом отчёте для согласования с Архитектором/Звуком.
