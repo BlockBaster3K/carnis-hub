@@ -10,6 +10,9 @@
 Использование:
     python3 02-reviewer/tools/ci_guard_test.py [--workflow путь] [-v]
 
+Шаги исполняются той же оболочкой, что на раннере: `bash --noprofile --norc -eo pipefail -c`.
+Это принципиально: без `pipefail` тест проходит там, где CI падает.
+
 Код возврата: 0 — все сценарии дали ожидаемое, 2 — есть расхождения, 1 — ошибка запуска.
 """
 
@@ -65,8 +68,12 @@ def run_step(script, root, env_extra=None):
         env.update({k: str(v) for k, v in env_extra.items()})
     for f in (env["GITHUB_STEP_SUMMARY"], env["GITHUB_OUTPUT"]):
         open(f, "w").close()
-    p = subprocess.run(["bash", "-c", script], cwd=root, env=env,
-                       capture_output=True, text=True)
+    # GitHub Actions для `shell: bash` запускает:
+    #   bash --noprofile --norc -eo pipefail {0}
+    # Без `-o pipefail` тест «проходит» там, где раннер падает (так и было
+    # 25.11: Resolve package → failure при живом вердикте). Запускаем так же.
+    p = subprocess.run(["bash", "--noprofile", "--norc", "-eo", "pipefail", "-c", script],
+                       cwd=root, env=env, capture_output=True, text=True)
     out = (env["GITHUB_OUTPUT"] and open(env["GITHUB_OUTPUT"]).read()) or ""
     return p.returncode, p.stdout + p.stderr, out
 

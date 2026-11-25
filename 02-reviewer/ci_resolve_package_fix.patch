@@ -1,0 +1,102 @@
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -51,54 +51,60 @@
+         run: |
+           set -e
+           PKG="${{ github.event.inputs.package }}"
++          DIR=""
++          # Проверка вердикта — одна функция на все случаи: и автовыбор, и ручной package.
++          verdict_for() {   # $1 = каталог версии (например 3.7.1 или 3.7.1-R5)
++            V="${1%%-R*}"
++            D=$(echo "$V" | tr -d '.')
++            for f in "00-board/reports/reviewer_${V}_verdict.md" "00-board/reports/reviewer_${D}_verdict.md"; do
++              if [ -f "$f" ]; then echo "$f"; return 0; fi
++            done
++            return 1
++          }
+           if [ -z "$PKG" ]; then
+-            # Каталог версии без ZIP — ещё не сдача (например заготовка 3.7.0,
+-            # в которой нет project-*-clean.zip). Такой каталог НЕ выбираем:
+-            # иначе сборка падает или, хуже, соберёт не тот пакет.
+-            DIR=""
+             for CAND in $(ls -1d 01-coder/*/ 2>/dev/null | sed 's|01-coder/||; s|/$||' \
+-                          | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V -r); do
+-              if ls -1 "01-coder/$CAND"/project-*-clean.zip >/dev/null 2>&1; then
+-                # ⛔ Пакет без ВЕРДИКТА РЕВИЗОРА не становится релизом.
+-                # Инцидент 2026-11-25: заготовка 3.7.2 (отладочная, гейт давал
+-                # код 1) оказалась старшей версией с ZIP — и CI выпустил
+-                # релиз v3.7.2 из непринятого пакета. Отсутствие файла
+-                # вердикта здесь — это «не принято», а не «принято по умолчанию».
+-                # Вердикт ищем по номеру версии БЕЗ точек: у ролей встречаются
+-                # оба вида — reviewer_3.6.0_verdict.md и reviewer_371_verdict.md.
+-                VBASE="${CAND%%-R*}"
+-                VDIG=$(echo "$VBASE" | tr -d '.')
+-                VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
+-                           00-board/reports/reviewer_*"$VDIG"*_verdict.md \
+-                           2>/dev/null | head -1)
+-                if [ -z "$VERD2" ]; then
+-                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)"
+-                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
+-                  continue
+-                fi
+-                # grep в условии возвращает 1 при «не найдено», а set -e на
+-                # некоторых раннерах валит шаг. `|| true` делает проверку
+-                # чисто логической: пусто = вердикт положительный.
+-                NEG=""
+-                NEG=$(grep -oiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2" 2>/dev/null || true)
+-                if [ -n "$NEG" ]; then
+-                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю"
+-                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю" >> "$GITHUB_STEP_SUMMARY"
+-                  continue
+-                fi
+-                DIR="$CAND"
+-                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята"
+-                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята" >> "$GITHUB_STEP_SUMMARY"
+-                break
++                          | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V -r || true); do
++              ZIP=""
++              for z in "01-coder/$CAND"/project-*-clean.zip; do
++                [ -f "$z" ] && { ZIP="$z"; break; }
++              done
++              [ -n "$ZIP" ] || continue
++              if ! VERD2=$(verdict_for "$CAND"); then
++                echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)"
++                echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
++                continue
++              fi
++              NEG=$(grep -oiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2" || true)
++              if [ -n "$NEG" ]; then
++                echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю"
++                echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю" >> "$GITHUB_STEP_SUMMARY"
++                continue
++              fi
++              if ! grep -qiE 'ПРИНЯТ|ACCEPTED' "$VERD2"; then
++                echo "- ⛔ \`01-coder/$CAND\`: в вердикте \`$VERD2\` нет явного «ПРИНЯТО» — пропускаю"
++                echo "- ⛔ \`01-coder/$CAND\`: в вердикте \`$VERD2\` нет явного «ПРИНЯТО» — пропускаю" >> "$GITHUB_STEP_SUMMARY"
++                continue
+               fi
++              DIR="$CAND"; PKG="$ZIP"
++              echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята"
++              echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята" >> "$GITHUB_STEP_SUMMARY"
++              break
+             done
+             test -n "$DIR" || { echo "::error::Нет ни одного принятого пакета: каталоги с project-*-clean.zip есть, но вердикта Ревизора (00-board/reports/reviewer_*_verdict.md) нет ни у одного"; exit 1; }
+-            PKG=$(ls -1 "01-coder/$DIR"/project-*-clean.zip 2>/dev/null | head -1)
++          else
++            # Ручной запуск проверяется теми же правилами: вердикт обязателен и он должен быть положительным.
++            DIR=$(basename "$(dirname "$PKG")")
++            if ! VERD2=$(verdict_for "$DIR"); then
++              echo "::error::у пакета '$PKG' нет вердикта Ревизора — ручной запуск не обходит приёмку"; exit 1
++            fi
++            NEG=$(grep -oiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2" || true)
++            [ -z "$NEG" ] || { echo "::error::вердикт '$VERD2' отрицательный — пакет не для релиза"; exit 1; }
++            grep -qiE 'ПРИНЯТ|ACCEPTED' "$VERD2" || { echo "::error::в вердикте '$VERD2' нет явного «ПРИНЯТО»"; exit 1; }
++            echo "- ✅ Ручной пакет \`$PKG\`, вердикт \`$VERD2\`" >> "$GITHUB_STEP_SUMMARY"
+           fi
+           test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
+           echo "path=$PKG" >> "$GITHUB_OUTPUT"
+           echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
+-
+       - name: Unpack project package
+         shell: bash
+         run: |
