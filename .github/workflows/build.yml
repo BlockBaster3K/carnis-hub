@@ -34,6 +34,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Ревизор (R15): тесты звуковых проверок не запускались ни в CI, ни в
+      # гейте — страж allowlist был добровольным, а fail-open в
+      # heard_elsewhere жил незамеченным. Зависимостей у тестов нет.
+      - name: Sound orphans unit tests
+        run: |
+          set -e
+          python3 tools/sound_orphans_alias_test.py
+          python3 tools/sound_orphans_allowlist_test.py
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:

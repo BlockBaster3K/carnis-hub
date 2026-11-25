@@ -178,6 +178,20 @@ def heard_elsewhere(dead, data, sources, files):
     dead_keys = {key for _name, key in dead}
     event_refs = {}
     live = {}
+    # R15: «живое» покрытие строим только из событий с ВЫЗЫВАЕМОЙ константой.
+    # Переиспользую тот же предикат, что и unreachable_events: пока их два,
+    # они расходятся и мёртвое событие оправдывает другое мёртвое.
+    others = {k: v for k, v in (sources or {}).items()
+              if k != "ModSounds.java"}
+    static_imported = set()
+    if sources:
+        for text in others.values():
+            for m in re.finditer(r"import\s+static\s+[\w.]*ModSounds\."
+                                 r"([A-Z0-9_]+)\s*;", text):
+                static_imported.add(m.group(1))
+    key2name = dict((key, name) for name, key in
+                    (RE_CONST.findall(sources.get("ModSounds.java") or "")
+                     if sources else []))
     for ev, spec in (data or {}).items():
         snds = spec.get("sounds", []) if isinstance(spec, dict) else []
         refs = set()
@@ -186,7 +200,17 @@ def heard_elsewhere(dead, data, sources, files):
             if isinstance(name, str) and name.startswith("carnis:"):
                 refs.add(name[len("carnis:"):])
         event_refs[ev] = refs
-        if ev not in dead_keys:
+        evname = key2name.get(ev)
+        if evname is None:
+            # Событие без константы ModSounds (например, чужое/фиктивное) —
+            # НЕ может быть доказательством слышимости. Прежний фолбэк
+            # «evname is None -> живое» и был дырой: любое событие без
+            # константы оправдывало мёртвое.
+            is_live = not sources
+        else:
+            is_live = (not sources
+                       or is_called(evname, others, static_imported))
+        if ev not in dead_keys and is_live:
             live[ev] = refs
 
     out = {}
@@ -228,22 +252,32 @@ def unreachable_events(sources):
             static_imported.add(m.group(1))
     dead = []
     for name, key in consts:
-        used = False
-        pat_qual = re.compile(r"\bModSounds\s*\.\s*" + name + r"\b")
-        for text in others.values():
-            if pat_qual.search(text):
-                used = True
-                break
-        if not used and name in static_imported:
-            pat_bare = re.compile(r"(?<![\w.])" + name + r"\b")
-            for text in others.values():
-                body = re.sub(r"import\s+static[^;]*;", "", text)
-                if pat_bare.search(body):
-                    used = True
-                    break
-        if not used:
+        if not is_called(name, others, static_imported):
             dead.append((name, key))
     return dead
+
+
+def is_called(name, others, static_imported=None):
+    """Вызывается ли константа ModSounds.ИМЯ в коде (вне ModSounds.java).
+
+    Один предикат на две проверки: `unreachable_events` решает, мертва ли
+    константа, а `heard_elsewhere` — можно ли считать событие ЖИВЫМ
+    покрытием. Пока предикатов было два, они расходились (R15: мёртвое
+    событие оправдывало другое мёртвое).
+    """
+    if static_imported is None:
+        static_imported = set()
+    pat_qual = re.compile(r"\bModSounds\s*\.\s*" + name + r"\b")
+    for text in others.values():
+        if pat_qual.search(text):
+            return True
+    if name in static_imported:
+        pat_bare = re.compile(r"(?<![\w.])" + name + r"\b")
+        for text in others.values():
+            body = re.sub(r"import\s+static[^;]*;", "", text)
+            if pat_bare.search(body):
+                return True
+    return False
 
 
 def main():
