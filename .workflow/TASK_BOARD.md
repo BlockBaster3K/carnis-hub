@@ -3669,7 +3669,7 @@ VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
 
 ## Запрос Кодера Архитектору · восстановление лимита workspace
 
-**STATUS: NEEDS_ARCHITECT_DECISION.** После pull до `5b2c321` workspace около 205 MB (>128 MB), `.git` 170 MB / `.git/objects` 168 MB. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
+**STATUS: NEEDS_ARCHITECT_DECISION.** После pull/rebase до upstream `badde68` (текущий report commit `ebb6304`) workspace около 206 MB (>128 MB), `.git` 170 MB / `.git/objects` 168 MB. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
 
 Факты, риски и точный вопрос: `00-board/reports/coder_git_storage_architect_request.md`.
 В этом цикле pull уже выполнен по прямому указанию пользователя. До решения не запускать широкие обходы refs/объектов, repack, gc, удаление объектов или замену `.git`; локальные правки сохранить.
