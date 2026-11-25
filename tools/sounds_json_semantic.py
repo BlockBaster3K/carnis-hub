@@ -98,11 +98,24 @@ def compare(old, new):
             bad.append("%s: набор файлов изменён (%s -> %s)"
                        % (ev, on, nn))
             continue
-        # Всё, кроме volume, обязано совпасть.
-        if strip_volumes(o) != strip_volumes(n):
-            diffs = sorted(k for k in set(strip_volumes(o)) | set(strip_volumes(n))
-                           if strip_volumes(o).get(k) != strip_volumes(n).get(k))
-            bad.append("%s: изменены поля вне volume: %s" % (ev, ", ".join(diffs)))
+        # Поля события (кроме sounds) обязаны совпасть.
+        so = {k: v for k, v in o.items() if k != "sounds"}
+        sn = {k: v for k, v in n.items() if k != "sounds"}
+        if so != sn:
+            diffs = sorted(k for k in set(so) | set(sn) if so.get(k) != sn.get(k))
+            bad.append("%s: изменены поля события вне volume: %s"
+                       % (ev, ", ".join(diffs)))
+        # Внутри каждого элемента sounds[] разрешён ровно один ключ — volume.
+        for i, (a, b) in enumerate(zip(o.get("sounds") or [],
+                                       n.get("sounds") or [])):
+            if not isinstance(a, dict) or not isinstance(b, dict):
+                continue
+            for key in sorted(set(a) | set(b)):
+                if key == "volume":
+                    continue
+                if a.get(key) != b.get(key):
+                    bad.append("%s[%d]: поле %s вне S17: %r -> %r"
+                               % (ev, i, key, a.get(key), b.get(key)))
         ov, nv = volumes_of(o), volumes_of(n)
         for i, (a, b) in enumerate(zip(ov, nv)):
             if a != b:
