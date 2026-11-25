@@ -3057,7 +3057,7 @@ glowmask по Р-3 **33/33**.
 **Критерий приёмки:** 11/11 событий либо вызываются из кода, либо удалены
 согласованно с Звуком; ни одного «озвученного, но недостижимого».
 
-**Текущий прогресс Кодера:** 9 реальных call sites внесены и закоммичены в `2c338af`; alias `FLESH_AMALGAM_AMBIENT` покрыт через `hive.amalgam_breath`; `FLAMETHROWER_FIRE` — осознанный allowlist. Невалидный override private `Creeper.explodeCreeper()` заменён на серверный `ExplosionEvent.Detonate` hook, но подтверждения/Java-компиляции нет. `sound_orphans.py` код 0; alias 5/5 и allowlist 4/4. Интегратор опубликовал `integrator_r15_heard_elsewhere_closed.md`: общий предикат живости внесён и оба теста подключены к CI. Compile, игровой тест, ZIP rebuild и acceptance после source commit не подтверждены. См. `00-board/reports/coder_modsounds_audit.md`.
+**Текущий прогресс Кодера:** 9 реальных call sites внесены и закоммичены в `2c338af`; alias `FLESH_AMALGAM_AMBIENT` покрыт через `hive.amalgam_breath`; `FLAMETHROWER_FIRE` — осознанный allowlist. Невалидный override private `Creeper.explodeCreeper()` заменён на серверный `ExplosionEvent.Detonate` hook, но подтверждения/Java-компиляции нет. `sound_orphans.py` код 0; alias 5/5 и allowlist 4/4. Интегратор опубликовал `integrator_r15_heard_elsewhere_closed.md`: общий предикат живости внесён и оба теста подключены к CI. Reviewer source-ready подтвердил 9/9 привязок. Диагностический ZIP/manifest собран во временном `/tmp` (761/761, sound_orphans 0), но постоянный ZIP не заменял; полный gate/Java compile/игровой тест не подтверждены. Вопрос flow_01 0,45 намеренный согласно S17 map (multiplier 1,5 × вызов 0,30). Gate delta всё ещё нуждается в semantic check вместо широкого sounds.json allow; просьба Интегратору/Архитектору в `reviewer_t3202_source_ready.md`. См. `00-board/reports/coder_modsounds_audit.md`.
 
 ---
 
@@ -3678,7 +3678,7 @@ VERD2=$(ls -1 00-board/reports/reviewer_*"$VBASE"*_verdict.md \
 
 ## Запрос Кодера Архитектору · восстановление лимита workspace
 
-**STATUS: NEEDS_ARCHITECT_DECISION.** После последнего sync workspace около 191 MB (>128 MB), `.git` 155 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
+**STATUS: NEEDS_ARCHITECT_DECISION.** После последнего sync workspace около 191 MB (>128 MB), `.git` 156 MB; внутри checkout временный мусор не найден. Origin — partial clone `blob:none`; Git 2.47.3 не предоставляет `--drop-filtered`, а `--filter-to` требует внешнего pack. Ручное удаление pack не допускается. Прошу Архитектора выбрать безопасный способ снизить размер с сохранением refs/commit/tree и всех локальных изменений.
 
 Факты, риски и точный вопрос: `00-board/reports/coder_git_storage_architect_request.md`.
 В этом цикле pull уже выполнен по прямому указанию пользователя. До решения не запускать широкие обходы refs/объектов, repack, gc, удаление объектов или замену `.git`; локальные правки сохранить.

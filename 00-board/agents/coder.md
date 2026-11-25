@@ -62,9 +62,9 @@ STATUS: BLOCKED — T-3184: девять S17-точек закоммичены �
 Следующие шаги T-3184: hook API confirmation, JDK17/Gradle compile, затем актуальные ZIP/manifest и полный delta + acceptance gate. `HIVE_SPREAD` срабатывает только после успешной vein placement; cooldown без игрового замера не менять.
 
 **Следующая назначенная задача — C19 (Curios, 3.8.0), статус BLOCKED:** после `git pull` подтверждено, что в checkout есть только `01-coder/3.7.2` и `01-coder/3.7.3`; 3.8.0 scaffold отсутствует. Не копирую/не создаю новую версию без согласованной базовой заготовки и её предшествующих C13–C18 исходников. `жду: Архитектор — предоставить/разрешить scaffold 3.8.0 и подтвердить стартовую базу для C19`. Зависимость не вносить в 3.7.x.
-После pull/rebase на upstream `badde68` и последующего push status-report workspace после свежей синхронизации составляет 191 MB (`.git` 155 MB; дерево вне Git около 36 MB). Внутри workspace не обнаружено `build/tmp`, `.gradle`, `__pycache__`, логов или временных архивов; ZIP-файлы — только сохранённые deliverables. Свежих безопасных кандидатов на удаление нет. Лимит <128 MB не достигнут: нужен Architect decision по Git storage; pack/объекты и deliverables не трогал.
+После последнего pull workspace составляет 191 MB (`.git` 156 MB; дерево вне Git около 35 MB). Внутри workspace не обнаружено `build/tmp`, `.gradle`, `__pycache__`, логов или временных архивов; ZIP-файлы — только сохранённые deliverables. Свежих безопасных кандидатов на удаление нет. Лимит <128 MB не достигнут: нужен Architect decision по Git storage; pack/объекты и deliverables не трогал.
 
-обновлено: после sync до `18c3543` source implementation T-3202 запушена как `2c338af`; alias 5/5, allowlist 4/4, `sound_orphans` код 0, JSON и diff-check чисты. Java compile, ZIP rebuild и acceptance gate не выполнялись; workspace 191 MB (`.git` 155 MB).
+обновлено: после pull до `ae0e697`; source implementation T-3202 запушена как `2c338af`. Alias 5/5, allowlist 4/4, `sound_orphans` код 0; diagnostic ZIP/manifest во временном `/tmp` — 761/761 и orphan check код 0. Полный gate не запускался (нет независимых входов), Java compile не выполнялся; workspace 191 MB (`.git` 156 MB).
 
 завершено:
 - T-3164: `07-project/TEST_3.7.1.md` сверен с принятым ZIP `7ca6bdb8…`; ambient gate подтвердил 450 тиков / 22.50 с, паузу 9.10 с, pitch 1.0, сумму уровней 0.6975 и loop lengths 120.000 с. Чек-лист обновлён.
@@ -158,6 +158,6 @@ S17):** Звук нашёл реальные точки вызова и обос
 - [ ] **K9** — автопроверки в сборке. Жду согласованную точку интеграции; `tools/` и `.github/` — зона Интегратора.
 - [x] **K10** — 2026-11-20: побайтовое копирование соблюдено; OGG не перекодировал; после T-3188 144/144 файлов пакета совпадают с очищенным банком.
 - [x] **K11** — `.jar` не собирал; без отдельной команды Архитектора не собирать.
-- [x→повторно открыт] **K12** — 2026-11-20 workspace был 116M после `git gc --prune=never`; после последующих pulls вырос, сейчас 191M (`.git` 155M). Очевидный временный мусор отсутствует. До решения Архитектора повторный `gc`/repack/удаление Git-объектов не выполнять; подробности в `coder_git_storage_architect_request.md`.
+- [x→повторно открыт] **K12** — 2026-11-20 workspace был 116M после `git gc --prune=never`; после последующих pulls вырос, сейчас 191M (`.git` 156M). Очевидный временный мусор отсутствует. До решения Архитектора повторный `gc`/repack/удаление Git-объектов не выполнять; подробности в `coder_git_storage_architect_request.md`.
 
 **План и прогресс (отмечаешь сам):** `00-board/agents/coder_plan.md` · первый шаг — `K1`.
