@@ -1088,6 +1088,37 @@ def _table_types(path):
     return out
 
 
+_BM = None
+BASELINE_MASTER = os.path.join(REPO, "03-sound", "baseline_master.json")
+
+
+def _baseline_master():
+    """baseline(M) от Звука (S46/S48): шум первого кодирования на мастере.
+
+    Это ЕДИНСТВЕННАЯ величина, пригодная для нормы от PCM-мастера. Таблица
+    `sound_crest_baseline.md` меряет перекод УЖЕ закодированного файла —
+    шум второй генерации, который для ровного сигнала систематически ниже
+    (Ревизор I23 §10.2: 12 нетронутых файлов 3.8.0 «падали» на табличном
+    допуске). Ключ — путь без префикса банка, как в таблице.
+    """
+    import json
+    out = {}
+    try:
+        with open(BASELINE_MASTER, encoding="utf-8") as fh:
+            for rec in json.load(fh):
+                name = rec.get("file", "")
+                for prefix in ("sounds/", "sounds_380/"):
+                    if name.startswith(prefix):
+                        name = name[len(prefix):]
+                        break
+                if name and "baseline_master" in rec:
+                    out[name] = (float(rec["baseline_master"]),
+                                 float(rec.get("repro_delta") or 0.0))
+    except (OSError, ValueError, TypeError):
+        return {}
+    return out
+
+
 def _prev_version_bytes(rel):
     """Байты того же файла из принятой 3.7.2: (True, bytes) или (None, None).
 
@@ -1189,6 +1220,9 @@ def check_crest_attack(extract_dir):
         print("  · звуков в пакете нет — нечего сверять с мастерами")
         return
 
+    global _BM
+    if _BM is None:
+        _BM = _baseline_master()
     checked, no_master, no_entry, bad_crest = 0, [], [], []
     attack_report, no_attack, taut = [], [], []
     used_prev = 0
@@ -1262,11 +1296,16 @@ def check_crest_attack(extract_dir):
             # 0,05. Теперь baseline(M) считается: перекодировать мастер тем
             # же кодеком и сравнить crest с мастером. Не удалось — берём
             # табличный baseline как нижнюю границу (он не меньше шума).
-            # Baseline берём из таблицы Звука: это измеренный шум кодека
-            # для этого файла. Своими руками его не пересчитываю — Ревизор
-            # доказал (R21), что пол зависит от энкодера машины, а таблица
-            # посчитана энкодером Звука тем же битрейтом, что у файла.
-            tol = max(thr, base_tbl + 0.05)
+            # Baseline: приоритет у baseline(M) от Звука (S46/S48) — это шум
+            # ПЕРВОГО кодирования на мастере, ровно та величина, что нужна
+            # норме от PCM. Табличный baseline (шум второй генерации) —
+            # только запасной, и тогда это печатается.
+            bm = _BM.get(rel)
+            if bm is not None:
+                base_used, src = bm[0], "baseline(M)"
+            else:
+                base_used, src = base_tbl, "таблица"
+            tol = max(thr, base_used + 0.05)
             d = abs(cf - cm)
             if d > tol:
                 # R23 (I23 §10.2): ТАБЛИЧНЫЙ baseline измерен на перекоде
@@ -1278,7 +1317,11 @@ def check_crest_attack(extract_dir):
                 # энкодером (S46), стационарные идут ОТЧЁТОМ, а не провалом;
                 # транзиентные (порог 0,60) валят как раньше — у них запас
                 # 2-3x и ложных провалов нет.
-                if typ == "стац":
+                # Стационарный валит, ЕСЛИ допуск посчитан от измеренного
+                # baseline(M) — тогда шум учтён и превышение реально. Если
+                # baseline(M) нет и взят табличный, остаётся отчётом: таблица
+                # меряет шум другой генерации (см. выше).
+                if typ == "стац" and src == "таблица":
                     stationary_cand.append((rel, d, tol, base_tbl))
                 else:
                     bad_crest.append((rel, d, tol, typ))
