@@ -121,6 +121,51 @@ def geo_info(data):
     }
 
 
+# Минимум костей в ключах по каждой анимации — решение Архитектора H36.
+MIN_KEYED = {"idle": 2, "walk": 3, "attack": 3, "hurt": 3, "death": 4}
+EPS = 1e-6
+
+
+def _motion_values(node, out):
+    """Собрать числа-значения каналов, отбросив времена ключей.
+
+    Формат Bedrock: `rotation: [[t, [x,y,z]], ...]` либо `[[x,y,z], ...]`
+    (равномерные кадры) либо `{"pre":..,"post":..}`. Время (первый элемент
+    пары) в значения не попадает — иначе анимация «с двумя одинаковыми
+    кадрами» выглядела бы движущейся только потому, что у кадров разные t.
+    """
+    if isinstance(node, (int, float)):
+        out.append(float(node))
+    elif isinstance(node, list):
+        if (len(node) == 2 and isinstance(node[0], (int, float))
+                and isinstance(node[1], (list, dict))):
+            _motion_values(node[1], out)
+        else:
+            for x in node:
+                _motion_values(x, out)
+    elif isinstance(node, dict):
+        # Ключи каналов: {"0.0": [..], "1.0": [..]} (Bedrock, время строкой)
+        # либо {"pre": .., "post": ..} — значения рекурсивно, времена-ключи нет.
+        for v in node.values():
+            _motion_values(v, out)
+
+
+def anim_stats(body):
+    """(костей в ключах, из них реально двигаются, есть ли статика)."""
+    bones = body.get("bones") or {}
+    keyed = 0
+    moving = 0
+    for chans in bones.values():
+        vals = []
+        for v in chans.values():
+            _motion_values(v, vals)
+        if vals:
+            keyed += 1
+            if max(vals) - min(vals) > EPS:
+                moving += 1
+    return keyed, moving
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("sources", nargs="+")
@@ -216,8 +261,9 @@ def main():
                 glow_res = "%dpx" % gs["opaque"]
 
         # анимации
-        anim_files = [k for k in files if k.startswith("animations/entity/")
-                      and k.endswith(".animation.json") and name in k]
+        anim_files = [k for k in files if k.startswith("animations/")
+                      and k.endswith(".animation.json")
+                      and k.split("/")[-1] == name + ".animation.json"]
         anim_res = "—"
         if anim_files:
             anim_bones = set()
@@ -239,19 +285,42 @@ def main():
             if missing:
                 (bad if a.require_anims else warn)(
                     "%s: нет анимаций %s" % (name, ", ".join(missing)))
-            # Пустая анимация (есть имя, нет ключевых кадров) — та же болванка,
-            # только выглядит как выполненная работа: ловится здесь.
+            # Ключи: сколько костей реально двигается (H36) и есть ли движение
+            # вообще. Пустая или статичная анимация — та же болванка, только
+            # выглядит как выполненная работа.
+            cov = []
+            union = set()
             for anim_name, body in _anim_bodies:
-                kf = 0
-                for chans in (body.get("bones") or {}).values():
-                    for val in chans.values():
-                        if isinstance(val, list):
-                            kf += len(val)
-                        elif isinstance(val, dict):
-                            kf += sum(len(x) for x in val.values()
-                                      if isinstance(x, list))
-                if kf == 0:
+                union |= set((body.get("bones") or {}).keys())
+                short = anim_name.split(".")[-1]
+                keyed, moving = anim_stats(body)
+                if keyed == 0:
                     bad("%s: анимация %s без ключевых кадров" % (name, anim_name))
+                elif moving == 0:
+                    bad("%s: анимация %s статична — ключи есть, тело не движется"
+                        % (name, anim_name))
+                need = MIN_KEYED.get(short)
+                if need and keyed < need:
+                    (bad if a.require_anims else warn)(
+                        "%s: %s двигает %d костей из нужных %d"
+                        % (name, short, keyed, need))
+                if short in REQUIRED_ANIMS:
+                    cov.append("%s:%d" % (short, keyed))
+            if cov:
+                anim_res = " ".join(cov)
+            # H36: на существо в ключах должно быть >= 4 костей суммарно.
+            if a.require_anims and union and len(union) < 4:
+                bad("%s: в ключах всего %d костей (H36 требует >= 4): %s"
+                    % (name, len(union), ", ".join(sorted(union))))
+            fv = set()
+            for af in anim_files:
+                d = json.loads(files[af].decode("utf-8"))
+                if "format_version" in d:
+                    fv.add(str(d["format_version"]))
+            if fv and fv != {"1.8.0"}:
+                (bad if a.require_anims else warn)(
+                    "%s: format_version анимаций %s, нужен 1.8.0 (H37)"
+                    % (name, ", ".join(sorted(fv))))
 
         print("%-26s %6d %10s %6d %6.1f %12s %9s %s"
               % (name, info["bones"], "%dx%d" % (w, h), st["colors"],
