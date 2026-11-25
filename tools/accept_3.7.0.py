@@ -313,8 +313,10 @@ def check_k8s_breaths(extract_dir):
         if isinstance(s, dict) and "amalgam_breath" in s.get("name", ""):
             got.append((s["name"], s.get("volume")))
     if not got:
-        print("  ! amalgam_breath_01/02 не подключены (решение Р-31.2 не применено)")
-        warn.append("amalgam_breath_01/02 не подключены — Р-31.2 не применена")
+        # Р-31.7 Архитектора: «не считать amalgam_breath дефектом».
+        # Кодер решает сам (подключить с volume 0.35 или не подключать);
+        # гейт это только информационно печатает, в warn/fail НЕ пишет.
+        print("  · amalgam_breath_01/02 не подключены (решение Кодера, не дефект)")
         return
     bad = [g for g in got if g[1] != 0.35]
     print("  %s amalgam_breath: %d подключено, volume %s (нужно 0.35)"
