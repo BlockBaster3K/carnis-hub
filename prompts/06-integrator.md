@@ -66,7 +66,7 @@ curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
 `carnis-coder`, `carnis-artist`, `carnis-sound`.
 
 **Проверка.** Список ключей — приведённой командой выше. Право записи у каждой
-роли проверяется её самой в начале сессии (`ssh -T git@github.com`) — результат
+роли проверяет она сама в начале сессии (`ssh -T git@github.com`), результат
 роль пишет в handshake-отчёт на доске. Свой отчёт о регистрации ключей сдай
 в `00-board/reports/integrator_ssh_deploy_keys.md`: список из 5 ключей,
 `read_only: false` у каждого, дата регистрации.
