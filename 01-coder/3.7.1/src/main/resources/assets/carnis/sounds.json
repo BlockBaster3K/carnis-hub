@@ -98,7 +98,9 @@
     "sounds": [
       {
         "name": "carnis:block/heartbeat_loop",
-        "stream": true
+        "stream": true,
+        "volume": 0.05,
+        "pitch": 1.0
       }
     ]
   },
@@ -471,18 +473,23 @@
     "sounds": [
       {
         "name": "carnis:entity/flesh_amalgam_ambient",
-        "volume": 0.25,
+        "volume": 0.35,
         "pitch": 1.0,
+        "stream": false,
         "weight": 1
       },
       {
         "name": "carnis:hive/amalgam_breath_01",
         "volume": 0.35,
+        "pitch": 1.0,
+        "stream": false,
         "weight": 1
       },
       {
         "name": "carnis:hive/amalgam_breath_02",
         "volume": 0.35,
+        "pitch": 1.0,
+        "stream": false,
         "weight": 1
       }
     ]
@@ -781,7 +788,9 @@
     "sounds": [
       {
         "name": "carnis:amb/hive_ambient_tonal_stinger",
-        "stream": false
+        "stream": false,
+        "volume": 0.05,
+        "pitch": 1.0
       }
     ]
   },
@@ -800,7 +809,9 @@
     "subtitle": "carnis.subtitle.hive_heartbeat",
     "sounds": [
       {
-        "name": "carnis:block/hive_heartbeat"
+        "name": "carnis:block/hive_heartbeat",
+        "volume": 0.05,
+        "pitch": 1.0
       }
     ]
   },
@@ -810,16 +821,19 @@
       {
         "name": "carnis:amb/hive_pulse_01",
         "stream": false,
+        "volume": 0.1,
         "pitch": 1.0
       },
       {
         "name": "carnis:amb/hive_pulse_02",
         "stream": false,
+        "volume": 0.1,
         "pitch": 1.0
       },
       {
         "name": "carnis:amb/hive_pulse_03",
         "stream": false,
+        "volume": 0.1,
         "pitch": 1.0
       }
     ]
@@ -869,7 +883,7 @@
     "sounds": [
       {
         "name": "carnis:hive/zone_stinger_intensify",
-        "volume": 0.65,
+        "volume": 0.05,
         "pitch": 1.0
       }
     ]
@@ -879,7 +893,7 @@
     "sounds": [
       {
         "name": "carnis:hive/zone_stinger_release",
-        "volume": 0.65,
+        "volume": 0.05,
         "pitch": 1.0
       }
     ]
@@ -889,7 +903,7 @@
     "sounds": [
       {
         "name": "carnis:hive/zone_stinger_deep",
-        "volume": 0.65,
+        "volume": 0.05,
         "pitch": 1.0
       }
     ]
