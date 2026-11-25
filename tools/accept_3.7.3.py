@@ -456,8 +456,18 @@ def check_glow9(extract_dir):
             print("  ✗ %-20s цветов %d, вне палитры: %s"
                   % (mob, len(cols), sorted(bad)[:3]))
         else:
+            # З-Г7 (тот же класс): «цветов 2» утверждалось без проверки.
+            # Маска из одного цвета (только прозрачный) проходила как «ок»,
+            # хотя свечения в ней нет.
+            if len(cols) != len(GLOW_EXPECT):
+                print("  ✗ %-20s цветов %d, а Р-3 требует ровно %d "
+                      "(прозрачный + 255,92,57)"
+                      % (mob, len(cols), len(GLOW_EXPECT)))
+                extra.append((mob, "цветов %d" % len(cols)))
+                continue
             ok += 1
-            print("  ✓ %-20s цветов 2 (прозрачный + 255,92,57)" % mob)
+            print("  ✓ %-20s цветов %d (прозрачный + 255,92,57)"
+                  % (mob, len(cols)))
     print("  свечение: мобов %d, в норме %d, без glowmask %d, вне палитры %d"
           % (len(MOBS9), ok, len(missing), len(extra)))
     if missing:
