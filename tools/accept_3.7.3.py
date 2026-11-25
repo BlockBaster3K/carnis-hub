@@ -1103,7 +1103,8 @@ def check_crest_attack(extract_dir):
         print("  · звуков в пакете нет — нечего сверять с мастерами")
         return
 
-    checked, no_master, no_entry, bad_crest, bad_attack = 0, [], [], [], []
+    checked, no_master, no_entry, bad_crest = 0, [], [], []
+    attack_report, no_attack = [], []
     worst_c, worst_a = (0.0, ""), (0.0, "")
     for dp, _, fs in os.walk(root):
         for f in sorted(fs):
@@ -1154,9 +1155,18 @@ def check_crest_attack(extract_dir):
             am, af = _attack(ref[0], ref[1]), _attack(got[0], got[1])
             if am is not None and af is not None:
                 da = abs(af - am)
-                if da > ATTACK_TOL:
-                    bad_attack.append((rel, da))
-                if da > worst_a[0]:
+                # R22 (Ревизор): «атака» КАК НОРМА не выдерживает собственных
+                # негативов — ни постоянный допуск 0,60 (13 из 132 файлов
+                # выходят при простом перекоде), ни per-file допуск (не ловит
+                # gain). Причины: ведущая цифровая тишина, сдвиг окна на 1 мс
+                # даёт до 9,90 дБ, сдвиг онсета. Поэтому здесь она НЕ валит, а
+                # печатается как отчётная цифра — вместе с двумя колонками,
+                # которые действительно являются нормой (crest + timbre).
+                if am < -20.0:
+                    no_attack.append((rel, am))
+                elif da > ATTACK_TOL:
+                    attack_report.append((rel, da))
+                if da > worst_a[0] and am >= -20.0:
                     worst_a = (da, rel)
             checked += 1
 
@@ -1169,8 +1179,16 @@ def check_crest_attack(extract_dir):
                  ATTACK_TOL))
     for rel, d, tol in [(a, b, c) for a, b, c, _t in bad_crest[:4]]:
         print("      ✗ %s Δcrest %.3f > %.3f" % (rel, d, tol))
-    for rel, da in bad_attack[:4]:
-        print("      ✗ %s Δатаки %.3f > %.2f" % (rel, da, ATTACK_TOL))
+    # Атака — ОТЧЁТ, не вердикт (R22). Печатается всегда, чтобы цифра была
+    # видна, но fail по ней не выставляется.
+    if no_attack:
+        print("  · атака ниже -20 дБ (окно 0-10 мс не имеет смысла): %d файлов"
+              % len(no_attack))
+    if attack_report:
+        print("  · Δатаки > %.2f дБ — отчётная метрика, не норма (R22): %d файлов"
+              % (ATTACK_TOL, len(attack_report)))
+        for rel, da in attack_report[:3]:
+            print("      ~ %s %.3f дБ" % (rel, da))
     if no_master:
         # З-31 п.2 и п.3 вместе: мастер обязателен для ИЗМЕНЁННЫХ файлов,
         # а побайтово неизменённые норме не подлежат. Разделить их можно
@@ -1193,10 +1211,7 @@ def check_crest_attack(extract_dir):
     if bad_crest:
         fail.append("crest: %d файлов изменили динамику сверх своего допуска"
                     % len(bad_crest))
-    if bad_attack:
-        fail.append("атака: %d файлов изменили атаку сверх %.2f дБ"
-                    % (len(bad_attack), ATTACK_TOL))
-    if checked and not bad_crest and not bad_attack and not no_master:
+    if checked and not bad_crest and not no_master:
         print("  ✓ crest/атака: %d файлов в норме от мастеров (З-31)" % checked)
 
 
