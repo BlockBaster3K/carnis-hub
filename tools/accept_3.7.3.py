@@ -1256,6 +1256,53 @@ def _load_crest_master():
         return None
     return mod
 
+def check_package_vs_bank_bytes(extract_dir):
+    """Звук (§6 sound_REQUEST): зелёный гейт не гарантировал, что норма банка
+    в пакете — сверялся СОСТАВ (144 из 144), а не байты.
+
+    Эталон — `MANIFEST_canon_144.txt` (S60): sha256 каждого файла канона. Если
+    файл в пакете отличается от банка, приёмка по одному составу этого не
+    увидит. Сверка по байтам, а не по имени.
+    """
+    import hashlib
+    manifest = os.path.join(REPO, "03-sound", "MANIFEST_canon_144.txt")
+    if not os.path.isfile(manifest):
+        print("  x пакет==банк: нет эталона 03-sound/MANIFEST_canon_144.txt")
+        fail.append("пакет==банк: эталона нет — байты не сверены")
+        return
+    want = {}
+    for line in open(manifest, encoding="utf-8"):
+        parts = line.split()
+        if len(parts) == 2:
+            want[parts[1]] = parts[0]
+    root = os.path.join(extract_dir, SOUND_SUBDIR)
+    differ, absent = [], []
+    for rel, sha in want.items():
+        base = rel.split("/", 1)[1] if "/" in rel else rel
+        path = os.path.join(root, base)
+        if not os.path.isfile(path):
+            absent.append(base)
+            continue
+        h = hashlib.sha256(open(path, "rb").read()).hexdigest()
+        if h != sha:
+            differ.append(base)
+    if absent:
+        print("  x пакет==банк: %d файлов канона нет в пакете (напр. %s)"
+              % (len(absent), absent[0]))
+        fail.append("пакет==банк: %d файлов канона нет в пакете"
+                    % len(absent))
+    if differ:
+        print("  x пакет==банк: %d файлов отличаются по байтам (напр. %s)"
+              % (len(differ), differ[0]))
+        for rel in differ[:4]:
+            print("      ✗ %s" % rel)
+        fail.append("пакет==банк: %d файлов канона отличаются от банка "
+                    "по байтам" % len(differ))
+    if not absent and not differ:
+        print("  v пакет==банк по байтам: %d файлов канона совпали с эталоном"
+              % len(want))
+
+
 def check_canon_manifest():
     """S65 (Звук): эталон канона обязан быть актуальным ДО сверки «банк == пакет».
 
@@ -1650,6 +1697,7 @@ def main():
         print("13) Банк — формат и клиппинг (ТЗ 3.7.2 §9)")
         check_bank_format(tmp)
         check_canon_manifest()
+        check_package_vs_bank_bytes(tmp)
 
         print()
         print("14) Свечение 9 мобов — правило Р-3 (ТЗ 3.7.3)")
