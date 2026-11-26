@@ -201,102 +201,6 @@
           ]
         },
         {
-          "name": "dorsal_spike_1",
-          "parent": "spine_flesh_root",
-          "pivot": [
-            0,
-            20.5,
-            3
-          ],
-          "rotation": [
-            30,
-            0,
-            0
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -0.5,
-                20.5,
-                2.5
-              ],
-              "size": [
-                1,
-                3,
-                2
-              ],
-              "uv": [
-                40,
-                44
-              ]
-            }
-          ]
-        },
-        {
-          "name": "dorsal_spike_2",
-          "parent": "spine_flesh_root",
-          "pivot": [
-            0,
-            18,
-            3
-          ],
-          "rotation": [
-            30,
-            0,
-            0
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -0.5,
-                18,
-                2.5
-              ],
-              "size": [
-                1,
-                3,
-                2
-              ],
-              "uv": [
-                40,
-                44
-              ]
-            }
-          ]
-        },
-        {
-          "name": "dorsal_spike_3",
-          "parent": "spine_flesh_root",
-          "pivot": [
-            0,
-            15.5,
-            3
-          ],
-          "rotation": [
-            30,
-            0,
-            0
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -0.5,
-                15.5,
-                2.5
-              ],
-              "size": [
-                1,
-                2.5,
-                2
-              ],
-              "uv": [
-                40,
-                44
-              ]
-            }
-          ]
-        },
-        {
           "name": "head",
           "parent": "body",
           "pivot": [
@@ -587,6 +491,134 @@
               "uv": [
                 0,
                 32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spike_major_base",
+          "parent": "spine_flesh_root",
+          "pivot": [
+            0,
+            20.5,
+            3
+          ],
+          "rotation": [
+            30,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                20.5,
+                2
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                40,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spike_major_tip",
+          "parent": "spike_major_base",
+          "pivot": [
+            0,
+            23.5,
+            3
+          ],
+          "rotation": [
+            20,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -0.5,
+                23.5,
+                2.5
+              ],
+              "size": [
+                1,
+                4,
+                1
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "dorsal_spike_mid",
+          "parent": "spine_flesh_root",
+          "pivot": [
+            1,
+            16.5,
+            3
+          ],
+          "rotation": [
+            20,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0.5,
+                16.5,
+                2.5
+              ],
+              "size": [
+                1,
+                3,
+                1
+              ],
+              "uv": [
+                40,
+                36
+              ]
+            }
+          ]
+        },
+        {
+          "name": "dorsal_spike_minor",
+          "parent": "spine_flesh_root",
+          "pivot": [
+            -0.5,
+            14,
+            3
+          ],
+          "rotation": [
+            45,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                14,
+                2.5
+              ],
+              "size": [
+                1,
+                2,
+                1
+              ],
+              "uv": [
+                40,
+                36
               ]
             }
           ]
