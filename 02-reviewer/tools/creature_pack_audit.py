@@ -395,6 +395,14 @@ def main():
             if a.require_anims and union and len(union) < 4:
                 bad("%s: в ключах всего %d костей (H36 требует >= 4): %s"
                     % (name, len(union), ", ".join(sorted(union))))
+        else:
+            # Файла анимаций нет вовсе. Раньше это молчало и печаталось «ok —»:
+            # существо без единой анимации считалось годным, хотя --require-anims
+            # объявлен именно как «отсутствие idle/walk/attack/hurt/death — провал».
+            (bad if a.require_anims else warn)(
+                "%s: файла анимаций нет вообще — idle/walk/attack/hurt/death "
+                "отсутствуют" % name)
+
             fv = set()
             for af in anim_files:
                 d = json.loads(files[af].decode("utf-8"))

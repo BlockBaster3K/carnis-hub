@@ -104,6 +104,9 @@ CASES = [
     # I: мягкая формула UV (size.x+size.z) пропускала это; box-UV обязан ловить
     ("I: box-UV шириной 2*(sx+sz) вылезает за текстуру", 2,
      dict(tex=_tex_normal(), mask=_mask_ok(), geo=_geo(uv=(40, 38), size=(16, 4, 4)))),
+    # J: файла анимаций НЕТ вовсе — под --require-anims это провал, а не «ok —»
+    ("J: --require-anims, файла анимаций нет", 2,
+     dict(tex=_tex_normal(), mask=_mask_ok(), extra=["--require-anims"])),
     ("H: --require-anims при одной анимации из пяти", 2,
      dict(tex=_tex_normal(), mask=_mask_ok(), anim=_anim(),
           extra=["--require-anims"])),
