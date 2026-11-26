@@ -569,6 +569,24 @@ def check_glow9(extract_dir):
                       % (mob, len(cols), len(GLOW_EXPECT)))
                 extra.append((mob, "цветов %d" % len(cols)))
                 continue
+            # ⛔ Дыра, найденная Ревизором 2026-11-26 (reviewer_glowmask_two_standards):
+            # размер маски не сверялся с телом. Доказано контролем: текстура
+            # infected_skeleton 64x64 при маске 64x32 — блок печатал «все 9 в
+            # норме» и fail оставался пустым. Конвенция при этом верная (два
+            # цвета, прозрачный фон), поэтому палитра молчит, а UV уезжают:
+            # маска ляжет на верхние две трети и «свечение» окажется не там.
+            body = os.path.join(base, mob + ".png")
+            if not os.path.exists(body):
+                print("  ✗ %-20s тело НЕТ, сверить размер маски не с чем" % mob)
+                extra.append((mob, "нет тела"))
+                continue
+            bsz = Image.open(body).convert("RGBA").size
+            if im.size != bsz:
+                print("  ✗ %-20s маска %dx%d, тело %dx%d"
+                      % (mob, im.size[0], im.size[1], bsz[0], bsz[1]))
+                extra.append((mob, "размер %dx%d != тело %dx%d"
+                              % (im.size[0], im.size[1], bsz[0], bsz[1])))
+                continue
             ok += 1
             print("  ✓ %-20s цветов %d (прозрачный + 255,92,57)"
                   % (mob, len(cols)))
@@ -577,7 +595,11 @@ def check_glow9(extract_dir):
     if missing:
         fail.append("свечение Р-3: нет glowmask у %s" % ", ".join(missing))
     for mob, bad in extra:
-        fail.append("свечение Р-3: %s — цвета вне палитры %s" % (mob, bad))
+        # Формулировка: вне палитры и размер — разные причины, и в отчёте
+        # они не должны звучать одинаково, иначе разбор уходит не туда.
+        why = ("цвета вне палитры %s" % (bad,) if isinstance(bad, list)
+               else str(bad))
+        fail.append("свечение Р-3: %s — %s" % (mob, why))
 
 
 # ------------------------------------- 16. Новые существа 3.8.0 (волна 52, I11)
