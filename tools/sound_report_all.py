@@ -15,6 +15,7 @@
   volume_effective_check  — итоговая громкость по спеке T-3202 (S70/S86)
   sample_loudness         — разброс сэмплов внутри события (S78)
   volume_double_check     — двойное применение громкости (Ревизор, R24)
+  gate_selfoff_check      — проверка не отключается по чужому провалу (S92)
 
 Коды возврата:
   0 — все проверки выполнились и все чистые
@@ -56,6 +57,9 @@ CHECKS = [
      ["--spec", os.path.join(REPO, "03-sound", "spec",
                              "volume_spec_t3202.json")], "flag"),
     ("двойное применение", "tools/volume_double_check.py", [], "positional"),
+    ("гейты: самовыключение", "tools/gate_selfoff_check.py",
+     [os.path.join(REPO, "tools", "accept_3.7.3.py"),
+      os.path.join(REPO, "tools", "accept_3.8.0.py")], None),
 ]
 
 
