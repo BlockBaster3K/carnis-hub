@@ -177,6 +177,25 @@ EXPECTED_CHANGED_PNG = (
     "src/main/resources/assets/carnis/textures/entity/flesh_amalgam_glowmask.png",
 )
 
+# ⛔ 2026-11-26: каталоги, где 3.8.0 ОБЯЗАН вырасти. Гейт 3.8.0 сверяет пакет
+# с 3.7.3 и до этой правки разрешал только src/main/java/ и одну маску — то
+# есть покраснел бы на правильно собранном пакете (проверено: три новых файла
+# дают «не разрешено» и код 2). Разрешение только на ДОБАВЛЕНИЕ в эти
+# каталоги; изменение и удаление существующих файлов остаются под запретом, а
+# состав каждого нового существа/звука проверяют блоки 16 и 9д, так что
+# проверка не отменяется, а переезжает туда, где она содержательнее.
+# sounds.json — отдельно от каталогов: 132 новых звука обязаны получить
+# события, иначе они сироты (блок 7 сразу покраснеет). Проверено прогоном:
+# пакет, где добавлены существо и звуки и sounds.json получил событие, без
+# этого разрешения даёт «неожиданные изменения содержимого: sounds.json» и
+# код 2 — то есть гейт валил бы согласованную сдачу.
+GROWN_380 = (
+    "src/main/resources/assets/carnis/textures/entity/",
+    "src/main/resources/assets/carnis/geo/",
+    "src/main/resources/assets/carnis/sounds/",
+    "src/main/resources/assets/carnis/sounds.json",
+)
+
 
 def check_delta_372(zip_path):
     """Дельта к принятому 3.7.2: любое неожиданное изменение — fail.
@@ -207,6 +226,9 @@ def check_delta_372(zip_path):
     # разрешение не ослабляет проверку: не тот цвет — упадёт блок 14.
     for png in EXPECTED_CHANGED_PNG:
         cmd += ["--allow", png]
+    # См. GROWN_380: 3.8.0 обязан добавить 33 существа и 132 звука.
+    for grown in GROWN_380:
+        cmd += ["--allow", grown]
     r = subprocess.run(cmd, capture_output=True, text=True)
     out = r.stdout
     for ln in out.splitlines():
