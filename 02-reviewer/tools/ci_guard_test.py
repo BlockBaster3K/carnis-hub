@@ -70,8 +70,13 @@ _VDEC = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
 
 def run_step(script, root, env_extra=None):
     env = dict(os.environ)
-    env["GITHUB_STEP_SUMMARY"] = os.path.join(root, "_summary.md")
-    env["GITHUB_OUTPUT"] = os.path.join(root, "_output.txt")
+    # ⛔ Сценарии 1–14 работают в синтетическом дереве tmp, но прогоны на
+    # РЕАЛЬНОМ дереве (проверка резолвера, cwd='.') писали _summary.md и
+    # _output.txt в корень репозитория — и в коммите 586cd29 они уехали в git.
+    # Эти файлы — отчёт одного прогона, им место во временном каталоге.
+    _art = tempfile.mkdtemp(prefix="ci_guard_art_")
+    env["GITHUB_STEP_SUMMARY"] = os.path.join(_art, "_summary.md")
+    env["GITHUB_OUTPUT"] = os.path.join(_art, "_output.txt")
     env["VERDICT_TOOL"] = _VDEC
     env.pop("INPUT_PKG", None)
     if env_extra:

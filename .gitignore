@@ -30,3 +30,10 @@ __pycache__/
 *.key
 id_ed25519*
 ssh-keys/
+
+# Артефакты прогонов инструментов (GITHUB_OUTPUT / GITHUB_STEP_SUMMARY).
+# Инцидент 2026-11-26: прогон build.yml-шага через ci_guard_test с cwd=корень
+# создал _output.txt и _summary.md в корне — и они ушли в коммит 586cd29.
+# Файлы не нужны в репозитории: это отчёт одного прогона, а не данные.
+_output.txt
+_summary.md
