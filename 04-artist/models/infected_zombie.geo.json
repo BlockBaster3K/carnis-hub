@@ -563,6 +563,102 @@
               ]
             }
           ]
+        },
+        {
+          "name": "flesh_nodule_shoulder",
+          "parent": "scythe_upper",
+          "pivot": [
+            6.5,
+            20.25,
+            0
+          ],
+          "rotation": [
+            12,
+            -8,
+            15
+          ],
+          "cubes": [
+            {
+              "origin": [
+                5.5,
+                19,
+                -1
+              ],
+              "size": [
+                2,
+                2.5,
+                2
+              ],
+              "uv": [
+                40,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_nodule_elbow",
+          "parent": "scythe_blade",
+          "pivot": [
+            5.5,
+            15,
+            2.75
+          ],
+          "rotation": [
+            -15,
+            10,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4.5,
+                14,
+                1.5
+              ],
+              "size": [
+                2,
+                2,
+                2.5
+              ],
+              "uv": [
+                40,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bone_shard_chest",
+          "parent": "body",
+          "pivot": [
+            -0.5,
+            18,
+            -1.75
+          ],
+          "rotation": [
+            -20,
+            15,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                17,
+                -2.5
+              ],
+              "size": [
+                1,
+                2,
+                1.5
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
         }
       ]
     }
