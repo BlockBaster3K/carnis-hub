@@ -45,12 +45,28 @@ def metrics(path):
         return None
     centre = float((freqs * spec).sum() / total)
     low_share = float(spec[freqs < LOW_BAND_HZ].sum() / total)
-    # шов: RMS первых и последних 10 мс
+    # ШОВ — окно 100 мс (критерий по timbre_methodology.md), 10 мс справочно.
+    # Первая версия считала только 10 мс и давала числа, несопоставимые с
+    # эталонной методикой: на 10 мс шум края доминирует, на 100 мс видно уровень.
+    # Оба числа сохраняются, вердикт выносится по 100 мс.
     k = max(1, int(0.01 * sr))
     a = float(np.sqrt(np.mean(x[:k] ** 2)))
     b = float(np.sqrt(np.mean(x[-k:] ** 2)))
     seam = abs(20 * np.log10(max(a, 1e-9)) - 20 * np.log10(max(b, 1e-9)))
-    return {"center_hz": centre, "low_share": low_share, "seam_db": float(seam),
+    k100 = max(1, int(0.1 * sr))
+    a100 = float(np.sqrt(np.mean(x[:k100] ** 2)))
+    b100 = float(np.sqrt(np.mean(x[-k100:] ** 2)))
+    # Если край — цифровая ТИШИНА (ровно нули), логарифм даёт бессмысленные
+    # 230 дБ. Это отдельный класс дефекта: петля кончается провалом в ничто.
+    # Пишем seam = None и помечаем silence_edge, чтобы не выдавать артефакт
+    # логарифма за «шов 230 дБ».
+    silence_edge = (a100 < 1e-7) or (b100 < 1e-7)
+    if silence_edge:
+        seam100 = float("inf")
+    else:
+        seam100 = abs(20 * np.log10(a100) - 20 * np.log10(b100))
+    return {"center_hz": centre, "low_share": low_share, "seam_db": float(seam100),
+            "seam10_db": float(seam), "silence_edge": silence_edge,
             "dur": len(x) / float(sr)}
 
 
@@ -89,7 +105,8 @@ def main(argv=None):
     bad_low = [(s, r) for s, r, _ in checked if r["low_share"] > LOW_SHARE_MAX]
     is_loop = lambda s: any(m in s for m in LOOP_MARKERS)
     bad_seam = [(s, r) for s, r, _ in checked
-                if is_loop(s) and r["seam_db"] > SEAM_MAX_DB]
+                if is_loop(s) and (r["silence_edge"] or r["seam_db"] > SEAM_MAX_DB)]
+    silence = [(s, r) for s, r in bad_seam if r["silence_edge"]]
     errs = [(s, e) for s, r, e in rows if e]
 
     print("банк: %s — проверено %d файлов" % (a.bank, len(checked)))
@@ -113,6 +130,10 @@ def main(argv=None):
             print()
             print(title + ":")
             for s, r in sorted(lst, key=lambda t: -t[1][key])[:25]:
+                if key == "seam_db" and r["silence_edge"]:
+                    print("  %-34s КРАЙ В ТИШИНЕ (0 отсчётов на конце/начале)"
+                          % s)
+                    continue
                 print("  %-34s %s" % (s, fmt % (r[key] * 100 if key == "low_share"
                                                else r[key])))
             if len(lst) > 25:
