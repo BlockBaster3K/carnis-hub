@@ -92,8 +92,21 @@ def main(argv=None):
     undeclared = 0
     spec_targets = {}
     if a.spec:
-        with open(a.spec, encoding="utf-8") as f:
-            sp = json.load(f)
+        # ⛔ Ревизор/Интегратор 2026-11-26: битый путь к спеке давал
+        # FileNotFoundError с трейсбеком. В гейте это выглядело бы как
+        # «чекер упал», а не как «спека не прочитана» — и разбор ушёл бы
+        # искать дефект в пакете. Код 1 = «не смог проверить», по общей
+        # конвенции чекеров, и без трейсбека.
+        try:
+            with open(a.spec, encoding="utf-8") as f:
+                sp = json.load(f)
+        except OSError as exc:
+            print("ОШИБКА: спека не прочитана (%s) — объявленное засчитать "
+                  "нельзя" % exc)
+            return 1
+        except ValueError as exc:
+            print("ОШИБКА: спека не разобрана как JSON (%s)" % exc)
+            return 1
         for e in sp.get("events", []):
             spec_targets[e.get("event", "")] = e.get("targets_by_sample", {}) or {}
         print("спека: %s — объявлено событий с целями по сэмплам: %d\n"
