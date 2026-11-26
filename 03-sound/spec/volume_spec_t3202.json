@@ -91,6 +91,26 @@
       "source": "выравнивание пары по измерению — S80 (таблица решений), S82, reviewer_detail_flow_decision.md §3. Решение Звука, НЕ норма доски",
       "board_target": 0.3,
       "deviation": "доска даёт одно число 0.30 на событие; здесь пара выровнена: flow_01 тише на 7.74 дБ (RMS -29.57 против -21.86), поэтому множитель 2.437 даёт 0.30*2.437=0.731 и разрыв 0.00 дБ. Компромисс 0.45 (S17) снят автором в S80/S82."
+    },
+    {
+      "event": "hive.spawn_idle",
+      "call_site": {
+        "kind": "no_code_multiplier",
+        "file": "src/main/java/com/carnis/mod/entity/InfectedZombieEntity.java",
+        "volume": null,
+        "arg_marker": "getAmbientSound",
+        "note": "getAmbientSound() возвращает ModSounds.HIVE_SPAWN_IDLE без аргумента громкости — множителя в коде нет"
+      },
+      "targets_by_sample": {
+        "hive_spawn_idle_01": 2.263,
+        "hive_spawn_idle_02": 1.0,
+        "hive_spawn_idle_03": 1.0,
+        "hive_spawn_idle_04": 1.0
+      },
+      "source": "T-3128 (sound_quiet_normalization.md): _02/_03/_04 подняты до -22 dBFS, _01 остался на -29.09, потому что отбор шёл по порогу «тише -30.2»",
+      "board_target": 0.3,
+      "deviation": "нет: правка одним ключом volume в sounds.json, банк не перекодируется",
+      "why": "Разброс 7.09 дБ. Ревизор (reviewer_s96_fix_without_masters.md) показал, что мастера не нужны: механизм per-entry volume уже используется 30 событиями. Множитель 2.263 = 10^(7.09/20), остаток после применения 0.05 дБ (проверено sample_loudness --spec). Пик после подъёма -9.25 dBFS при потолке -1.20 — запас 8.05 дБ."
     }
   ]
 }

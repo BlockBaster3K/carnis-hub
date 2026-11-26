@@ -629,7 +629,8 @@
     "subtitle": "carnis.subtitle.hive_spawn_idle",
     "sounds": [
       {
-        "name": "carnis:hive/hive_spawn_idle_01"
+        "name": "carnis:hive/hive_spawn_idle_01",
+        "volume": 2.263
       },
       {
         "name": "carnis:hive/hive_spawn_idle_02"

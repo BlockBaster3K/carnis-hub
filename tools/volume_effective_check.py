@@ -109,8 +109,19 @@ def volume_from_args(args):
 
 
 def call_site_volume(pkg_path, event, spec_entry, zf=None):
-    """vol из Java: ищем playSound/playLocalSound(...), где встречается событие."""
-    rel = spec_entry.get("call_site", {}).get("file")
+    """vol из Java: ищем playSound/playLocalSound(...), где встречается событие.
+
+    Если код множителя НЕ задаёт (поле call_site.kind == "no_code_multiplier" или
+    call_site.volume is None), множитель равен 1.0 по определению: тогда
+    эффективная громкость — это volume из sounds.json. Иначе события вроде
+    hive.spawn_idle (getAmbientSound, без аргумента громкости) получали
+    «вызов не найден» и код 3, хотя проверять их надо как раз по JSON.
+    """
+    cs = spec_entry.get("call_site", {})
+    if cs.get("kind") == "no_code_multiplier" or (
+            "volume" in cs and cs.get("volume") is None):
+        return 1.0
+    rel = cs.get("file")
     if not rel:
         raise KeyError("call_site.file")
     if zf is not None:
