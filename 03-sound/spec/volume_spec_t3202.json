@@ -99,7 +99,10 @@
         "file": "src/main/java/com/carnis/mod/entity/InfectedZombieEntity.java",
         "volume": null,
         "arg_marker": "getAmbientSound",
-        "note": "getAmbientSound() возвращает ModSounds.HIVE_SPAWN_IDLE без аргумента громкости — множителя в коде нет"
+        "note": "две точки вызова, обе возвращают ModSounds.HIVE_SPAWN_IDLE без аргумента громкости; заявление проверяется по коду функцией prove_no_code_multiplier",
+        "other_call_sites": [
+          "src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java"
+        ]
       },
       "targets_by_sample": {
         "hive_spawn_idle_01": 2.263,

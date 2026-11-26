@@ -153,6 +153,95 @@ def call_site_volume(pkg_path, event, spec_entry, zf=None):
     raise LookupError("%s: вызов %s не найден" % (rel, ev))
 
 
+
+def java_sources(pkg_path, zf=None):
+    """{относительный путь: текст} по всем .java пакета."""
+    out = {}
+    if zf is not None:
+        for rel in zf.namelist():
+            if rel.endswith(".java"):
+                out[rel] = _read_from_zip(zf, rel)
+        return out
+    for dp, _, fs in os.walk(pkg_path):
+        for f in fs:
+            if f.endswith(".java"):
+                full = os.path.join(dp, f)
+                out[os.path.relpath(full, pkg_path)] = open(
+                    full, encoding="utf-8", errors="replace").read()
+    return out
+
+
+def prove_no_code_multiplier(pkg_path, event, zf=None):
+    """Проверить заявление «в коде множителя громкости нет» ПО КОДУ, а не на слово.
+
+    Заявление `call_site.kind = "no_code_multiplier"` раньше принималось на веру:
+    в спеке писали «множителя нет», чекер ставил 1.0 и не смотрел Java. Ревизор
+    (reviewer_volume_key_verified.md §3) показал, что цель и заявление лежат в
+    ОДНОМ файле — кто может написать «множителя нет», тот может поправить и цель.
+
+    Здесь заявление проверяется:
+      1. найти регистрацию события: ModSounds.* -> имя "carnis:<event с _>"
+         (или любую строку с именем события);
+      2. взять константу ModSounds.X;
+      3. найти ВСЕ её использования вне ModSounds;
+      4. провал, если хоть одна передана в playSound/playLocalSound с громкостью.
+
+    Возвращает (ok: bool, точки: [(файл, строка, текст)], причина: str).
+    """
+    src = java_sources(pkg_path, zf)
+    if not src:
+        return False, [], "в пакете нет .java — заявление не проверить"
+
+    # Имя события в Java пишется по-разному: registerVariableRangeSound("hive.spawn_idle")
+    # (с точками, как в sounds.json) либо "carnis:hive_spawn_idle". Пробуем все формы.
+    forms = [event, "carnis:" + event, event.replace(".", "_"),
+             "carnis:" + event.replace(".", "_")]
+    const = None
+    for rel, text in src.items():
+        if not rel.endswith("ModSounds.java"):
+            continue
+        lines = text.splitlines()
+        for i, line in enumerate(lines):
+            if not any('"%s"' % f in line for f in forms):
+                continue
+            # константа объявлена на этой же строке или на предыдущей:
+            #     public static final RegistryObject<SoundEvent> HIVE_SPAWN_IDLE =
+            #             registerVariableRangeSound("hive.spawn_idle");
+            for j in (i, i - 1):
+                if j < 0:
+                    continue
+                m = re.search(r"\b([A-Z][A-Z0-9_]{2,})\s*=", lines[j])
+                if m:
+                    const = m.group(1)
+                    break
+            if const:
+                break
+        if const:
+            break
+    if not const:
+        return False, [], "константа ModSounds для %s не найдена" % event
+
+    uses = []
+    for rel, text in src.items():
+        if rel.endswith("ModSounds.java"):
+            continue
+        for i, line in enumerate(text.splitlines(), 1):
+            if re.search(r"ModSounds\." + re.escape(const) + r"\b", line):
+                uses.append((rel, i, line.strip()))
+
+    bad = []
+    for rel, i, line in uses:
+        # вызов с аргументом громкости: playSound(..., X, Y) — 3+ аргумента
+        for m in CALL_RE.finditer(line):
+            if "ModSounds." + const in m.group(1):
+                if volume_from_args(m.group(1)) is not None:
+                    bad.append((rel, i, line))
+    if bad:
+        return False, bad, ("константа %s передана в вызов С ГРОМКОСТЬЮ — "
+                            "заявление no_code_multiplier неверно" % const)
+    return True, uses, "константа %s: %d использований, ни одного с громкостью" % (const, len(uses))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--pkg", required=True, help="каталог версии пакета, напр. 01-coder/3.7.3")
@@ -193,6 +282,16 @@ def _run(a, spec, sj, zf=None):
             return 3
         try:
             cs = call_site_volume(a.pkg, ev, ent, zf)
+            if ent.get("call_site", {}).get("kind") == "no_code_multiplier":
+                proved, pts, why = prove_no_code_multiplier(a.pkg, ev, zf)
+                where = ", ".join("%s:%d" % (r, i) for r, i, _ in pts[:4])
+                print("  [проверка заявления] %-20s %s — %s%s"
+                      % (ev, "ПОДТВЕРЖДЕНО" if proved else "НЕВЕРНО", why,
+                         (" [" + where + "]") if where else ""))
+                if not proved:
+                    print("  [проверка заявления] %s: заявление no_code_multiplier "
+                          "не доказано — считать множитель 1.0 нельзя" % ev)
+                    return 3
             vols = volumes_of_event(sj, ev)
         except (OSError, KeyError, LookupError) as exc:
             print("%-22s %6s %8s %10s  ОШИБКА: %s" % (ev, target or "по сэмплам", "?", "?", exc))
