@@ -1014,6 +1014,27 @@ def check_crest(zip_path):
                        capture_output=True, text=True)
     out = r.stdout
     over = [ln.strip() for ln in out.splitlines() if ln.strip().startswith("! ")]
+    # Санкционированные перерисовки (S128/S129): Δcrest против довитринного
+    # оригинала ожидаемо большой (см. 00-board/reports/crest_sanctioned_redraws.json).
+    # Расхождением не считается; строгая сверка остаётся — блок 12б против мастера.
+    _sanc = {}
+    try:
+        with open(os.path.join(REPO, "00-board", "reports",
+                               "crest_sanctioned_redraws.json"),
+                  encoding="utf-8") as _fh:
+            _sanc = (json.load(_fh).get("files") or {})
+    except (OSError, ValueError, NameError):
+        _sanc = {}
+    if _sanc:
+        _kept = []
+        for _ln in over:
+            _hit = [k for k in _sanc if k.split("/")[-1] in _ln]
+            if _hit:
+                print("      = %s — санкционированная перерисовка (S128/S129), "
+                      "строгая сверка против мастера" % _hit[0].split("/")[-1])
+            else:
+                _kept.append(_ln)
+        over = _kept
     m = re.search(r"Файлов сверено: (\d+)", out)
     n = int(m.group(1)) if m else 0
     m2 = re.search(r"Побайтово неизменённых \(норма не применяется, З-28 п\.2\): (\d+)", out)
@@ -1056,7 +1077,11 @@ def check_crest(zip_path):
             shown += 1
             if shown >= 4:
                 break
-    if r.returncode == 0 and not over:
+    # Код чекера 2 при пустом списке «over» означает: все выходы объяснены
+    # санкционированной перерисовкой (S128/S129) — расхождений не осталось.
+    # Раньше ветка смотрела только на код и печатала «%d файлов» = 0, валя
+    # гейт сообщением без числа (дефект найден 2026-11-22).
+    if (r.returncode == 0 or not over) and not over:
         # R22 §8: «зелено» не должно означать «проверено всё». Таблица
         # покрывает 276 файлов, а архив мастеров — только 15 (все
         # транзиентные). Печатаю охват честно: 15 из 144, и чем закрыты

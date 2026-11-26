@@ -296,6 +296,21 @@ def main():
         warn("нет каталога оригиналов %s — crest не сверен" % orig_dir)
     worst = None
     crest_bad = 0
+    # Санкционированные перерисовки (S128/S129): для этих файлов динамику
+    # изменили НАМЕРЕННО, поэтому Δcrest против довитринного оригинала большой
+    # по определению. Строгая сверка за них не снимается — она делается против
+    # МАСТЕРА (tools/crest_master.py, блок 12б гейта 3.8.0).
+    import json as _json
+    REPO = os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))))
+    _sanctioned = {}
+    try:
+        with open(os.path.join(REPO, "00-board", "reports",
+                               "crest_sanctioned_redraws.json"),
+                  encoding="utf-8") as _fh:
+            _sanctioned = (_json.load(_fh).get("files") or {})
+    except (OSError, ValueError):
+        _sanctioned = {}
     for p in changed_snd:
         name = p.split("/")[-1]
         if name not in orig:
@@ -308,6 +323,12 @@ def main():
             warn("не декодируется: %s" % name)
             continue
         d = abs(a2[0] - b2[0])
+        _key = [k for k in _sanctioned if k.split("/")[-1] == name]
+        if d > a.tol and _key:
+            print("  = %s: Δ crest %.2f дБ — санкционированная перерисовка "
+                  "(S128/S129), строгая сверка против мастера" % (name, d))
+            worst = max(worst or (0, ""), (d, name))
+            continue
         if d > a.tol:
             crest_bad += 1
             bad("%s: Δ crest %.2f дБ > %.2f" % (name, d, a.tol))

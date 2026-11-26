@@ -1378,6 +1378,29 @@ def check_crest(zip_path):
                        capture_output=True, text=True)
     out = r.stdout
     over = [ln.strip() for ln in out.splitlines() if ln.strip().startswith("! ")]
+    # Санкционированные перерисовки (S128/S129, решение зафиксировано в
+    # 00-board/reports/crest_sanctioned_redraws.json): Δcrest против
+    # довитринного оригинала ожидаемо большой. Расхождением НЕ считается,
+    # но строгая сверка остаётся — блок 12б против мастера.
+    sanctioned = {}
+    try:
+        with open(os.path.join(REPO, "00-board", "reports",
+                               "crest_sanctioned_redraws.json"),
+                  encoding="utf-8") as fh:
+            sanctioned = (json.load(fh).get("files") or {})
+    except (OSError, ValueError):
+        sanctioned = {}
+    if sanctioned:
+        kept = []
+        for ln in over:
+            hit = [k for k in sanctioned
+                   if k.split("/")[-1] in ln or ln.split()[1:2] == [k]]
+            if hit:
+                print("      = %s — санкционированная перерисовка (S128/S129), "
+                      "строгая сверка против мастера" % (hit[0].split("/")[-1]))
+            else:
+                kept.append(ln)
+        over = kept
     m = re.search(r"Файлов сверено: (\d+)", out)
     n = int(m.group(1)) if m else 0
     m2 = re.search(r"Побайтово неизменённых \(норма не применяется, З-28 п\.2\): (\d+)", out)

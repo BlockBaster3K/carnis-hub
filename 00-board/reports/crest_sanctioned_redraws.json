@@ -1,0 +1,53 @@
+{
+  "what": "Санкционированные перерисовки динамики (crest) — не дефект обработки",
+  "sanction": [
+    "S128/S129 [sound] — перерисовка crest 18.0±0.3 для 6 файлов (00-board/reports/sound_s128_crest_redraw_batch.md)",
+    "R29 [reviewer] импульс 71 — вывод: норму RMS-разброса на этих файлах нельзя выполнить иначе, как изменением crest",
+    "мастера обновлены: 03-sound/masters/sounds_crest_2026-11-22/; прежние оригиналы сохранены: 03-sound/archive_crest_2026-11-22/"
+  ],
+  "rule": "Сверка «Δcrest против довитринного оригинала» (T-3182 §4 / дельта к 3.7.2) для этих файлов ожидаемо показывает большой Δ и НЕ является расхождением. Строгая проверка остаётся: файл обязан совпасть с МАСТЕРОМ в пределах 0.05 дБ (З-31, блок 12б гейта 3.8.0). Если мастер не совпал — расхождение.",
+  "files": {
+    "combat/combat_flesh_hit_01.ogg": {
+      "crest_before": 18.02,
+      "crest_after": 18.07,
+      "delta": 0.05,
+      "master": "03-sound/masters/sounds_crest_2026-11-22/combat_flesh_hit_01.flac",
+      "master_dcrest": 0.02
+    },
+    "combat/combat_flesh_hit_02.ogg": {
+      "crest_before": 19.47,
+      "crest_after": 18.08,
+      "delta": -1.39,
+      "master": "03-sound/masters/sounds_crest_2026-11-22/combat_flesh_hit_02.flac",
+      "master_dcrest": 0.01
+    },
+    "combat/combat_flesh_hit_03.ogg": {
+      "crest_before": 21.53,
+      "crest_after": 18.1,
+      "delta": -3.43,
+      "master": "03-sound/masters/sounds_crest_2026-11-22/combat_flesh_hit_03.flac",
+      "master_dcrest": 0.02
+    },
+    "hive/hive_spread_01_creep.ogg": {
+      "crest_before": 23.08,
+      "crest_after": 18.15,
+      "delta": -4.93,
+      "master": "03-sound/masters/sounds_crest_2026-11-22/hive_spread_01_creep.flac",
+      "master_dcrest": 0.01
+    },
+    "hive/hive_spread_02_pulse.ogg": {
+      "crest_before": 18.81,
+      "crest_after": 18.06,
+      "delta": -0.75,
+      "master": "03-sound/masters/sounds_crest_2026-11-22/hive_spread_02_pulse.flac",
+      "master_dcrest": 0.02
+    },
+    "hive/hive_spread_03_swell.ogg": {
+      "crest_before": 22.75,
+      "crest_after": 18.11,
+      "delta": -4.64,
+      "master": "03-sound/masters/sounds_crest_2026-11-22/hive_spread_03_swell.flac",
+      "master_dcrest": 0.0
+    }
+  }
+}

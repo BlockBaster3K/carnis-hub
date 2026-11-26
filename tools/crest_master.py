@@ -299,20 +299,54 @@ def check_crest_attack(extract_dir):
                 continue
             # Мастер ищется в обоих корнях: канон и 3.8.0 лежат отдельно.
             master = None
+            # 1) канонические корни — точный путь
             for sub in ("sounds", "sounds_380"):
                 for ext in MASTER_EXTS:
                     cand = os.path.join(MASTERS, sub, rel[:-4] + ext)
                     if os.path.isfile(cand):
                         master = cand
                         break
-                    # Мастера З-21 лежат ПЛОСКО в sounds/_z21/ без подкаталогов
-                    # банка — искать по одному имени файла, а не по полному пути.
-                    flat = os.path.join(MASTERS, sub, "_z21", f[:-4] + ext)
-                    if os.path.isfile(flat):
-                        master = flat
-                        break
                 if master is not None:
                     break
+            # 2) датированные корни перерисовки: masters/sounds_crest_<дата>/
+            #    (S128/S129: Звук положил мастера 6 перерисованных файлов в
+            #    отдельный корень. Гейт его не видел и брал УСТАРЕВШИЙ _z21 —
+            #    6 файлов падали с Δcrest до 4,9 дБ против прежней версии,
+            #    хотя против нового мастера расходятся на 0,02 дБ.
+            #    Свежий корень главнее канона по дате в имени.)
+            if master is None:
+                dated = []
+                try:
+                    for name in os.listdir(MASTERS):
+                        full = os.path.join(MASTERS, name)
+                        if (os.path.isdir(full) and name not in ("sounds", "sounds_380")
+                                and name.startswith("sounds")):
+                            dated.append(name)
+                except OSError:
+                    dated = []
+                for name in sorted(dated, reverse=True):
+                    for ext in MASTER_EXTS:
+                        # и с подкаталогами банка, и плоско — как их кладёт Звук
+                        for cand in (os.path.join(MASTERS, name, rel[:-4] + ext),
+                                     os.path.join(MASTERS, name, f[:-4] + ext)):
+                            if os.path.isfile(cand):
+                                master = cand
+                                break
+                        if master is not None:
+                            break
+                    if master is not None:
+                        break
+            # 3) наследие З-21: мастера лежат ПЛОСКО в sounds/_z21/ без
+            #    подкаталогов банка — искать по одному имени файла.
+            if master is None:
+                for sub in ("sounds", "sounds_380"):
+                    for ext in MASTER_EXTS:
+                        flat = os.path.join(MASTERS, sub, "_z21", f[:-4] + ext)
+                        if os.path.isfile(flat):
+                            master = flat
+                            break
+                    if master is not None:
+                        break
             # S44 (Звук): если PCM-мастера нет, мастером может служить
             # ДЕКОД ПРЕДЫДУЩЕЙ ВЕРСИИ — это два разных сигнала, не тавтология.
             # Звук измерил зазор на правках: громкость −3 дБ даёт Δcrest
