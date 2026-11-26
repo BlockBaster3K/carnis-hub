@@ -143,6 +143,7 @@ def call_site_volume(pkg_path, event, spec_entry, zf=None):
         needle = marker
     else:
         needle = ev
+    unparsed = []
     for m in CALL_RE.finditer(src):
         args = m.group(1)
         if needle not in args:
@@ -150,6 +151,15 @@ def call_site_volume(pkg_path, event, spec_entry, zf=None):
         vol = volume_from_args(args)
         if vol is not None:
             return vol
+        # Вызов НАЙДЕН, но громкость не разобрана — это отказ, а не «пропустить».
+        # Иначе незнакомая форма вызова (playLocalSound без SoundSource,
+        # playSound с this.getSoundSource()) молча давала бы «вызов не найден»,
+        # а в блоке 9д — «заявление подтверждено» (Ревизор, §1).
+        unparsed.append(args.strip().replace("\n", " ")[:80])
+    if unparsed:
+        raise LookupError("%s: вызов %s найден, но громкость не разобрана — "
+                          "форма вызова не поддержана: %s"
+                          % (rel, ev, unparsed[0]))
     raise LookupError("%s: вызов %s не найден" % (rel, ev))
 
 
@@ -229,16 +239,19 @@ def prove_no_code_multiplier(pkg_path, event, zf=None):
             if re.search(r"ModSounds\." + re.escape(const) + r"\b", line):
                 uses.append((rel, i, line.strip()))
 
-    bad = []
-    for rel, i, line in uses:
-        # вызов с аргументом громкости: playSound(..., X, Y) — 3+ аргумента
-        for m in CALL_RE.finditer(line):
-            if "ModSounds." + const in m.group(1):
-                if volume_from_args(m.group(1)) is not None:
-                    bad.append((rel, i, line))
+    # БЕЛЫЙ СПИСОК, а не чёрный (Ревизор, reviewer_prove_no_code_multiplier_bypass).
+    # Раньше провал ставился только если volume_from_args() РАЗОБРАЛ громкость.
+    # Значит любую незнакомую форму вызова можно было «доказать»: playLocalSound
+    # без SoundSource или playSound с this.getSoundSource() давали None ->
+    # «передана без громкости» -> заявление проходило.
+    # Теперь доказуема ТОЛЬКО форма возврата события: "return X.CONST.get();".
+    # Всё остальное (любой вызов, присваивание, аргумент) -> заявление не доказано.
+    good_re = re.compile(r"^return\s+[\w.]*\." + re.escape(const) + r"\.get\(\)\s*;\s*$")
+    bad = [(r, i, l) for r, i, l in uses if not good_re.match(l)]
     if bad:
-        return False, bad, ("константа %s передана в вызов С ГРОМКОСТЬЮ — "
-                            "заявление no_code_multiplier неверно" % const)
+        return False, bad, ("константа %s используется не только как возврат события "
+                            "(вызов/присваивание) — множитель может задаваться в коде"
+                            % const)
     return True, uses, "константа %s: %d использований, ни одного с громкостью" % (const, len(uses))
 
 
