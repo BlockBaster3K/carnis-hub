@@ -44,6 +44,33 @@
                 4
               ],
               "uv": [
+                16,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_left_chest",
+          "parent": "body",
+          "pivot": [
+            2,
+            18,
+            -1
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0,
+                14,
+                -2.5
+              ],
+              "size": [
+                4.5,
+                8,
+                4.5
+              ],
+              "uv": [
                 0,
                 32
               ]
@@ -51,24 +78,24 @@
           ]
         },
         {
-          "name": "rib_maw_left",
-          "parent": "body",
+          "name": "rib_fang_1",
+          "parent": "flesh_left_chest",
           "pivot": [
             3,
-            18,
-            -2
+            20,
+            -2.5
           ],
           "rotation": [
-            0,
-            -25,
-            0
+            -20,
+            -18,
+            8
           ],
           "cubes": [
             {
               "origin": [
                 2.5,
-                17,
-                -3.5
+                19,
+                -4
               ],
               "size": [
                 1,
@@ -83,28 +110,92 @@
           ]
         },
         {
-          "name": "rib_maw_right",
+          "name": "rib_fang_2",
+          "parent": "flesh_left_chest",
+          "pivot": [
+            3,
+            16.5,
+            -2.5
+          ],
+          "rotation": [
+            -15,
+            -22,
+            12
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.5,
+                15.5,
+                -4
+              ],
+              "size": [
+                1,
+                2,
+                2
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "dorsal_spike_1",
           "parent": "body",
           "pivot": [
-            -3,
+            0,
+            21,
+            2
+          ],
+          "rotation": [
+            30,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -0.5,
+                21,
+                2
+              ],
+              "size": [
+                1,
+                3,
+                2
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "dorsal_spike_2",
+          "parent": "body",
+          "pivot": [
+            0,
             18,
-            -2
+            2
           ],
           "rotation": [
+            30,
             0,
-            25,
             0
           ],
           "cubes": [
             {
               "origin": [
-                -3.5,
-                17,
-                -3.5
+                -0.5,
+                18,
+                2
               ],
               "size": [
                 1,
-                2,
+                3,
                 2
               ],
               "uv": [
@@ -115,93 +206,29 @@
           ]
         },
         {
-          "name": "spine_base",
+          "name": "dorsal_spike_3",
           "parent": "body",
           "pivot": [
             0,
-            20,
-            2
-          ],
-          "rotation": [
             15,
-            -12,
-            0
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -1,
-                20,
-                1.5
-              ],
-              "size": [
-                2,
-                9,
-                2
-              ],
-              "uv": [
-                0,
-                32
-              ]
-            }
-          ]
-        },
-        {
-          "name": "spine_mid",
-          "parent": "spine_base",
-          "pivot": [
-            -2,
-            29,
             2
           ],
           "rotation": [
-            -55,
-            -10,
-            0
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -4,
-                29,
-                1
-              ],
-              "size": [
-                2,
-                8,
-                2
-              ],
-              "uv": [
-                0,
-                32
-              ]
-            }
-          ]
-        },
-        {
-          "name": "spine_blade",
-          "parent": "spine_mid",
-          "pivot": [
-            -3,
-            37,
-            2
-          ],
-          "rotation": [
-            -45,
+            30,
             0,
             0
           ],
           "cubes": [
             {
               "origin": [
-                -3.75,
-                37,
-                0.5
+                -0.5,
+                15,
+                2
               ],
               "size": [
-                1.5,
-                6,
-                2.5
+                1,
+                2.5,
+                2
               ],
               "uv": [
                 40,
@@ -227,156 +254,17 @@
             {
               "origin": [
                 -4,
-                27,
-                -4
-              ],
-              "size": [
-                8,
-                5,
-                8
-              ],
-              "uv": [
-                0,
-                0
-              ]
-            }
-          ]
-        },
-        {
-          "name": "jaw",
-          "parent": "head",
-          "pivot": [
-            0,
-            27,
-            0
-          ],
-          "rotation": [
-            22,
-            5,
-            -6
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -4,
                 24,
                 -4
               ],
               "size": [
                 8,
-                3,
-                7
+                8,
+                8
               ],
               "uv": [
                 0,
                 0
-              ]
-            }
-          ]
-        },
-        {
-          "name": "left_arm",
-          "parent": "body",
-          "pivot": [
-            5,
-            22,
-            0
-          ],
-          "cubes": [
-            {
-              "origin": [
-                4,
-                12,
-                -1
-              ],
-              "size": [
-                2,
-                12,
-                2
-              ],
-              "uv": [
-                40,
-                16
-              ]
-            },
-            {
-              "origin": [
-                3.5,
-                12,
-                -1.5
-              ],
-              "size": [
-                3,
-                6,
-                3
-              ],
-              "uv": [
-                0,
-                32
-              ]
-            }
-          ]
-        },
-        {
-          "name": "talon_1",
-          "parent": "left_arm",
-          "pivot": [
-            4,
-            12,
-            -1
-          ],
-          "rotation": [
-            20,
-            0,
-            -8
-          ],
-          "cubes": [
-            {
-              "origin": [
-                3.3,
-                6,
-                -2
-              ],
-              "size": [
-                1.2,
-                6,
-                2
-              ],
-              "uv": [
-                40,
-                44
-              ]
-            }
-          ]
-        },
-        {
-          "name": "talon_2",
-          "parent": "left_arm",
-          "pivot": [
-            6,
-            12,
-            -1
-          ],
-          "rotation": [
-            20,
-            0,
-            8
-          ],
-          "cubes": [
-            {
-              "origin": [
-                5.5,
-                6,
-                -2
-              ],
-              "size": [
-                1.2,
-                6,
-                2
-              ],
-              "uv": [
-                40,
-                44
               ]
             }
           ]
@@ -388,11 +276,6 @@
             -5,
             22,
             0
-          ],
-          "rotation": [
-            25,
-            0,
-            -10
           ],
           "cubes": [
             {
@@ -409,6 +292,65 @@
               "uv": [
                 40,
                 16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "left_arm",
+          "parent": "body",
+          "pivot": [
+            6,
+            22,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4,
+                15,
+                -2
+              ],
+              "size": [
+                4,
+                8,
+                4
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bone_lance",
+          "parent": "left_arm",
+          "pivot": [
+            6,
+            15,
+            0
+          ],
+          "rotation": [
+            18,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                5,
+                1,
+                -1
+              ],
+              "size": [
+                2,
+                14,
+                2
+              ],
+              "uv": [
+                40,
+                44
               ]
             }
           ]
