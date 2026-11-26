@@ -239,20 +239,69 @@ def prove_no_code_multiplier(pkg_path, event, zf=None):
             if re.search(r"ModSounds\." + re.escape(const) + r"\b", line):
                 uses.append((rel, i, line.strip()))
 
-    # БЕЛЫЙ СПИСОК, а не чёрный (Ревизор, reviewer_prove_no_code_multiplier_bypass).
-    # Раньше провал ставился только если volume_from_args() РАЗОБРАЛ громкость.
-    # Значит любую незнакомую форму вызова можно было «доказать»: playLocalSound
-    # без SoundSource или playSound с this.getSoundSource() давали None ->
-    # «передана без громкости» -> заявление проходило.
-    # Теперь доказуема ТОЛЬКО форма возврата события: "return X.CONST.get();".
-    # Всё остальное (любой вызов, присваивание, аргумент) -> заявление не доказано.
+    # Fail closed, except for explicitly verified unity-volume routes. A sound
+    # can be returned directly, passed to playAt(..., 1.0F), or used as the hit
+    # argument of a SoundType whose volume constructor argument is 1.0F.
+    # Unknown calls/assignments still fail; this avoids the prior false positive
+    # where an explicit neutral multiplier was rejected as unprovable.
     good_re = re.compile(r"^return\s+[\w.]*\." + re.escape(const) + r"\.get\(\)\s*;\s*$")
-    bad = [(r, i, l) for r, i, l in uses if not good_re.match(l)]
+    token_re = re.compile(r"ModSounds\." + re.escape(const) + r"\.get\(\)")
+
+    def is_unity_route(rel, line_no, line):
+        if good_re.match(line):
+            return True
+        source = src_by_rel[rel]
+        lines = source.splitlines(keepends=True)
+        line_start = sum(map(len, lines[:line_no - 1]))
+        local_tokens = list(token_re.finditer(line))
+        if not local_tokens:
+            return False
+        for local in local_tokens:
+            pos = line_start + local.start()
+            # Verify this exact occurrence is passed to playAt with unity volume.
+            play_at = re.compile(r"playAt\s*\((?:(?!;).)*?ModSounds\." +
+                                 re.escape(const) + r"\.get\(\)\s*,\s*1\.0F\s*\)", re.S)
+            if any(a <= pos < b for a, b in (m.span() for m in play_at.finditer(source))):
+                continue
+            # Verify this exact SoundType occurrence is its 'hit' argument, and
+            # constructor volume (argument zero) is exactly unity. Parse argument
+            # nesting, not commas in nested expressions.
+            start = source.rfind("new SoundType(", 0, pos)
+            proven_soundtype = False
+            if start >= 0:
+                open_pos = source.find("(", start)
+                depth = 0
+                close_pos = None
+                for j in range(open_pos, len(source)):
+                    if source[j] == "(": depth += 1
+                    elif source[j] == ")":
+                        depth -= 1
+                        if depth == 0:
+                            close_pos = j
+                            break
+                if close_pos is not None and pos < close_pos:
+                    body = source[open_pos + 1:close_pos]
+                    args, last, level = [], 0, 0
+                    for j, ch in enumerate(body):
+                        if ch in "([{": level += 1
+                        elif ch in ")]}": level -= 1
+                        elif ch == "," and level == 0:
+                            args.append(body[last:j].strip()); last = j + 1
+                    args.append(body[last:].strip())
+                    proven_soundtype = (len(args) >= 7 and
+                        re.fullmatch(r"1\.0F", args[0]) and
+                        re.fullmatch(r"1\.0F", args[1]) and
+                        token_re.search(args[5]) is not None)
+            if not proven_soundtype:
+                return False
+        return True
+
+    src_by_rel = src
+    bad = [(r, i, l) for r, i, l in uses if not is_unity_route(r, i, l)]
     if bad:
-        return False, bad, ("константа %s используется не только как возврат события "
-                            "(вызов/присваивание) — множитель может задаваться в коде"
-                            % const)
-    return True, uses, "константа %s: %d использований, ни одного с громкостью" % (const, len(uses))
+        return False, bad, ("константа %s используется через непроверенный call-site; "
+                            "множитель может задаваться в коде" % const)
+    return True, uses, "константа %s: %d использований, все маршруты с unity-volume" % (const, len(uses))
 
 
 def main(argv=None):

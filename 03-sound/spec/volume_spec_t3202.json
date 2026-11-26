@@ -111,7 +111,7 @@
       "event": "combat.flesh_hit",
       "call_site": {
         "kind": "no_code_multiplier",
-        "note": "три сэмпла выбираются взвешенно (weight 1); громкость задаётся только ключом volume в sounds.json"
+        "note": "три сэмпла выбираются взвешенно (weight 1); все Java call-sites используют проверенный unity volume (1.0F / SoundType volume 1.0F), поэтому итоговый уровень задаётся per-sample volume в sounds.json"
       },
       "targets_by_sample": {
         "combat_flesh_hit_01": 0.995,
@@ -132,14 +132,14 @@
         "volume": 0.65
       },
       "targets_by_sample": {
-        "hive_spread_01_creep": 1.921,
-        "hive_spread_02_pulse": 1.336,
-        "hive_spread_03_swell": 1.702
+        "hive_spread_01_creep": 1.24865,
+        "hive_spread_02_pulse": 0.8684,
+        "hive_spread_03_swell": 1.1063
       },
       "source": "S128: перерисовка crest до 18.0 (был разброс 4.27 дБ) + выравнивание RMS множителями. Решение Звука",
       "board_target": 0.65,
       "deviation": "crest внутри события приведён к одной цели; после этого RMS выравнивается точно (остаток 0.00), а не частично",
-      "why": "crest было 23.06 / 18.79 / 22.75 (разброс 4.27) — тот же класс дефекта, что у combat.flesh_hit. После перерисовки crest 18.14 у всех, множители дают RMS -19.54 у всех трёх, пики -1.40 / -1.49 / -1.43 dBFS. У 01 и 03 срезано 185 и 83 отсчёта, энергия >10 кГц выросла на 4.92 и 7.87 дБ — цена отчитывается, а не скрывается",
+      "why": "crest было 23.06 / 18.79 / 22.75 (разброс 4.27) — тот же класс дефекта, что у combat.flesh_hit. После перерисовки crest 18.14 у всех, JSON multipliers 1.921 / 1.336 / 1.702 дают RMS -19.54 у всех трёх; effective targets здесь равны call-site 0.65 × JSON volume: 1.24865 / 0.8684 / 1.1063. Пики -1.40 / -1.49 / -1.43 dBFS. У 01 и 03 срезано 185 и 83 отсчёта, энергия >10 кГц выросла на 4.92 и 7.87 дБ — цена отчитывается, а не скрывается",
       "residual_tolerance": 0.05,
       "tolerance_why": "crest внутри события выровнен перерисовкой (S128)"
     }

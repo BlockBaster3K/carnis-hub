@@ -186,3 +186,10 @@ S17):** Звук нашёл реальные точки вызова и обос
 - Item 8: configured `Coder <coder@carnis.dev>`, fetched and rebased before publication, then pushed commit `1267214e97cad45a0bbfef233704cc0868b6eb4c` (`fix: correct effective detail_flow volume [skip ci]`). Post-push fetch confirms local/remote refs match and worktree is clean. Staged C100 changes remain preserved in `stash@{0}` after an upstream conflict on `gradle.properties` and `mods.toml`; the stash was not dropped. The `[skip ci]` marker honored the no-Java/no-JAR rule. No Java compilation/JAR build.
 - Validation: volume effective check 10/10 on both 3.8.0 and 3.7.3 ZIPs; volume double check code 0 on 3.7.3; both package manifests verified. 3.8.0 ZIP includes README/LICENSE and is CRC-clean.
 - Full report: `00-board/reports/coder_prompt_380_blocker.md`. The push-triggered `build-jar` workflow targets every `01-coder/**` change; commit will use GitHub's `[skip ci]` marker to honor the explicit no-Java/no-JAR prohibition.
+
+## Rebuild sound packages 3.7.3 + 3.8.0 — 2026-11-20
+
+- Rebuilt 3.7.3 ZIP (761 entries, SHA `a9346ef25bbcb246394f573dd6236ec05041da4f216fb56053f723d32144465a`) and 3.8.0 ZIP (1,037 entries, SHA `26edbeefa9dc40fcaf29d0d32b2dd65483678d8fb0fc7577f656af13886ea07c`). Both include current bank OGGs and S128 per-sample `volume` entries; detail_flow_01 remains 2.437.
+- Bank parity: 144/144 OGGs for 3.7.3 and 276/276 for 3.8.0. ZIP CRC/manifests passed; `sounds_coverage_check` passes both, `volume_double_check` code 0 both.
+- Extended `volume_effective_check` proof to accept only explicitly verified unity-volume routes (direct return, playAt(..., 1.0F), SoundType hit arg with constructor volume 1.0F); all unknown usages remain fail-closed. Full check now passes 11/11 on both packages. Report: `coder_rebuild_sound_packages.md`.
+- No Java compile/JAR. Commit created with `[skip ci]`; a fresh fetch/rebase and push are still required before publication is complete.
