@@ -59,10 +59,20 @@ def prepare_script(script, with_inputs=True):
     return script
 
 
+# Шаг резолвера вызывает tools/verdict_decision.py (З-CИ-4). Сценарии этого
+# теста собирают СИНТЕТИЧЕСКОЕ дерево в tmp — в нём каталога tools/ нет, и
+# относительный путь не нашёлся бы. В CI скрипт лежит в репозитории, поэтому
+# тест подставляет его настоящий путь; сам шаг читает переменную с дефолтом
+# `tools/verdict_decision.py`, то есть поведение на раннере не меняется.
+_VDEC = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__)))), "tools", "verdict_decision.py")
+
+
 def run_step(script, root, env_extra=None):
     env = dict(os.environ)
     env["GITHUB_STEP_SUMMARY"] = os.path.join(root, "_summary.md")
     env["GITHUB_OUTPUT"] = os.path.join(root, "_output.txt")
+    env["VERDICT_TOOL"] = _VDEC
     env.pop("INPUT_PKG", None)
     if env_extra:
         env.update({k: str(v) for k, v in env_extra.items()})

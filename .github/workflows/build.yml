@@ -115,12 +115,22 @@ jobs:
                   echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
                   continue
                 fi
-                # grep в условии возвращает 1 при «не найдено», а set -e на
-                # некоторых раннерах валит шаг. `|| true` делает проверку
-                # чисто логической: пусто = вердикт положительный.
-                NEG=""
-                NEG=$(grep -oiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2" 2>/dev/null || true)
-                if [ -n "$NEG" ]; then
+                # ⛔ З-CИ-4 (найдено сухим прогоном tools/ci_resolver_dryrun.py):
+                # прежний греп считал вердикт отрицательным по ЛЮБОМУ вхождению
+                # слова в файле. Вердикты содержат ИСТОРИЮ сдач: у 3.7.3 строка 7
+                # «`d19169b4...` — не принята», а решение на строке 11 «# ПРИНЯТО».
+                # CI пропускал 3.7.3 и 3.7.2 и выпускал релиз из 3.7.1.
+                # Теперь решение читает tools/verdict_decision.py: 0 — отказ,
+                # 1 — принято, 2 — решения нет, 3 — файл не прочитан.
+                RC_NEG=0
+                python3 "${VERDICT_TOOL:-tools/verdict_decision.py}" "$VERD2" > /tmp/vdec.log 2>&1 || RC_NEG=$?
+                echo "- вердикт: $(cat /tmp/vdec.log)"
+                if [ "$RC_NEG" = "2" ] || [ "$RC_NEG" = "3" ]; then
+                  echo "::error::вердикт $VERD2 не даёт решения (код $RC_NEG) — публиковать нельзя"
+                  echo "$(cat /tmp/vdec.log)"
+                  exit 1
+                fi
+                if [ "$RC_NEG" = "0" ]; then
                   echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю"
                   echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю" >> "$GITHUB_STEP_SUMMARY"
                   continue
@@ -164,7 +174,14 @@ jobs:
               echo "::error::ручной запуск: вердикт $MANUAL_VERDICT пуст по содержанию"
               exit 1
             fi
-            if grep -qiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$MANUAL_VERDICT"; then
+            RC_MAN=0
+            python3 "${VERDICT_TOOL:-tools/verdict_decision.py}" "$MANUAL_VERDICT" > /tmp/vman.log 2>&1 || RC_MAN=$?
+            if [ "$RC_MAN" = "2" ] || [ "$RC_MAN" = "3" ]; then
+              echo "::error::ручной запуск: вердикт $MANUAL_VERDICT не даёт решения (код $RC_MAN)"
+              cat /tmp/vman.log
+              exit 1
+            fi
+            if [ "$RC_MAN" = "0" ]; then
               echo "::error::ручной запуск: вердикт $MANUAL_VERDICT отрицательный"
               exit 1
             fi
