@@ -56,7 +56,9 @@ def main(argv=None):
     ap.add_argument("--spec", default=None,
                     help="volume_spec*.json: проверить, что объявленные targets_by_sample "
                          "действительно выравнивают разброс (поправка Ревизора, S98)")
-    ap.add_argument("--residual", type=float, default=1.0,
+    # 0.25, а не 1.0: Ревизор (reviewer_s98 §3) показал, что при 1.0 ошибка
+    # в множителе на 1 дБ даёт остаток 0.98 и проходит как «ПОДТВЕРЖДЕНО».
+    ap.add_argument("--residual", type=float, default=0.25,
                     help="допустимый ОСТАТОЧНЫЙ разброс после применения множителей, дБ")
     a = ap.parse_args(argv)
 
@@ -102,6 +104,20 @@ def main(argv=None):
               "Для верного счёта передайте --map sounds.json.\n")
     else:
         print("группировка: по карте %s\n" % a.map)
+    # Карта читается ДО замера: несуществующий/битый --map раньше МОЛЧА
+    # откатывался на группировку по именам файлов (она слепа к 6 событиям из 31)
+    # и результат выглядел достоверным. Теперь отказ с кодом 3.
+    map_data = None
+    if a.map:
+        try:
+            with open(a.map, encoding="utf-8") as f:
+                map_data = json.load(f)
+        except (OSError, ValueError) as exc:
+            print("ОШИБКА: карта %s не читается (%s)" % (a.map, exc))
+            print("Без карты группировка по именам файлов слепа (6 событий из 31) — "
+                  "результат недостоверен.")
+            return 3
+
     print("%-40s %9s %9s %8s" % ("сэмпл", "пик dBFS", "RMS dBFS", "длит, с"))
     rows = []
     for stem in sorted(groups):
@@ -121,8 +137,7 @@ def main(argv=None):
     meas = {stem: (peak, rms) for stem, peak, rms, _ in rows}
     events = {}
     if a.map:
-        with open(a.map, encoding="utf-8") as f:
-            sj = json.load(f)
+        sj = map_data
         missing = []
         for ev, node in sj.items():
             if not isinstance(node, dict):
@@ -141,7 +156,7 @@ def main(argv=None):
         if missing:
             print("ВНИМАНИЕ: %d файлов из карты не найдены в банке: %s"
                   % (len(missing), ", ".join(sorted(set(missing))[:5])))
-        print("группировка: по карте %s — %d событий\n" % (a.map, len(events)))
+        print("группировка: по карте — %d событий\n" % len(events))
     else:
         print("группировка: ПО ИМЕНАМ ФАЙЛОВ — может склеить разные события и\n"
               "разъединить одно. Для верного счёта передайте --map sounds.json\n")
@@ -186,7 +201,7 @@ def main(argv=None):
                     else:
                         res = max(known) - min(known)
                         ok = res <= a.residual
-                        print("      остаток после множителей: %.2f дБ (допуск %.1f) -> %s"
+                        print("      остаток после множителей: %.2f дБ (допуск %g) -> %s"
                               % (res, a.residual,
                                  "объявление ПОДТВЕРЖДЕНО" if ok else "ОБЪЯВЛЕНО, НО НЕ РАБОТАЕТ"))
                         if not ok:
