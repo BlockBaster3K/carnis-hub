@@ -1697,7 +1697,12 @@ def main():
         print("9в) Итоговая громкость по спеке (S78 / отзыв Ревизора 95476a3)")
         VOL_EFF = os.path.join(REPO, "tools", "volume_effective_check.py")
         VOL_SPEC = os.path.join(REPO, "03-sound", "spec", "volume_spec_t3202.json")
-        pkg_dir = os.path.dirname(zip_path)
+        # ⛔ БЫЛО: os.path.dirname(zip_path) — КАТАЛОГ, СОДЕРЖАЩИЙ архив, а не
+        # пакет. Чекер не находил src/main/resources/.../sounds.json и возвращал
+        # код 3, который печатался как «нет строки ИТОГ» и гасился report=True:
+        # проверка громкости по спеке не выполнялась ни разу, а блок выглядел
+        # рабочим (нашёл Звук в S86).
+        pkg_dir = zip_path
         if not os.path.exists(VOL_EFF):
             fail.append("tools/volume_effective_check.py отсутствует — "
                         "громкость по спеке не проверить")

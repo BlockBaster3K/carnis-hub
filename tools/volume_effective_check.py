@@ -35,9 +35,13 @@ import json
 import os
 import re
 import sys
+import zipfile
 
 # volume — последний float-литерал в аргументах playSound/playLocalSound
 CALL_RE = re.compile(r"(?:playLocalSound|playSound)\s*\((.*?)\)\s*;", re.S)
+
+
+SJ_REL = "src/main/resources/assets/carnis/sounds.json"
 
 
 def read_json(path):
@@ -45,11 +49,22 @@ def read_json(path):
         return json.load(fh)
 
 
-def sounds_json_of(pkg):
-    p = os.path.join(pkg, "src/main/resources/assets/carnis/sounds.json")
-    if not os.path.isfile(p):
-        raise FileNotFoundError(p)
-    return p
+def is_zip(pkg):
+    """Пакет может быть ZIP — гейт передаёт путь к архиву, а не каталог.
+
+    Пока чекер умел только каталог, интеграция с гейтом давала код 3 на
+    ЛЮБОМ пакете: блок 9в передавал `os.path.dirname(zip_path)`, и проверка
+    громкости не выполнялась ни разу. Поддержка ZIP убирает эту зависимость
+    от того, распакован пакет или нет.
+    """
+    return os.path.isfile(pkg) and zipfile.is_zipfile(pkg)
+
+
+def _read_from_zip(zf, rel):
+    try:
+        return zf.read(rel).decode("utf-8")
+    except KeyError:
+        raise FileNotFoundError("%s (внутри %s)" % (rel, os.path.basename(zf.filename)))
 
 
 def volumes_of_event(sj, event):
@@ -69,16 +84,19 @@ def volumes_of_event(sj, event):
     return out or [(None, 1.0)]
 
 
-def call_site_volume(pkg_path, event, spec_entry):
+def call_site_volume(pkg_path, event, spec_entry, zf=None):
     """vol из Java: ищем playSound/playLocalSound(...), где встречается событие."""
     rel = spec_entry.get("call_site", {}).get("file")
     if not rel:
         raise KeyError("call_site.file")
-    path = os.path.join(pkg_path, rel)
-    if not os.path.isfile(path):
-        raise FileNotFoundError(rel)
-    with open(path, encoding="utf-8") as fh:
-        src = fh.read()
+    if zf is not None:
+        src = _read_from_zip(zf, rel)
+    else:
+        path = os.path.join(pkg_path, rel)
+        if not os.path.isfile(path):
+            raise FileNotFoundError(rel)
+        with open(path, encoding="utf-8") as fh:
+            src = fh.read()
     ev = event.replace(".", "_").upper()          # hive.spread -> HIVE_SPREAD
     marker = spec_entry.get("call_site", {}).get("arg_marker")
     if marker:
@@ -108,12 +126,25 @@ def main(argv=None):
     ap.add_argument("--spec", required=True, help="JSON спеки громкостей")
     a = ap.parse_args(argv)
 
+    zf = None
     try:
         spec = read_json(a.spec)
-        sj = read_json(sounds_json_of(a.pkg))
-    except (OSError, ValueError) as exc:
+        if is_zip(a.pkg):
+            zf = zipfile.ZipFile(a.pkg)
+            sj = json.loads(_read_from_zip(zf, SJ_REL))
+        else:
+            sj = read_json(os.path.join(a.pkg, SJ_REL))
+    except (OSError, ValueError, zipfile.BadZipFile) as exc:
         print("ОШИБКА: %s" % exc)
         return 3
+    try:
+        return _run(a, spec, sj, zf)
+    finally:
+        if zf is not None:
+            zf.close()
+
+
+def _run(a, spec, sj, zf=None):
 
     tol = float(spec.get("tolerance", 0.005))
     bad = 0
@@ -128,7 +159,7 @@ def main(argv=None):
             print("%-22s %6s %8s %10s  ОШИБКА: нет цели (target или targets_by_sample)" % (ev, "?", "?", "?"))
             return 3
         try:
-            cs = call_site_volume(a.pkg, ev, ent)
+            cs = call_site_volume(a.pkg, ev, ent, zf)
             vols = volumes_of_event(sj, ev)
         except (OSError, KeyError, LookupError) as exc:
             print("%-22s %6s %8s %10s  ОШИБКА: %s" % (ev, target or "по сэмплам", "?", "?", exc))
