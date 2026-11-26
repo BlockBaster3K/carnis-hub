@@ -213,12 +213,71 @@ def main():
               % (len(jars), len(gpl), gpl[:5]))
         fails.append("GPL/сторонние .jar: %s" % (jars[:3] + gpl[:3]))
 
+    # 8. Сторонние лицензии == канон (первоисточник — LICENSE библиотек)
+    bad8 = check_third_party_licenses(readme)
+    if bad8 is None:
+        print("  - 8. сверка лицензий с каноном пропущена (нет README)")
+    elif bad8:
+        print("  ✗ 8. лицензии расходятся с фактом: %s" % "; ".join(bad8))
+        fails.append("лицензии: " + "; ".join(bad8))
+    else:
+        print("  ✓ 8. сторонние лицензии совпадают с каноном (6 библиотек)")
+
     print()
     if fails:
         print("ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ — провалов %d" % len(fails))
         return 2
     print("ИТОГ: СХОДИТСЯ — все шесть пунктов R23 выполнены")
     return 0
+
+
+
+# Пункт 8 (2026-11-26, найдено Интегратором): лицензии сторонних библиотек
+# должны совпадать с фактом, а не «выглядеть правдоподобно». В README 3.8.0
+# стояло: Patchouli — MPL-2.0 (факт CC-BY-NC-SA-3.0), SmartBrainLib —
+# LGPL-3.0-or-later (факт MPL-2.0), Sound Physics — LGPLv3 (факт GPL-3.0).
+# Последнее опаснее всех: строгая копилефт-лицензия была записана в сторону
+# ослабления, то есть README разрешал то, чего GPL-3.0 не разрешает.
+# Канон ниже сверен с файлами LICENSE самих библиотек (GitHub API, поле
+# license.spdx_id), а не с пересказом в досках. Правку канона делает
+# Архитектор; чекер лишь требует сходимости README с каноном.
+CANON_LICENSES = {
+    "GeckoLib": "MIT",
+    "Curios": "LGPL-3.0-or-later",
+    "Patchouli": "CC-BY-NC-SA-3.0",
+    "SmartBrainLib": "MPL-2.0",
+    "Lodestone": "LGPL-3.0",
+    "Sound Physics": "GPL-3.0",
+}
+
+# В README лицензия написана рядом с именем в таблице: «| Patchouli | MPL-2.0 |»
+LICENSE_ROW_RX = re.compile(
+    r"\|\s*([^|\n]+?)\s*\|\s*([^|\n]*?(?:MIT|LGPL[^|\n]*|MPL[^|\n]*|"
+    r"GPL[^|\n]*|CC-BY[^|\n]*))\s*\|")
+
+
+def check_third_party_licenses(readme):
+    """Пункт 8: таблица сторонних лицензий в README == канон."""
+    if not readme:
+        return None  # README нет — это валит пункт 1, не дублируем
+    rows = {}
+    for line in readme.split("\n"):
+        m = LICENSE_ROW_RX.search(line)
+        if not m:
+            continue
+        name, lic = m.group(1).strip(), m.group(2).strip()
+        for key in CANON_LICENSES:
+            if key.lower() in name.lower() or (key == "Sound Physics"
+                                               and "sound physics" in name.lower()):
+                rows[key] = lic
+    bad = []
+    for key, want in CANON_LICENSES.items():
+        got = rows.get(key)
+        if got is None:
+            bad.append("%s: не указана" % key)
+        elif want.split()[0].lower() not in got.lower():
+            bad.append("%s: в README «%s», факт «%s»" % (key, got, want))
+    return bad
 
 
 if __name__ == "__main__":
