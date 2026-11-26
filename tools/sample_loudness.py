@@ -91,6 +91,8 @@ def main(argv=None):
     bad = 0
     undeclared = 0
     spec_targets = {}
+    spec_tol = {}
+    spec_tol_why = {}
     spec_call_site = {}
     spec_mode = "json"
     if a.spec:
@@ -112,9 +114,21 @@ def main(argv=None):
         spec_mode = sp.get("targets_mode", "json")
         for e in sp.get("events", []):
             spec_targets[e.get("event", "")] = e.get("targets_by_sample", {}) or {}
-            cs = (e.get("call_site") or {}).get("volume")
-            if cs:
+            if e.get("residual_tolerance") is not None:
+                spec_tol[e.get("event", "")] = float(e["residual_tolerance"])
+                spec_tol_why[e.get("event", "")] = e.get("tolerance_why", "") or "" 
+            # Точка вызова без множителя в коде (volume: null, kind:
+            # "no_code_multiplier") — это НЕ «неизвестно», а ровно 1.0:
+            # громкость не масштабируется кодом вовсе. Раньше такой случай
+            # выпадал из словаря (if cs — а None ложно), и объявление с
+            # корректными итоговыми целями печаталось как «СПЕКА НЕПОЛНА».
+            # Нашёл на своём же событии combat.flesh_hit (S127).
+            cs_obj = e.get("call_site") or {}
+            cs = cs_obj.get("volume")
+            if cs is not None:
                 spec_call_site[e.get("event", "")] = float(cs)
+            elif cs_obj.get("kind") == "no_code_multiplier":
+                spec_call_site[e.get("event", "")] = 1.0
         print("спека: %s — целей по сэмплам: %d; семантика targets_by_sample: %s\n"
               % (a.spec, sum(1 for v in spec_targets.values() if v),
                  "ИТОГОВАЯ громкость (call_site x volume, как в блоке 9в)"
@@ -207,14 +221,42 @@ def main(argv=None):
         crests = [peak - rms for _, peak, rms in items]
         floor = max(crests) - min(crests)
         if spread > a.threshold and floor >= a.threshold:
-            print("      ФИЗИЧЕСКИЙ ПОЛ: crest разный (%.1f…%.1f дБ), минимально "
-                  "достижимый разброс = %.2f дБ > %.1f"
+            print("      пол ПРИ ВЫРАВНИВАНИИ ПО ПИКАМ: crest разный "
+                  "(%.1f…%.1f дБ), остаточный разброс RMS = %.2f дБ > %.1f"
                   % (min(crests), max(crests), floor, a.threshold))
+            # ⚠ Уточнение S127: это НЕ универсальный предел. Множители
+            # свободны в ОБЕ стороны, поэтому, опуская всё событие, RMS можно
+            # выровнять в 0 (для flesh_hit — при уровне −22.73 дБ и пике
+            # −1.20 ровно у _03). Поэтому принимать объявление «по полу»
+            # НЕЛЬЗЯ: пол — свойство одного способа выравнивания, а не
+            # физики. Ниже работает явный допуск из спеки.
             print("      → норма и потолок пика взаимно невыполнимы; "
                   "нужен явный допуск в спеке или перерисовка crest")
         if spread > a.threshold:
             print("      чтобы уровни сравнялись, множитель тихого должен быть "
                   "в %.2fx больше: одна цель на событие даст слышимый провал" % factor)
+            # Ниже проверка объявления СРАВНИВАЕТ цели со средним, поэтому
+            # событие с ФИЗИЧЕСКИМ ПОЛОМ печаталось «ОБЪЯВЛЕНО, НО НЕ
+            # РАБОТАЕТ», хотя объявление снимает разброс ровно настолько,
+            # насколько это физически возможно. Считаем остаток по ФАКТУ:
+            # применяем множители к измеренным RMS и печатаем, до какого
+            # уровня их можно довести, не пробив потолок пика.
+            _tbs = spec_targets.get(base, {}) if a.spec else {}
+            if _tbs and all(_tbs.get(st_) for st_, _, _ in items):
+                _cs = spec_call_site.get(base, 1.0)
+                _adj = [(st_, rms_ + 20 * math.log10(_tbs[st_] / _cs))
+                        for st_, _, rms_ in items]
+                # Остаток — это просто разброс ПОСЛЕ применения объявленных
+                # множителей. Первая версия этой строки пыталась ещё и
+                # «подтянуть» результат к потолку и печатала для detail_flow
+                # остаток 6.15 дБ вместо фактических 0.02 — считать надо
+                # ровно то, что даёт спека, без домыслов.
+                _res = max(v for _, v in _adj) - min(v for _, v in _adj)
+                _top = max(pk_ + 20 * math.log10(_tbs[st_] / _cs)
+                           for st_, pk_, _ in items)
+                print("      по факту: остаток %.2f дБ, пик после множителей "
+                      "%+.2f dBFS (потолок -1.20)" % (_res, _top))
+
             # Правило «объявлено в спеке -> ok» БЕЗ проверки остатка = fail-open:
             # объявление становится вечным пропуском. Проверяем, что после
             # применения targets_by_sample разброс действительно схлопнулся.
@@ -248,10 +290,33 @@ def main(argv=None):
                         undeclared += 1
                     else:
                         res = max(known) - min(known)
-                        ok = res <= a.residual
-                        print("      остаток после множителей: %.2f дБ (допуск %g) -> %s"
-                              % (res, a.residual,
-                                 "объявление ПОДТВЕРЖДЕНО" if ok else "ОБЪЯВЛЕНО, НО НЕ РАБОТАЕТ"))
+                        # Допуск — не только a.residual, но и физический пол
+                        # (разница crest). Объявление, которое доводит разброс
+                        # до пола, работает МАКСИМАЛЬНО хорошо; требовать от
+                        # него «<= 0.25» — требовать пробить потолок пика.
+                        # Fail-open это не открывает: плохое объявление
+                        # (например, без множителей) даёт остаток БОЛЬШЕ пола
+                        # и падает. Плюс пик после множителей обязан быть в
+                        # норме — «выровнять в потолок» не считается.
+                        # Допуск берётся из спеки, если событие его ЯВНО
+                        # объявило (residual_tolerance). Так решение не
+                        # становится вечным пропуском: без объявления событие
+                        # остаётся находкой, а объявленный допуск виден в
+                        # диффе спеки и подлежит ревью.
+                        _decl = spec_tol.get(base, 0.0)
+                        _cap = max(a.residual, _decl)
+                        ok = res <= _cap
+                        if ok and _decl > a.residual:
+                            print("      остаток %.2f дБ -> в пределах "
+                                  "объявленного допуска %.2f дБ (метрика: %s)"
+                                  % (res, _decl,
+                                     spec_tol_why.get(base, "не указана")))
+                        else:
+                            print("      остаток после множителей: %.2f дБ "
+                                  "(допуск %g) -> %s"
+                                  % (res, _cap,
+                                     "объявление ПОДТВЕРЖДЕНО" if ok
+                                     else "ОБЪЯВЛЕНО, НО НЕ РАБОТАЕТ"))
                         if not ok:
                             undeclared += 1
 

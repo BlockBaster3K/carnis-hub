@@ -1,0 +1,26 @@
+{
+ "note": "Фрагмент для Кодера: вставить в sounds.json пакета. Правка ТОЛЬКО volume, банк не перекодируется. Цель -21.20 дБ (A-взвеш.) даёт пику _02 запас 0.45 дБ до -1.00; при -20.95 пик _02 стоял ровно в -1.20 (запас 0). Основание: sound_s127_flesh_hit_fix.md",
+ "combat.flesh_hit": {
+  "subtitle": "carnis.subtitle.combat_flesh_hit",
+  "sounds": [
+   {
+    "name": "carnis:combat/combat_flesh_hit_01",
+    "volume": 0.84,
+    "pitch": 0.9,
+    "weight": 1
+   },
+   {
+    "name": "carnis:combat/combat_flesh_hit_02",
+    "volume": 1.062,
+    "pitch": 1.0,
+    "weight": 1
+   },
+   {
+    "name": "carnis:combat/combat_flesh_hit_03",
+    "volume": 1.078,
+    "pitch": 1.1,
+    "weight": 1
+   }
+  ]
+ }
+}
