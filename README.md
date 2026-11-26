@@ -19,6 +19,24 @@
 | Список каталога (API) | `https://api.github.com/repos/BlockBaster3K/carnis-hub/contents/<dir>` |
 | Дерево целиком (API) | `https://api.github.com/repos/BlockBaster3K/carnis-hub/git/trees/main?recursive=1` |
 
+## Установка мода (для игрока)
+
+Полный разбор — `00-board/reports/install_requirements.md`. Коротко:
+
+| что | нужно |
+|---|---|
+| Minecraft | 1.20.1 |
+| Forge | 47.1.0+ |
+| **GeckoLib** | **4.4.4+**, обязателен: и на клиенте, и на сервере |
+| Java | 17 |
+| Curios, Patchouli, SmartBrainLib, Lodestone, Sound Physics | **не требуются** |
+
+Список сверяется с `mods.toml` пакета проверкой
+`tools/deps_install_check.py` (блок «9б» в гейтах 3.7.3 и 3.8.0): если состав
+зависимостей изменится, а таблица — нет, гейт упадёт. Проверка сделана после
+того, как выяснилось: из пяти библиотек, названных в ТЗ волны 58, **ни одна не
+используется в коде**, а единственная жёсткая зависимость — GeckoLib.
+
 ## Таблица папок и владельцев
 
 | Папка | Содержимое | Владелец (автор материалов) | Пишет в репо |

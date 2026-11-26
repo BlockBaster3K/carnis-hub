@@ -1701,6 +1701,15 @@ def main():
             fail.append("tools/timbre_check.py отсутствует — тембр не проверить")
 
         print()
+        print("9б) Требования к установке против mods.toml (I100)")
+        DEPS_INSTALL = os.path.join(REPO, "tools", "deps_install_check.py")
+        if os.path.exists(DEPS_INSTALL):
+            run_tool("deps_install_check", DEPS_INSTALL, zip_path)
+        else:
+            fail.append("tools/deps_install_check.py отсутствует — "
+                        "требования к установке не проверить")
+
+        print()
         print("10) Принятое не тронуто (14 файлов 3.6.0-R побайтово)")
         check_keep_identical(tmp)
 
