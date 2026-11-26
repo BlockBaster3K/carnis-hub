@@ -84,6 +84,30 @@ def volumes_of_event(sj, event):
     return out or [(None, 1.0)]
 
 
+def volume_from_args(args):
+    """Громкость из аргументов вызова — ПО ПОЗИЦИИ, а не «предпоследний float».
+
+    Раньше брался предпоследний float-литерал, и это молча ломалось, если вызов
+    между событием и громкостью несёт ещё одно число: например
+    `playSound(null, pos, ev, SoundSource.BLOCKS, 1.0F, 0.8F, 1.0F)` (volume,
+    pitch, ещё что-то) дало бы 1.0 вместо 0.8. Код при этом выглядел рабочим.
+
+    Известные сигнатуры (Minecraft 1.20.x):
+      playSound(Player, BlockPos, SoundEvent, SoundSource, float volume, float pitch)
+      playLocalSound(double x, double y, double z, SoundEvent, SoundSource,
+                     float volume, float pitch, boolean distanceDelay)
+    В обеих volume — ПЕРВЫЙ float после SoundSource. Если SoundSource в вызове
+    нет, позицию определить нельзя — возвращаем None (пусть вызывающий код
+    скажет «не нашёл», а не подставит первое попавшееся число).
+    """
+    m = re.search(r"SoundSource\s*\.\s*\w+", args)
+    if m is None:
+        return None
+    rest = args[m.end():]
+    f = re.search(r"(\d+(?:\.\d+)?)F", rest)
+    return float(f.group(1)) if f else None
+
+
 def call_site_volume(pkg_path, event, spec_entry, zf=None):
     """vol из Java: ищем playSound/playLocalSound(...), где встречается событие."""
     rel = spec_entry.get("call_site", {}).get("file")
@@ -112,11 +136,9 @@ def call_site_volume(pkg_path, event, spec_entry, zf=None):
         args = m.group(1)
         if needle not in args:
             continue
-        floats = re.findall(r"(\d+\.\d+)F", args)
-        if len(floats) >= 2:                       # (volume, pitch)
-            return float(floats[-2])
-        if len(floats) == 1:
-            return float(floats[0])
+        vol = volume_from_args(args)
+        if vol is not None:
+            return vol
     raise LookupError("%s: вызов %s не найден" % (rel, ev))
 
 
