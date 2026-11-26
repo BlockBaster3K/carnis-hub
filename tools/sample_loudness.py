@@ -66,21 +66,24 @@ def main(argv=None):
             stem = f[:-4]
             if a.events and not any(stem.startswith(p) for p in a.events):
                 continue
-            if not a.events and not stem.startswith("detail_"):
-                continue
             groups.setdefault(stem, os.path.join(dp, f))
 
     if not groups:
         print("ОШИБКА: не найдено ни одного .ogg по заданным префиксам")
         return 3
+    if not a.events and not any(k.startswith("detail_") for k in groups):
+        # Без --events и без detail_* в банке раньше возвращалось «не найдено»,
+        # то есть инструмент молча отказывался работать на чужом банке
+        # (например sounds_380). Теперь меряет весь банк.
+        print("банк без detail_*-сэмплов — меряю все %d файлов\n" % len(groups))
 
     bad = 0
-    print("%-22s %9s %9s %8s" % ("сэмпл", "пик dBFS", "RMS dBFS", "длит, с"))
+    print("%-40s %9s %9s %8s" % ("сэмпл", "пик dBFS", "RMS dBFS", "длит, с"))
     rows = []
     for stem in sorted(groups):
         peak, rms, dur = measure(groups[stem])
         rows.append((stem, peak, rms, dur))
-        print("%-22s %9.1f %9.1f %8.2f" % (stem, peak, rms, dur))
+        print("%-40s %9.1f %9.1f %8.2f" % (stem, peak, rms, dur))
 
     # группируем по событию: detail_flow_01 / detail_flow_02 -> detail_flow
     events = {}
