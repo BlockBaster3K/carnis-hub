@@ -136,14 +136,14 @@
           "name": "mandible_left",
           "parent": "head",
           "pivot": [
-            2,
-            27,
-            -1
+            1,
+            23,
+            -2
           ],
           "rotation": [
             15,
-            -15,
-            0
+            -22,
+            10
           ],
           "cubes": [
             {
@@ -168,14 +168,14 @@
           "name": "mandible_right",
           "parent": "head",
           "pivot": [
-            -2,
-            27,
-            -1
+            -1,
+            23,
+            -2
           ],
           "rotation": [
             15,
-            15,
-            0
+            22,
+            -10
           ],
           "cubes": [
             {
@@ -231,11 +231,6 @@
             22,
             0
           ],
-          "rotation": [
-            10,
-            0,
-            5
-          ],
           "cubes": [
             {
               "origin": [
@@ -256,6 +251,38 @@
           ]
         },
         {
+          "name": "shoulder_crest",
+          "parent": "arm_left_upper",
+          "pivot": [
+            5.25,
+            22.5,
+            0
+          ],
+          "rotation": [
+            -15,
+            0,
+            15
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4.5,
+                21,
+                -2
+              ],
+              "size": [
+                1.5,
+                3,
+                4
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
           "name": "arm_left_lower",
           "parent": "arm_left_upper",
           "pivot": [
@@ -263,21 +290,16 @@
             17,
             0
           ],
-          "rotation": [
-            -20,
-            0,
-            0
-          ],
           "cubes": [
             {
               "origin": [
                 4.5,
-                11,
+                10,
                 -1.5
               ],
               "size": [
                 3,
-                6,
+                7,
                 3
               ],
               "uv": [
@@ -288,29 +310,29 @@
           ]
         },
         {
-          "name": "talon_1",
+          "name": "talon_outer",
           "parent": "arm_left_lower",
           "pivot": [
-            5.5,
-            11,
+            4.4,
+            10,
             -1
           ],
           "rotation": [
-            25,
-            -8,
-            0
+            10,
+            0,
+            -8
           ],
           "cubes": [
             {
               "origin": [
-                4.5,
-                4,
-                -2.5
+                3.8,
+                5,
+                -2
               ],
               "size": [
-                1.5,
-                7,
-                2.5
+                1.2,
+                5,
+                2
               ],
               "uv": [
                 40,
@@ -320,29 +342,93 @@
           ]
         },
         {
-          "name": "talon_2",
-          "parent": "arm_left_lower",
+          "name": "talon_outer_tip",
+          "parent": "talon_outer",
           "pivot": [
-            6.5,
-            11,
-            1
+            4.3,
+            5,
+            -2
           ],
           "rotation": [
-            18,
-            10,
+            25,
+            0,
             0
           ],
           "cubes": [
             {
               "origin": [
-                6,
-                4.5,
-                -0.5
+                3.8,
+                1,
+                -3
               ],
               "size": [
-                1.5,
-                6.5,
-                2.5
+                1,
+                4,
+                1.5
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "talon_inner",
+          "parent": "arm_left_lower",
+          "pivot": [
+            6.6,
+            10,
+            -1
+          ],
+          "rotation": [
+            10,
+            0,
+            8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                6.0,
+                5,
+                -2
+              ],
+              "size": [
+                1.2,
+                5,
+                2
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "talon_inner_tip",
+          "parent": "talon_inner",
+          "pivot": [
+            6.5,
+            5,
+            -2
+          ],
+          "rotation": [
+            25,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                6.0,
+                1,
+                -3
+              ],
+              "size": [
+                1,
+                4,
+                1.5
               ],
               "uv": [
                 40,
