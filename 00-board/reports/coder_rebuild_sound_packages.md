@@ -1,6 +1,6 @@
 # Rebuild 3.7.3 and 3.8.0 sound packages
 
-**Date:** 2026-11-20 · **Status:** rebuilt against the current Sound bank; ready for Git publication. No Java compilation or JAR build.
+**Date:** 2026-11-20 · **Status:** rebuilt, verified, and published to `arena/d474d740-carnis-hub`. No Java compilation or JAR build.
 
 ## Changes
 
