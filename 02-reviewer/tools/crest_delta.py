@@ -156,6 +156,10 @@ def main():
     ap.add_argument("archive", help="каталог оригиналов (.ogg), например 03-sound/archive_zapas_2026-11-26")
     ap.add_argument("target", help="банк (каталог) или пакет (zip)")
     ap.add_argument("--tol", type=float, default=0.05, help="допуск |Δ|, дБ (по умолчанию 0,05)")
+    ap.add_argument("--gain-tol", type=float, default=0.15,
+                    help="порог детектора чистого усиления: |Δпик − ΔRMS|, дБ "
+                         "(по умолчанию 0,15; на плотных сэмплах шум кодека "
+                         "даёт до 0,18 — тогда поднять до 0,25)")
     ap.add_argument("--top", type=int, default=20)
     ap.add_argument("--roundtrip", action="store_true",
                     help="эталон = перекод оригинала тем же кодеком (З-28)")
@@ -215,7 +219,7 @@ def main():
         # иначе шум перекода выглядел бы «правкой усиления» (проверено).
         d_gain = (b_stats[1] - ref_stats[1])        # сдвиг RMS
         d_peak = (b_stats[0] - ref_stats[0])        # сдвиг пика
-        is_gain = abs(d_peak - d_gain) <= 0.15 and abs(d_gain) >= 0.1
+        is_gain = abs(d_peak - d_gain) <= a.gain_tol and abs(d_gain) >= 0.1
         tol = a.tol
         if table is not None:
             hit = next((v for k, v in table.items()
@@ -229,10 +233,17 @@ def main():
         if is_gain:
             gain_only.append((f.name, d_gain))
 
+    # Файлы с чистым усилением вердиктом не судятся (З-28 п.3) — значит и в
+    # таблице они не должны стоять с маркером выхода: иначе сводка «СХОДИТСЯ»
+    # спорит с «!» в строке (дефект подачи, найден 2026-11-22).
+    gain_names_pre = {n for n, _g in gain_only}
     rows.sort(key=lambda r: -abs(r[3]))
     print("%-40s %10s %11s %7s %7s" % ("файл", "crest было", "crest стало", "Δ дБ", "допуск"))
     for name, o, n, d, tol in rows[:a.top]:
-        mark = "  " if abs(d) <= tol else " !"
+        if name in gain_names_pre:
+            mark = " ="          # судится по пику/запасу, crest неприменим
+        else:
+            mark = "  " if abs(d) <= tol else " !"
         print("%-40s %10.2f %11.2f %7.2f %7.2f%s" % (name, o, n, d, tol, mark))
 
     # З-28 п.3: crest инвариантен к усилению, поэтому файл с чистым gain из
@@ -240,11 +251,18 @@ def main():
     # может быть и 0,5 дБ: это разница двух разных кодирований, а не динамика.
     gain_names = {n for n, _g in gain_only}
     over = [r for r in rows if abs(r[3]) > r[4] and r[0] not in gain_names]
-    diffs = sorted(abs(r[3]) for r in rows)
+    judged = [r for r in rows if r[0] not in gain_names]
+    diffs = sorted(abs(r[3]) for r in judged)
     median = diffs[len(diffs) // 2] if diffs else 0.0
     print("-" * 72)
-    print("Файлов сверено: %d, выходов за допуск: %d, медиана |Δ| %.3f дБ, максимум %.2f дБ"
-          % (len(rows), len(over), median, max(diffs) if diffs else 0.0))
+    print("Файлов сверено: %d (судится %d), выходов за допуск: %d, "
+          "медиана |Δ| %.3f дБ, максимум %.2f дБ"
+          % (len(rows), len(judged), len(over), median,
+             max(diffs) if diffs else 0.0))
+    if gain_names:
+        gd = max(abs(r[3]) for r in rows if r[0] in gain_names)
+        print("Из них чистого усиления: %d (Δcrest до %.2f дБ — шум кодека, "
+              "норме не подлежат)" % (len(gain_names), gd))
     if missing:
         print("Не сверено: %d — %s" % (len(missing), ", ".join(missing[:5])))
     if unchanged:

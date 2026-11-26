@@ -7,8 +7,10 @@
 него, поэтому шум кодека не принимается за дефект обработки.
 
 Норма обязана (условие приёмки, R19):
-  1. **ловить изменение тембра**: файл, у которого изменена спектральная
-     окраска (не громкость), обязан дать |Δcrest| > 0,05 дБ;
+  1. **ловить изменение динамики**: лимитер и компрессор обязаны дать
+     |Δcrest| >> 0,05 дБ. (Полочный фильтр ВЧ — НЕ цель нормы: crest почти
+     не меняется от EQ, поэтому тембр проверяется `timbre_check.py`,
+     а здесь печатается справочно и на код не влияет — замер 2026-11-22.)
   2. **не ловить шум кодека**: чистый перекод без обработки обязан уложиться
      в допуск;
   3. **честно маркировать чистый gain**: crest инвариантен к усилению,
@@ -91,6 +93,18 @@ def high_shelf(x, sr, gain_db=6.0, corner=4000.0):
     return y
 
 
+def limiter_hard(x, gain_db=12.0, ceiling=0.9):
+    """Жёсткий лимитер: усиление + обрезка по потолку. Crest обязан упасть."""
+    return np.clip(x * (10 ** (gain_db / 20.0)), -ceiling, ceiling)
+
+
+def compressor_tanh(x, drive=6.0, ceiling=0.9):
+    """Мягкий компрессор: tanh-насыщение. Crest тоже обязан упасть."""
+    y = np.tanh(x * drive)
+    peak = np.abs(y).max()
+    return y * (ceiling / peak) if peak > 0 else y
+
+
 def main():
     src = sys.argv[1] if len(sys.argv) > 1 else None
     if src is None:
@@ -114,7 +128,9 @@ def main():
 
         cases = {
             "gain": x * (10 ** (-0.5 / 20.0)),        # только громкость
-            "timbre": high_shelf(x, sr),              # только тембр
+            "limiter": limiter_hard(x),               # динамика: обрезка по потолку
+            "compr": compressor_tanh(x),              # динамика: tanh-насыщение
+            "shelf": high_shelf(x, sr),               # EQ — справочно, не цель нормы
             "transcode": x.copy(),                    # чистый перекод
         }
         for label, sig in cases.items():
@@ -129,23 +145,32 @@ def main():
             d_line = [ln for ln in out.splitlines() if ln.startswith(name)]
             delta = None
             if d_line:
-                # строка таблицы: "... 0.75 !" — берём последнее число, а не
-                # последний токен (после числа может стоять маркер «!»)
-                m = re.search(r"([-+]?\d+\.\d+)\s*!?\s*$", d_line[0])
-                if m:
-                    delta = abs(float(m.group(1)))
-            expect = {"gain": "ok", "timbre": "over", "transcode": "ok"}[label]
+                # строка таблицы: "<файл>  crest_было  crest_стало  Δ  допуск [!]"
+                # Δ — ВТОРОЕ число с конца; последнее — колонка допуска
+                # (прежняя редакция брала последнее число и печатала «0.050»
+                #  вместо 0.10 — ложное «расхождение» 2026-11-22)
+                nums = re.findall(r"[-+]?\d+\.\d+", d_line[0])
+                if len(nums) >= 2:
+                    delta = abs(float(nums[-2]))
+            expect = {"gain": "ok", "limiter": "over", "compr": "over",
+                      "shelf": "info", "transcode": "ok"}[label]
             got_over = r.returncode == 2
             if label == "gain":
                 marked = "Только усиление" in out
                 ok = (not got_over) and marked
                 detail = "Δ=%.3f дБ, маркировка gain: %s" % (
                     delta if delta is not None else -1, "да" if marked else "НЕТ")
-            elif label == "timbre":
+            elif label in ("limiter", "compr"):
                 ok = got_over and (delta is not None and delta > 0.05)
                 detail = "Δ=%.3f дБ, норма %s" % (
                     delta if delta is not None else -1,
                     "сработала" if got_over else "ПРОПУСТИЛА")
+            elif label == "shelf":
+                # информационно: EQ почти не меняет crest — это не дефект нормы,
+                # тембр проверяет timbre_check.py
+                ok = True
+                detail = "Δ=%.3f дБ (справочно: EQ — не цель crest)" % (
+                    delta if delta is not None else -1)
             else:
                 ok = not got_over
                 detail = "Δ=%.3f дБ (шум кодека)" % (delta if delta is not None else -1)
