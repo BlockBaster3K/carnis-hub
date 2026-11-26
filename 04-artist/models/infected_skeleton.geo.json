@@ -489,6 +489,92 @@
               ]
             }
           ]
+        },
+        {
+          "name": "flesh_calf_muscle",
+          "parent": "leg_left",
+          "pivot": [
+            2,
+            6.5,
+            0.5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0.5,
+                3,
+                -1
+              ],
+              "size": [
+                3,
+                7,
+                3
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "eye_tendril_base",
+          "parent": "head",
+          "pivot": [
+            2,
+            27,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.5,
+                26.5,
+                -5.5
+              ],
+              "size": [
+                1,
+                1,
+                2
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "eye_tendril_tip",
+          "parent": "eye_tendril_base",
+          "pivot": [
+            2,
+            27,
+            -5.5
+          ],
+          "rotation": [
+            18,
+            15,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.5,
+                26.5,
+                -7.5
+              ],
+              "size": [
+                1,
+                1,
+                2
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
         }
       ]
     }
