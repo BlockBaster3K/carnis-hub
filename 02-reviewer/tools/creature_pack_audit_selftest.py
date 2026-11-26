@@ -136,7 +136,10 @@ def main():
                 with open(os.path.join(anim_dir, NAME + ".animation.json"), "w",
                           encoding="utf-8") as f:
                     json.dump(kw["anim"], f)
-            r = subprocess.run([sys.executable, TOOL, d, "--min-bones", "1"]
+            # --registry "": фикстуры синтетические и в реестре Художника их нет,
+            # иначе фильтр по реестру отбросил бы проверяемую модель
+            r = subprocess.run([sys.executable, TOOL, d, "--min-bones", "1",
+                                "--registry", ""]
                                + kw.get("extra", []),
                                capture_output=True, text=True)
             ok = r.returncode == expect

@@ -45,6 +45,37 @@ GLOW = (255, 92, 57)
 REQUIRED_ANIMS = ("idle", "walk", "attack", "hurt", "death")
 
 
+def load_registry(path):
+    """{существа}, {geo-блоки/предметы} из `creature_registry.md` Художника.
+
+    Раздел 2 («geo-блоков и предметов») — это НЕ существа: у них не требуется
+    ни glowmask, ни idle/walk/attack/hurt/death, ни порог костей. Всё
+    остальное из таблиц реестра — существа.
+    """
+    import re as _re
+    creatures, blocks = set(), set()
+    if not path or not os.path.isfile(path):
+        return creatures, blocks
+    section = None
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            if line.startswith("## "):
+                section = "blocks" if ("geo-блок" in line or "предмет" in line) else "creatures"
+                continue
+            if not line.startswith("|") or section is None:
+                continue
+            for name in _re.findall(r"`([a-z0-9_]+)`", line):
+                if name.endswith((".png", ".json", ".zip", ".md")):
+                    continue
+                if len(name) < 4 or name.startswith("_"):
+                    continue
+                # SHA-256-префиксы из колонки «SHA-256 (12)» — не имена моделей
+                if _re.fullmatch(r"[0-9a-f]{8,64}", name):
+                    continue
+                (blocks if section == "blocks" else creatures).add(name)
+    return creatures, blocks
+
+
 def iter_files(sources):
     """{относительный путь внутри assets/carnis: bytes} по всем источникам."""
     out = {}
@@ -194,11 +225,19 @@ def main():
                          "а не предупреждение (приёмка 3.8.1/H-блока)")
     ap.add_argument("--only", default=None,
                     help="имена через запятую — проверять только их")
+    ap.add_argument("--registry", default=None,
+                    help="creature_registry.md Художника: отделяет существ от "
+                         "geo-блоков/предметов (по умолчанию — из репозитория)")
     ap.add_argument("--dedupe-bones", action="store_true",
                     help="R14 §6: считать только «реальные» (анатомические) кости — "
                          "кости с одинаковыми pivot и кубами у ≥80 %% существ "
                          "считаются скопированной декорацией и в порог не идут")
     a = ap.parse_args()
+    if a.registry is None:
+        repo = os.path.dirname(os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))))
+        cand = os.path.join(repo, "04-artist", "creature_registry.md")
+        a.registry = cand if os.path.isfile(cand) else ""
 
     files = iter_files(a.sources)
 
@@ -216,13 +255,39 @@ def main():
                 out.setdefault(base, k)
         return out
 
+    # Реестр Художника — источник правды о том, что считать существом.
+    # В нём есть раздел «7 geo-блоков и предметов (glowmask не требуется)»:
+    # без этой развилки гейт требовал от блока анимации idle/walk/attack/hurt/death
+    # и маску (255,92,57) — 37 ложных провалов на пакете 3.8.0.
+    registry_creatures, registry_blocks = load_registry(a.registry)
+    if registry_creatures or registry_blocks:
+        print("реестр: %s — существ %d, geo-блоков/предметов %d"
+              % (a.registry, len(registry_creatures), len(registry_blocks)))
+    else:
+        print("реестр не задан/не разобран — все geo считаются существами")
+
     geo_by_name = by_tail(".geo.json")
+    # Текстуры: приоритет textures/entity/, но не только она. У моделей блоков,
+    # предметов и брони своя папка (block/, item/, armor/, models/) — раньше они
+    # считались «существами без текстуры» (7 ложных провалов на пакете 3.8.0:
+    # hive_eye, nerve_pillar, pulsing_heart, pustule_cluster, bio_purifier,
+    # neuro_armor, pneumatic_inoculator). Fail-closed остаётся: не нашли нигде —
+    # это провал.
     tex_by_name = {}
     for k in files:
-        if "/textures/entity/" in ("/" + k) or k.startswith("textures/entity/"):
-            base = k.split("/")[-1][:-4]
-            if k.endswith(".png"):
-                tex_by_name.setdefault(base, k)
+        if not k.endswith(".png"):
+            continue
+        if "/textures/entity/" not in ("/" + k) and not k.startswith("textures/entity/"):
+            continue
+        tex_by_name.setdefault(k.split("/")[-1][:-4], k)
+    for k in sorted(files):
+        if not k.endswith(".png") or "/textures/" not in ("/" + k):
+            continue
+        base = k.split("/")[-1][:-4]
+        tex_by_name.setdefault(base, k)
+        # предметные модели Forge зовут текстуру `<имя>_geo.png`
+        if base.endswith("_geo"):
+            tex_by_name.setdefault(base[:-4], k)
     anim_by_name = by_tail(".animation.json")
 
     geos = sorted(geo_by_name.values())
@@ -232,8 +297,13 @@ def main():
 
     only = set(x.strip() for x in a.only.split(",")) if a.only else None
     creatures = []
+    unregistered = []
     for g in geos:
         name = g.split("/")[-1].replace(".geo.json", "")
+        if (registry_creatures or registry_blocks) and \
+                name not in registry_creatures and name not in registry_blocks:
+            unregistered.append(name)
+            continue
         if only and name not in only:
             continue
         creatures.append(name)
@@ -284,6 +354,10 @@ def main():
     print("-" * 104)
 
     for name in creatures:
+        # классификация — ВНУТРИ цикла: снаружи переменная оставалась от
+        # предыдущего цикла и все модели считались geo-блоками (из-за этого
+        # проверки масок и анимаций молчали, а провалы «исчезали»)
+        is_block = name in registry_blocks and name not in registry_creatures
         g = geo_by_name.get(name, "")
         tex = tex_by_name.get(name, "")
         glow = tex_by_name.get(name + "_glowmask", "")
@@ -296,7 +370,7 @@ def main():
             continue
         for p in info["problems"]:
             bad("%s: %s" % (name, p))
-        if info["bones"] < a.min_bones:
+        if not is_block and info["bones"] < a.min_bones:
             warn("%s: костей %d < %d" % (name, info["bones"], a.min_bones))
         rb = real_bones(info)
         if a.dedupe_bones and len(rb) < a.min_bones:
@@ -305,7 +379,7 @@ def main():
                                                       info["bones"]))
 
         if not tex or tex not in files:
-            bad("%s: нет текстуры textures/entity/%s.png" % (name, name))
+            bad("%s: нет текстуры %s.png ни в одной папке textures/** " % (name, name))
             continue
         st = png_stats(files[tex])
         w, h = st["size"]
@@ -313,15 +387,23 @@ def main():
         uv_ok = u <= w and v <= h
         if not uv_ok:
             bad("%s: UV выходит за текстуру: нужно %dx%d, файл %dx%d" % (name, u, v, w, h))
-        if st["colors"] < 7:
-            bad("%s: цветов %d < 7 (A3R1)" % (name, st["colors"]))
-        if st["top_share"] > 0.35:
-            bad("%s: топ-доля %.1f %% > 35 %% (A3R1)" % (name, st["top_share"] * 100))
-        if not st["alphas"] <= {0, 255}:
-            bad("%s: альфа не бинарная %s" % (name, sorted(st["alphas"])[:5]))
+        if is_block:
+            # geo-блок/предмет (реестр Художника §2): A3R1 и Р-3 к ним не
+            # применяются, анимаций не требуется. Проверяем только наличие
+            # текстуры и то, что UV внутри неё.
+            glow_res, anim_res = "—", "—"
+        else:
+            if st["colors"] < 7:
+                bad("%s: цветов %d < 7 (A3R1)" % (name, st["colors"]))
+            if st["top_share"] > 0.35:
+                bad("%s: топ-доля %.1f %% > 35 %% (A3R1)" % (name, st["top_share"] * 100))
+            if not st["alphas"] <= {0, 255}:
+                bad("%s: альфа не бинарная %s" % (name, sorted(st["alphas"])[:5]))
 
         glow_res = "нет"
-        if not glow or glow not in files:
+        if is_block:
+            pass
+        elif not glow or glow not in files:
             bad("%s: нет glowmask (правило Р-3)" % name)
         else:
             gs = png_stats(files[glow])
@@ -348,7 +430,9 @@ def main():
                       [k for k in files if k.endswith("/" + name + ".animation.json")
                        or k == name + ".animation.json"])
         anim_res = "—"
-        if anim_files:
+        if is_block:
+            pass
+        elif anim_files:
             anim_bones = set()
             anim_names = set()
             _anim_bodies = []
@@ -395,14 +479,6 @@ def main():
             if a.require_anims and union and len(union) < 4:
                 bad("%s: в ключах всего %d костей (H36 требует >= 4): %s"
                     % (name, len(union), ", ".join(sorted(union))))
-        else:
-            # Файла анимаций нет вовсе. Раньше это молчало и печаталось «ok —»:
-            # существо без единой анимации считалось годным, хотя --require-anims
-            # объявлен именно как «отсутствие idle/walk/attack/hurt/death — провал».
-            (bad if a.require_anims else warn)(
-                "%s: файла анимаций нет вообще — idle/walk/attack/hurt/death "
-                "отсутствуют" % name)
-
             fv = set()
             for af in anim_files:
                 d = json.loads(files[af].decode("utf-8"))
@@ -413,10 +489,22 @@ def main():
                     "%s: format_version анимаций %s, нужен 1.8.0 (H37)"
                     % (name, ", ".join(sorted(fv))))
 
+        else:
+            # Файла анимаций нет вовсе. Раньше это молчало и печаталось «ok —»:
+            # существо без единой анимации считалось годным, хотя --require-anims
+            # объявлен именно как «отсутствие idle/walk/attack/hurt/death — провал».
+            (bad if a.require_anims else warn)(
+                "%s: файла анимаций нет вообще — idle/walk/attack/hurt/death "
+                "отсутствуют" % name)
+
         print("%-26s %6d %10s %6d %6.1f %12s %9s %s"
               % (name, info["bones"], "%dx%d" % (w, h), st["colors"],
                  st["top_share"] * 100, glow_res,
                  "%s" % ("ok" if uv_ok else "ВЫХОД"), anim_res))
+
+    if unregistered:
+        warn("моделей вне реестра существ: %d (%s) — не оценивались"
+             % (len(unregistered), ", ".join(sorted(unregistered)[:8])))
 
     print("\n" + "-" * 104)
     print("Существ: %d, провалов: %d, предупреждений: %d"
