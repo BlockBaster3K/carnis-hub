@@ -78,6 +78,38 @@
           ]
         },
         {
+          "name": "sinew_diagonal_strap",
+          "parent": "body",
+          "pivot": [
+            0,
+            12.5,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            -32
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.5,
+                10,
+                -1.5
+              ],
+              "size": [
+                3,
+                5,
+                3
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
           "name": "rib_fang_1",
           "parent": "flesh_right_chest",
           "pivot": [
@@ -142,12 +174,39 @@
           ]
         },
         {
-          "name": "dorsal_spike_1",
+          "name": "spine_flesh_root",
           "parent": "body",
           "pivot": [
             0,
-            21,
+            18,
             2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                14,
+                1.5
+              ],
+              "size": [
+                2,
+                8,
+                2
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "dorsal_spike_1",
+          "parent": "spine_flesh_root",
+          "pivot": [
+            0,
+            20.5,
+            3
           ],
           "rotation": [
             30,
@@ -158,8 +217,8 @@
             {
               "origin": [
                 -0.5,
-                21,
-                2
+                20.5,
+                2.5
               ],
               "size": [
                 1,
@@ -175,11 +234,11 @@
         },
         {
           "name": "dorsal_spike_2",
-          "parent": "body",
+          "parent": "spine_flesh_root",
           "pivot": [
             0,
             18,
-            2
+            3
           ],
           "rotation": [
             30,
@@ -191,7 +250,7 @@
               "origin": [
                 -0.5,
                 18,
-                2
+                2.5
               ],
               "size": [
                 1,
@@ -207,11 +266,11 @@
         },
         {
           "name": "dorsal_spike_3",
-          "parent": "body",
+          "parent": "spine_flesh_root",
           "pivot": [
             0,
-            15,
-            2
+            15.5,
+            3
           ],
           "rotation": [
             30,
@@ -222,8 +281,8 @@
             {
               "origin": [
                 -0.5,
-                15,
-                2
+                15.5,
+                2.5
               ],
               "size": [
                 1,
@@ -479,23 +538,23 @@
           ]
         },
         {
-          "name": "flesh_brace_thigh",
+          "name": "flesh_thigh",
           "parent": "leg_left",
           "pivot": [
             2,
-            9,
+            9.5,
             0
           ],
           "cubes": [
             {
               "origin": [
                 0.5,
-                6,
+                7,
                 -1.5
               ],
               "size": [
                 3,
-                6,
+                5,
                 3
               ],
               "uv": [
@@ -506,24 +565,24 @@
           ]
         },
         {
-          "name": "flesh_brace_calf",
+          "name": "flesh_calf",
           "parent": "leg_left",
           "pivot": [
             2,
-            3,
+            3.5,
             0
           ],
           "cubes": [
             {
               "origin": [
-                0.5,
-                0,
-                -1.5
+                0.6,
+                1.5,
+                -1.4
               ],
               "size": [
-                3,
-                6,
-                3
+                2.8,
+                4,
+                2.8
               ],
               "uv": [
                 0,
