@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_chestplate"
+    },
+    {
+      "item": "carnis:sinew_spikes"
+    },
+    {
+      "item": "carnis:ossified_flesh"
+    },
+    {
+      "item": "carnis:fireproof_flesh"
+    }
+  ],
+  "result": {
+    "item": "carnis:neuro_resonator_chestplate"
+  }
+}

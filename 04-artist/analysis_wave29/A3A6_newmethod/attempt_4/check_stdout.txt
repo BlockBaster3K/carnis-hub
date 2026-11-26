@@ -1,0 +1,42 @@
+вариантов: 4
+  [OK ] 1_format_and_palette
+         creeping_tendrils_0.png: непрозрачных 2963/4096 (72.3 %), цветов 8
+         creeping_tendrils_1.png: непрозрачных 3004/4096 (73.3 %), цветов 8
+         creeping_tendrils_2.png: непрозрачных 2744/4096 (67.0 %), цветов 8
+         creeping_tendrils_3.png: непрозрачных 2734/4096 (66.7 %), цветов 8
+  [OK ] 2_borders_identical
+         top: одинаков у 4 вариантов
+         bottom: одинаков у 4 вариантов
+         left: одинаков у 4 вариантов
+         right: одинаков у 4 вариантов
+  [OK ] 3_seam_byte_exact
+         проверено 16 пар (включая самозамыкание)
+  [OK ] 4_mixed_grids
+         3x3_980: стык max=0.0 внутри=18.371 период×0.465
+         3x3_20260104: стык max=0.0 внутри=19.374 период×0.44
+         3x3_4245: стык max=0.0 внутри=18.534 период×0.403
+         5x5_982: стык max=0.0 внутри=18.572 период×0.356
+         5x5_20260106: стык max=0.0 внутри=18.092 период×0.449
+         5x5_4247: стык max=0.0 внутри=18.568 период×0.464
+  [OK ] 4b_lattice
+  [OK ] 5_readability_16px
+  [FAIL] 6_ends_and_corners
+         creeping_tendrils_0.png: вдоль кромки прямая полоса длиной 32 px
+         creeping_tendrils_1.png: вдоль кромки прямая полоса длиной 32 px
+         creeping_tendrils_2.png: вдоль кромки прямая полоса длиной 32 px
+         creeping_tendrils_3.png: вдоль кромки прямая полоса длиной 32 px
+  [FAIL] 7_stroke_geometry
+         creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (0, 18)
+         creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (7, 63)
+         creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (21, 0)
+         creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (20, 25)
+         creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (56, 0)
+         creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (56, 63)
+         creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (0, 46)
+         creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (7, 0)
+         creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (7, 63)
+         creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (42, 0)
+         creeping_tendrils_2.png: непрерывная линия 39.4 px > 32 (медианная толщина 11.8 px, минимум 5.0 px)
+         creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (37, 30)
+ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ
+записан: /home/user/carnis/analysis_wave28/A3_newmethod/attempt_4/SELFCHECK.json

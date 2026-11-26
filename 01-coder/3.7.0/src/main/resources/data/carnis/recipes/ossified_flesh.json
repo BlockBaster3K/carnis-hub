@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:bone"
+    },
+    {
+      "item": "minecraft:bone"
+    },
+    {
+      "item": "carnis:living_flesh"
+    }
+  ],
+  "result": {
+    "item": "carnis:ossified_flesh",
+    "count": 1
+  }
+}

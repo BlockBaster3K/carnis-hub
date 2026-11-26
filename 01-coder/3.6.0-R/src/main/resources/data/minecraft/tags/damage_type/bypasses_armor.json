@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "carnis:bio_purifier",
+    "carnis:necrotic_consumption",
+    "carnis:purification_dart",
+    "carnis:organic_consumption"
+  ]
+}

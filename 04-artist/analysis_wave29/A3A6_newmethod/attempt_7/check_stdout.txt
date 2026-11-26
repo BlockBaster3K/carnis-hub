@@ -1,0 +1,26 @@
+вариантов: 4
+  [OK ] 1_format_and_palette
+         creeping_tendrils_0.png: непрозрачных 2608/4096 (63.7 %), цветов 8
+         creeping_tendrils_1.png: непрозрачных 2583/4096 (63.1 %), цветов 8
+         creeping_tendrils_2.png: непрозрачных 2529/4096 (61.7 %), цветов 8
+         creeping_tendrils_3.png: непрозрачных 2746/4096 (67.0 %), цветов 8
+  [OK ] 2_borders_identical
+         top: одинаков у 4 вариантов
+         bottom: одинаков у 4 вариантов
+         left: одинаков у 4 вариантов
+         right: одинаков у 4 вариантов
+  [OK ] 3_seam_byte_exact
+         проверено 16 пар (включая самозамыкание)
+  [OK ] 4_mixed_grids
+         3x3_980: стык max=0.0 внутри=19.284 период×0.503
+         3x3_20260104: стык max=0.0 внутри=20.111 период×0.458
+         3x3_4245: стык max=0.0 внутри=20.587 период×0.478
+         5x5_982: стык max=0.0 внутри=20.142 период×0.449
+         5x5_20260106: стык max=0.0 внутри=20.687 период×0.541
+         5x5_4247: стык max=0.0 внутри=20.087 период×0.451
+  [OK ] 4b_lattice
+  [OK ] 5_readability_16px
+  [OK ] 6_ends_and_corners
+  [OK ] 7_stroke_geometry
+ИТОГ: ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ
+записан: /home/user/carnis/analysis_wave28/A3_newmethod/attempt_7/SELFCHECK.json

@@ -1,0 +1,564 @@
+{
+  "tool": "tendrils_check.py",
+  "tiles": [
+    "creeping_tendrils_0.png",
+    "creeping_tendrils_1.png",
+    "creeping_tendrils_2.png",
+    "creeping_tendrils_3.png"
+  ],
+  "checks": {
+    "1_format_and_palette": {
+      "ok": true,
+      "details": [
+        "creeping_tendrils_0.png: непрозрачных 2560/4096 (62.5 %), цветов 8",
+        "creeping_tendrils_1.png: непрозрачных 2605/4096 (63.6 %), цветов 8",
+        "creeping_tendrils_2.png: непрозрачных 2199/4096 (53.7 %), цветов 8",
+        "creeping_tendrils_3.png: непрозрачных 2473/4096 (60.4 %), цветов 8"
+      ]
+    },
+    "2_borders_identical": {
+      "ok": true,
+      "details": [
+        "top: одинаков у 4 вариантов",
+        "bottom: одинаков у 4 вариантов",
+        "left: одинаков у 4 вариантов",
+        "right: одинаков у 4 вариантов"
+      ]
+    },
+    "3_seam_byte_exact": {
+      "ok": true,
+      "details": [
+        "проверено 16 пар (включая самозамыкание)"
+      ],
+      "pairs": 16
+    },
+    "4_mixed_grids": {
+      "ok": false,
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "pattern": [
+            [
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              2,
+              2
+            ],
+            [
+              1,
+              3,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.504,
+          "autocorr_alpha_16px": {
+            "8": 1.0825,
+            "16": 0.4881,
+            "24": 0.7653,
+            "32": 0.2422,
+            "40": 0.3931
+          },
+          "tile_period_ratio": 0.653,
+          "control_same_tile_ratio": 0.857,
+          "control_rotated_ratio": 0.566,
+          "control_noise_ratio": 1.365,
+          "irregularity_margin": 1.312
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "pattern": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 21.29,
+          "autocorr_alpha_16px": {
+            "8": 1.0904,
+            "16": 0.3039,
+            "24": 0.952,
+            "32": 0.5512,
+            "40": 0.4999
+          },
+          "tile_period_ratio": 0.359,
+          "control_same_tile_ratio": 0.857,
+          "control_rotated_ratio": 0.545,
+          "control_noise_ratio": 0.252,
+          "irregularity_margin": 2.391
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "pattern": [
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              1,
+              3,
+              1
+            ],
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 21.052,
+          "autocorr_alpha_16px": {
+            "8": 1.1927,
+            "16": 0.4388,
+            "24": 1.0813,
+            "32": 0.5312,
+            "40": 0.749
+          },
+          "tile_period_ratio": 0.435,
+          "control_same_tile_ratio": 0.857,
+          "control_rotated_ratio": 0.611,
+          "control_noise_ratio": -0.214,
+          "irregularity_margin": 1.969
+        },
+        "5x5_982": {
+          "seed": 982,
+          "pattern": [
+            [
+              1,
+              3,
+              1,
+              3,
+              0
+            ],
+            [
+              2,
+              0,
+              2,
+              2,
+              0
+            ],
+            [
+              3,
+              1,
+              2,
+              3,
+              3
+            ],
+            [
+              1,
+              2,
+              0,
+              3,
+              1
+            ],
+            [
+              0,
+              2,
+              1,
+              3,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.869,
+          "autocorr_alpha_16px": {
+            "8": 0.9921,
+            "16": 0.3193,
+            "24": 0.8942,
+            "32": 0.3854,
+            "40": 1.0028,
+            "48": 0.5286,
+            "56": 1.0085,
+            "64": 0.576
+          },
+          "tile_period_ratio": 0.328,
+          "control_same_tile_ratio": 0.858,
+          "control_rotated_ratio": 0.461,
+          "control_noise_ratio": 0.412,
+          "irregularity_margin": 2.618
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "pattern": [
+            [
+              1,
+              3,
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              3,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              2,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              2,
+              0,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 21.156,
+          "autocorr_alpha_16px": {
+            "8": 1.1472,
+            "16": 0.5144,
+            "24": 0.9758,
+            "32": 0.2854,
+            "40": 0.981,
+            "48": 0.4665,
+            "56": 1.0657,
+            "64": 0.2836
+          },
+          "tile_period_ratio": 0.493,
+          "control_same_tile_ratio": 0.858,
+          "control_rotated_ratio": 0.347,
+          "control_noise_ratio": -0.175,
+          "irregularity_margin": 1.739
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "pattern": [
+            [
+              3,
+              0,
+              2,
+              2,
+              2
+            ],
+            [
+              0,
+              2,
+              0,
+              1,
+              0
+            ],
+            [
+              3,
+              1,
+              1,
+              0,
+              3
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              2
+            ],
+            [
+              2,
+              3,
+              3,
+              1,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 20.997,
+          "autocorr_alpha_16px": {
+            "8": 1.0636,
+            "16": 0.4256,
+            "24": 0.9364,
+            "32": 0.4186,
+            "40": 0.8456,
+            "48": 0.1973,
+            "56": 0.8057,
+            "64": 0.5439
+          },
+          "tile_period_ratio": 0.466,
+          "control_same_tile_ratio": 0.858,
+          "control_rotated_ratio": 0.491,
+          "control_noise_ratio": -0.389,
+          "irregularity_margin": 1.84
+        }
+      },
+      "details": [
+        "5x5 seed=20260106: автокорреляция с периодом плитки 0.49× (контроль «одна плитка» 0.86×, «повёрнутая» 0.35×)"
+      ]
+    },
+    "4b_lattice": {
+      "ok": true,
+      "details": [],
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "alpha_at_border": 0.538,
+          "alpha_inside": 0.347,
+          "border_to_inside": 1.551
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "alpha_at_border": 0.575,
+          "alpha_inside": 0.287,
+          "border_to_inside": 2.0
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "alpha_at_border": 0.565,
+          "alpha_inside": 0.282,
+          "border_to_inside": 2.006
+        },
+        "5x5_982": {
+          "seed": 982,
+          "alpha_at_border": 0.555,
+          "alpha_inside": 0.3,
+          "border_to_inside": 1.852
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "alpha_at_border": 0.558,
+          "alpha_inside": 0.301,
+          "border_to_inside": 1.854
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "alpha_at_border": 0.554,
+          "alpha_inside": 0.311,
+          "border_to_inside": 1.784
+        }
+      }
+    },
+    "5_readability_16px": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "opaque_px": 230,
+          "alpha_coverage": 0.624,
+          "components": 3,
+          "components_ge3px": 3,
+          "share_in_big_components": 0.739,
+          "luma_contrast": 170.0
+        },
+        "creeping_tendrils_1.png": {
+          "opaque_px": 227,
+          "alpha_coverage": 0.634,
+          "components": 2,
+          "components_ge3px": 2,
+          "share_in_big_components": 0.762,
+          "luma_contrast": 169.7
+        },
+        "creeping_tendrils_2.png": {
+          "opaque_px": 209,
+          "alpha_coverage": 0.537,
+          "components": 4,
+          "components_ge3px": 4,
+          "share_in_big_components": 0.713,
+          "luma_contrast": 255.0
+        },
+        "creeping_tendrils_3.png": {
+          "opaque_px": 219,
+          "alpha_coverage": 0.603,
+          "components": 3,
+          "components_ge3px": 3,
+          "share_in_big_components": 0.731,
+          "luma_contrast": 169.7
+        }
+      }
+    },
+    "6_ends_and_corners": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "edge_density": 0.546,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        },
+        "creeping_tendrils_1.png": {
+          "edge_density": 0.541,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        },
+        "creeping_tendrils_2.png": {
+          "edge_density": 0.516,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        },
+        "creeping_tendrils_3.png": {
+          "edge_density": 0.526,
+          "max_run_on_border": 15,
+          "corner_px": 0
+        }
+      }
+    },
+    "7_stroke_geometry": {
+      "ok": false,
+      "details": [
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (20, 0)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (20, 63)",
+        "creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (63, 25)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (43, 63)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (63, 25)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (0, 38)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (8, 0)",
+        "creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (63, 38)"
+      ],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "skeleton_branches": 146,
+          "longest_branch_px": 22.31,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 5.0,
+          "branches_too_thin": [
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                20,
+                0
+              ]
+            },
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                20,
+                63
+              ]
+            },
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                25
+              ]
+            }
+          ],
+          "branches_exempt_short": 137,
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_1.png": {
+          "skeleton_branches": 118,
+          "longest_branch_px": 19.07,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 5.0,
+          "branches_too_thin": [
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                43,
+                63
+              ]
+            },
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                25
+              ]
+            }
+          ],
+          "branches_exempt_short": 108,
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_2.png": {
+          "skeleton_branches": 138,
+          "longest_branch_px": 16.66,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 5.0,
+          "branches_too_thin": [
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                0,
+                38
+              ]
+            },
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                8,
+                0
+              ]
+            },
+            {
+              "length": 8.0,
+              "min_width": 5.0,
+              "at": [
+                63,
+                38
+              ]
+            }
+          ],
+          "branches_exempt_short": 128,
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_3.png": {
+          "skeleton_branches": 115,
+          "longest_branch_px": 25.31,
+          "stroke_middle_fraction": 0.6,
+          "long_limit_thin_px": 32,
+          "long_limit_thick_px": 40,
+          "thick_branch_median_px": 12,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 9.0,
+          "branches_too_thin": [],
+          "branches_exempt_short": 109,
+          "thin_detached_parts": []
+        }
+      }
+    }
+  },
+  "all_ok": false
+}

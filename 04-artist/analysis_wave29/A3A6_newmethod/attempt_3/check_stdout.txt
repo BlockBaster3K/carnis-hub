@@ -1,0 +1,38 @@
+вариантов: 4
+  [OK ] 1_format_and_palette
+         creeping_tendrils_0.png: непрозрачных 2599/4096 (63.5 %), цветов 8
+         creeping_tendrils_1.png: непрозрачных 2667/4096 (65.1 %), цветов 7
+         creeping_tendrils_2.png: непрозрачных 2698/4096 (65.9 %), цветов 7
+         creeping_tendrils_3.png: непрозрачных 2694/4096 (65.8 %), цветов 7
+  [OK ] 2_borders_identical
+         top: одинаков у 4 вариантов
+         bottom: одинаков у 4 вариантов
+         left: одинаков у 4 вариантов
+         right: одинаков у 4 вариантов
+  [OK ] 3_seam_byte_exact
+         проверено 16 пар (включая самозамыкание)
+  [OK ] 4_mixed_grids
+         3x3_980: стык max=0.0 внутри=20.978 период×0.875
+         3x3_20260104: стык max=0.0 внутри=21.51 период×0.772
+         3x3_4245: стык max=0.0 внутри=21.624 период×0.62
+         5x5_982: стык max=0.0 внутри=21.497 период×0.683
+         5x5_20260106: стык max=0.0 внутри=21.06 период×0.814
+         5x5_4247: стык max=0.0 внутри=21.178 период×0.79
+  [OK ] 4b_lattice
+  [OK ] 5_readability_16px
+  [OK ] 6_ends_and_corners
+  [FAIL] 7_stroke_geometry
+         creeping_tendrils_0.png: штрих толщиной 5.8 px в точке (22, 0)
+         creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (33, 34)
+         creeping_tendrils_0.png: штрих толщиной 3.8 px в точке (52, 63)
+         creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (32, 52)
+         creeping_tendrils_1.png: штрих толщиной 3.8 px в точке (63, 39)
+         creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (0, 39)
+         creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (23, 0)
+         creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (23, 63)
+         creeping_tendrils_2.png: штрих толщиной 3.8 px в точке (52, 0)
+         creeping_tendrils_3.png: штрих толщиной 5.8 px в точке (0, 50)
+         creeping_tendrils_3.png: штрих толщиной 5.0 px в точке (13, 28)
+         creeping_tendrils_3.png: штрих толщиной 3.8 px в точке (23, 0)
+ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ
+записан: /home/user/carnis/analysis_wave28/A3_newmethod/attempt_3/SELFCHECK.json

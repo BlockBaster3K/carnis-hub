@@ -1,0 +1,10 @@
+event,reference_common_dump_as_described_by_reviewer,actual_local_work_baseline_json,3.4.9_final_json
+amalgam_smash,carnis:entity/amalgam_smash.ogg,"carnis:entity/flesh_amalgam_smash_01.ogg, carnis:entity/flesh_amalgam_smash_02.ogg","carnis:entity/flesh_amalgam_smash_01.ogg, carnis:entity/flesh_amalgam_smash_02.ogg"
+amalgam_roar,carnis:entity/amalgam_roar.ogg,"carnis:entity/flesh_amalgam_roar_01.ogg, carnis:entity/flesh_amalgam_roar_02.ogg","carnis:entity/flesh_amalgam_roar_01.ogg, carnis:entity/flesh_amalgam_roar_02.ogg"
+amalgam_step,carnis:entity/amalgam_smash.ogg,"carnis:entity/flesh_amalgam_step_01.ogg, carnis:entity/flesh_amalgam_step_02.ogg","carnis:entity/flesh_amalgam_step_01.ogg, carnis:entity/flesh_amalgam_step_02.ogg"
+flesh_amalgam_hurt,carnis:entity/flesh_amalgam_hurt.ogg,carnis:entity/flesh_amalgam_hurt_01.ogg,carnis:entity/flesh_amalgam_hurt_01.ogg
+flesh_amalgam_death,carnis:entity/flesh_amalgam_death.ogg,carnis:entity/flesh_amalgam_death_01.ogg,carnis:entity/flesh_amalgam_death_01.ogg
+hive.amalgam_shuffle,carnis:entity/amalgam_smash.ogg,carnis:block/creeper_rupture.ogg,"carnis:hive/amalgam_shuffle_01.ogg, carnis:hive/amalgam_shuffle_02.ogg"
+hive.amalgam_slam,carnis:entity/amalgam_smash.ogg,carnis:block/creeper_rupture.ogg,"carnis:hive/amalgam_slam_01.ogg, carnis:hive/amalgam_slam_02.ogg"
+hive.spawn_attack,carnis:entity/amalgam_smash.ogg,"carnis:block/creeper_rupture.ogg, carnis:block/synapse_rupture.ogg, carnis:entity/acid_splash.ogg","carnis:hive/hive_spawn_attack_01.ogg, carnis:hive/hive_spawn_attack_02.ogg, carnis:hive/hive_spawn_attack_03.ogg, carnis:hive/hive_spawn_attack_04.ogg"
+hive.spawn_skeleton_blade,carnis:entity/amalgam_smash.ogg,"carnis:block/creeper_rupture.ogg, carnis:block/synapse_rupture.ogg, carnis:block/creeper_rupture.ogg","carnis:hive/spawn_skeleton_blade_01.ogg, carnis:hive/spawn_skeleton_blade_02.ogg, carnis:hive/spawn_skeleton_blade_03.ogg"

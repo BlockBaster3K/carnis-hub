@@ -1,0 +1,30 @@
+# Запрос Кодера Архитектору · восстановление лимита workspace
+
+**Статус:** НУЖНО РЕШЕНИЕ АРХИТЕКТОРА · до решения object store не изменять.
+
+## Факты
+
+- После повторного `git pull --rebase --autostash` workspace после нового pull занимает около **191 MB**, при заданном пределе `<128 MB`; `.git` — около **156 MB**, всё дерево вне `.git` — около **35 MB**. Чтобы вернуться ниже лимита, нужно освободить не менее ~76 MB; обычная чистка временных файлов не может этого обеспечить.
+- После upstream update `225a750` fix commit `7b9655f` был запушен; затем выполнен новый `git pull --rebase --autostash` до `5b2c321` без конфликтов. После этого pull remote продвинулся до `badde68`; documentation commit запушен, текущий HEAD `ebb6304`. Остальные незакоммиченные локальные изменения сохранены. В workspace дополнительно проверены временные каталоги и файлы: `build/tmp`, `.gradle`, `__pycache__`, логи и временные архивы не найдены; ZIP-файлы — проектные deliverables, они сохранены.
+- Очистка удалённой временной директории `/tmp`: удалены 24 явно временных `baseline-*.zip` (по 12.3 MB каждый); внутри workspace удалён `tools/__pycache__`. Каталогов `build/`, `tmp/`, `temp/` вне `.git` не найдено. ZIP-пакеты проекта не удалялись, так как это рабочие deliverables, а не временные файлы.
+- `origin` настроен как partial clone: `promisor=true`, `partialclonefilter=blob:none`.
+- Локальный Git — **2.47.3**. В этой версии `git repack` не показывает `--drop-filtered`; доступный `--filter-to` складывает отфильтрованные объекты во внешний pack. Удалять такой pack вручную нельзя без отдельного плана: Git docs предупреждают о риске недоступности объектов.
+- Во время предыдущей диагностики `git rev-list --objects --all` запустил lazy-fetch; фоновые `rev-list`/fetch были остановлены. Pack-файлы вручную не удалялись. Временные ZIP и ссылки диагностики удалены.
+
+## Вопрос к Архитектору
+
+Пользователь разрешил blobless repack при сохранении refs и commit/tree-истории, но текущая версия Git не предоставляет безопасного `--drop-filtered`. Разреши один из вариантов:
+
+1. **Предпочтительно:** пересоздать checkout как partial clone `blob:none`, сохранить все доступные refs и commit/tree-историю, оставить текущий рабочий каталог и вручную перенести только локальные незакоммиченные изменения; затем сверить HEAD/refs/status и проверить, что размер ниже 128 MB.
+2. Предложить поддерживаемую процедуру repack с этой версией Git, которая освобождает filtered blobs без ручного удаления pack-файлов и без потери refs/commit/tree-истории.
+3. Запретить перепаковку/замену клона и указать альтернативное место хранения или пересмотр лимита.
+
+По прямому запросу пользователя pull уже выполнен; повторный fetch/pull без нового указания не запускать. До решения не обходить все refs/объекты, не выполнять repack/gc, не удалять pack-файлы и не заменять `.git`. Не коммитить посторонние локальные правки; отдельный тест allowlist закоммичен/запушен по запросу пользователя, остальные локальные изменения сохранены.
+
+## Повторная проверка после pull до `0be643c`
+
+Workspace: **205 MB**, `.git`: **169 MB**, pack: **152.56 MiB**, garbage: **0 bytes**. Дерево вне `.git` около 36 MB. Внутри проекта не обнаружены `build/`, `tmp/`, `temp/`, `__pycache__`, логи или временные архивы; найдены только семь ZIP-deliverables. В `/tmp` удалены три небольших тестовых лога от регрессионных проверок и удалён `tools/__pycache__`. Цель `<128 MB` остаётся недостигнутой: безопасных временных файлов для удаления больше нет. Четыре autostash refs и два набора незакоммиченных пользовательских изменений сохранены. Никаких операций с Git object storage, stash или deliverables не выполнялось; по-прежнему требуется решение Архитектора.
+
+## Latest workspace snapshot (after sync through `a61c791`)
+
+Measured workspace **217 MB**, `.git` **182 MB** (tree outside Git about 35 MB). No `build/`, `tmp/`, `temp/`, `__pycache__`, project-local logs, or temporary archives remain; package ZIPs are deliverables. Small test logs created during this cycle were deleted from `/tmp`. Four autostash refs and owner-local edits remain preserved. `<128 MB` is still unmet, and no object-store/stash/deliverable deletion or repack/gc was attempted. Architect decision remains required.

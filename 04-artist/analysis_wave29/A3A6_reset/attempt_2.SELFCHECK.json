@@ -1,0 +1,667 @@
+{
+  "tool": "tendrils_check.py",
+  "tiles": [
+    "creeping_tendrils_0.png",
+    "creeping_tendrils_1.png",
+    "creeping_tendrils_2.png",
+    "creeping_tendrils_3.png"
+  ],
+  "checks": {
+    "1_format_and_palette": {
+      "ok": true,
+      "details": [
+        "creeping_tendrils_0.png: непрозрачных 2035/4096 (49.7 %), цветов 7",
+        "creeping_tendrils_1.png: непрозрачных 2918/4096 (71.2 %), цветов 7",
+        "creeping_tendrils_2.png: непрозрачных 2411/4096 (58.9 %), цветов 7",
+        "creeping_tendrils_3.png: непрозрачных 2524/4096 (61.6 %), цветов 7"
+      ]
+    },
+    "2_borders_identical": {
+      "ok": true,
+      "details": [
+        "top: одинаков у 4 вариантов",
+        "bottom: одинаков у 4 вариантов",
+        "left: одинаков у 4 вариантов",
+        "right: одинаков у 4 вариантов"
+      ]
+    },
+    "3_seam_byte_exact": {
+      "ok": true,
+      "details": [
+        "проверено 16 пар (включая самозамыкание)"
+      ],
+      "pairs": 16
+    },
+    "4_mixed_grids": {
+      "ok": true,
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "pattern": [
+            [
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              2,
+              2
+            ],
+            [
+              1,
+              3,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 25.168,
+          "autocorr_alpha_16px": {
+            "8": 0.0182,
+            "16": 0.5178,
+            "24": 0.074,
+            "32": 0.2893,
+            "40": 0.3089
+          },
+          "tile_period_ratio": 3.873,
+          "control_same_tile_ratio": 23.665,
+          "control_rotated_ratio": 5.395,
+          "control_noise_ratio": 1.365,
+          "irregularity_margin": 6.111
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "pattern": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.341,
+          "autocorr_alpha_16px": {
+            "8": 0.0788,
+            "16": 0.3171,
+            "24": 0.0762,
+            "32": 0.2999,
+            "40": 0.4533
+          },
+          "tile_period_ratio": 1.564,
+          "control_same_tile_ratio": 23.665,
+          "control_rotated_ratio": 7.834,
+          "control_noise_ratio": 0.252,
+          "irregularity_margin": 15.132
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "pattern": [
+            [
+              0,
+              0,
+              3
+            ],
+            [
+              1,
+              3,
+              1
+            ],
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.864,
+          "autocorr_alpha_16px": {
+            "8": 0.2003,
+            "16": 0.356,
+            "24": 0.33,
+            "32": 0.539,
+            "40": 0.7115
+          },
+          "tile_period_ratio": 0.86,
+          "control_same_tile_ratio": 23.665,
+          "control_rotated_ratio": 8.063,
+          "control_noise_ratio": -0.214,
+          "irregularity_margin": 27.516
+        },
+        "5x5_982": {
+          "seed": 982,
+          "pattern": [
+            [
+              1,
+              3,
+              1,
+              3,
+              0
+            ],
+            [
+              2,
+              0,
+              2,
+              2,
+              0
+            ],
+            [
+              3,
+              1,
+              2,
+              3,
+              3
+            ],
+            [
+              1,
+              2,
+              0,
+              3,
+              1
+            ],
+            [
+              0,
+              2,
+              1,
+              3,
+              3
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.957,
+          "autocorr_alpha_16px": {
+            "8": 0.1522,
+            "16": 0.3799,
+            "24": 0.1258,
+            "32": 0.3466,
+            "40": 0.139,
+            "48": 0.4602,
+            "56": 0.1641,
+            "64": 0.4672
+          },
+          "tile_period_ratio": 2.615,
+          "control_same_tile_ratio": 22.913,
+          "control_rotated_ratio": 2.539,
+          "control_noise_ratio": 0.412,
+          "irregularity_margin": 8.762
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "pattern": [
+            [
+              1,
+              3,
+              0,
+              2,
+              2
+            ],
+            [
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              3,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              2,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              2,
+              0,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.785,
+          "autocorr_alpha_16px": {
+            "8": 0.3703,
+            "16": 0.476,
+            "24": 0.2148,
+            "32": 0.2377,
+            "40": 0.2832,
+            "48": 0.4413,
+            "56": 0.2745,
+            "64": 0.1829
+          },
+          "tile_period_ratio": 1.666,
+          "control_same_tile_ratio": 22.913,
+          "control_rotated_ratio": 3.967,
+          "control_noise_ratio": -0.175,
+          "irregularity_margin": 13.752
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "pattern": [
+            [
+              3,
+              0,
+              2,
+              2,
+              2
+            ],
+            [
+              0,
+              2,
+              0,
+              1,
+              0
+            ],
+            [
+              3,
+              1,
+              1,
+              0,
+              3
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              2
+            ],
+            [
+              2,
+              3,
+              3,
+              1,
+              0
+            ]
+          ],
+          "max_jump_at_border": 0.0,
+          "mean_jump_at_border": 0.0,
+          "mean_jump_inside": 24.769,
+          "autocorr_alpha_16px": {
+            "8": 0.2125,
+            "16": 0.4081,
+            "24": 0.1792,
+            "32": 0.3952,
+            "40": 0.1118,
+            "48": 0.185,
+            "56": -0.0381,
+            "64": 0.4994
+          },
+          "tile_period_ratio": 3.508,
+          "control_same_tile_ratio": 22.913,
+          "control_rotated_ratio": 4.221,
+          "control_noise_ratio": -0.389,
+          "irregularity_margin": 6.532
+        }
+      }
+    },
+    "4b_lattice": {
+      "ok": true,
+      "details": [],
+      "grids": {
+        "3x3_980": {
+          "seed": 980,
+          "alpha_at_border": 0.565,
+          "alpha_inside": 0.613,
+          "border_to_inside": 0.921
+        },
+        "3x3_20260104": {
+          "seed": 20260104,
+          "alpha_at_border": 0.564,
+          "alpha_inside": 0.561,
+          "border_to_inside": 1.006
+        },
+        "3x3_4245": {
+          "seed": 4245,
+          "alpha_at_border": 0.573,
+          "alpha_inside": 0.603,
+          "border_to_inside": 0.951
+        },
+        "5x5_982": {
+          "seed": 982,
+          "alpha_at_border": 0.569,
+          "alpha_inside": 0.606,
+          "border_to_inside": 0.938
+        },
+        "5x5_20260106": {
+          "seed": 20260106,
+          "alpha_at_border": 0.576,
+          "alpha_inside": 0.593,
+          "border_to_inside": 0.971
+        },
+        "5x5_4247": {
+          "seed": 4247,
+          "alpha_at_border": 0.568,
+          "alpha_inside": 0.59,
+          "border_to_inside": 0.964
+        }
+      }
+    },
+    "5_readability_16px": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "opaque_px": 208,
+          "alpha_coverage": 0.488,
+          "components": 10,
+          "components_ge3px": 10,
+          "share_in_big_components": 0.611,
+          "luma_contrast": 255.0
+        },
+        "creeping_tendrils_1.png": {
+          "opaque_px": 245,
+          "alpha_coverage": 0.7,
+          "components": 4,
+          "components_ge3px": 4,
+          "share_in_big_components": 0.767,
+          "luma_contrast": 144.7
+        },
+        "creeping_tendrils_2.png": {
+          "opaque_px": 225,
+          "alpha_coverage": 0.577,
+          "components": 5,
+          "components_ge3px": 5,
+          "share_in_big_components": 0.698,
+          "luma_contrast": 255.0
+        },
+        "creeping_tendrils_3.png": {
+          "opaque_px": 232,
+          "alpha_coverage": 0.606,
+          "components": 8,
+          "components_ge3px": 8,
+          "share_in_big_components": 0.698,
+          "luma_contrast": 255.0
+        }
+      }
+    },
+    "6_ends_and_corners": {
+      "ok": true,
+      "details": [],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "edge_density": 0.596,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        },
+        "creeping_tendrils_1.png": {
+          "edge_density": 0.611,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        },
+        "creeping_tendrils_2.png": {
+          "edge_density": 0.596,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        },
+        "creeping_tendrils_3.png": {
+          "edge_density": 0.601,
+          "max_run_on_border": 9,
+          "corner_px": 0
+        }
+      }
+    },
+    "7_stroke_geometry": {
+      "ok": false,
+      "details": [
+        "creeping_tendrils_0.png: штрих толщиной 7.8 px в точке (11, 42)",
+        "creeping_tendrils_0.png: штрих толщиной 7.8 px в точке (11, 43)",
+        "creeping_tendrils_0.png: штрих толщиной 7.8 px в точке (11, 42)",
+        "creeping_tendrils_0.png: штрих толщиной 7.8 px в точке (11, 42)",
+        "creeping_tendrils_0.png: штрих толщиной 7.8 px в точке (11, 43)",
+        "creeping_tendrils_0.png: штрих толщиной 7.0 px в точке (14, 43)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (22, 53)",
+        "creeping_tendrils_1.png: штрих толщиной 5.0 px в точке (40, 51)",
+        "creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (51, 23)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (14, 41)",
+        "creeping_tendrils_2.png: штрих толщиной 3.0 px в точке (22, 48)",
+        "creeping_tendrils_2.png: штрих толщиной 5.8 px в точке (52, 37)",
+        "creeping_tendrils_2.png: штрих толщиной 6.7 px в точке (52, 26)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (53, 24)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (53, 24)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (53, 39)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (53, 39)",
+        "creeping_tendrils_2.png: штрих толщиной 7.8 px в точке (54, 24)",
+        "creeping_tendrils_2.png: штрих толщиной 7.8 px в точке (54, 24)",
+        "creeping_tendrils_2.png: штрих толщиной 7.8 px в точке (54, 39)",
+        "creeping_tendrils_2.png: штрих толщиной 7.8 px в точке (54, 39)",
+        "creeping_tendrils_2.png: штрих толщиной 7.0 px в точке (57, 23)"
+      ],
+      "tiles": {
+        "creeping_tendrils_0.png": {
+          "skeleton_branches": 100,
+          "longest_branch_px": 17.49,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 7.0,
+          "branches_too_thin": [
+            {
+              "length": 1.0,
+              "min_width": 7.83,
+              "at": [
+                11,
+                42
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.83,
+              "at": [
+                11,
+                43
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.83,
+              "at": [
+                11,
+                42
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.83,
+              "at": [
+                11,
+                42
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.83,
+              "at": [
+                11,
+                43
+              ]
+            },
+            {
+              "length": 9.07,
+              "min_width": 7.0,
+              "at": [
+                14,
+                43
+              ]
+            }
+          ],
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_1.png": {
+          "skeleton_branches": 209,
+          "longest_branch_px": 18.66,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 5.0,
+          "branches_too_thin": [
+            {
+              "length": 12.41,
+              "min_width": 7.0,
+              "at": [
+                22,
+                53
+              ]
+            },
+            {
+              "length": 18.66,
+              "min_width": 5.0,
+              "at": [
+                40,
+                51
+              ]
+            },
+            {
+              "length": 13.83,
+              "min_width": 7.0,
+              "at": [
+                51,
+                23
+              ]
+            }
+          ],
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_2.png": {
+          "skeleton_branches": 169,
+          "longest_branch_px": 19.41,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 3.0,
+          "branches_too_thin": [
+            {
+              "length": 19.41,
+              "min_width": 3.0,
+              "at": [
+                14,
+                41
+              ]
+            },
+            {
+              "length": 19.41,
+              "min_width": 3.0,
+              "at": [
+                22,
+                48
+              ]
+            },
+            {
+              "length": 9.66,
+              "min_width": 5.83,
+              "at": [
+                52,
+                37
+              ]
+            },
+            {
+              "length": 4.83,
+              "min_width": 6.66,
+              "at": [
+                52,
+                26
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                53,
+                24
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                53,
+                24
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.0,
+              "at": [
+                53,
+                39
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.0,
+              "at": [
+                53,
+                39
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.83,
+              "at": [
+                54,
+                24
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.83,
+              "at": [
+                54,
+                24
+              ]
+            },
+            {
+              "length": 1.0,
+              "min_width": 7.83,
+              "at": [
+                54,
+                39
+              ]
+            },
+            {
+              "length": 1.41,
+              "min_width": 7.83,
+              "at": [
+                54,
+                39
+              ]
+            },
+            {
+              "length": 7.41,
+              "min_width": 7.0,
+              "at": [
+                57,
+                23
+              ]
+            }
+          ],
+          "thin_detached_parts": []
+        },
+        "creeping_tendrils_3.png": {
+          "skeleton_branches": 129,
+          "longest_branch_px": 20.41,
+          "branches_over_limit": [],
+          "min_stroke_width_px": 8.66,
+          "branches_too_thin": [],
+          "thin_detached_parts": []
+        }
+      }
+    }
+  },
+  "all_ok": false
+}

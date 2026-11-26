@@ -1,0 +1,32 @@
+# Build caches and output — never commit
+.gradle/
+build/
+run/
+out/
+logs/
+
+# IDE / compiled classes
+.idea/
+*.iml
+*.class
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# NOTE: gradle wrapper is intentionally NOT ignored:
+#   gradle/wrapper/gradle-wrapper.jar
+#   gradle/wrapper/gradle-wrapper.properties
+#   gradlew, gradlew.bat
+
+# Python
+__pycache__/
+*.pyc
+
+# SSH-ключи и секреты — никогда не коммитить
+*.pem
+*.key
+id_ed25519*
+ssh-keys/

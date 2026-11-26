@@ -1,0 +1,370 @@
+name: build-jar
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Путь к zip-пакету проекта (пусто = последняя версия)'
+        required: false
+        default: ''
+  push:
+    # Пушим только ветки. Push ТЕГА сюда попадать не должен: шаг публикации
+    # сам двигает тег `vX.Y.Z` — иначе каждый прогон запускал бы следующий.
+    branches:
+      - '**'
+    paths:
+      - '01-coder/**'
+      - '04-artist/**'
+      - '03-sound/**'
+      - '06-build/overlay.txt'
+
+permissions:
+  contents: write
+
+# Несколько агентов могут сдавать файлы подряд. Собираем только последнее
+# состояние ветки: промежуточный прогон отменяется, раннеры не тратятся впустую.
+concurrency:
+  group: build-jar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Ревизор (R15): тесты звуковых проверок не запускались ни в CI, ни в
+      # гейте — страж allowlist был добровольным, а fail-open в
+      # heard_elsewhere жил незамеченным. Зависимостей у тестов нет.
+      - name: Sound orphans unit tests
+        run: |
+          set -e
+          python3 tools/sound_orphans_alias_test.py
+          python3 tools/sound_orphans_allowlist_test.py
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.1.1'
+
+      - name: Resolve package
+        id: pkg
+        shell: bash
+        env:
+          INPUT_PKG: ${{ github.event.inputs.package }}
+        run: |
+          set -e
+          PKG="${{ github.event.inputs.package }}"
+          if [ -z "$PKG" ]; then
+            # Каталог версии без ZIP — ещё не сдача (например заготовка 3.7.0,
+            # в которой нет project-*-clean.zip). Такой каталог НЕ выбираем:
+            # иначе сборка падает или, хуже, соберёт не тот пакет.
+            DIR=""
+            for CAND in $(ls -1d 01-coder/*/ 2>/dev/null | sed 's|01-coder/||; s|/$||' \
+                          | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?(-R[0-9]*)?$' | sort -V -r); do
+              if ls -1 "01-coder/$CAND"/project-*-clean.zip >/dev/null 2>&1; then
+                # ⛔ Пакет без ВЕРДИКТА РЕВИЗОРА не становится релизом.
+                # Инцидент 2026-11-25: заготовка 3.7.2 (отладочная, гейт давал
+                # код 1) оказалась старшей версией с ZIP — и CI выпустил
+                # релиз v3.7.2 из непринятого пакета. Отсутствие файла
+                # вердикта здесь — это «не принято», а не «принято по умолчанию».
+                # Вердикт ищем по номеру версии БЕЗ точек: у ролей встречаются
+                # оба вида — reviewer_3.6.0_verdict.md и reviewer_371_verdict.md.
+                VBASE="${CAND%%-R*}"
+                VDIG=$(echo "$VBASE" | tr -d '.')
+                # ⛔ НЕ через `ls ... | head -1`: Actions запускает bash с `-eo pipefail`,
+                # и при отсутствии совпадений ls даёт exit 2, pipefail поднимает его,
+                # а set -e валит шаг МОЛЧА — до проверки на пустоту. Это и валило CI.
+                # ⛔ З-CИ-1: ТОЛЬКО точные имена, никаких подстановок. Раньше
+                # `reviewer_*3.1.2*` находил reviewer_3120_delta_verdict.md (вердикт
+                # про 3.12.0) — пакет без своего вердикта становился релизом.
+                VERD2=""
+                for F in "00-board/reports/reviewer_${VBASE}_verdict.md" \
+                         "00-board/reports/reviewer_${VDIG}_verdict.md"; do
+                  [ -f "$F" ] || continue
+                  VERD2="$F"
+                  break
+                done
+                # ⛔ З-CИ-3: файл без СОДЕРЖАНИЯ (заглушка из переводов строки
+                # и пробелов) — это НЕ вердикт. `[ -s ]` такое пропускает:
+                # файл с одним переводом строки не пуст по размеру, но пуст по смыслу.
+                if [ -n "$VERD2" ]; then
+                  if ! grep -qE '[^[:space:]]' "$VERD2" 2>/dev/null; then
+                    echo "::error::вердикт $VERD2 пуст по содержанию — считать принятым нельзя"
+                    exit 1
+                  fi
+                fi
+                if [ -z "$VERD2" ]; then
+                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)"
+                  echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
+                  continue
+                fi
+                # grep в условии возвращает 1 при «не найдено», а set -e на
+                # некоторых раннерах валит шаг. `|| true` делает проверку
+                # чисто логической: пусто = вердикт положительный.
+                NEG=""
+                NEG=$(grep -oiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2" 2>/dev/null || true)
+                if [ -n "$NEG" ]; then
+                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю"
+                  echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю" >> "$GITHUB_STEP_SUMMARY"
+                  continue
+                fi
+                DIR="$CAND"
+                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята"
+                echo "- ✅ Вердикт: \`$VERD2\` — версия $CAND принята" >> "$GITHUB_STEP_SUMMARY"
+                break
+              fi
+            done
+            test -n "$DIR" || { echo "::error::Нет ни одного принятого пакета"; echo "--- диагностика ---"; echo "каталоги с версией:"; ls -1d 01-coder/*/ 2>/dev/null | sed "s|01-coder/||; s|/$||"; echo "каталоги с ZIP:"; ls -1d 01-coder/*/ 2>/dev/null | while read d; do ls "$d"project-*-clean.zip >/dev/null 2>&1 && echo "  $d"; done; echo "вердикты:"; ls -1 00-board/reports/ | grep -i verdict; echo "pwd=$(pwd)"; exit 1; }
+            # Та же мина, что и с вердиктом.
+            PKG=""
+            for F in "01-coder/$DIR"/project-*-clean.zip; do
+              [ -f "$F" ] || continue
+              PKG="$F"
+              break
+            done
+          fi
+          test -n "$PKG" && test -f "$PKG" || { echo "::error::Пакет не найден: '$PKG'"; exit 1; }
+
+          # ⛔ З-CИ-2: ручной запуск (workflow_dispatch) с путём в package тоже
+          # обязан иметь вердикт. Раньше защита стояла только в ветке автопоиска,
+          # и ручной прогон мог опубликовать любой пакет, обойдя её целиком.
+          if [ -n "$INPUT_PKG" ]; then
+            VD=$(basename "$(dirname "$PKG")")
+            VB="${VD%%-R*}"
+            VDG=$(echo "$VB" | tr -d '.')
+            MANUAL_VERDICT=""
+            for F in "00-board/reports/reviewer_${VB}_verdict.md" \
+                     "00-board/reports/reviewer_${VDG}_verdict.md"; do
+              [ -f "$F" ] || continue
+              MANUAL_VERDICT="$F"
+              break
+            done
+            if [ -z "$MANUAL_VERDICT" ]; then
+              echo "::error::ручной запуск: у пакета $VD нет вердикта Ревизора — публиковать нельзя"
+              exit 1
+            fi
+            if ! grep -qE '[^[:space:]]' "$MANUAL_VERDICT" 2>/dev/null; then
+              echo "::error::ручной запуск: вердикт $MANUAL_VERDICT пуст по содержанию"
+              exit 1
+            fi
+            if grep -qiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$MANUAL_VERDICT"; then
+              echo "::error::ручной запуск: вердикт $MANUAL_VERDICT отрицательный"
+              exit 1
+            fi
+            echo "- ✅ Ручной запуск: вердикт \`$MANUAL_VERDICT\` найден (З-CИ-2)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "path=$PKG" >> "$GITHUB_OUTPUT"
+          echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Unpack project package
+        shell: bash
+        run: |
+          mkdir -p build-src
+          unzip -q "${{ steps.pkg.outputs.path }}" -d build-src
+          echo "- Файлов распаковано: $(find build-src -type f | wc -l)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Assert version
+        shell: bash
+        run: |
+          set -e
+          # Ожидаемая версия берётся из имени каталога пакета:
+          # 01-coder/<версия>/project-<версия>-clean.zip  ->  <версия>.
+          # Суффикс пересдачи (-R, -R2, -R5) отбрасывается: внутренний
+          # mod_version пересдачи совпадает с базовой версией.
+          # Так проверка работает для любой версии и не требует правки workflow.
+          DIR=$(basename "$(dirname "${{ steps.pkg.outputs.path }}")")
+          EXPECT="${DIR%%-R*}"
+          V=$(grep -m1 '^mod_version=' build-src/gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          echo "- Ожидаемая версия (каталог пакета \`$DIR\`): \`$EXPECT\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- mod_version в пакете: \`$V\`" >> "$GITHUB_STEP_SUMMARY"
+          [ "$V" = "$EXPECT" ] || { echo "::error::ожидалась версия $EXPECT, в пакете '$V'"; exit 1; }
+
+      - name: Overlay accepted drops
+        shell: bash
+        run: |
+          set -e
+          LIST=06-build/overlay.txt
+          test -f "$LIST" || { echo "::error::нет списка $LIST"; exit 1; }
+          : > /tmp/expect.txt
+          n=0
+          while IFS= read -r line; do
+            line="${line%%#*}"
+            [ -z "$(echo -n "$line" | tr -d '[:space:]')" ] && continue
+            src="$(echo "${line%%->*}" | xargs)"
+            rest="${line#*->}"
+            dst="$(echo "${rest%%|*}" | xargs)"
+            if [ "$rest" = "${rest#*|}" ]; then want=""; else want="$(echo "${rest#*|}" | xargs)"; fi
+            test -f "$src" || { echo "::error::источник не найден: $src"; exit 1; }
+            case "$want" in
+              ""|*[!0-9a-fA-F]*) echo "::error::строка без sha256 (файл: $src)"; exit 1 ;;
+            esac
+            [ "${#want}" = "64" ] || { echo "::error::sha256 неверной длины: $want"; exit 1; }
+            got="$(sha256sum "$src" | cut -d' ' -f1)"
+            [ "$got" = "$want" ] || { echo "::error::хеш не совпал: $src (ждали $want, получили $got)"; exit 1; }
+            mkdir -p "$(dirname "build-src/$dst")"
+            cp "$src" "build-src/$dst"
+            echo "${dst#src/main/resources/}" >> /tmp/expect.txt
+            echo "| \`$src\` | \`$dst\` | \`${want:0:12}\` |" >> "$GITHUB_STEP_SUMMARY"
+            n=$((n+1))
+          done < "$LIST"
+          echo "- Перекрыто файлов: **$n**" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build
+        working-directory: build-src
+        run: gradle --no-daemon --console=plain build
+
+      # Сборка Gradle проставляет в jar текущее время: в MANIFEST.MF строку
+      # Implementation-Timestamp и в заголовки zip метки времени записей.
+      # Поэтому две сборки одного и того же пакета дают РАЗНЫЕ байты и разный
+      # sha256 — хеш «плывёт» от прогона к прогону, и проверка по хешу становится
+      # бессмысленной. Здесь обе нестабильности обнуляются: jar становится
+      # побайтово воспроизводимым, хеш стабилен между прогонами.
+      - name: Normalize jar for reproducibility
+        shell: bash
+        run: |
+          set -e
+          JAR=$(ls build-src/build/libs/*.jar | head -1)
+          python3 - "$JAR" <<'PYEOF'
+          import os, re, sys, zipfile
+          path = sys.argv[1]
+          tmp = path + ".norm"
+          src = zipfile.ZipFile(path)
+          with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as dst:
+              for info in src.infolist():
+                  data = src.read(info.filename)
+                  if info.filename == "META-INF/MANIFEST.MF":
+                      data = re.sub(rb"Implementation-Timestamp: [^\r\n]*",
+                                    b"Implementation-Timestamp: 0", data)
+                  zi = zipfile.ZipInfo(info.filename, date_time=(1980, 1, 1, 0, 0, 0))
+                  zi.compress_type = info.compress_type
+                  zi.external_attr = info.external_attr
+                  zi.internal_attr = info.internal_attr
+                  zi.create_system = info.create_system
+                  dst.writestr(zi, data)
+          src.close()
+          os.replace(tmp, path)
+          PYEOF
+          echo "- **Jar нормализован:** метки времени записей и Implementation-Timestamp обнулены — сборка побайтово воспроизводима" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify overlay reached the jar
+        shell: bash
+        run: |
+          set -e
+          [ -f /tmp/expect.txt ] || { echo "- Перекрытий не было" >> "$GITHUB_STEP_SUMMARY"; exit 0; }
+          JAR=$(ls build-src/build/libs/*.jar | head -1)
+          unzip -Z1 "$JAR" > /tmp/jarlist.txt
+          miss=0
+          while IFS= read -r rel; do
+            if ! grep -qx "$rel" /tmp/jarlist.txt; then
+              echo "::error::в jar нет $rel"; miss=1
+            fi
+          done < /tmp/expect.txt
+          [ "$miss" = "0" ] && echo "- Все перекрытые файлы внутри jar ✔" >> "$GITHUB_STEP_SUMMARY"
+          exit $miss
+
+      - name: Report jar version
+        id: jar
+        shell: bash
+        run: |
+          set -e
+          JAR=$(ls build-src/build/libs/*.jar | head -1)
+          echo "file=$JAR" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$JAR")" >> "$GITHUB_OUTPUT"
+          echo "ver=$(grep -m1 '^mod_version=' build-src/gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+          echo "- JAR: \`$(basename "$JAR")\`, $(stat -c%s "$JAR") Б" >> "$GITHUB_STEP_SUMMARY"
+          unzip -p "$JAR" META-INF/mods.toml > /tmp/mods.toml
+          echo '```toml' >> "$GITHUB_STEP_SUMMARY"
+          grep -E 'version|displayName' /tmp/mods.toml >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: carnis-jar
+          path: build-src/build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Commit jar into repository
+        id: commitjar
+        shell: bash
+        run: |
+          set -e
+          JAR_NAME="${{ steps.jar.outputs.name }}"
+          cp "${{ steps.jar.outputs.file }}" "/tmp/$JAR_NAME"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --no-tags origin main
+          git checkout -B main origin/main
+          mkdir -p 06-build/jars
+          # Jar нормализован, поэтому побайтовое сравнение корректно:
+          # если содержимое то же — main не трогаем и релиз не перезаписываем.
+          CHANGED=1
+          if git cat-file -e "origin/main:06-build/jars/$JAR_NAME" 2>/dev/null; then
+            git show "origin/main:06-build/jars/$JAR_NAME" > "/tmp/old_$JAR_NAME"
+            if cmp -s "/tmp/$JAR_NAME" "/tmp/old_$JAR_NAME"; then
+              CHANGED=0
+              echo "jar не изменился (побайтово) — коммит не нужен"
+            fi
+          fi
+          if [ "$CHANGED" = "1" ]; then
+            cp "/tmp/$JAR_NAME" "06-build/jars/$JAR_NAME"
+            git add "06-build/jars/$JAR_NAME"
+            if git diff --cached --quiet; then
+              echo "jar не изменился — коммит не нужен"
+            else
+              git commit -m "build: $JAR_NAME из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})"
+              for i in 1 2 3; do
+                git push origin main && break
+                git pull --rebase --autostash origin main
+              done
+            fi
+            echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- **JAR в репозитории:** без изменений (содержимое совпадает с текущим в \`main\`)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          # Коммит, в котором физически лежит именно этот JAR. На него встанет тег.
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release with jar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="v${{ steps.jar.outputs.ver }}"
+          JAR_NAME="${{ steps.jar.outputs.name }}"
+          TARGET="${{ steps.commitjar.outputs.commit }}"
+
+          # Тег обязан указывать на коммит, СОДЕРЖАЩИЙ этот JAR.
+          # Раньше шаг шёл до коммита JAR в main и тег вставал на предыдущий
+          # коммит: релиз ссылался на сборку, которой в нём не было.
+          git fetch --no-tags origin main
+          git merge-base --is-ancestor "$TARGET" origin/main || {
+            echo "::error::коммит $TARGET не в origin/main — тег ставить нельзя"; exit 1; }
+          git cat-file -e "$TARGET:06-build/jars/$JAR_NAME" || {
+            echo "::error::в коммите $TARGET нет 06-build/jars/$JAR_NAME — тег ставить нельзя"; exit 1; }
+
+          git tag -f "$TAG" "$TARGET"
+          git push --force origin "refs/tags/$TAG"
+
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --verify-tag \
+              --title "Carnis ${{ steps.jar.outputs.ver }}" \
+              --notes "Автосборка модового jar. Файл обновляется при каждом прогоне из актуального пакета."
+          fi
+          gh release upload "$TAG" "${{ steps.jar.outputs.file }}" --clobber
+
+          # Самопроверка: тег действительно на нужном коммите.
+          NOW="$(git rev-parse "refs/tags/$TAG")"
+          [ "$NOW" = "$TARGET" ] || { echo "::error::тег $TAG указывает на $NOW, ожидался $TARGET"; exit 1; }
+          echo "- **Релиз:** [ $TAG ](https://github.com/${{ github.repository }}/releases/tag/$TAG) → коммит \`${TARGET:0:7}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Прямая ссылка на jar (через Azure, может не открываться):** https://github.com/${{ github.repository }}/releases/download/$TAG/$JAR_NAME" >> "$GITHUB_STEP_SUMMARY"

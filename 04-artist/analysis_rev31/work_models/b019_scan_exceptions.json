@@ -1,0 +1,28 @@
+{
+  "palette_exception_coordinates": [],
+  "render": {
+    "front": {
+      "scanned_bounds": [
+        0,
+        48,
+        420,
+        685
+      ],
+      "exceptions": [],
+      "top_exceptions": []
+    },
+    "side": {
+      "scanned_bounds": [
+        0,
+        48,
+        420,
+        685
+      ],
+      "exceptions": [],
+      "top_exceptions": []
+    }
+  },
+  "root_alpha_hist": {
+    "178": 6912
+  }
+}

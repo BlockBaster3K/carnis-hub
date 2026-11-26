@@ -1,0 +1,17 @@
+# волна 22 · сердце. Каждая строка: источник -> назначение | sha256 источника
+# ⛔ block/heart_pulse.ogg из 03-sound в старом виде (20 284 Б, bc4154aa) — банковский мастер,
+#    заказчик его отклонил. Здесь только новый файл 10 926 Б, 17f42e30.
+#
+# ⚠️ ПРАВИЛО ИМЕНИ (зафиксировано волной 27, после находки Ревизора 2.1):
+#    строка overlay строится ОТ ПУТИ, КОТОРЫЙ ЧИТАЕТ sounds.json, а не от имени,
+#    которым назвал файл автор звука. Звуковое событие называется pulsing_heart_beat,
+#    но в пакете оно указывает на block/heart_pulse.ogg — поэтому overlay ведёт
+#    именно туда. Дубль block/pulsing_heart_beat.ogg (побайтно идентичен, 17f42e30)
+#    удалён из банка 03-sound: на него не ссылается ни один файл пакета.
+#
+# ℹ️ СБОРКА ВОСПРОИЗВОДИМА (волна 27): CI обнуляет Implementation-Timestamp в
+#    MANIFEST.MF и метки времени zip-записей, поэтому jar побайтово одинаков при
+#    каждой сборке одного пакета и его sha256 стабилен между прогонами.
+#    Проверка заказчика по хешу теперь осмысленна.
+03-sound/sounds/block/heartbeat_loop.ogg -> src/main/resources/assets/carnis/sounds/block/heartbeat_loop.ogg | 39de4db0d9938af9dba8b1f6b637988003410dd7daf85b17df8284c49a513079
+03-sound/sounds/block/heart_pulse.ogg    -> src/main/resources/assets/carnis/sounds/block/heart_pulse.ogg    | 17f42e3076ee1d0bc8212ea4d817d43ac3e78ebbee8d6c7544e87b4832f7e905

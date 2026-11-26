@@ -1,0 +1,31 @@
+вариантов: 4
+  [OK ] 1_format_and_palette
+         creeping_tendrils_0.png: непрозрачных 2298/4096 (56.1 %), цветов 8
+         creeping_tendrils_1.png: непрозрачных 2733/4096 (66.7 %), цветов 8
+         creeping_tendrils_2.png: непрозрачных 2850/4096 (69.6 %), цветов 8
+         creeping_tendrils_3.png: непрозрачных 2738/4096 (66.8 %), цветов 8
+  [OK ] 2_borders_identical
+         top: одинаков у 4 вариантов
+         bottom: одинаков у 4 вариантов
+         left: одинаков у 4 вариантов
+         right: одинаков у 4 вариантов
+  [OK ] 3_seam_byte_exact
+         проверено 16 пар (включая самозамыкание)
+  [FAIL] 4_mixed_grids
+         3x3 seed=980: автокорреляция с периодом плитки 0.72× (контроль «одна плитка» 0.71×, «повёрнутая» 0.56×)
+         3x3_980: стык max=0.0 внутри=20.564 период×0.718
+         3x3_20260104: стык max=0.0 внутри=20.116 период×0.563
+         3x3_4245: стык max=0.0 внутри=20.187 период×0.538
+         5x5_982: стык max=0.0 внутри=20.271 период×0.573
+         5x5_20260106: стык max=0.0 внутри=20.423 период×0.6
+         5x5_4247: стык max=0.0 внутри=20.37 период×0.577
+  [OK ] 4b_lattice
+  [OK ] 5_readability_16px
+  [OK ] 6_ends_and_corners
+  [FAIL] 7_stroke_geometry
+         creeping_tendrils_0.png: штрих толщиной 5.0 px в точке (0, 25)
+         creeping_tendrils_1.png: штрих толщиной 7.0 px в точке (16, 34)
+         creeping_tendrils_2.png: штрих толщиной 5.0 px в точке (0, 25)
+         creeping_tendrils_3.png: штрих толщиной 7.8 px в точке (33, 27)
+ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ
+записан: /home/user/carnis/analysis_wave28/A3_newmethod/attempt_5/SELFCHECK.json

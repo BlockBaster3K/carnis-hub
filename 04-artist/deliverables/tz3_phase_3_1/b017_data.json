@@ -1,0 +1,204 @@
+{
+  "id": "b017",
+  "label": "Заражённый зомби",
+  "bones": [
+    {
+      "name": "root",
+      "role": "корень и прикорневые выросты"
+    },
+    {
+      "name": "torso",
+      "role": "грудь и корпус"
+    },
+    {
+      "name": "head",
+      "role": "голова, глаза"
+    },
+    {
+      "name": "jaw",
+      "role": "нижняя челюсть"
+    },
+    {
+      "name": "mask",
+      "role": "биомаска и пустулы"
+    },
+    {
+      "name": "chest_growth",
+      "role": "грудной нарост"
+    },
+    {
+      "name": "arm_left",
+      "role": "плечо, заражённое"
+    },
+    {
+      "name": "forearm_left",
+      "role": "предплечье и когти"
+    },
+    {
+      "name": "leg_left",
+      "role": "бедро и голень"
+    },
+    {
+      "name": "foot_left",
+      "role": "стопа и прикорневые выросты"
+    },
+    {
+      "name": "arm_right",
+      "role": "плечо, человеческое"
+    },
+    {
+      "name": "forearm_right",
+      "role": "предплечье и кисть"
+    },
+    {
+      "name": "leg_right",
+      "role": "бедро и голень"
+    },
+    {
+      "name": "foot_right",
+      "role": "стопа и прикорневые выросты"
+    }
+  ],
+  "animations": [
+    {
+      "name": "idle",
+      "duration": 3,
+      "mode": "loop"
+    },
+    {
+      "name": "walk",
+      "duration": 0.8,
+      "mode": "loop"
+    },
+    {
+      "name": "attack",
+      "duration": 0.4,
+      "mode": "once"
+    },
+    {
+      "name": "hurt",
+      "duration": 0.2,
+      "mode": "once"
+    },
+    {
+      "name": "death",
+      "duration": 1.5,
+      "mode": "once"
+    },
+    {
+      "name": "mask_twitch",
+      "duration": 0.15,
+      "mode": "once"
+    }
+  ],
+  "tiles": [
+    [
+      "flesh",
+      0,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      2,
+      "side",
+      false
+    ],
+    [
+      "raw",
+      1,
+      "zombie_face",
+      true
+    ],
+    [
+      "raw",
+      1,
+      "side",
+      false
+    ],
+    [
+      "flesh",
+      4,
+      "side",
+      false
+    ],
+    [
+      "mask",
+      1,
+      "mask_face",
+      true
+    ],
+    [
+      "mask",
+      1,
+      "side",
+      false
+    ],
+    [
+      "sac",
+      1,
+      "side",
+      true
+    ],
+    [
+      "sac",
+      3,
+      "side",
+      true
+    ],
+    [
+      "raw",
+      3,
+      "side",
+      false
+    ],
+    [
+      "crust",
+      2,
+      "side",
+      false
+    ],
+    [
+      "bone",
+      1,
+      "side",
+      false
+    ],
+    [
+      "flesh",
+      2,
+      "side",
+      false
+    ],
+    [
+      "rootlet",
+      0,
+      "side",
+      false
+    ],
+    [
+      "rootlet",
+      1,
+      "side",
+      false
+    ],
+    [
+      "flesh",
+      1,
+      "side",
+      false
+    ],
+    [
+      "flesh",
+      3,
+      "side",
+      false
+    ],
+    [
+      "crust",
+      3,
+      "side",
+      false
+    ]
+  ]
+}

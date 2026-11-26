@@ -1,0 +1,2262 @@
+{
+  "cube_count": 27,
+  "face_count": 162,
+  "nonparallel_segments": 124,
+  "segments": [
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "torso",
+          1,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.29884151,
+      "samples": 375
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "torso",
+          1,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.14467454,
+      "samples": 182
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "torso",
+          1,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.14467454,
+      "samples": 182
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.02490346,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.02490346,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.18906333,
+      "samples": 25
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.15938215,
+      "samples": 33
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.15938215,
+      "samples": 33
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.06165108,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.06165108,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "torso",
+          1,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.29884151,
+      "samples": 29
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "front"
+        ]
+      ],
+      "length": 0.10188729,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.10188729,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.15000001,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.15000001,
+      "samples": 23
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "left"
+        ],
+        [
+          "arm_right",
+          0,
+          0,
+          "front"
+        ]
+      ],
+      "length": 0.22267489,
+      "samples": 44
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "left"
+        ],
+        [
+          "arm_right",
+          0,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.22267489,
+      "samples": 44
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "left"
+        ],
+        [
+          "arm_right",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.13,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "left"
+        ],
+        [
+          "arm_right",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.13,
+      "samples": 26
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "top"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.18906333,
+      "samples": 49
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "top"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.091,
+      "samples": 24
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          0,
+          0,
+          "top"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.091,
+      "samples": 24
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.15938215,
+      "samples": 33
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.15938215,
+      "samples": 33
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.06165108,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "front"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.06165108,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "back"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.15938215,
+      "samples": 33
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "back"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.15938215,
+      "samples": 33
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "back"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.06165108,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "torso",
+          1,
+          0,
+          "back"
+        ],
+        [
+          "chest_growth",
+          0,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.06165108,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.02988415,
+      "samples": 9
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.02988415,
+      "samples": 9
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.18906333,
+      "samples": 25
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "mask",
+          0,
+          1,
+          "right"
+        ]
+      ],
+      "length": 0.00498068,
+      "samples": 2
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "mask",
+          0,
+          1,
+          "left"
+        ]
+      ],
+      "length": 0.00498068,
+      "samples": 2
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "mask",
+          0,
+          1,
+          "bottom"
+        ]
+      ],
+      "length": 0.06576116,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "top"
+        ],
+        [
+          "mask",
+          0,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.06576116,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "top"
+        ],
+        [
+          "mask",
+          0,
+          1,
+          "right"
+        ]
+      ],
+      "length": 0.09,
+      "samples": 15
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "top"
+        ],
+        [
+          "mask",
+          0,
+          1,
+          "left"
+        ]
+      ],
+      "length": 0.09,
+      "samples": 15
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.18906333,
+      "samples": 49
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.116,
+      "samples": 31
+    },
+    {
+      "faces": [
+        [
+          "head",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "jaw",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.116,
+      "samples": 31
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.06165109,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.06165109,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.105,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          0,
+          0,
+          "front"
+        ]
+      ],
+      "length": 0.02490347,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          0,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.02490347,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.104,
+      "samples": 27
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "left"
+        ],
+        [
+          "arm_left",
+          1,
+          0,
+          "bottom"
+        ]
+      ],
+      "length": 0.105,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          0,
+          0,
+          "front"
+        ]
+      ],
+      "length": 0.0452108,
+      "samples": 13
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          0,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.0452108,
+      "samples": 13
+    },
+    {
+      "faces": [
+        [
+          "arm_left",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.104,
+      "samples": 27
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "forearm_left",
+          1,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.06165109,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "left"
+        ]
+      ],
+      "length": 0.09463316,
+      "samples": 25
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "top"
+        ]
+      ],
+      "length": 0.00411008,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "forearm_left",
+          1,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.06165109,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.104,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.09463316,
+      "samples": 22
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "top"
+        ]
+      ],
+      "length": 0.102,
+      "samples": 23
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "left"
+        ],
+        [
+          "forearm_left",
+          1,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.104,
+      "samples": 16
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.00411008,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "left"
+        ]
+      ],
+      "length": 0.102,
+      "samples": 26
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          0,
+          "front"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "left"
+        ]
+      ],
+      "length": 0.09961385,
+      "samples": 14
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          0,
+          "front"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "top"
+        ]
+      ],
+      "length": 0.03493562,
+      "samples": 9
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.09961385,
+      "samples": 23
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "top"
+        ]
+      ],
+      "length": 0.125,
+      "samples": 28
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.03493562,
+      "samples": 9
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          1,
+          "left"
+        ]
+      ],
+      "length": 0.125,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          3,
+          "front"
+        ]
+      ],
+      "length": 0.02988413,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          3,
+          "back"
+        ]
+      ],
+      "length": 0.02988413,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "right"
+        ],
+        [
+          "forearm_left",
+          1,
+          3,
+          "top"
+        ]
+      ],
+      "length": 0.08,
+      "samples": 43
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "left"
+        ],
+        [
+          "forearm_left",
+          1,
+          2,
+          "front"
+        ]
+      ],
+      "length": 0.02988413,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "left"
+        ],
+        [
+          "forearm_left",
+          1,
+          2,
+          "back"
+        ]
+      ],
+      "length": 0.02988413,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "left"
+        ],
+        [
+          "forearm_left",
+          1,
+          2,
+          "top"
+        ]
+      ],
+      "length": 0.08,
+      "samples": 43
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          2,
+          "front"
+        ]
+      ],
+      "length": 0.02466044,
+      "samples": 14
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          2,
+          "back"
+        ]
+      ],
+      "length": 0.02466044,
+      "samples": 14
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          2,
+          "right"
+        ]
+      ],
+      "length": 0.08,
+      "samples": 19
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          3,
+          "front"
+        ]
+      ],
+      "length": 0.02466043,
+      "samples": 14
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          3,
+          "back"
+        ]
+      ],
+      "length": 0.02466043,
+      "samples": 14
+    },
+    {
+      "faces": [
+        [
+          "forearm_left",
+          1,
+          1,
+          "bottom"
+        ],
+        [
+          "forearm_left",
+          1,
+          3,
+          "left"
+        ]
+      ],
+      "length": 0.08,
+      "samples": 19
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.08877756,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.08877756,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.15000001,
+      "samples": 26
+    },
+    {
+      "faces": [
+        [
+          "leg_left",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "foot_left",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.15000001,
+      "samples": 26
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "foot_left",
+          1,
+          2,
+          "front"
+        ]
+      ],
+      "length": 0.01544014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "foot_left",
+          1,
+          2,
+          "back"
+        ]
+      ],
+      "length": 0.01544014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "foot_left",
+          1,
+          2,
+          "bottom"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "left"
+        ],
+        [
+          "foot_left",
+          1,
+          1,
+          "front"
+        ]
+      ],
+      "length": 0.01563937,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "left"
+        ],
+        [
+          "foot_left",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.01563937,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "left"
+        ],
+        [
+          "foot_left",
+          1,
+          1,
+          "bottom"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_left",
+          1,
+          1,
+          "front"
+        ]
+      ],
+      "length": 0.00780914,
+      "samples": 6
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_left",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.00780914,
+      "samples": 6
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_left",
+          1,
+          1,
+          "right"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 10
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_left",
+          1,
+          2,
+          "front"
+        ]
+      ],
+      "length": 0.00986417,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_left",
+          1,
+          2,
+          "back"
+        ]
+      ],
+      "length": 0.00986417,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_left",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_left",
+          1,
+          2,
+          "left"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 10
+    },
+    {
+      "faces": [
+        [
+          "arm_right",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_right",
+          0,
+          0,
+          "front"
+        ]
+      ],
+      "length": 0.06987123,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "arm_right",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_right",
+          0,
+          0,
+          "back"
+        ]
+      ],
+      "length": 0.06987123,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "arm_right",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_right",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.119,
+      "samples": 24
+    },
+    {
+      "faces": [
+        [
+          "arm_right",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "forearm_right",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.119,
+      "samples": 24
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "front"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.08877756,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.00996136,
+      "samples": 3
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "back"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "top"
+        ]
+      ],
+      "length": 0.08877756,
+      "samples": 17
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "right"
+        ]
+      ],
+      "length": 0.15000001,
+      "samples": 26
+    },
+    {
+      "faces": [
+        [
+          "leg_right",
+          0,
+          0,
+          "bottom"
+        ],
+        [
+          "foot_right",
+          0,
+          0,
+          "left"
+        ]
+      ],
+      "length": 0.15000001,
+      "samples": 26
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "foot_right",
+          1,
+          2,
+          "front"
+        ]
+      ],
+      "length": 0.01544014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "foot_right",
+          1,
+          2,
+          "back"
+        ]
+      ],
+      "length": 0.01544014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "right"
+        ],
+        [
+          "foot_right",
+          1,
+          2,
+          "bottom"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "left"
+        ],
+        [
+          "foot_right",
+          1,
+          1,
+          "front"
+        ]
+      ],
+      "length": 0.01563937,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "left"
+        ],
+        [
+          "foot_right",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.01563937,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "left"
+        ],
+        [
+          "foot_right",
+          1,
+          1,
+          "bottom"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_right",
+          1,
+          1,
+          "front"
+        ]
+      ],
+      "length": 0.00780914,
+      "samples": 6
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_right",
+          1,
+          1,
+          "back"
+        ]
+      ],
+      "length": 0.00780914,
+      "samples": 6
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_right",
+          1,
+          1,
+          "right"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 10
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_right",
+          1,
+          2,
+          "front"
+        ]
+      ],
+      "length": 0.00986417,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_right",
+          1,
+          2,
+          "back"
+        ]
+      ],
+      "length": 0.00986417,
+      "samples": 8
+    },
+    {
+      "faces": [
+        [
+          "foot_right",
+          1,
+          0,
+          "top"
+        ],
+        [
+          "foot_right",
+          1,
+          2,
+          "left"
+        ]
+      ],
+      "length": 0.014,
+      "samples": 10
+    }
+  ],
+  "coplanar_candidates": 1,
+  "coplanar": [
+    [
+      [
+        "torso",
+        0,
+        0,
+        "front"
+      ],
+      [
+        "torso",
+        1,
+        0,
+        "back"
+      ]
+    ]
+  ],
+  "material_rays": 477,
+  "rays": {
+    "OK": 477
+  },
+  "failures": [],
+  "scope": "static GLB geometry only; includes hidden/coplanar surfaces; coplanar candidates not resolved; segment samples not mathematical proof of all subtexel points"
+}

@@ -1,0 +1,3654 @@
+{
+  "entity": "b019",
+  "sampling": "all animation keyframes at 20 fps; 0,45,90,135 degrees, elevation approximately 7 degrees; full materials; nearest, alpha>0 treated opaque; 540x560, 230 px/block, centered on each pose; depth difference <=2 screen pixels in model scale",
+  "samples": 772,
+  "observations": {
+    "same": 2694,
+    "different": 1082
+  },
+  "candidate_face_pairs": 65,
+  "different_cuboid_pairs": 35,
+  "records": [
+    {
+      "face_a": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          64,
+          160,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          64,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 0,
+        "time": 0.0,
+        "azimuth_deg": 135,
+        "pixel": [
+          269,
+          466
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004379004240036011
+      },
+      "observations": 346,
+      "sampled_poses": 209
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 1,
+        "time": 0.05,
+        "azimuth_deg": 135,
+        "pixel": [
+          221,
+          441
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 319,
+      "sampled_poses": 214
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          64,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 45,
+        "pixel": [
+          333,
+          442
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.0043790340423583984
+      },
+      "observations": 251,
+      "sampled_poses": 30
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 0,
+        "time": 0.0,
+        "azimuth_deg": 45,
+        "pixel": [
+          295,
+          453
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          166,
+          48,
+          48
+        ],
+        "depth_difference": 0.008251562714576721
+      },
+      "observations": 219,
+      "sampled_poses": 51
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          176,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 135,
+        "pixel": [
+          224,
+          444
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.008254215121269226
+      },
+      "observations": 196,
+      "sampled_poses": 47
+    },
+    {
+      "face_a": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          64,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          64,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 0,
+        "time": 0.0,
+        "azimuth_deg": 45,
+        "pixel": [
+          208,
+          460
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 189,
+      "sampled_poses": 141
+    },
+    {
+      "face_a": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          128,
+          64,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          64,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 45,
+        "pixel": [
+          206,
+          441
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.00821974128484726
+      },
+      "observations": 174,
+      "sampled_poses": 48
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 0,
+        "time": 0.0,
+        "azimuth_deg": 135,
+        "pixel": [
+          307,
+          436
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379015415906906
+      },
+      "observations": 164,
+      "sampled_poses": 145
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          249,
+          446
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 164,
+      "sampled_poses": 132
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 45,
+        "pixel": [
+          233,
+          447
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379022866487503
+      },
+      "observations": 141,
+      "sampled_poses": 99
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 10,
+        "time": 0.5,
+        "azimuth_deg": 45,
+        "pixel": [
+          241,
+          437
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.0043790340423583984
+      },
+      "observations": 104,
+      "sampled_poses": 15
+    },
+    {
+      "face_a": {
+        "bone": "sac_right",
+        "primitive": 0,
+        "cube": 0,
+        "side": "right",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          32,
+          48,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_back",
+        "primitive": 0,
+        "cube": 0,
+        "side": "top",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          160,
+          48,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "fuse",
+        "frame": 0,
+        "time": 0.0,
+        "azimuth_deg": 135,
+        "pixel": [
+          316,
+          268
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.008397072553634644
+      },
+      "observations": 86,
+      "sampled_poses": 32
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          112,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 1,
+        "time": 0.05,
+        "azimuth_deg": 45,
+        "pixel": [
+          317,
+          442
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.00730326771736145
+      },
+      "observations": 83,
+      "sampled_poses": 20
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          16,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 12,
+        "time": 0.6,
+        "azimuth_deg": 135,
+        "pixel": [
+          306,
+          449
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.0076004937291145325
+      },
+      "observations": 79,
+      "sampled_poses": 26
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          240,
+          112,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 5,
+        "time": 0.25,
+        "azimuth_deg": 135,
+        "pixel": [
+          249,
+          449
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.00744292140007019
+      },
+      "observations": 68,
+      "sampled_poses": 18
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          112,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          64,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 45,
+        "pixel": [
+          334,
+          440
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.0060241445899009705
+      },
+      "observations": 65,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 5,
+        "time": 0.25,
+        "azimuth_deg": 45,
+        "pixel": [
+          242,
+          444
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004379004240036011
+      },
+      "observations": 62,
+      "sampled_poses": 57
+    },
+    {
+      "face_a": {
+        "bone": "head",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "healthy_base",
+        "atlas_rect": [
+          208,
+          0,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_right",
+        "primitive": 0,
+        "cube": 0,
+        "side": "top",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          64,
+          48,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "fuse",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          330,
+          223
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.008434489369392395
+      },
+      "observations": 60,
+      "sampled_poses": 9
+    },
+    {
+      "face_a": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          160,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          64,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 4,
+        "time": 0.2,
+        "azimuth_deg": 45,
+        "pixel": [
+          341,
+          439
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.007075011730194092
+      },
+      "observations": 59,
+      "sampled_poses": 17
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          112,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          112,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 7,
+        "time": 0.35,
+        "azimuth_deg": 45,
+        "pixel": [
+          308,
+          445
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004379011690616608
+      },
+      "observations": 57,
+      "sampled_poses": 53
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 45,
+        "pixel": [
+          241,
+          440
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.0030035004019737244
+      },
+      "observations": 56,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 0,
+        "time": 0.0,
+        "azimuth_deg": 45,
+        "pixel": [
+          251,
+          439
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.007475115358829498
+      },
+      "observations": 55,
+      "sampled_poses": 28
+    },
+    {
+      "face_a": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          160,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 4,
+        "time": 0.2,
+        "azimuth_deg": 45,
+        "pixel": [
+          332,
+          456
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          166,
+          48,
+          48
+        ],
+        "depth_difference": 0.004379024729132652
+      },
+      "observations": 49,
+      "sampled_poses": 43
+    },
+    {
+      "face_a": {
+        "bone": "head",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "healthy_base",
+        "atlas_rect": [
+          208,
+          0,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_left",
+        "primitive": 0,
+        "cube": 0,
+        "side": "top",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          224,
+          32,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "fuse",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          297,
+          226
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.00753098726272583
+      },
+      "observations": 47,
+      "sampled_poses": 8
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 4,
+        "time": 0.2,
+        "azimuth_deg": 45,
+        "pixel": [
+          228,
+          448
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.007346557453274727
+      },
+      "observations": 46,
+      "sampled_poses": 16
+    },
+    {
+      "face_a": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          48,
+          160,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          48,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 7,
+        "time": 0.35,
+        "azimuth_deg": 135,
+        "pixel": [
+          283,
+          452
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379004240036011
+      },
+      "observations": 45,
+      "sampled_poses": 40
+    },
+    {
+      "face_a": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          64,
+          160,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          48,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 10,
+        "time": 0.5,
+        "azimuth_deg": 135,
+        "pixel": [
+          272,
+          450
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.007448673248291016
+      },
+      "observations": 45,
+      "sampled_poses": 13
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 45,
+        "pixel": [
+          219,
+          439
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 42,
+      "sampled_poses": 38
+    },
+    {
+      "face_a": {
+        "bone": "head",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "healthy_base",
+        "atlas_rect": [
+          208,
+          0,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_right",
+        "primitive": 0,
+        "cube": 0,
+        "side": "right",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          32,
+          48,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "attack",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          308,
+          251
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.00467190146446228
+      },
+      "observations": 42,
+      "sampled_poses": 5
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          240,
+          112,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          64,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          257,
+          447
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.003990113735198975
+      },
+      "observations": 36,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 45,
+        "pixel": [
+          308,
+          449
+        ],
+        "rgb_a": [
+          166,
+          48,
+          48
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.002940833568572998
+      },
+      "observations": 33,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          128,
+          64,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 45,
+        "pixel": [
+          222,
+          445
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.00299949012696743
+      },
+      "observations": 30,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "sac_left",
+        "primitive": 0,
+        "cube": 0,
+        "side": "right",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          192,
+          32,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "head",
+        "primitive": 0,
+        "cube": 0,
+        "side": "bottom",
+        "material": "healthy_base",
+        "atlas_rect": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "attack",
+        "frame": 1,
+        "time": 0.05,
+        "azimuth_deg": 45,
+        "pixel": [
+          319,
+          231
+        ],
+        "rgb_a": [
+          122,
+          48,
+          64
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.0076395124197006226
+      },
+      "observations": 30,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          208,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          208,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 0,
+        "time": 0.0,
+        "azimuth_deg": 135,
+        "pixel": [
+          287,
+          439
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          166,
+          48,
+          48
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 29,
+      "sampled_poses": 29
+    },
+    {
+      "face_a": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          48,
+          160,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 135,
+        "pixel": [
+          256,
+          449
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.0018018484115600586
+      },
+      "observations": 26,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          208,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 10,
+        "time": 0.5,
+        "azimuth_deg": 135,
+        "pixel": [
+          298,
+          436
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.005582481622695923
+      },
+      "observations": 26,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          240,
+          112,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          240,
+          112,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 4,
+        "time": 0.2,
+        "azimuth_deg": 135,
+        "pixel": [
+          259,
+          457
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 24,
+      "sampled_poses": 20
+    },
+    {
+      "face_a": {
+        "bone": "head",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "healthy_base",
+        "atlas_rect": [
+          208,
+          0,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_left",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          176,
+          32,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "attack",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 135,
+        "pixel": [
+          278,
+          241
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.004633814096450806
+      },
+      "observations": 24,
+      "sampled_poses": 3
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          16,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          16,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "idle",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          317,
+          455
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004379011690616608
+      },
+      "observations": 23,
+      "sampled_poses": 20
+    },
+    {
+      "face_a": {
+        "bone": "head",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "healthy_base",
+        "atlas_rect": [
+          208,
+          0,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_left",
+        "primitive": 0,
+        "cube": 0,
+        "side": "right",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          192,
+          32,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "attack",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          267,
+          258
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.007368326187133789
+      },
+      "observations": 21,
+      "sampled_poses": 5
+    },
+    {
+      "face_a": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          128,
+          64,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 0,
+        "pixel": [
+          230,
+          440
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.001282423734664917
+      },
+      "observations": 16,
+      "sampled_poses": 8
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          176,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 10,
+        "time": 0.5,
+        "azimuth_deg": 135,
+        "pixel": [
+          241,
+          445
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.000691831111907959
+      },
+      "observations": 16,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "head",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "healthy_base",
+        "atlas_rect": [
+          208,
+          0,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_right",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          16,
+          48,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "attack",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 135,
+        "pixel": [
+          316,
+          236
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.0023791342973709106
+      },
+      "observations": 15,
+      "sampled_poses": 3
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          112,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 10,
+        "time": 0.5,
+        "azimuth_deg": 45,
+        "pixel": [
+          295,
+          456
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 3.108382225036621e-05
+      },
+      "observations": 12,
+      "sampled_poses": 12
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          240,
+          112,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          176,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 135,
+        "pixel": [
+          253,
+          437
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.0015109777450561523
+      },
+      "observations": 12,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 0,
+        "cube": 0,
+        "side": "front",
+        "material": "healthy_base",
+        "atlas_rect": [
+          224,
+          64,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 45,
+        "pixel": [
+          287,
+          461
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.005038589239120483
+      },
+      "observations": 9,
+      "sampled_poses": 7
+    },
+    {
+      "face_a": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          48,
+          160,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          240,
+          112,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 135,
+        "pixel": [
+          261,
+          441
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.00015679001808166504
+      },
+      "observations": 8,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 45,
+        "pixel": [
+          235,
+          433
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004433341324329376
+      },
+      "observations": 8,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          16,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          208,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 135,
+        "pixel": [
+          309,
+          430
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004517510533332825
+      },
+      "observations": 8,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          128,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 45,
+        "pixel": [
+          333,
+          444
+        ],
+        "rgb_a": [
+          166,
+          48,
+          48
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.003799237310886383
+      },
+      "observations": 6,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_4",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          112,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_6",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          160,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 3,
+        "time": 0.15,
+        "azimuth_deg": 45,
+        "pixel": [
+          329,
+          437
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.0004928261041641235
+      },
+      "observations": 6,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          0,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 10,
+        "time": 0.5,
+        "azimuth_deg": 45,
+        "pixel": [
+          240,
+          440
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.0030476972460746765
+      },
+      "observations": 6,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_1",
+        "primitive": 0,
+        "cube": 0,
+        "side": "front",
+        "material": "healthy_base",
+        "atlas_rect": [
+          192,
+          48,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          64,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 10,
+        "time": 0.5,
+        "azimuth_deg": 45,
+        "pixel": [
+          195,
+          450
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004710108041763306
+      },
+      "observations": 6,
+      "sampled_poses": 6
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          176,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          176,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "hurt",
+        "frame": 1,
+        "time": 0.05,
+        "azimuth_deg": 135,
+        "pixel": [
+          208,
+          444
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 6,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "sac_back",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          112,
+          48,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_right",
+        "primitive": 0,
+        "cube": 0,
+        "side": "right",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          32,
+          48,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "detonate",
+        "frame": 4,
+        "time": 0.2,
+        "azimuth_deg": 135,
+        "pixel": [
+          347,
+          296
+        ],
+        "rgb_a": [
+          122,
+          48,
+          64
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.0032259225845336914
+      },
+      "observations": 6,
+      "sampled_poses": 3
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 0,
+        "cube": 0,
+        "side": "front",
+        "material": "healthy_base",
+        "atlas_rect": [
+          0,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 45,
+        "pixel": [
+          243,
+          448
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.004176020622253418
+      },
+      "observations": 4,
+      "sampled_poses": 2
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          208,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 135,
+        "pixel": [
+          302,
+          435
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.006964690983295441
+      },
+      "observations": 4,
+      "sampled_poses": 4
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          192,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "healthy_base",
+        "atlas_rect": [
+          240,
+          64,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 11,
+        "time": 0.55,
+        "azimuth_deg": 135,
+        "pixel": [
+          244,
+          450
+        ],
+        "rgb_a": [
+          107,
+          24,
+          24
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.005070298910140991
+      },
+      "observations": 3,
+      "sampled_poses": 3
+    },
+    {
+      "face_a": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          80,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_2",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          160,
+          80,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "attack",
+        "frame": 1,
+        "time": 0.05,
+        "azimuth_deg": 45,
+        "pixel": [
+          278,
+          451
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004379019141197205
+      },
+      "observations": 3,
+      "sampled_poses": 3
+    },
+    {
+      "face_a": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          208,
+          96,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          144,
+          64,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 135,
+        "pixel": [
+          280,
+          444
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.001543581485748291
+      },
+      "observations": 2,
+      "sampled_poses": 2
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "back",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          16,
+          144,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_3",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          224,
+          96,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "walk",
+        "frame": 12,
+        "time": 0.6,
+        "azimuth_deg": 135,
+        "pixel": [
+          302,
+          430
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.0009122639894485474
+      },
+      "observations": 1,
+      "sampled_poses": 1
+    },
+    {
+      "face_a": {
+        "bone": "leg_5",
+        "primitive": 0,
+        "cube": 0,
+        "side": "front",
+        "material": "healthy_base",
+        "atlas_rect": [
+          64,
+          128,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_5",
+        "primitive": 1,
+        "cube": 0,
+        "side": "right",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          32,
+          144,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": false,
+      "first": {
+        "clip": "death",
+        "frame": 2,
+        "time": 0.1,
+        "azimuth_deg": 45,
+        "pixel": [
+          237,
+          440
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.004423186182975769
+      },
+      "observations": 1,
+      "sampled_poses": 1
+    },
+    {
+      "face_a": {
+        "bone": "sac_right",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          16,
+          48,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_right",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          16,
+          48,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "death",
+        "frame": 26,
+        "time": 1.3,
+        "azimuth_deg": 135,
+        "pixel": [
+          325,
+          340
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          122,
+          48,
+          64
+        ],
+        "depth_difference": 0.007304489612579346
+      },
+      "observations": 1,
+      "sampled_poses": 1
+    },
+    {
+      "face_a": {
+        "bone": "sac_left",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          176,
+          32,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "sac_left",
+        "primitive": 0,
+        "cube": 0,
+        "side": "back",
+        "material": "sac_charge_runtime",
+        "atlas_rect": [
+          176,
+          32,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "flesh",
+        "skin"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "death",
+        "frame": 27,
+        "time": 1.35,
+        "azimuth_deg": 135,
+        "pixel": [
+          287,
+          350
+        ],
+        "rgb_a": [
+          122,
+          48,
+          64
+        ],
+        "rgb_b": [
+          89,
+          108,
+          74
+        ],
+        "depth_difference": 0.008059680461883545
+      },
+      "observations": 1,
+      "sampled_poses": 1
+    },
+    {
+      "face_a": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          128,
+          64,
+          16,
+          16
+        ]
+      },
+      "face_b": {
+        "bone": "leg_1",
+        "primitive": 1,
+        "cube": 0,
+        "side": "front",
+        "material": "infection_overlay",
+        "atlas_rect": [
+          128,
+          64,
+          16,
+          16
+        ]
+      },
+      "categories": [
+        "skin",
+        "flesh"
+      ],
+      "same_cuboid": true,
+      "first": {
+        "clip": "death",
+        "frame": 30,
+        "time": 1.5,
+        "azimuth_deg": 90,
+        "pixel": [
+          78,
+          274
+        ],
+        "rgb_a": [
+          89,
+          108,
+          74
+        ],
+        "rgb_b": [
+          107,
+          24,
+          24
+        ],
+        "depth_difference": 0.008190780878067017
+      },
+      "observations": 1,
+      "sampled_poses": 1
+    }
+  ],
+  "scope_limitations": "A candidate is a projected visual adjacency, not necessarily physical contact: depth can differ by <=2/230 blocks. Does not measure transition normal width; does not evaluate transparent layering, 3D occlusion behind frontmost surface, arbitrary view angles, continuous times between animation keys, GPU or Minecraft."
+}

@@ -1,0 +1,260 @@
+{
+  "cube_count": 27,
+  "results": [
+    {
+      "mesh": "torso_mesh",
+      "primitive": 0,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "cloth"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 120,
+      "width_histogram": {
+        "2": 120
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "head_mesh",
+      "primitive": 0,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "cloth"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 64,
+      "width_histogram": {
+        "2": 64
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "mask_mesh",
+      "primitive": 0,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 430,
+      "width_histogram": {
+        "2": 430
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "mask_mesh",
+      "primitive": 0,
+      "cuboid": 1,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 419,
+      "width_histogram": {
+        "2": 419
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "mask_mesh",
+      "primitive": 0,
+      "cuboid": 2,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 407,
+      "width_histogram": {
+        "2": 407
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "arm_left_mesh",
+      "primitive": 0,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "cloth"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 122,
+      "width_histogram": {
+        "2": 116,
+        "3": 6
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "arm_left_mesh",
+      "primitive": 1,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 291,
+      "width_histogram": {
+        "2": 284,
+        "3": 7
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "arm_left_mesh",
+      "primitive": 1,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "cloth"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 122,
+      "width_histogram": {
+        "2": 116,
+        "3": 6
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "forearm_left_mesh",
+      "primitive": 1,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 305,
+      "width_histogram": {
+        "2": 290,
+        "4": 3,
+        "3": 12
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "forearm_left_mesh",
+      "primitive": 1,
+      "cuboid": 1,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 55,
+      "width_histogram": {
+        "2": 54,
+        "3": 1
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "forearm_left_mesh",
+      "primitive": 1,
+      "cuboid": 2,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 58,
+      "width_histogram": {
+        "2": 42,
+        "3": 16
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "forearm_left_mesh",
+      "primitive": 1,
+      "cuboid": 3,
+      "pair": [
+        "skin",
+        "flesh"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 14,
+      "width_histogram": {
+        "2": 14
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "leg_left_mesh",
+      "primitive": 0,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "cloth"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 34,
+      "width_histogram": {
+        "2": 22,
+        "3": 12
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "arm_right_mesh",
+      "primitive": 0,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "cloth"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 120,
+      "width_histogram": {
+        "2": 120
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    },
+    {
+      "mesh": "leg_right_mesh",
+      "primitive": 0,
+      "cuboid": 0,
+      "pair": [
+        "skin",
+        "cloth"
+      ],
+      "direct_count": 0,
+      "bridge_nodes": 34,
+      "width_histogram": {
+        "2": 22,
+        "3": 12
+      },
+      "invalid_nodes": 0,
+      "invalid_examples": []
+    }
+  ],
+  "totals": {
+    "direct": 0,
+    "bridge_nodes": 2595,
+    "invalid": 0
+  },
+  "coverage": "all cuboid surfaces, even hidden, on static export; not inter-cuboid contacts or any proof of full visibility"
+}

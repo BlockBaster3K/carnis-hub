@@ -1,0 +1,193 @@
+{
+  "id": "b018",
+  "label": "Заражённый скелет",
+  "bones": [
+    {
+      "name": "root",
+      "role": "корень и прикорневые выросты"
+    },
+    {
+      "name": "pelvis",
+      "role": "таз"
+    },
+    {
+      "name": "spine",
+      "role": "позвоночник"
+    },
+    {
+      "name": "ribcage",
+      "role": "рёбра"
+    },
+    {
+      "name": "head",
+      "role": "череп и глаза"
+    },
+    {
+      "name": "jaw",
+      "role": "нижняя челюсть"
+    },
+    {
+      "name": "sinew_top",
+      "role": "сухожилия между рёбрами"
+    },
+    {
+      "name": "sinew_mid",
+      "role": "сухожилия между рёбрами"
+    },
+    {
+      "name": "sinew_bot",
+      "role": "сухожилия между рёбрами"
+    },
+    {
+      "name": "arm_blade",
+      "role": "костяное плечо"
+    },
+    {
+      "name": "forearm_blade",
+      "role": "кисть-лезвие"
+    },
+    {
+      "name": "arm_whip",
+      "role": "плечо плети"
+    },
+    {
+      "name": "whip_seg1",
+      "role": "первый сегмент плети"
+    },
+    {
+      "name": "whip_seg2",
+      "role": "второй сегмент плети"
+    },
+    {
+      "name": "whip_seg3",
+      "role": "кончик плети"
+    },
+    {
+      "name": "leg_left",
+      "role": "бедро и голень"
+    },
+    {
+      "name": "foot_left",
+      "role": "стопа с корешками"
+    },
+    {
+      "name": "leg_right",
+      "role": "бедро и голень"
+    },
+    {
+      "name": "foot_right",
+      "role": "стопа с корешками"
+    }
+  ],
+  "animations": [
+    {
+      "name": "idle",
+      "duration": 3,
+      "mode": "loop"
+    },
+    {
+      "name": "walk",
+      "duration": 0.8,
+      "mode": "loop"
+    },
+    {
+      "name": "attack",
+      "duration": 0.4,
+      "mode": "once"
+    },
+    {
+      "name": "hurt",
+      "duration": 0.2,
+      "mode": "once"
+    },
+    {
+      "name": "death",
+      "duration": 1.5,
+      "mode": "once"
+    },
+    {
+      "name": "whip_attack",
+      "duration": 0.4,
+      "mode": "once"
+    },
+    {
+      "name": "bone_rattle",
+      "duration": 2,
+      "mode": "loop"
+    }
+  ],
+  "tiles": [
+    [
+      "bone",
+      1,
+      "side",
+      false
+    ],
+    [
+      "bone",
+      2,
+      "side",
+      false
+    ],
+    [
+      "bone",
+      4,
+      "side",
+      false
+    ],
+    [
+      "bone",
+      0,
+      "side",
+      false
+    ],
+    [
+      "bone",
+      2,
+      "skull_face",
+      true
+    ],
+    [
+      "bone",
+      3,
+      "side",
+      false
+    ],
+    [
+      "sinew",
+      2,
+      "side",
+      true
+    ],
+    [
+      "sinew",
+      0,
+      "side",
+      true
+    ],
+    [
+      "sinew",
+      3,
+      "side",
+      true
+    ],
+    [
+      "flesh",
+      1,
+      "side",
+      false
+    ],
+    [
+      "sinew",
+      2,
+      "side",
+      false
+    ],
+    [
+      "rootlet",
+      2,
+      "side",
+      false
+    ]
+  ]
+}
