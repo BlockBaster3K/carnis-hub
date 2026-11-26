@@ -91,6 +91,8 @@ def main(argv=None):
     bad = 0
     undeclared = 0
     spec_targets = {}
+    spec_call_site = {}
+    spec_mode = "json"
     if a.spec:
         # ⛔ Ревизор/Интегратор 2026-11-26: битый путь к спеке давал
         # FileNotFoundError с трейсбеком. В гейте это выглядело бы как
@@ -107,10 +109,16 @@ def main(argv=None):
         except ValueError as exc:
             print("ОШИБКА: спека не разобрана как JSON (%s)" % exc)
             return 1
+        spec_mode = sp.get("targets_mode", "json")
         for e in sp.get("events", []):
             spec_targets[e.get("event", "")] = e.get("targets_by_sample", {}) or {}
-        print("спека: %s — объявлено событий с целями по сэмплам: %d\n"
-              % (a.spec, sum(1 for v in spec_targets.values() if v)))
+            cs = (e.get("call_site") or {}).get("volume")
+            if cs:
+                spec_call_site[e.get("event", "")] = float(cs)
+        print("спека: %s — целей по сэмплам: %d; семантика targets_by_sample: %s\n"
+              % (a.spec, sum(1 for v in spec_targets.values() if v),
+                 "ИТОГОВАЯ громкость (call_site x volume, как в блоке 9в)"
+                 if spec_mode == "effective" else "volume в sounds.json"))
     if not a.map:
         print("ВНИМАНИЕ: группировка ПО ИМЕНАМ ФАЙЛОВ — может склеить РАЗНЫЕ события\n"
               "и разъединить ОДНО (файл без номера на конце уезжает в свою группу).\n"
@@ -203,9 +211,23 @@ def main(argv=None):
                     print("      В СПЕКЕ НЕ ОБЪЯВЛЕНО -> находка (нормы нет)")
                     undeclared += 1
                 else:
+                    # СЕМАНТИКА targets_by_sample — по умолчанию «volume в
+                    # sounds.json» (обратная совместимость: спеку заполнял я,
+                    # и раньше там лежали именно множители sounds.json).
+                    # mode == "effective" читает их как ИТОГОВУЮ громкость
+                    # (call_site x volume), то есть так, как их понимает
+                    # volume_effective_check (блок 9в). Без явного выбора режима
+                    # два инструмента считают одно событие по-разному —
+                    # расхождение, на которое указал Интегратор.
                     adj = []
                     for stem_, pk_, rms_ in items:
                         t = tbs.get(stem_)
+                        if t and spec_mode == "effective":
+                            cs_vol = spec_call_site.get(base)
+                            if not cs_vol:
+                                t = None
+                            else:
+                                t = t / cs_vol
                         adj.append((stem_, rms_ + 20 * math.log10(t) if t else None))
                     known = [v for _, v in adj if v is not None]
                     if len(known) != len(adj):
