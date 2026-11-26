@@ -1,0 +1,89 @@
+{
+  "schema": "carnis.volume_spec/1",
+  "note": "ТЗ громкостей T-3202. effective = call_site_volume * sounds_json_volume_каждого_сэмпла",
+  "tolerance": 0.005,
+  "events": [
+    {
+      "event": "amalgam_smash",
+      "target": 1.0,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java",
+        "volume": 1.0
+      }
+    },
+    {
+      "event": "creeper_rupture",
+      "target": 1.0,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/event/CarnisEvents.java",
+        "volume": 1.0
+      }
+    },
+    {
+      "event": "synapse_shock",
+      "target": 0.8,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/block/SynapseNodeBlock.java",
+        "volume": 0.8
+      }
+    },
+    {
+      "event": "hive.spread",
+      "target": 0.65,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/world/infection/VeinMutationEngine.java",
+        "volume": 0.65
+      }
+    },
+    {
+      "event": "hive.detail_membrane",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_bubbles",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_creak",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_scuttle",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_flow",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    }
+  ]
+}
