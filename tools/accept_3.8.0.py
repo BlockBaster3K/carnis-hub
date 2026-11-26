@@ -172,6 +172,57 @@ def check_manifest(extract_dir, manifest, src="near"):
         fail.append("манифест: строк %d, файлов %d" % (files, actual))
 
 
+def check_inner_manifest(extract_dir):
+    """I14 (2026-11-26): манифест ВНУТРИ пакета обязан описывать весь пакет.
+
+    Найдено прогоном: в пакет 3.8.0 проехал MANIFEST.txt от 3.7.3
+    («source scaffold — NOT PACKAGED»), описывающий 760 путей из 1036 и не
+    описывающий ни одного из 277 новых файлов, — при том, что гейт печатал
+    «✓ манифест: строк 1037, файлов 1037», сверяя ВНЕШНИЙ манифест.
+    Получатель пакета, запустивший sha256sum -c MANIFEST.txt, получил бы
+    «всё сходится» по старым файлам и ничего о новых. Проверка закрывает
+    этот класс: если манифест в пакете есть, он должен быть полным.
+    """
+    if not os.path.exists(os.path.join(extract_dir, "MANIFEST.txt")):
+        return  # манифеста внутри нет — проверять нечего, не приговор
+    actual = set()
+    for d, _, fs in os.walk(extract_dir):
+        for f in fs:
+            r = os.path.relpath(os.path.join(d, f), extract_dir)
+            if r != "MANIFEST.txt":
+                actual.add(r.replace(os.sep, "/"))
+    # формат sha256  путь; прозаические строки шапки пропускаем
+    desc = set()
+    for line in open(os.path.join(extract_dir, "MANIFEST.txt"), encoding="utf-8"):
+        parts = line.strip().split(None, 1)
+        if len(parts) != 2 or len(parts[0]) != 64:
+            continue
+        if any(c not in "0123456789abcdef" for c in parts[0].lower()):
+            continue
+        desc.add(parts[1].strip())
+    miss = sorted(actual - desc)
+    extra = sorted(desc - actual)
+    print("  %s манифест внутри пакета: описывает %d, файлов %d, не описано %d"
+          % ("✓" if not miss else "✗", len(desc), len(actual), len(miss)))
+    for m in miss[:5]:
+        print("      не описан: %s" % m)
+    if miss:
+        fail.append("манифест внутри пакета: не описано %d файлов" % len(miss))
+    if extra:
+        fail.append("манифест внутри пакета: %d путей без файлов" % len(extra))
+    # и сам манифест должен проходить sha256sum -c — отсекает хеши «на глаз»
+    r = subprocess.run(["sha256sum", "-c", "--quiet", "MANIFEST.txt"],
+                       cwd=extract_dir, capture_output=True, text=True)
+    bad = [l for l in (r.stdout + r.stderr).split("\n")
+           if l.strip() and "OK" not in l and "improperly formatted" not in l]
+    if r.returncode != 0 or bad:
+        print("  ✗ манифест внутри пакета не проходит sha256sum -c: %s"
+              % (bad[0] if bad else "код %d" % r.returncode))
+        fail.append("манифест внутри пакета: sha256 не сходится")
+    else:
+        print("  ✓ манифест внутри пакета проходит sha256sum -c")
+
+
 # --------------------------------------------------------------------- 2. JSON
 EXPECTED_CHANGED_PNG = (
     "src/main/resources/assets/carnis/textures/entity/flesh_amalgam_glowmask.png",
@@ -1696,6 +1747,7 @@ def main():
         if m:
             print("   %s" % os.path.relpath(m, REPO))
         check_manifest(tmp, m, m_src)
+        check_inner_manifest(tmp)
 
         print()
         print("1а) Дельта к 3.7.2 — только ожидаемые изменения")
