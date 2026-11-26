@@ -1256,6 +1256,35 @@ def _load_crest_master():
         return None
     return mod
 
+def check_canon_manifest():
+    """S65 (Звук): эталон канона обязан быть актуальным ДО сверки «банк == пакет».
+
+    `MANIFEST_canon_144.txt` — единственный пригодный эталон канона (S60). Если
+    файл канона изменился без пересчёта манифеста, приёмка сверяет с устаревшим
+    эталоном и даёт ложные расхождения — молча. Звук просил одну строку в гейт:
+    вызвать тест, при rc != 0 — fail. Тест не пересчитывает манифест намеренно:
+    пересчёт на машине приёмки вернул бы машинозависимость (как с baseline).
+    """
+    checker = os.path.join(REPO, "tools", "manifest_canon_test.py")
+    if not os.path.isfile(checker):
+        print("  x манифест канона: нет теста tools/manifest_canon_test.py")
+        fail.append("манифест канона: тест отсутствует — эталон не проверен")
+        return
+    r = subprocess.run([sys.executable, checker], capture_output=True, text=True)
+    out = ((r.stdout or "") + (r.stderr or "")).strip()
+    for ln in out.splitlines():
+        if ln.strip():
+            print("      " + ln.rstrip())
+    if r.returncode == 0:
+        print("  v манифест канона: актуален (144 файла, SHA256 сходятся)")
+    elif r.returncode == 2:
+        fail.append("манифест канона: файл изменён без пересчёта манифеста — "
+                    "эталон устарел (S65)")
+    else:
+        fail.append("манифест канона: не проверен (код %d) — эталон канона "
+                    "недоказуем" % r.returncode)
+
+
 def check_bank_format(extract_dir):
     """ТЗ 3.7.2 §9, блок 13: формат банка однороден, клиппинга нет.
 
@@ -1620,6 +1649,7 @@ def main():
         print()
         print("13) Банк — формат и клиппинг (ТЗ 3.7.2 §9)")
         check_bank_format(tmp)
+        check_canon_manifest()
 
         print()
         print("14) Свечение 9 мобов — правило Р-3 (ТЗ 3.7.3)")
