@@ -366,6 +366,12 @@ def _python_with(pkg, extra=()):
 
 
 def run_tool(name, script, *args, **kw):
+    # report=True — проверка, чей критерий не является нормой (например спека
+    # роли: S84 Звука показал, что «пакет против моей спеки» — замкнутый круг,
+    # такая проверка не может подтвердить саму спеку). Провал ПЕЧАТАЕТСЯ, но
+    # не валит приёмку. Требовать её ради того, чтобы видеть — да; выдавать её
+    # за независимый вердикт — нет.
+    report_only = bool(kw.get("report", False))
     pkg = kw.get("need", None)
     py = _python_with(pkg) if pkg else sys.executable
     if py is None:
@@ -390,6 +396,11 @@ def run_tool(name, script, *args, **kw):
         skipped_checks.append("%s: код 2 «пропущено»" % name)
         return
     if r.returncode == 2:
+        if report_only:
+            print("  ~ %s → код 2 «ЗАМЕЧАНИЯ», отчёт (критерий — спека роли, "
+                  "не норма) | %s" % (name, verdict or "(нет строки ИТОГ)"))
+            warn.append("%s: замечания по спеке (отчёт)" % name)
+            return
         print("  ✗ %s → код 2 «ЗАМЕЧАНИЯ» (не пропуск!) | %s"
               % (name, verdict or "(нет строки ИТОГ)"))
         for line in r.stdout.split("\n"):
@@ -1722,7 +1733,30 @@ def main():
                         "цели по сэмплам не проверить")
         else:
             run_tool("volume_effective_check", VOL_EFF,
-                     "--pkg", pkg_dir, "--spec", VOL_SPEC)
+                     "--pkg", pkg_dir, "--spec", VOL_SPEC, report=True)
+
+        print()
+        print("9г) Разброс сэмплов внутри события — норма без спеки (S84 Audio)")
+        SAMPLE_LOUD = os.path.join(REPO, "tools", "sample_loudness.py")
+        bank = os.path.join(REPO, "03-sound", "sounds")
+        if not os.path.exists(SAMPLE_LOUD):
+            fail.append("tools/sample_loudness.py отсутствует — разброс "
+                        "сэмплов не проверить")
+        elif not os.path.isdir(bank):
+            fail.append("банк 03-sound/sounds отсутствует — разброс не проверить")
+        else:
+            # ⛔ Этот тест меряет САМИ .ogg банка и не читает спеку целей —
+            # поэтому он не может быть кругом «спека подтверждает себя»
+            # (S84 Звука, reviewer_volume_retraction §7).
+            # ⚠ НО: он смотрит БАНК, а не пакет, и его вердикт не зависит от
+            # `volume` в sounds.json. В 3.7.x канон 144 заморожен (R18), то
+            # есть исправить разброс правкой .ogg внутри версии НЕЛЬЗЯ. Если
+            # поставить его нормой, пакет становится неисправимым — гейт
+            # красный при любом значении volume. Поэтому здесь ОТЧЁТ:
+            # находка видна и обязательна к разбору, а норма включается в
+            # 3.7.4/3.8.0, где банк режется заново.
+            run_tool("sample_loudness", SAMPLE_LOUD, "--bank", bank,
+                     need="soundfile", report=True)
 
         print()
         print("10) Принятое не тронуто (14 файлов 3.6.0-R побайтово)")
@@ -1795,7 +1829,19 @@ def main():
             print("Лечение: обеспечить доступность эталона/манифеста (см. З-17/З-18)")
             print("и прогнать гейт заново. Код 2 — «не проверено», не «принято».")
             return 2
-        print("ИТОГ: ПРИНЯТО — все проверки пройдены.")
+        # ⛔ Отчётные находки обязаны быть видны В ФИНАЛЬНОЙ строке. Иначе
+        # «ПРИНЯТО» их прячет: дефект `detail_flow` (разброс 7,7 дБ) проходит
+        # приёмку зелёным, и это ровно то, на чём ошибся Ревизор 2026-11-26.
+        # Не валим — критерий пока не норма, — но и не молчим.
+        if warn:
+            print("ИТОГ: ПРИНЯТО — нормативные проверки пройдены.")
+            print("  ⚠ ОТЧЁТНЫХ НАХОДОК: %d — приёмку не валят, но требуют "
+                  "разбора:" % len(warn))
+            for w in warn:
+                print("    · %s" % w)
+            print("  Решение по ним: 00-board/reports/integrator_s84_circularity_answer.md")
+        else:
+            print("ИТОГ: ПРИНЯТО — все проверки пройдены.")
         print("Дальше: CI на новом коммите → merge PR → тег v%s → Release."
               % VERSION)
         return 0
