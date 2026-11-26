@@ -224,6 +224,33 @@ def check_delta_372(zip_path):
         fail.append("дельта: неожиданные изменения против 3.7.2")
 
 
+def check_deps_soft(zip_path):
+    """I102/R102: пять библиотек Директора — мягкие, сборка без них идёт.
+
+    Заявлены Curios, Patchouli, SmartBrainLib, Lodestone, Sound Physics. Если
+    любая станет жёсткой (`modImplementation`/`implementation`), проект без неё
+    не соберётся — а игрок получит краш вместо «работает без необязательного».
+    GeckoLib, наоборот, обязан остаться жёстким (R23 п.5).
+    """
+    checker = os.path.join(REPO, "tools", "deps_soft_check.py")
+    if not os.path.isfile(checker):
+        print("  x зависимости: нет чекера tools/deps_soft_check.py")
+        fail.append("зависимости: чекер отсутствует — мягкость не проверена")
+        return
+    r = subprocess.run([sys.executable, checker, zip_path],
+                       capture_output=True, text=True)
+    for ln in (r.stdout or "").splitlines():
+        if ln.strip():
+            print("      " + ln.rstrip())
+    if r.returncode == 0:
+        print("  v зависимости: пять библиотек мягкие, GeckoLib жёсткий (I102)")
+    elif r.returncode == 2:
+        fail.append("зависимости: есть жёсткая зависимость — сборка без неё "
+                    "не пройдёт (I102)")
+    else:
+        fail.append("зависимости: проверка не выполнена (код %d)" % r.returncode)
+
+
 def check_readme_license(zip_path):
     """R23 пп.1-6 + «GPL не попал»: README, лицензии, зависимости.
 
@@ -1534,6 +1561,7 @@ def main():
         print("2) JSON")
         check_json(tmp)
         check_readme_license(zip_path)
+        check_deps_soft(zip_path)
 
         print()
         print("3) Версия %s в четырёх местах" % VERSION)
