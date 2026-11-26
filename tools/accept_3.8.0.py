@@ -224,6 +224,35 @@ def check_delta_372(zip_path):
         fail.append("дельта: неожиданные изменения против 3.7.2")
 
 
+def check_volume_double(zip_path):
+    """R24 §4: громкость задаётся в ОДНОМ месте — здесь это НОРМА, не отчёт.
+
+    В гейте 3.7.3 та же проверка печатается отчётом: Ревизор в вердикте
+    (`reviewer_373_verdict.md` §4-5) отнёс замечание к 3.7.4 и принял пакет.
+    В 3.8.0 дефект переезжать не должен — поэтому здесь провал.
+    """
+    checker = os.path.join(REPO, "tools", "volume_double_check.py")
+    if not os.path.isfile(checker):
+        print("  x громкость: нет чекера tools/volume_double_check.py")
+        fail.append("громкость: чекер отсутствует — двойное применение "
+                    "не проверено")
+        return
+    r = subprocess.run([sys.executable, checker, zip_path],
+                       capture_output=True, text=True)
+    for ln in (r.stdout or "").splitlines():
+        s = ln.strip()
+        if s.startswith("↯") or s.startswith("=") or "код:" in s \
+                or "итог:" in s or "ИТОГ" in s or "передаёт" in s:
+            print("      " + s)
+    if r.returncode == 0:
+        print("  v громкость: одно место на событие (R24 §4)")
+    elif r.returncode == 2:
+        fail.append("громкость: двойное применение — событие задаёт громкость "
+                    "и в коде, и в sounds.json (R24 §4)")
+    else:
+        fail.append("громкость: проверка не выполнена (код %d)" % r.returncode)
+
+
 def check_deps_soft(zip_path):
     """I102/R102: пять библиотек Директора — мягкие, сборка без них идёт.
 
@@ -1591,6 +1620,7 @@ def main():
         check_json(tmp)
         check_readme_license(zip_path)
         check_deps_soft(zip_path)
+        check_volume_double(zip_path)
 
         print()
         print("3) Версия %s в четырёх местах" % VERSION)

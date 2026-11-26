@@ -1256,6 +1256,45 @@ def _load_crest_master():
         return None
     return mod
 
+def check_volume_double(zip_path):
+    """R24 §4 (вердикт Ревизора): громкость задаётся в ОДНОМ месте.
+
+    Ревизор: «Ненулевой множитель в JSON при ненулевой громкости в коде =
+    двойное применение, дефект… проверка системная, а не выборочная».
+    Он видел один случай; системная проверка нашла столько же, но механизмом.
+
+    Fail-closed: нет чекера или он не смог отработать — это НЕ «ок».
+    """
+    checker = os.path.join(REPO, "tools", "volume_double_check.py")
+    if not os.path.isfile(checker):
+        print("  x громкость: нет чекера tools/volume_double_check.py")
+        fail.append("громкость: чекер отсутствует — двойное применение "
+                    "не проверено")
+        return
+    r = subprocess.run([sys.executable, checker, zip_path],
+                       capture_output=True, text=True)
+    for ln in (r.stdout or "").splitlines():
+        s = ln.strip()
+        if s.startswith("↯") or s.startswith("=") or "код:" in s \
+                or "итог:" in s or "ИТОГ" in s or "передаёт" in s:
+            print("      " + s)
+    if r.returncode == 0:
+        print("  v громкость: одно место на событие (R24 §4)")
+    elif r.returncode == 2:
+        # ОСОЗНАННОЕ РЕШЕНИЕ, а не послабление: Ревизор в вердикте по 3.7.3
+        # (`reviewer_373_verdict.md` §4-5) написал прямо — «Замечание §4 — в
+        # следующий патч, а не в этот пакет. Блокеров нет. Пакет принимается»,
+        # и поставил задачу Кодеру в 3.7.4/3.8.0. Значения 1.5 и отсутствие
+        # volume пришли из ПРИНЯТОГО 3.7.2 побайтово, то есть это не регрессия
+        # этой сдачи. Поэтому здесь — отчёт, а в гейте 3.8.0 — норма.
+        print("  ~ громкость: двойное применение НАЙДЕНО — отчёт, не провал "
+              "(вердикт Ревизора: в 3.7.4, не блокер этой сдачи)")
+        print("      в 3.8.0 эта же проверка ВАЛИТ: дефект не должен "
+              "переехать в следующий пакет")
+    else:
+        fail.append("громкость: проверка не выполнена (код %d)" % r.returncode)
+
+
 def check_package_vs_bank_bytes(extract_dir):
     """Звук (§6 sound_REQUEST): зелёный гейт не гарантировал, что норма банка
     в пакете — сверялся СОСТАВ (144 из 144), а не байты.
@@ -1698,6 +1737,7 @@ def main():
         check_bank_format(tmp)
         check_canon_manifest()
         check_package_vs_bank_bytes(tmp)
+        check_volume_double(zip_path)
 
         print()
         print("14) Свечение 9 мобов — правило Р-3 (ТЗ 3.7.3)")
