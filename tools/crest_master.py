@@ -287,6 +287,7 @@ def check_crest_attack(extract_dir):
     used_prev = 0
     unchanged_now = []
     stationary_unmeasured = []
+    type_clash = []
     worst_c, worst_a = (0.0, ""), (0.0, "")
     for dp, _, fs in os.walk(root):
         for f in sorted(fs):
@@ -354,6 +355,21 @@ def check_crest_attack(extract_dir):
                 base_tbl = 0.0
             else:
                 no_entry.append(rel)
+                continue
+            # S53 (Звук): тип и baseline — ОДНА пара, из одного источника.
+            # Если тип взят из таблицы, а baseline из JSON, а их поправили
+            # по-разному, гейт молча возьмёт несогласованную пару. Поэтому
+            # при расхождении типа побеждает JSON (он же источник baseline),
+            # а расхождение печатается.
+            if bm_rec and bm_rec.get("type") and bm_rec["type"] != typ:
+                # Несогласованная пара — это ПРОВАЛ, а не примечание.
+                # Проверено негативом: подмена типа стац->транз поднимала допуск
+                # 0,173 -> 0,600 и файл проходил молча. Тихий выбор «чьей-то»
+                # версии делает расхождение незаметным — ровно тот класс, за
+                # который я весь вечер правил гейты.
+                print("  x %s: тип в таблице «%s», в baseline_master «%s» — "
+                      "источники разошлись" % (rel, typ, bm_rec["type"]))
+                type_clash.append((rel, typ, bm_rec["type"]))
                 continue
             cm, cf = _crest(ref[0]), _crest(got[0])
             if cm is None or cf is None:
@@ -485,6 +501,13 @@ def check_crest_attack(extract_dir):
     if bad_crest:
         _fail.append("crest: %d файлов изменили динамику сверх своего допуска"
                     % len(bad_crest))
+    if type_clash:
+        print("  x crest: тип сигнала расходится у %d файлов (таблица vs "
+              "baseline_master) — пара «тип+baseline» недоказуема"
+              % len(type_clash))
+        _fail.append("crest/атака: тип сигнала расходится у %d файлов — "
+                     "таблица и baseline_master правлены по-разному"
+                     % len(type_clash))
     if stationary_unmeasured:
         print("  x crest: у %d стационарных файлов есть мастер, но нет своей "
               "записи baseline(M) — норма недоказуема (I23 s14)" %
@@ -498,7 +521,8 @@ def check_crest_attack(extract_dir):
     # Зелёная строка печатается ТОЛЬКО когда провалов нет вовсе. Иначе
     # получалось «✓ 132 в норме» рядом с «x 11 не замерены» — и читающий
     # верил зелёной (Ревизор I23 s14).
-    if checked and not bad_crest and not no_master and not stationary_unmeasured:
+    if checked and not bad_crest and not no_master and not stationary_unmeasured \
+            and not type_clash:
         print("  ✓ crest/атака: %d файлов в норме от мастеров (З-31)" % checked)
     for path in _TEMP_MASTERS:
         try:
