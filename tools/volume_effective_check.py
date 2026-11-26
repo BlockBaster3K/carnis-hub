@@ -7,6 +7,16 @@
 
     effective = call_site_volume (из Java) * volume каждого сэмпла (sounds.json)
 
+Цель задаётся ДВУМЯ способами (схема carnis.volume_spec/2):
+  * "target": одно число на событие — когда сэмплы события равноценны;
+  * "targets_by_sample": цель по имени сэмпла — когда сэмплы разной громкости
+    ПО ПРИРОДЕ и одна цель на событие неверна.
+
+Второй случай не гипотетический: `hive.detail_flow_01` тише пары на 8 дБ
+(пик −15.1 / RMS −29.6 против −7.3 / −21.9), поэтому S17 назначил ему 0.45,
+а `flow_02` — 0.30. Схема «одна цель на событие» вынудила бы выровнять
+множители и создать слышимый провал «то есть звук, то нет».
+
 Коды возврата:
   0 — все события спеки в пределах tolerance
   2 — есть расхождение (печатает событие, сэмпл, ожидание, факт)
@@ -43,16 +53,20 @@ def sounds_json_of(pkg):
 
 
 def volumes_of_event(sj, event):
-    """Список volume по сэмплам события из sounds.json."""
+    """[(имя сэмпла или None, volume)] по звукам события из sounds.json."""
     reg = sj.get("sounds", sj)
     node = reg.get(event)
     if node is None:
         raise KeyError(event)
     out = []
     for s in node.get("sounds", []):
-        out.append(float(s.get("volume", sj.get("volume", 1.0))
-                        if isinstance(s, dict) else 1.0))
-    return out or [1.0]
+        if isinstance(s, dict):
+            name = s.get("name")
+            name = name.split(":")[-1].split("/")[-1] if name else None
+            out.append((name, float(s.get("volume", 1.0))))
+        else:
+            out.append((None, 1.0))
+    return out or [(None, 1.0)]
 
 
 def call_site_volume(pkg_path, event, spec_entry):
@@ -105,30 +119,45 @@ def main(argv=None):
     bad = 0
     total = 0
     print("пакет: %s" % a.pkg)
-    print("%-22s %6s %8s %10s  %s" % ("событие", "ТЗ", "call-site", "факт", "вердикт"))
+    print("%-22s %10s %8s %10s  %s" % ("событие", "ТЗ", "call-site", "факт", "вердикт"))
     for ent in spec.get("events", []):
         ev = ent["event"]
-        target = float(ent["target"])
+        by_sample = ent.get("targets_by_sample")
+        target = ent.get("target")
+        if by_sample is None and target is None:
+            print("%-22s %6s %8s %10s  ОШИБКА: нет цели (target или targets_by_sample)" % (ev, "?", "?", "?"))
+            return 3
         try:
             cs = call_site_volume(a.pkg, ev, ent)
             vols = volumes_of_event(sj, ev)
         except (OSError, KeyError, LookupError) as exc:
-            print("%-22s %6.2f %8s %10s  ОШИБКА: %s" % (ev, target, "?", "?", exc))
+            print("%-22s %6s %8s %10s  ОШИБКА: %s" % (ev, target or "по сэмплам", "?", "?", exc))
             return 3
-        # каждый сэмпл события должен давать target
-        worst = max(vols, key=lambda v: abs(cs * v - target))
-        eff = cs * worst
+        # Для каждого сэмпла — своя цель: из targets_by_sample либо общая target.
+        per = []
+        for name, v in vols:
+            if by_sample is not None:
+                if name not in by_sample:
+                    print("%-22s  ОШИБКА: цель для сэмпла '%s' не задана в targets_by_sample" % (ev, name))
+                    return 3
+                t = float(by_sample[name])
+            else:
+                t = float(target)
+            per.append((name, v, cs * v, t))
         total += 1
-        ok = abs(eff - target) <= tol
+        worst = max(per, key=lambda r: abs(r[2] - r[3]))
+        ok = abs(worst[2] - worst[3]) <= tol
         if not ok:
             bad += 1
-        print("%-22s %6.2f %8.2f %10.3f  %s" % (
-            ev, target, cs, eff,
-            "ok" if ok else "РАСХОЖДЕНИЕ (x%.2f)" % (eff / target)))
-        if not ok:
-            for i, v in enumerate(vols):
-                if abs(cs * v - target) > tol:
-                    print("      сэмпл %d: sounds.json volume %.2f -> %.3f" % (i, v, cs * v))
+        label = ("%.2f" % float(target)) if target is not None else "по сэмплам"
+        print("%-22s %10s %8.2f %10.3f  %s" % (
+            ev, label, cs, worst[2],
+            "ok" if ok else "РАСХОЖДЕНИЕ (x%.2f)" % (worst[2] / worst[3])))
+        if not ok or by_sample is not None:
+            for name, v, eff, t in per:
+                mark = "" if abs(eff - t) <= tol else "  <-- вне допуска"
+                print("      %s: sounds.json volume %.2f -> %.3f (цель %.2f)%s"
+                      % (name or "?", v, eff, t, mark))
 
     if bad:
         print("ИТОГ: %d из %d вне допуска (tolerance %.3f)" % (bad, total, tol))

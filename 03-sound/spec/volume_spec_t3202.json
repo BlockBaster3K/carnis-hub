@@ -1,6 +1,6 @@
 {
-  "schema": "carnis.volume_spec/1",
-  "note": "ТЗ громкостей T-3202. effective = call_site_volume * sounds_json_volume_каждого_сэмпла",
+  "schema": "carnis.volume_spec/2",
+  "note": "ТЗ громкостей T-3202. effective = call_site_volume * sounds_json_volume_каждого_сэмпла | v2: цель может быть ПО СЭМПЛАМ (targets_by_sample), если сэмплы внутри события разной громкости по природе",
   "tolerance": 0.005,
   "events": [
     {
@@ -77,13 +77,17 @@
     },
     {
       "event": "hive.detail_flow",
-      "target": 0.3,
       "call_site": {
         "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
         "volume": 0.3,
         "arg_marker": "detail,",
         "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
-      }
+      },
+      "targets_by_sample": {
+        "detail_flow_01": 0.45,
+        "detail_flow_02": 0.3
+      },
+      "why": "S17 (sound_unreachable_map.md §«Уровень»): flow_01 тише пары на 8 дБ (измерено: пик -15.1 / RMS -29.6 против -7.3 / -21.9), поэтому ему 0.45, а flow_02 0.30. Одна цель на событие здесь неверна: она выравнивает множители и создаёт слышимый провал 'то есть звук, то нет'."
     }
   ]
 }
