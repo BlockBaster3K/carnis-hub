@@ -1732,6 +1732,35 @@ def main():
                      need="soundfile", report=True)
 
         print()
+        print("9д) 132 звука 33 существ — свои нормы, не crest (R11)")
+        INFECTED_AUDIT = os.path.join(REPO, "02-reviewer", "tools",
+                                      "infected_sound_audit.py")
+        sounds_380 = os.path.join(REPO, "03-sound", "sounds_380")
+        json_380 = os.path.join(REPO, "03-sound", "3.8.0",
+                                "sounds_json_infected_33.json")
+        if not os.path.exists(INFECTED_AUDIT):
+            fail.append("02-reviewer/tools/infected_sound_audit.py отсутствует — "
+                        "132 новых звука не проверены")
+        elif not os.path.isdir(sounds_380):
+            fail.append("03-sound/sounds_380 отсутствует — 132 звука не проверить")
+        else:
+            # ⛔ Дыра, найденная 2026-11-26: чекер существовал и давал код 0,
+            # но гейт проверял только СОСТАВ банка (пакет == банк), а сами
+            # 132 файла — пик, RMS-разброс внутри категории, crest — никем не
+            # измерялись. Crest из архива З-21 их не покрывает: это дельта к
+            # оригиналам, а не нормы новых файлов. Проверка живая: с порогом
+            # --peak -2.0 даёт 21 провал и код 2.
+            args = ["--sounds-dir", sounds_380]
+            if os.path.exists(json_380):
+                args += ["--json", json_380]
+            else:
+                fail.append("03-sound/3.8.0/sounds_json_infected_33.json "
+                            "отсутствует — привязка звуков к событиям не проверена")
+            if not fail:
+                run_tool("infected_sound_audit", INFECTED_AUDIT, *args,
+                         need="numpy")
+
+        print()
         print("10) Принятое не тронуто (14 файлов 3.6.0-R побайтово)")
         check_keep_identical(tmp)
 
