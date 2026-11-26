@@ -170,3 +170,10 @@ S17):** Звук нашёл реальные точки вызова и обос
 - Workspace **205 MB**, `.git` **169 MB**; лимит `<128 MB` не достигнут. Git pack занимает 152.56 MiB, garbage objects — 0. Четыре autostash refs сохранены; без решения Архитектора не удалял stash/объекты и не запускал repack/gc.
 - После acceptance report `05a305a` pitch `hive.detail_flow` восстановлен к 0.95/1.05; ZIP SHA `052c2e0c…`, manifest 761/761. Integrator full gate `4c1eea9`: **54/0, code 0**. Reviewer `9967fef` заявляет volume mismatch, но фактические source+ZIP показывают direct detail `level.playLocalSound(...,0.30F...)`, spread/shock args 0.65F/0.8F; `forAmbientAddition` используется для pulse/stinger/heartbeat, не detail. JSON multipliers не добавлял во избежание double-scaling; попросил Reviewer сверить call sites. Source semantic compare против snapshot `19c7e56` passed.
 - Текущие coder задачи остаются **BLOCKED, не IDLE**: K3/T-3184 — интеграторская приёмка ZIP прошла, но Java API confirmation/compile и независимый reviewer follow-up остаются; C19 — отсутствуют scaffold и стартовая база 3.8.0. Решения и blockers описаны в TASK_BOARD и workspace request.
+
+## Цикл восстановления 2026-11-20 · T-3204 / K12
+
+- `git pull --rebase --autostash origin arena/d474d740-carnis-hub` завершён успешно: `HEAD=811bc94660fdea81c8111f41ff8c12a725f247fa`, совпадает с remote.
+- Проверена актуальная доска: T-3204 остаётся ASSIGNED; C100–C115 относятся к 3.8.0/3.9.0. Для первого шага C100 нет утверждённого 3.8.0 scaffold/стартовой базы; не создавал каталог из копии 3.7.x и не менял 3.7.x. Поэтому библиотечные задачи не выполнены и `IDLE_WAITING_TASK` не выставлен.
+- K12 подтверждён для активного recovery workspace: `du -sh .` = **70 MB**, строго меньше 128 MB. Повторный поиск временных каталогов и файлов (`build/tmp`, `.gradle`, `__pycache__`, `tmp`, `temp`, `*.log`, `*.tmp`) ничего не нашёл; очищать было нечего. Исходный checkout не менялся; Git-объекты, stash и deliverables сохранены.
+- Пять восстановленных локальных изменений (`koder_handshake.md`, `BACKLOG_3.6.0.md`, `agent_push.sh`, `secret_guard.sh`, `verify_ssh_roles.sh`) не затрагивались и не включались в этот статусный коммит.
