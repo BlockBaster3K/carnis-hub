@@ -24,5 +24,6 @@
 - Configured local author exactly as instructed: `Coder <coder@carnis.dev>`.
 - Ran `git fetch origin` successfully and rebased to remote `b776f9b` successfully before commit/push.
 - Existing staged C100 changes were preserved in `stash@{0}` before rebase. `stash apply --index` conflicted on upstream `gradle.properties` and `mods.toml`; no stash was dropped or overwritten. The stash remains intact and unapplied.
-- Commit/push not yet performed; working changes are the blocker sound fix, refreshed 3.7.3 and 3.8.0 ZIP manifests/packages, and effective-mode spec. Do not include the preserved C100 stash in the blocker commit unless separately authorized.
-- The repository's `build-jar` workflow runs on every `01-coder/**` push. To honor the explicit prohibition on Java compilation and JAR creation, the commit will include `[skip ci]` so GitHub does not start that workflow.
+- Committed and pushed as `1267214e97cad45a0bbfef233704cc0868b6eb4c` (`fix: correct effective detail_flow volume [skip ci]`) to `origin/arena/d474d740-carnis-hub`; post-push fetch confirms local and remote refs match and the working tree is clean.
+- Existing staged C100 changes were preserved in `stash@{0}` before rebase. `stash apply --index` conflicted on upstream `gradle.properties` and `mods.toml`; no stash was dropped or overwritten. The stash remains intact and unapplied.
+- The repository's `build-jar` workflow runs on every `01-coder/**` push. Commit includes `[skip ci]` to honor the explicit prohibition on Java compilation/JAR creation; no Java compilation or JAR packaging was run.
