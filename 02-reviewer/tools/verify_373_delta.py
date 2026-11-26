@@ -114,6 +114,12 @@ def body_for(mask_path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("package")
+    # ⛔ 2026-11-26: версия была вбита в код, поэтому чекер не мог проверить
+    # никакую другую сдачу: на пакете 3.8.0 с честно поднятой версией он
+    # печатал «mod_version=['3.8.0']» и валил правильную работу. Ожидание
+    # версии — параметр сдачи, а не константа чекера.
+    ap.add_argument("--version", default="3.7.3",
+                    help="ожидаемая версия пакета (по умолчанию 3.7.3)")
     ap.add_argument("--prev", required=True, help="пакет 3.7.2 (принятый эталон)")
     ap.add_argument("--tol", type=float, default=0.05)
     ap.add_argument("--originals", default="03-sound/archive_zapas_2026-11-26/",
@@ -317,15 +323,17 @@ def main():
     print("\n[6] Версия пакета")
     gp = cur.get("gradle.properties", b"").decode("utf-8", "replace")
     ver = [l.split("=", 1)[1].strip() for l in gp.splitlines() if l.startswith("mod_version")]
-    if ver and ver[0] == "3.7.3":
-        ok("gradle.properties: mod_version=3.7.3")
+    want = a.version
+    if ver and ver[0] == want:
+        ok("gradle.properties: mod_version=%s" % want)
     else:
-        bad("gradle.properties: mod_version=%s" % (ver or "нет"))
+        bad("gradle.properties: mod_version=%s, ожидалась %s"
+            % (ver or "нет", want))
     mt = cur.get("src/main/resources/META-INF/mods.toml", b"").decode("utf-8", "replace")
-    if "3.7.3" in mt:
-        ok("mods.toml содержит 3.7.3")
+    if want in mt:
+        ok("mods.toml содержит %s" % want)
     else:
-        bad("mods.toml без версии 3.7.3")
+        bad("mods.toml без версии %s" % want)
 
     print("\n" + "-" * 70)
     print("Провалов: %d, предупреждений: %d" % (len(fails), len(warns)))

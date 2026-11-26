@@ -1,0 +1,372 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.infected_phantom",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3,
+        "visible_bounds_offset": [
+          0,
+          1.2,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "body",
+          "pivot": [
+            0,
+            8,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                6,
+                -8
+              ],
+              "size": [
+                5,
+                3,
+                9
+              ],
+              "uv": [
+                0,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "body",
+          "pivot": [
+            0,
+            8,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                6,
+                -13
+              ],
+              "size": [
+                7,
+                3,
+                5
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing0",
+          "parent": "body",
+          "pivot": [
+            2,
+            8,
+            -6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2,
+                7,
+                -8
+              ],
+              "size": [
+                6,
+                2,
+                9
+              ],
+              "uv": [
+                23,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing1",
+          "parent": "body",
+          "pivot": [
+            -3,
+            8,
+            -6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -9,
+                7,
+                -8
+              ],
+              "size": [
+                6,
+                2,
+                9
+              ],
+              "uv": [
+                23,
+                12
+              ],
+              "mirror": true
+            }
+          ]
+        },
+        {
+          "name": "tail",
+          "parent": "body",
+          "pivot": [
+            0,
+            8,
+            1
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                7,
+                1
+              ],
+              "size": [
+                3,
+                2,
+                6
+              ],
+              "uv": [
+                3,
+                20
+              ]
+            }
+          ]
+        },
+        {
+          "name": "growth_back_1",
+          "parent": "body",
+          "pivot": [
+            -2,
+            18,
+            2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                16,
+                2
+              ],
+              "size": [
+                2,
+                4,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "growth_back_2",
+          "parent": "body",
+          "pivot": [
+            2,
+            20,
+            2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                18,
+                2
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tendril_left",
+          "parent": "body",
+          "pivot": [
+            3,
+            16,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3,
+                14,
+                -1
+              ],
+              "size": [
+                2,
+                4,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tendril_right",
+          "parent": "body",
+          "pivot": [
+            -3,
+            16,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                14,
+                -1
+              ],
+              "size": [
+                2,
+                4,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spore_sac_1",
+          "parent": "body",
+          "pivot": [
+            0,
+            14,
+            -2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                13,
+                -3
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spore_sac_2",
+          "parent": "body",
+          "pivot": [
+            0,
+            20,
+            -2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                19,
+                -3
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head_crest",
+          "parent": "head",
+          "pivot": [
+            0,
+            28,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                27,
+                -2
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "jaw_spike_l",
+          "parent": "head",
+          "pivot": [
+            2,
+            24,
+            -3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                23,
+                -4
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
