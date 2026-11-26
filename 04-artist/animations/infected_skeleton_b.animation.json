@@ -1,0 +1,215 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.infected_skeleton_b.idle": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "spine_whip_seg1": {
+          "rotation": {
+            "0.0": [
+              25,
+              0,
+              0
+            ],
+            "1.0": [
+              30,
+              5,
+              0
+            ],
+            "2.0": [
+              25,
+              0,
+              0
+            ]
+          }
+        },
+        "rib_maw_left": {
+          "rotation": {
+            "0.0": [
+              0,
+              -25,
+              10
+            ],
+            "1.0": [
+              0,
+              -32,
+              14
+            ],
+            "2.0": [
+              0,
+              -25,
+              10
+            ]
+          }
+        },
+        "rib_maw_right": {
+          "rotation": {
+            "0.0": [
+              0,
+              25,
+              -10
+            ],
+            "1.0": [
+              0,
+              32,
+              -14
+            ],
+            "2.0": [
+              0,
+              25,
+              -10
+            ]
+          }
+        }
+      }
+    },
+    "animation.infected_skeleton_b.walk": {
+      "loop": true,
+      "animation_length": 0.9,
+      "bones": {
+        "leg_right": {
+          "rotation": {
+            "0.0": [
+              -32,
+              0,
+              0
+            ],
+            "0.45": [
+              32,
+              0,
+              0
+            ],
+            "0.9": [
+              -32,
+              0,
+              0
+            ]
+          }
+        },
+        "leg_left": {
+          "rotation": {
+            "0.0": [
+              28,
+              0,
+              2
+            ],
+            "0.45": [
+              -24,
+              0,
+              2
+            ],
+            "0.9": [
+              28,
+              0,
+              2
+            ]
+          }
+        },
+        "body": {
+          "rotation": {
+            "0.0": [
+              15,
+              0,
+              -4
+            ],
+            "0.45": [
+              18,
+              0,
+              4
+            ],
+            "0.9": [
+              15,
+              0,
+              -4
+            ]
+          }
+        }
+      }
+    },
+    "animation.infected_skeleton_b.attack_whip": {
+      "loop": false,
+      "animation_length": 0.85,
+      "bones": {
+        "spine_whip_seg1": {
+          "rotation": {
+            "0.0": [
+              25,
+              0,
+              0
+            ],
+            "0.3": [
+              45,
+              0,
+              0
+            ],
+            "0.5": [
+              -55,
+              0,
+              0
+            ],
+            "0.85": [
+              25,
+              0,
+              0
+            ]
+          }
+        },
+        "spine_whip_seg2": {
+          "rotation": {
+            "0.0": [
+              -40,
+              0,
+              0
+            ],
+            "0.3": [
+              -20,
+              0,
+              0
+            ],
+            "0.5": [
+              -75,
+              0,
+              0
+            ],
+            "0.85": [
+              -40,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    },
+    "animation.infected_skeleton_b.attack_slash": {
+      "loop": false,
+      "animation_length": 0.8,
+      "bones": {
+        "left_arm": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.3": [
+              -65,
+              0,
+              15
+            ],
+            "0.5": [
+              45,
+              0,
+              -10
+            ],
+            "0.8": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}
