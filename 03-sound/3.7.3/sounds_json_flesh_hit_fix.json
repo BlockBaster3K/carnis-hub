@@ -1,25 +1,42 @@
 {
- "note": "Фрагмент для Кодера: вставить в sounds.json пакета. Правка ТОЛЬКО volume, банк не перекодируется. Цель -21.20 дБ (A-взвеш.) даёт пику _02 запас 0.45 дБ до -1.00; при -20.95 пик _02 стоял ровно в -1.20 (запас 0). Основание: sound_s127_flesh_hit_fix.md",
+ "note": "Фрагмент для Кодера: вставить в sounds.json пакета. Правка ТОЛЬКО volume; банк перерисован (crest 18.0±0.3) и лежит в 03-sound/sounds/, в пакет его кладёт сборка. Цель: crest внутри события одинаковый, поэтому RMS выравнивается точно — остаток 0.01 дБ, пики -1.43..-1.40 dBFS. Основание: sound_s128_crest_redraw_batch.md",
  "combat.flesh_hit": {
   "subtitle": "carnis.subtitle.combat_flesh_hit",
   "sounds": [
    {
     "name": "carnis:combat/combat_flesh_hit_01",
-    "volume": 0.84,
+    "volume": 0.995,
     "pitch": 0.9,
     "weight": 1
    },
    {
     "name": "carnis:combat/combat_flesh_hit_02",
-    "volume": 1.062,
+    "volume": 1.27,
     "pitch": 1.0,
     "weight": 1
    },
    {
     "name": "carnis:combat/combat_flesh_hit_03",
-    "volume": 1.078,
+    "volume": 1.729,
     "pitch": 1.1,
     "weight": 1
+   }
+  ]
+ },
+ "hive.spread": {
+  "subtitle": "carnis.subtitle.hive_spread",
+  "sounds": [
+   {
+    "name": "carnis:hive/hive_spread_01_creep",
+    "volume": 1.921
+   },
+   {
+    "name": "carnis:hive/hive_spread_02_pulse",
+    "volume": 1.336
+   },
+   {
+    "name": "carnis:hive/hive_spread_03_swell",
+    "volume": 1.702
    }
   ]
  }

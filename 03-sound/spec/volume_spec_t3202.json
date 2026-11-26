@@ -28,14 +28,6 @@
       }
     },
     {
-      "event": "hive.spread",
-      "target": 0.65,
-      "call_site": {
-        "file": "src/main/java/com/carnis/mod/world/infection/VeinMutationEngine.java",
-        "volume": 0.65
-      }
-    },
-    {
       "event": "hive.detail_membrane",
       "target": 0.3,
       "call_site": {
@@ -122,17 +114,36 @@
         "note": "три сэмпла выбираются взвешенно (weight 1); громкость задаётся только ключом volume в sounds.json"
       },
       "targets_by_sample": {
-        "combat_flesh_hit_01": 0.840,
-        "combat_flesh_hit_02": 1.062,
-        "combat_flesh_hit_03": 1.078
+        "combat_flesh_hit_01": 0.995,
+        "combat_flesh_hit_02": 1.270,
+        "combat_flesh_hit_03": 1.729
       },
       "source": "S127: выравнивание по ВОСПРИНИМАЕМОЙ громкости (A-взвешивание), не по сырому RMS. Решение Звука, НЕ норма доски",
       "board_target": 1.0,
       "deviation": "доска даёт одно число на событие; здесь три множителя, потому что сырой RMS расходится на 4.63 дБ, а пик всего на 1.12 — расхождение в СПЕКТРЕ, не в уровне",
-      "residual_tolerance": 2.6,
-      "tolerance_why": "A-взвеш. (воспринимаемая) громкость, не сырой RMS",
+      "residual_tolerance": 0.05,
+      "tolerance_why": "crest внутри события выровнен перерисовкой (S128), поэтому RMS выравнивается до нуля",
       "why": "A-разброс 2.17 -> 0.01 дБ; RMS 4.63 -> 2.55; пик 1.12 -> 1.53; все пики <= -1.20 dBFS (худший ровно -1.20 у _02). Цель -21.20 дБ: A-громкость выровнена, пик _02 -1.45 (запас 0.45 дБ до -1.00); при -20.95 пик _02 вставал ровно в -1.20 без запаса. Норма RMS 3 дБ без правки НЕДОСТИЖИМА: чтобы довести сырой RMS до 3 дБ, _01 пришлось бы опустить до -1.20 по пику, и остаток всё равно 3.1 дБ"
+    },
+    {
+      "event": "hive.spread",
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/world/infection/VeinMutationEngine.java",
+        "volume": 0.65
+      },
+      "targets_by_sample": {
+        "hive_spread_01_creep": 1.921,
+        "hive_spread_02_pulse": 1.336,
+        "hive_spread_03_swell": 1.702
+      },
+      "source": "S128: перерисовка crest до 18.0 (был разброс 4.27 дБ) + выравнивание RMS множителями. Решение Звука",
+      "board_target": 0.65,
+      "deviation": "crest внутри события приведён к одной цели; после этого RMS выравнивается точно (остаток 0.00), а не частично",
+      "why": "crest было 23.06 / 18.79 / 22.75 (разброс 4.27) — тот же класс дефекта, что у combat.flesh_hit. После перерисовки crest 18.14 у всех, множители дают RMS -19.54 у всех трёх, пики -1.40 / -1.49 / -1.43 dBFS. У 01 и 03 срезано 185 и 83 отсчёта, энергия >10 кГц выросла на 4.92 и 7.87 дБ — цена отчитывается, а не скрывается",
+      "residual_tolerance": 0.05,
+      "tolerance_why": "crest внутри события выровнен перерисовкой (S128)"
     }
+  
   
   ],
   "targets_mode": "effective"

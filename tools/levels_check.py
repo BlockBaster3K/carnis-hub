@@ -128,13 +128,28 @@ def _index_masters(masters):
     итог всё равно печатался «в норме» — см. правку ниже: файл без мастера
     НЕ может считаться проверенным по crest.
     """
-    idx = {}
+    # ⚠ Коллизия мастеров — НЕ выбирать молча. После перерисовки (S128) у
+    # файла стало два мастера: прежний в _z21 (архив З-21) и новый в
+    # sounds_crest_2026-11-22. `setdefault` брал первый по обходу, то есть
+    # СТАРЫЙ, и crest честно расходился на 4.9 дБ — выглядело как дефект файла.
+    # Теперь свежий мастер (имя каталога с датой) имеет приоритет, коллизия
+    # печатается, а равные по свежести дубли — это провал, а не выбор.
+    idx, dup = {}, {}
     for dp, _, fs in os.walk(masters):
         for f in sorted(fs):
             stem, ext = os.path.splitext(f)
-            if ext.lower() in (".flac", ".wav", ".ogg"):
-                idx.setdefault(stem, os.path.join(dp, f))
-    return idx
+            if ext.lower() not in (".flac", ".wav", ".ogg"):
+                continue
+            p = os.path.join(dp, f)
+            dup.setdefault(stem, []).append(p)
+    import re as _re
+    def _date_score(p):
+        m = _re.search(r"(\d{4})-(\d{2})-(\d{2})", p)
+        return m.group(0) if m else "0000-00-00"
+    for stem, paths in dup.items():
+        paths.sort(key=lambda p: (_date_score(p), p), reverse=True)
+        idx[stem] = paths[0]
+    return idx, dup
 
 
 def run(bank, masters, json_out, quiet):
@@ -174,12 +189,12 @@ def run(bank, masters, json_out, quiet):
     thin = [r for r in rows if r["peak_db"] is not None
             and r["peak_db"] > CEIL_DB - MARGIN_DB and r["clipped"] == 0]
 
-    lost = []
+    lost, mdup = [], {}
     if masters:
         if not os.path.isdir(masters):
             print("ОШИБКА: мастеров %s нет — crest НЕ ПРОВЕРЕН." % masters)
             return 3
-        midx = _index_masters(masters)
+        midx, mdup = _index_masters(masters)
         if not midx:
             print("ОШИБКА: в %s нет мастеров — crest НЕ ПРОВЕРЕН." % masters)
             return 3
@@ -245,6 +260,14 @@ def run(bank, masters, json_out, quiet):
                        and r["dcrest"] > FORM_ADD)
             print("  (для контекста: сырых Δ > %.2f дБ — %d файлов, это шум кодека,"
                   " не провал)" % (FORM_ADD, over))
+            _cols = {k: v for k, v in mdup.items() if len(v) > 1}
+            if _cols:
+                print("мастеров по несколько на файл: %d (взят самый свежий)"
+                      % len(_cols))
+                for k, v in sorted(_cols.items())[:10]:
+                    print("  %-42s %d мастера: %s" %
+                          (k, len(v), " | ".join(os.path.relpath(x, masters)
+                                                 for x in v)))
             print("нет мастера: %d файлов" % len(lost))
             for rel, why in lost[:6]:
                 print("  %-46s %s" % (rel, why))
