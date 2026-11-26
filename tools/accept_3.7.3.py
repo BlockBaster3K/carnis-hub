@@ -1710,6 +1710,21 @@ def main():
                         "требования к установке не проверить")
 
         print()
+        print("9в) Итоговая громкость по спеке (S78 / отзыв Ревизора 95476a3)")
+        VOL_EFF = os.path.join(REPO, "tools", "volume_effective_check.py")
+        VOL_SPEC = os.path.join(REPO, "03-sound", "spec", "volume_spec_t3202.json")
+        pkg_dir = os.path.dirname(zip_path)
+        if not os.path.exists(VOL_EFF):
+            fail.append("tools/volume_effective_check.py отсутствует — "
+                        "громкость по спеке не проверить")
+        elif not os.path.exists(VOL_SPEC):
+            fail.append("03-sound/spec/volume_spec_t3202.json отсутствует — "
+                        "цели по сэмплам не проверить")
+        else:
+            run_tool("volume_effective_check", VOL_EFF,
+                     "--pkg", pkg_dir, "--spec", VOL_SPEC)
+
+        print()
         print("10) Принятое не тронуто (14 файлов 3.6.0-R побайтово)")
         check_keep_identical(tmp)
 

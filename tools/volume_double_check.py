@@ -159,6 +159,29 @@ def json_volumes(data):
     return out
 
 
+SPEC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                    "03-sound", "spec", "volume_spec_t3202.json")
+
+
+def spec_declared_events():
+    """События, для которых спека задаёт per-sample цели, или None если спеки нет.
+
+    None — это «не прочитать спеку», а не «объявленных нет»: без спеки
+    различение замысла и остатка невозможно, поэтому гейт обязан упасть.
+    """
+    import json
+    try:
+        with open(SPEC, encoding="utf-8") as fh:
+            doc = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    out = set()
+    for e in doc.get("events") or []:
+        if isinstance(e, dict) and e.get("targets_by_sample"):
+            out.add(e.get("event", ""))
+    return out
+
+
 def main():
     if len(sys.argv) < 2:
         print(__doc__)
@@ -183,6 +206,26 @@ def main():
     print("  событий с volume в JSON != 1.0:      %d" % len(js))
 
     both = sorted(set(code) & set(js))
+    # ⛔ Правило «JSON volume всегда 1.0» ОТОЗВАНО Ревизором (reviewer_volume_retraction,
+    # 95476a3): оно противоречило машиночитаемой спеке volume_spec_t3202.json,
+    # которая задаёт per-sample цели (flow_01 0.45 при flow_02 0.30) и права по
+    # существу — сэмплы одного события различаются на 7.74 дБ. Новое правило
+    # (предложено Ревизором §5): множитель в JSON при громкости в коде допустим
+    # ТОЛЬКО если спека объявляет per-sample цели для этого события. Множитель
+    # без объявления остаётся провалом.
+    declared = spec_declared_events()
+    if declared is None:
+        print()
+        print("ИТОГ: спека громкостей не прочитана — объявленность множителей "
+              "не проверить (fail-closed)")
+        return 1
+    if both:
+        undeclared = [ev for ev in both if ev not in declared]
+        for ev in both:
+            if ev in declared:
+                print()
+                print("  ~ %s: множитель в JSON объявлен спекой — допустим" % ev)
+        both = undeclared
     if not both:
         print()
         print("ИТОГ: СХОДИТСЯ — ни одно событие не задаёт громкость в двух "
