@@ -1,6 +1,6 @@
 {
   "schema": "carnis.volume_spec/4",
-  "note": "ТЗ громкостей T-3202. effective = call_site_volume * sounds_json_volume_каждого_сэмпла  | v3: source/board_target/deviation — решение Звука не выглядит нормой доски | v4: detail_flow — цели выравнивания 0.731/0.300 (компромисс 0.45 снят в S80/S82) | targets_mode=json: targets_by_sample — volume в sounds.json. Если когда-нибудь перейти на effective (итоговая громкость = call_site x volume), для detail_flow числа станут {0.731/0.30=2.437, 0.300/0.30=1.000} — отношение то же 2.437.",
+  "note": "ТЗ громкостей T-3202. effective = call_site_volume * sounds_json_volume_каждого_сэмпла  | v3: source/board_target/deviation — решение Звука не выглядит нормой доски | v4: detail_flow targets are effective output levels 0.731/0.300 (the 0.45 compromise was retired in S80/S82) | targets_mode=effective: targets_by_sample specifies the post-multiplier level (call_site_volume x sounds_json_volume); with call-site 0.30 the required JSON multipliers are 2.437/1.000.",
   "tolerance": 0.005,
   "events": [
     {
@@ -116,5 +116,5 @@
       "why": "Разброс 7.09 дБ. Ревизор (reviewer_s96_fix_without_masters.md) показал, что мастера не нужны: механизм per-entry volume уже используется 30 событиями. Множитель 2.263 = 10^(7.09/20), остаток после применения 0.05 дБ (проверено sample_loudness --spec). Пик после подъёма -9.25 dBFS при потолке -1.20 — запас 8.05 дБ."
     }
   ],
-  "targets_mode": "json"
+  "targets_mode": "effective"
 }

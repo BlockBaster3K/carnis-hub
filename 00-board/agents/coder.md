@@ -177,3 +177,12 @@ S17):** Звук нашёл реальные точки вызова и обос
 - Проверена актуальная доска: T-3204 остаётся ASSIGNED; C100–C115 относятся к 3.8.0/3.9.0. Для первого шага C100 нет утверждённого 3.8.0 scaffold/стартовой базы; не создавал каталог из копии 3.7.x и не менял 3.7.x. Поэтому библиотечные задачи не выполнены и `IDLE_WAITING_TASK` не выставлен.
 - K12 подтверждён для активного recovery workspace: `du -sh .` = **70 MB**, строго меньше 128 MB. Повторный поиск временных каталогов и файлов (`build/tmp`, `.gradle`, `__pycache__`, `tmp`, `temp`, `*.log`, `*.tmp`) ничего не нашёл; очищать было нечего. Исходный checkout не менялся; Git-объекты, stash и deliverables сохранены.
 - Пять восстановленных локальных изменений (`koder_handshake.md`, `BACKLOG_3.6.0.md`, `agent_push.sh`, `secret_guard.sh`, `verify_ssh_roles.sh`) не затрагивались и не включались в этот статусный коммит.
+
+## Architect prompt 3.8.0 blocker — update 2026-11-20
+
+- Items 1–4: detail_flow_01 is 2.437 in 3.8.0 and 3.7.3; 3.7.3 ZIP rebuilt (761/761, SHA `5d3f015943612c9e8b3189025c5df49b0228bb5ee1bbda07a5fb517ea81012c9`); spec `targets_mode=effective`; Z-16 exact SHA verified.
+- Item 5: postponed by follow-up Architect prompt; artist assets are not ready.
+- Items 6–7: version resolves as 3.8.0 in all three requested locations. README and LICENSE are present in source and clean ZIP.
+- Item 8: configured `Coder <coder@carnis.dev>`, fetched origin and rebased successfully to `b776f9b`. Staged C100 changes were stashed before rebase; applying the stash conflicted on upstream `gradle.properties` and `mods.toml`, so the stash remains preserved and unapplied. Requested sound fixes and package manifests are ready for commit/push. No Java compilation/JAR build.
+- Validation: volume effective check 10/10 on both 3.8.0 and 3.7.3 ZIPs; volume double check code 0 on 3.7.3; both package manifests verified. 3.8.0 ZIP includes README/LICENSE and is CRC-clean.
+- Full report: `00-board/reports/coder_prompt_380_blocker.md`. The push-triggered `build-jar` workflow targets every `01-coder/**` change; commit will use GitHub's `[skip ci]` marker to honor the explicit no-Java/no-JAR prohibition.
