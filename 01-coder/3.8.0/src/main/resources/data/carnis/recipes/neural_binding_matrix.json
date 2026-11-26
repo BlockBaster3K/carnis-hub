@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " M ",
+    "MDM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "carnis:neural_moss"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "carnis:neural_binding_matrix"
+  }
+}

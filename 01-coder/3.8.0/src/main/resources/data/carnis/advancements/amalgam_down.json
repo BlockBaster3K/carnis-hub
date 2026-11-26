@@ -1,0 +1,28 @@
+{
+  "parent": "carnis:hive_first_block",
+  "display": {
+    "icon": {
+      "item": "carnis:flesh_amalgam_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.carnis.amalgam_down.title"
+    },
+    "description": {
+      "translate": "advancements.carnis.amalgam_down.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "amalgam_down": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "carnis:flesh_amalgam"
+        }
+      }
+    }
+  }
+}
