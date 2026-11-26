@@ -46,14 +46,25 @@ Java 17.
 | Forge | LGPL-2.1-only |
 | GeckoLib | MIT |
 | Curios | LGPL-3.0-or-later |
-| Patchouli | MPL-2.0 |
-| SmartBrainLib | LGPL-3.0-or-later |
-| Lodestone | LGPL-3.0-or-later |
-| Sound Physics Remastered | LGPLv3 |
+| Patchouli | CC-BY-NC-SA-3.0 |
+| SmartBrainLib | MPL-2.0 |
+| Lodestone | LGPL-3.0 |
+| Sound Physics Remastered | **GPL-3.0** |
 | Minecraft | проприетарная (Mojang) |
 
-Код с лицензией GPL в этот мод не включён: сторонние `.jar` в пакет не
-входят, GPL-заголовков в исходниках нет.
+Таблица сверена с файлами `LICENSE` самих библиотек (поле `license.spdx_id`),
+а не с пересказом: `Patchouli` — «Attribution-NonCommercial-ShareAlike 3.0
+Unported», `Curios` — «LGPL … either version 3 … or any later version»,
+`SmartBrainLib` — MPL-2.0, `Lodestone` — LGPL-3.0, `Sound Physics Remastered`
+— GPL-3.0, `GeckoLib` — MIT.
+
+**Про GPL-3.0 у Sound Physics Remastered — отдельно.** Это самая строгая
+лицензия в списке, и она важна для тех, кто будет подключать библиотеку
+теснее. Сторонние `.jar` в этот пакет **не входят**, GPL-заголовков в
+исходниках нет, код мода распространяется под MIT — то есть сейчас GPL-код
+в производную работу не попадает. Но Sound Physics — это **замена
+саунд-движка**, поэтому он никогда не должен становиться обязательной
+зависимостью: только soft dependency.
 
 ## Установка
 
