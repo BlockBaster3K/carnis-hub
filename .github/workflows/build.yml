@@ -421,6 +421,20 @@ jobs:
             echo "::warning::R14 не сможет сверить: пакет $PKG_SRC не найден до checkout"
             echo "pkg=" >> "$GITHUB_OUTPUT"
           fi
+          # ⛔ ТО ЖЕ САМОЕ ДЛЯ САМОГО СКРИПТА R14 (прогон 46078136979).
+          # После `git checkout -B main` на диске main-овое дерево, а
+          # tools/release_jar_check.py в main НЕТ — он живёт только в ветке
+          # задачи. Python падал с «can't open file», отдавал код 2, а шаг
+          # трактует 2 как «JAR НЕ соответствует пакету». То есть проверка
+          # не выполнялась вовсе, а вердикт был обвинительный — и релиз
+          # блокировался на пустом месте. Сохраняем скрипт рядом с пакетом.
+          if [ -f tools/release_jar_check.py ]; then
+            cp tools/release_jar_check.py /tmp/release_jar_check.py
+            echo "r14tool=/tmp/release_jar_check.py" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::R14 не сможет сверить: tools/release_jar_check.py не найден до checkout"
+            echo "r14tool=" >> "$GITHUB_OUTPUT"
+          fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch --no-tags origin main
@@ -476,6 +490,7 @@ jobs:
           # с «пакет не найден» уже ПОСЛЕ успешной сборки и коммита jar.
           # Пусто → падаем явно, а не проверяем пустоту.
           PKG: ${{ steps.commitjar.outputs.pkg }}
+          R14_TOOL: ${{ steps.commitjar.outputs.r14tool }}
           JAR_FILE: ${{ steps.jar.outputs.file }}
         run: |
           set -e
@@ -528,9 +543,13 @@ jobs:
             echo "::error::R14: пакет не найден: $PKG"
             exit 2
           fi
+          if [ -z "$R14_TOOL" ] || [ ! -f "$R14_TOOL" ]; then
+            echo "::error::R14: скрипт проверки не сохранён — сверять нечем"
+            exit 2
+          fi
           PY=$(command -v python3 || command -v python)
           set +e
-          "$PY" tools/release_jar_check.py --jar "$JAR_FILE" --pkg "$PKG" \
+          "$PY" "$R14_TOOL" --jar "$JAR_FILE" --pkg "$PKG" \
             > /tmp/r14.txt 2>&1
           RC=$?
           set -e
@@ -550,8 +569,11 @@ jobs:
             dump_r14
             exit 2
           fi
-          echo "::error::R14: проверка не выполнена (код $RC) — релиз не выпускается"
+          # код 1 = проверка не смогла выполниться (нет файла, пустой вход),
+          # это НЕ доказательство расхождения — сообщение должно отличаться,
+          # иначе «не смогли проверить» маскируется под «проверили и плохо».
           dump_r14
+          echo "::error::R14: проверка не выполнена (код $RC) — релиз не выпускается"
           exit 2
 
       - name: Publish release with jar
