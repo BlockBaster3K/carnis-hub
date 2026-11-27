@@ -484,8 +484,42 @@ jobs:
             exit 2
           fi
           echo "Проверка R14: JAR против принятого пакета"
+          # ⛔ Печатаем ФАКТИЧЕСКИЕ байты, которые проверяем: путь сам по себе
+          # ничего не доказывает, а локальный прогон того же скрипта на jar из
+          # main и на принятом пакете даёт «654/654 ассетов совпали, 0 лишних
+          # кроме датагена». Если CI снова упадёт — по sha256 будет видно, тот
+          # ли это пакет и тот ли jar (прогон 46077692665 упал без цифр).
           echo "- JAR:  \`$JAR_FILE\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- sha256(jar):   $(sha256sum "$JAR_FILE" | cut -d' ' -f1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- sha256(пакет): $(sha256sum "$PKG" | cut -d' ' -f1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- упаковка jar:  $(unzip -Z1 "$JAR_FILE" | wc -l) записей" >> "$GITHUB_STEP_SUMMARY"
+          # ⛔ Отчёт R14 уходит в ветку ci-log упавшего прогона.
+          # Причина: `gh run view --log` в этой среде отдаёт EOF, а результат
+          # R14 живёт только в GITHUB_STEP_SUMMARY, которую прочитать нечем —
+          # прогон 46077692665 упал с RC=2 без единой цифры расхождения.
+          # Локальный прогон того же скрипта на тех же файлах даёт 0, поэтому
+          # без вывода CI дальше идти нельзя. Пушим только при падении.
+          dump_r14() {
+            {
+              echo "=== R14 ==="
+              echo "jar:   $JAR_FILE"
+              echo "пакет: $PKG"
+              echo "sha256(jar):   $(sha256sum "$JAR_FILE" 2>/dev/null | cut -d' ' -f1)"
+              echo "sha256(пакет): $(sha256sum "$PKG" 2>/dev/null | cut -d' ' -f1)"
+              echo "RC=$RC"
+              echo "--- вывод release_jar_check.py ---"
+              cat /tmp/r14.txt 2>/dev/null
+            } > /tmp/r14_report.txt 2>&1
+            git fetch --no-tags origin main >/dev/null 2>&1 || true
+            BLOB=$(git hash-object -w /tmp/r14_report.txt 2>/dev/null) || exit 0
+            git update-index --add --cacheinfo 100644,"$BLOB",06-build/r14_report.txt 2>/dev/null || exit 0
+            TREE=$(git write-tree 2>/dev/null) || exit 0
+            CMT=$(git commit-tree "$TREE" -p "$(git rev-parse HEAD)" \
+                    -m "ci: отчёт R14 (run ${{ github.run_id }})" 2>/dev/null) || exit 0
+            git push --force origin "$CMT:refs/heads/ci-log/${{ github.run_id }}" >/dev/null 2>&1 || true
+            git reset --hard HEAD >/dev/null 2>&1 || true
+          }
           if [ ! -f "$JAR_FILE" ]; then
             echo "::error::R14: JAR не найден: $JAR_FILE"
             exit 2
@@ -513,9 +547,11 @@ jobs:
           if [ "$RC" = "2" ]; then
             echo "::error::R14: JAR НЕ соответствует принятому пакету — релиз не выпускается"
             echo "- ❌ R14: расхождения, релиз остановлен" >> "$GITHUB_STEP_SUMMARY"
+            dump_r14
             exit 2
           fi
           echo "::error::R14: проверка не выполнена (код $RC) — релиз не выпускается"
+          dump_r14
           exit 2
 
       - name: Publish release with jar
