@@ -1,0 +1,535 @@
+generated"),
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModItemModelProvider.java:69: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                new ResourceLocation(CarnisMod.MOD_ID, "item/" + item.getId().getPath()));
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:32: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                new ResourceLocation(CarnisMod.MOD_ID, "block/hive_membrane")));
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:34: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                new ResourceLocation(CarnisMod.MOD_ID, "block/synapse_node"));
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:38: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                new ResourceLocation(CarnisMod.MOD_ID, "block/incubation_cyst")));
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:40: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                new ResourceLocation(CarnisMod.MOD_ID, "block/purifier_lamp")));
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:56: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                    .texture("texture", new ResourceLocation(CarnisMod.MOD_ID, "block/" + name))
+                                        ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:81: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                    new ResourceLocation(CarnisMod.MOD_ID, "block/" + variantName));
+                    ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:90: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        models().cubeAll(name, new ResourceLocation(CarnisMod.MOD_ID, "block/" + name + "_0"));
+                               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:95: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                new ResourceLocation(CarnisMod.MOD_ID, "block/" + texture)));
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:100: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                new ResourceLocation(CarnisMod.MOD_ID, "block/" + texture)).renderType("cutout"));
+                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/datagen/ModBlockStateProvider.java:105: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                .texture("particle", new ResourceLocation(CarnisMod.MOD_ID, "block/" + particleTexture)));
+                                     ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/CarnisMod.java:34: warning: [removal] get() in FMLJavaModLoadingContext has been deprecated and marked for removal
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+                                                        ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/CarnisMod.java:54: warning: [removal] get() in ModLoadingContext has been deprecated and marked for removal
+        ModLoadingContext.get().registerConfig(
+                         ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/CarnisMod.java:59: warning: [removal] get() in ModLoadingContext has been deprecated and marked for removal
+        ModLoadingContext.get().registerConfig(
+                         ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/fluid/TaintedSludgeType.java:16: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+            @Override public ResourceLocation getStillTexture() { return new ResourceLocation("carnis", "block/tainted_sludge_still"); }
+                                                                         ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/fluid/TaintedSludgeType.java:17: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+            @Override public ResourceLocation getFlowingTexture() { return new ResourceLocation("carnis", "block/tainted_sludge_flow"); }
+                                                                           ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/network/ModMessages.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                    .named(new ResourceLocation(CarnisMod.MOD_ID, "messages"))
+                           ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/capability/infection/PlayerInfectionCapability.java:17: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public static final ResourceLocation ID = new ResourceLocation(
+                                              ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/capability/biomass/PlayerBiomassCapability.java:14: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public static final ResourceLocation ID = new ResourceLocation(CarnisMod.MOD_ID, "player_biomass");
+                                              ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/hud/BiomassHudOverlay.java:22: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation ICON = new ResourceLocation(CarnisMod.MOD_ID, "textures/gui/biomass_icon.png");
+                                                 ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/gui/InfectionVeinsOverlay.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation VEINS_TEXTURE = new ResourceLocation(
+                                                          ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/gui/PhantomEyesOverlay.java:29: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation TEXTURE = new ResourceLocation(CarnisMod.MOD_ID,
+                                                    ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/gui/CodexCarnisScreen.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation TEXTURE = new ResourceLocation("carnis", "textures/gui/codex_carnis_gui.png");
+                                                    ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedSpiderGeoModel.java:16: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA()
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedSpiderGeoModel.java:21: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA()
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedSpiderGeoModel.java:26: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA()
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PustuleClusterModel.java:10: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public PustuleClusterModel() { super(new ResourceLocation(CarnisMod.MOD_ID, "pustule_cluster")); }
+                                         ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PulsingHeartModel.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        super(new ResourceLocation(CarnisMod.MOD_ID, "pulsing_heart"));
+              ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/NervePillarModel.java:9: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public NervePillarModel() { super(new ResourceLocation(CarnisMod.MOD_ID, "nerve_pillar")); }
+                                      ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/NeuroArmorModel.java:6: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getModelResource(NeuroArmorItem item) { return new ResourceLocation("carnis", "geo/item/neuro_armor.geo.json"); }
+                                                                                     ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/NeuroArmorModel.java:7: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getTextureResource(NeuroArmorItem item) { return new ResourceLocation("carnis", "textures/armor/neuro_armor.png"); }
+                                                                                       ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/NeuroArmorModel.java:8: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getAnimationResource(NeuroArmorItem item) { return new ResourceLocation("carnis", "animations/armor/neuro_armor.animation.json"); }
+                                                                                         ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedZombieGeoModel.java:9: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA() ? "geo/entity/infected_zombie.geo.json" : "geo/entity/infected_zombie_b.geo.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedZombieGeoModel.java:12: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA() ? "textures/entity/infected_zombie.png" : "textures/entity/infected_zombie_b.png");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedZombieGeoModel.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA() ? "animations/entity/infected_zombie.animation.json" : "animations/entity/infected_zombie_b.animation.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/CerebralNexusModel.java:6: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getModelResource(CerebralNexusEntity entity) { return new ResourceLocation("carnis", "geo/entity/cerebral_nexus.geo.json"); }
+                                                                                            ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/CerebralNexusModel.java:7: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getTextureResource(CerebralNexusEntity entity) { return new ResourceLocation("carnis", "textures/entity/cerebral_nexus.png"); }
+                                                                                              ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/CerebralNexusModel.java:8: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getAnimationResource(CerebralNexusEntity entity) { return new ResourceLocation("carnis", "animations/entity/cerebral_nexus.animation.json"); }
+                                                                                                ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PneumaticInoculatorModel.java:6: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+ @Override public ResourceLocation getModelResource(PneumaticInoculatorItem a) { return new ResourceLocation("carnis", "geo/item/pneumatic_inoculator.geo.json"); }
+                                                                                        ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PneumaticInoculatorModel.java:7: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+ @Override public ResourceLocation getTextureResource(PneumaticInoculatorItem a) { return new ResourceLocation("carnis", "textures/item/pneumatic_inoculator_geo.png"); }
+                                                                                          ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PneumaticInoculatorModel.java:8: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+ @Override public ResourceLocation getAnimationResource(PneumaticInoculatorItem a) { return new ResourceLocation("carnis", "animations/item/pneumatic_inoculator.animation.json"); }
+                                                                                            ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedSkeletonGeoModel.java:9: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA() ? "geo/entity/infected_skeleton.geo.json" : "geo/entity/infected_skeleton_b.geo.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedSkeletonGeoModel.java:12: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA() ? "textures/entity/infected_skeleton.png" : "textures/entity/infected_skeleton_b.png");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedSkeletonGeoModel.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA() ? "animations/entity/infected_skeleton.animation.json" : "animations/entity/infected_skeleton_b.animation.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/BioPurifierModel.java:9: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "geo/item/bio_purifier.geo.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/BioPurifierModel.java:12: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "textures/item/bio_purifier.png");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/BioPurifierModel.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "animations/item/bio_purifier.animation.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/BiomassMaggotModel.java:9: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "geo/entity/biomass_maggot.geo.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/BiomassMaggotModel.java:12: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "textures/entity/biomass_maggot.png");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/BiomassMaggotModel.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "animations/entity/biomass_maggot.animation.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveEyeItemModel.java:10: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "geo/block/hive_eye.geo.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveEyeItemModel.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "textures/block/hive_eye.png");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveEyeItemModel.java:20: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "animations/block/hive_eye.animation.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PulsingHeartItemModel.java:6: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getModelResource(PulsingHeartItem item) { return new ResourceLocation("carnis", "geo/block/pulsing_heart.geo.json"); }
+                                                                                       ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PulsingHeartItemModel.java:7: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getTextureResource(PulsingHeartItem item) { return new ResourceLocation("carnis", "textures/block/pulsing_heart.png"); }
+                                                                                         ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/PulsingHeartItemModel.java:8: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getAnimationResource(PulsingHeartItem item) { return new ResourceLocation("carnis", "animations/block/pulsing_heart.animation.json"); }
+                                                                                           ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveSentinelModel.java:6: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getModelResource(HiveSentinelEntity entity) { return new ResourceLocation("carnis", "geo/entity/hive_sentinel.geo.json"); }
+                                                                                           ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveSentinelModel.java:7: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getTextureResource(HiveSentinelEntity entity) { return new ResourceLocation("carnis", "textures/entity/hive_sentinel.png"); }
+                                                                                             ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveSentinelModel.java:8: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getAnimationResource(HiveSentinelEntity entity) { return new ResourceLocation("carnis", "animations/entity/hive_sentinel.animation.json"); }
+                                                                                               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveEyeModel.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation(CarnisMod.MOD_ID, "geo/block/hive_eye.geo.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveEyeModel.java:29: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation(CarnisMod.MOD_ID, "textures/block/hive_eye.png");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/HiveEyeModel.java:34: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation(CarnisMod.MOD_ID, "animations/block/hive_eye.animation.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/FleshAmalgamModel.java:12: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "geo/entity/flesh_amalgam.geo.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/FleshAmalgamModel.java:15: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "textures/entity/flesh_amalgam.png");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/FleshAmalgamModel.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", "animations/entity/flesh_amalgam.animation.json");
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedCreeperGeoModel.java:16: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA()
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedCreeperGeoModel.java:21: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA()
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/InfectedCreeperGeoModel.java:26: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        return new ResourceLocation("carnis", entity.isVariantA()
+               ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/ParasiticTendrilModel.java:6: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getModelResource(ParasiticTendrilEntity e) { return new ResourceLocation("carnis", "geo/entity/parasitic_tendril.geo.json"); }
+                                                                                          ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/ParasiticTendrilModel.java:7: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getTextureResource(ParasiticTendrilEntity e) { return new ResourceLocation("carnis", "textures/entity/parasitic_tendril.png"); }
+                                                                                            ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/model/ParasiticTendrilModel.java:8: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    @Override public ResourceLocation getAnimationResource(ParasiticTendrilEntity e) { return new ResourceLocation("carnis", "animations/entity/parasitic_tendril.animation.json"); }
+                                                                                              ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/ClientLayerEvents.java:63: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                .getValue(new net.minecraft.resources.ResourceLocation("minecraft", path));
+                          ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java:243: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                ResourceLocation location = new ResourceLocation("carnis", "sounds/" + path + ".ogg");
+                                            ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/renderer/InfectedSpiderRenderer.java:10: error: cannot find symbol
+        super(context, new InfectedSpiderGeoModel());
+                           ^
+  symbol:   class InfectedSpiderGeoModel
+  location: class InfectedSpiderRenderer
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/renderer/InfectedCreeperRenderer.java:10: error: cannot find symbol
+        super(context, new InfectedCreeperGeoModel());
+                           ^
+  symbol:   class InfectedCreeperGeoModel
+  location: class InfectedCreeperRenderer
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/renderer/layer/IncubatingEntityLayer.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation VEINS = new ResourceLocation("carnis", "textures/entity/incubation_overlay.png");
+                                                  ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/renderer/layer/IncubatingEntityLayer.java:25: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation PUSTULE = new ResourceLocation("carnis", "textures/entity/incubation_pustule.png");
+                                                    ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/renderer/layer/OptionalGlowLayer.java:39: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        ResourceLocation glowmask = new ResourceLocation(texture.getNamespace(),
+                                    ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/renderer/DartRenderer.java:22: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+            new ResourceLocation(CarnisMod.MOD_ID, "textures/entity/dart.png");
+            ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/client/renderer/StomachPoolRenderer.java:18: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation ACID = new ResourceLocation(CarnisMod.MOD_ID, "textures/block/stomach_pool.png");
+                                                 ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/block/CarnisWebBlock.java:16: error: method does not override or implement a method from a supertype
+    @Override
+    ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/block/CarnisWebBlock.java:18: error: no suitable method found for is(CarnisWebBlock)
+        if (level.getBlockState(pos).is(this)) level.removeBlock(pos, false);
+                                    ^
+    method BlockStateBase.is(TagKey<Block>) is not applicable
+      (argument mismatch; CarnisWebBlock cannot be converted to TagKey<Block>)
+    method BlockStateBase.is(HolderSet<Block>) is not applicable
+      (argument mismatch; CarnisWebBlock cannot be converted to HolderSet<Block>)
+    method BlockStateBase.is(Block) is not applicable
+      (argument mismatch; CarnisWebBlock cannot be converted to Block)
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/block/NeuralMossBlock.java:33: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+            new ResourceLocation(CarnisMod.MOD_ID, "hive_members"));
+            ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/compat/CuriosSlotRegistration.java:14: warning: [removal] SlotTypeMessage in top.theillusivec4.curios.api has been deprecated and marked for removal
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                                       ^
+/home/runner/work/carnis-hub/carnis-hub/build-src/src/main/java/com/carnis/mod/compat/CuriosSlotRegistration.java:15: warning: [removal] SlotTypePreset in top.theillusivec4.curios.api has been deprecated and marked for removal
+                () -> SlotTypePreset.HEAD.getMessageBuilder().size(1).build());
+                      ^
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files additionally use or override a deprecated API that is marked for removal.
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+19 errors
+100 warnings
+
+> Task :compileJava FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+* Exception is:
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':compileJava'.
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:149)
+	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:282)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:147)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:135)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:337)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:324)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:317)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:116)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:138)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:123)
+	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
+	at org.gradle.execution.DryRunBuildExecutionAction.execute(DryRunBuildExecutionAction.java:51)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$10(DefaultBuildLifecycleController.java:202)
+	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$8(StateTransitionController.java:177)
+	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
+	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:177)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:202)
+	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:209)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:249)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:109)
+	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:172)
+	at org.gradle.composite.internal.DefaultBuildController.access$000(DefaultBuildController.java:47)
+	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:191)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:49)
+Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler error output for details.
+	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:57)
+	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:39)
+	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.delegateAndHandleErrors(NormalizingJavaCompiler.java:98)
+	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.execute(NormalizingJavaCompiler.java:52)
+	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.execute(NormalizingJavaCompiler.java:38)
+	at org.gradle.api.internal.tasks.compile.AnnotationProcessorDiscoveringCompiler.execute(AnnotationProcessorDiscoveringCompiler.java:51)
+	at org.gradle.api.internal.tasks.compile.AnnotationProcessorDiscoveringCompiler.execute(AnnotationProcessorDiscoveringCompiler.java:37)
+	at org.gradle.api.internal.tasks.compile.ModuleApplicationNameWritingCompiler.execute(ModuleApplicationNameWritingCompiler.java:46)
+	at org.gradle.api.internal.tasks.compile.ModuleApplicationNameWritingCompiler.execute(ModuleApplicationNameWritingCompiler.java:36)
+	at org.gradle.jvm.toolchain.internal.DefaultToolchainJavaCompiler.execute(DefaultToolchainJavaCompiler.java:57)
+	at org.gradle.api.tasks.compile.JavaCompile.lambda$createToolchainCompiler$3(JavaCompile.java:202)
+	at org.gradle.api.internal.tasks.compile.CleaningJavaCompiler.execute(CleaningJavaCompiler.java:53)
+	at org.gradle.api.internal.tasks.compile.incremental.IncrementalCompilerFactory.lambda$createRebuildAllCompiler$0(IncrementalCompilerFactory.java:52)
+	at org.gradle.api.internal.tasks.compile.incremental.SelectiveCompiler.execute(SelectiveCompiler.java:70)
+	at org.gradle.api.internal.tasks.compile.incremental.SelectiveCompiler.execute(SelectiveCompiler.java:44)
+	at org.gradle.api.internal.tasks.compile.incremental.IncrementalResultStoringCompiler.execute(IncrementalResultStoringCompiler.java:66)
+	at org.gradle.api.internal.tasks.compile.incremental.IncrementalResultStoringCompiler.execute(IncrementalResultStoringCompiler.java:52)
+	at org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler$1.call(CompileJavaBuildOperationReportingCompiler.java:64)
+	at org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler$1.call(CompileJavaBuildOperationReportingCompiler.java:48)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler.execute(CompileJavaBuildOperationReportingCompiler.java:48)
+	at org.gradle.api.tasks.compile.JavaCompile.performCompilation(JavaCompile.java:220)
+	at org.gradle.api.tasks.compile.JavaCompile.performIncrementalCompilation(JavaCompile.java:161)
+	at org.gradle.api.tasks.compile.JavaCompile.compile(JavaCompile.java:146)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at org.gradle.internal.reflect.JavaMethod.invoke(JavaMethod.java:125)
+	at org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.doExecute(IncrementalTaskAction.java:45)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
+	at org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.execute(IncrementalTaskAction.java:26)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:29)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:242)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:227)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:210)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:193)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:166)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:41)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:74)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.CreateOutputsStep.execute(CreateOutputsStep.java:50)
+	at org.gradle.internal.execution.steps.CreateOutputsStep.execute(CreateOutputsStep.java:28)
+	at org.gradle.internal.execution.steps.CaptureStateAfterExecutionStep.executeDelegateBroadcastingChanges(CaptureStateAfterExecutionStep.java:100)
+	at org.gradle.internal.execution.steps.CaptureStateAfterExecutionStep.execute(CaptureStateAfterExecutionStep.java:72)
+	at org.gradle.internal.execution.steps.CaptureStateAfterExecutionStep.execute(CaptureStateAfterExecutionStep.java:50)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:166)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeAndStoreInCache(BuildCacheStep.java:139)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$executeWithCache$4(BuildCacheStep.java:106)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$executeWithCache$5(BuildCacheStep.java:106)
+	at org.gradle.internal.Try$Success.map(Try.java:164)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithCache(BuildCacheStep.java:80)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$0(BuildCacheStep.java:69)
+	at org.gradle.internal.Either$Left.fold(Either.java:115)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:59)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:68)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:25)
+	at org.gradle.internal.execution.steps.RecordOutputsStep.execute(RecordOutputsStep.java:36)
+	at org.gradle.internal.execution.steps.RecordOutputsStep.execute(RecordOutputsStep.java:22)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:91)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:55)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:55)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:37)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveCachingStateStep.execute(ResolveCachingStateStep.java:76)
+	at org.gradle.internal.execution.steps.ResolveCachingStateStep.execute(ResolveCachingStateStep.java:37)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:94)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:49)
+	at org.gradle.internal.execution.steps.CaptureStateBeforeExecutionStep.execute(CaptureStateBeforeExecutionStep.java:71)
+	at org.gradle.internal.execution.steps.CaptureStateBeforeExecutionStep.execute(CaptureStateBeforeExecutionStep.java:45)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.executeWithNonEmptySources(SkipEmptyWorkStep.java:177)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.execute(SkipEmptyWorkStep.java:86)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.execute(SkipEmptyWorkStep.java:53)
+	at org.gradle.internal.execution.steps.RemoveUntrackedExecutionStateStep.execute(RemoveUntrackedExecutionStateStep.java:32)
+	at org.gradle.internal.execution.steps.RemoveUntrackedExecutionStateStep.execute(RemoveUntrackedExecutionStateStep.java:21)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.CleanupStaleOutputsStep.execute(CleanupStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.CleanupStaleOutputsStep.execute(CleanupStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.lambda$execute$0(AssignWorkspaceStep.java:32)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:287)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.execute(AssignWorkspaceStep.java:30)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.execute(AssignWorkspaceStep.java:21)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:37)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:27)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:47)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:34)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:64)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:146)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:135)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:337)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:324)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:317)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:116)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:138)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:123)
+	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
+	at org.gradle.execution.DryRunBuildExecutionAction.execute(DryRunBuildExecutionAction.java:51)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$10(DefaultBuildLifecycleController.java:202)
+	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$8(StateTransitionController.java:177)
+	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
+	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:177)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:202)
+	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:209)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:249)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:109)
+	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:172)
+	at org.gradle.composite.internal.DefaultBuildController.access$000(DefaultBuildController.java:47)
+	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:191)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:49)
+
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 1m 57s
+1 actionable task: 1 executed
