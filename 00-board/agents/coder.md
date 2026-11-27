@@ -210,3 +210,11 @@ S17):** Звук нашёл реальные точки вызова и обос
 - Current 3.8.1 scaffold ZIP: 1,038 entries, SHA `921f5cc1ff0f667f5a6ebb942c30b114caeccc7a4acffd939aa7fc5cb110a7ad`; CRC and internal/external manifests checked. Install report's package SHA matches.
 - Static dependency checks and the full 3.8.1 gate have not yet been run. No Java/Gradle/JAR build or runtime test. This is a development scaffold, not a release acceptance.
 - C101/C102 remain open; respirator design still needs an answer. Patchouli C104–C106 and the SBL AI/Goals pilot C107–C108 are scheduled in parallel for 3.8.1; only C100/C103 are implemented/documented at this point. Details and release reconciliation: `coder_380_gate_reconciliation.md`, `coder_381_scaffold.md`.
+
+## AI/Goals prompt — 8 infected variants, 3.8.1 · 2026-11-20
+
+**Источник:** пользовательское вложение `/home/user/uploads/coder_prompt_381_ai_goals.md` (Архитектор). В нём прямо разрешена Java-компиляция только для этих 8 вариантов; `.jar` не собирать без отдельного приказа.
+
+**Статус: BLOCKED AT SPEC/ASSET RECONCILIATION; код ещё не менял.** Проверил источник моделей и поставки: `04-artist/models` содержит A/B только для `infected_zombie` и `infected_skeleton`; `infected_spider_b` и `infected_creeper_b` отсутствуют в checkout и в 3.8.1 deliverable ZIPs (подтверждение — `00-board/reports/integrator_381_blocker_models.md`). В базовом 3.8.1 source сейчас по одному entity/type и одной модели каждого из четырёх мобов. Также отсутствует указанный в промпте `00-board/design/tactical_briefing_4_mobs_8_variants.md`.
+
+Не стал молча подменять недостающие B-модели, придумывать систему выбора варианта или семантику новых эффектов. Для корректной реализации нужны решения: как выдавать/сохранять A/B вариант (рандом 50/50, explicit NBT/command или 8 отдельных EntityType); ждать ли spider/creeper B ассеты или реализовывать их Goal-ветки отдельно с визуальными блокерами; применять ли для bleeding/vulnerability/venom/paralysis новые эффекты или ванильные эффекты/значения. Пункты P0 `cerebral_nexus` тоже не описаны в отсутствующем tactical briefing, поэтому readiness не заявляю.
