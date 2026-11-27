@@ -16,7 +16,7 @@ itself. Format: sha256  path. Verify from the package root with
     sha256sum -c MANIFEST.txt
 Files in package (excluding MANIFEST.txt): 1036
 c1e9553847b14d129799c1badbce17e0ed4f55d83ef53852ab83ca917eaf5c69  LICENSE
-2a98caab8394760c814c6778d8c7f031b1a0a23fb2454f6b63deeee3f66b1609  README.md
+d942ee90bf93a9a71d2d42fd40f85439637f8923ab771fd8c265555875876879  README.md
 05b22cbcb4c27e7008b8c1b5b9a065614d19e3773c843632bc1e8f170385b534  build.gradle
 48723b6c7c20f845153f50c9ff621a3f29d5544084bf583f4d97ed83c8ab8a08  gradle.properties
 528eb15e310da192945a2a072d2288c13d53d950eca33e824eb548d1d169b5b0  settings.gradle

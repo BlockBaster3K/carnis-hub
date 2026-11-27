@@ -1,25 +1,23 @@
-# Carnis: требования к установке
+# Carnis 3.8.0 — требования к установке
 
-**Дата:** 2026-11-26 · **Проверено на пакете:** `01-coder/3.7.3/project-3.7.3-clean.zip`
-(sha256 `c7d782544708…`) · **Основание:** I100 (волна 58)
+**Обновлено:** 2026-11-20 · **Пакет:** `01-coder/3.8.0/project-3.8.0-clean.zip` · **SHA-256:** `864d1f1750e5a5861b1c0b90e2ac6fe1d7a0fa17499ba83f001ef136b6095b18`
 
-Документ собран **по содержимому пакета**, а не по тексту ТЗ. Каждое
-утверждение ниже проверяемо командой, которая приведена рядом.
+## Кратко
 
-## 1. Короткая версия
+| Компонент | Требование | Сторона |
+|---|---|---|
+| Minecraft | 1.20.1 | клиент + сервер |
+| Forge | 47.1.0+ | клиент + сервер |
+| GeckoLib | 4.4.4+, **обязателен** | клиент + сервер |
+| Java | 17 | сервер/клиент |
+| Curios | **необязателен для запуска Carnis**; нужен для accessory slots | клиент + сервер для этих слотов |
+| Patchouli, SmartBrainLib, Lodestone, Sound Physics Remastered | не требуются; не добавлены в 3.8.0 | — |
 
-| что | нужно |
-|---|---|
-| Minecraft | **1.20.1** |
-| Forge | **47.1.0+** (loader 47+) |
-| **GeckoLib** | **обязателен, 4.4.4+**, ставится и на сервер, и на клиент |
-| Java | 17 |
-| Curios, Patchouli, SmartBrainLib, Lodestone, Sound Physics | **не требуются** |
+Установка Curios — **feature-specific**, а не hard requirement: без него Carnis должен запускаться как обычно, но слот-функции Curios недоступны. Чтобы использовать Curios inventory/слоты, Curios должен быть установлен и на клиенте, и на сервере.
 
-## 1a. Машиночитаемый список (сверяется гейтом)
+## Машиночитаемые требования
 
-Блок ниже читает `tools/deps_install_check.py` и сверяет с `mods.toml` пакета.
-Если Кодер добавит зависимость, а документ не обновят — гейт упадёт.
+`tools/deps_install_check.py` сравнивает этот блок с `mods.toml` пакета. Curios намеренно остаётся `not-required`: его запись имеет `mandatory=false`.
 
 ```
 forge: required
@@ -32,80 +30,23 @@ lodestone: not-required
 soundphysics: not-required
 ```
 
-## 2. Откуда это следует
+## Что объявлено в пакете
 
-`mods.toml` в пакете объявляет ровно три зависимости:
+`mods.toml` объявляет Forge, Minecraft и GeckoLib как обязательные; Curios объявлен `mandatory=false` с порядком `AFTER`. В `build.gradle` Curios API подключён как `compileOnly`, а сам мод — как `runtimeOnly`; это не включает Curios JAR внутрь Carnis и не требует его для загрузки игры.
 
-```toml
-[[dependencies.carnis]]  modId="forge"     mandatory=true  side="BOTH"
-[[dependencies.carnis]]  modId="minecraft" mandatory=true  side="BOTH"
-[[dependencies.carnis]]  modId="geckolib"  mandatory=true  side="BOTH"
-```
+Лицензия Curios API: **LGPL-3.0-or-later**. В пакет Carnis сторонний Curios JAR не встраивается.
 
-**GeckoLib — жёсткая зависимость** (`mandatory=true`, `side="BOTH"`), то есть
-без него мод не запустится ни на клиенте, ни на сервере. Это же
-подтверждается кодом: `154` импорта `software.bernie.geckolib` в `57` файлах.
+Patchouli, SmartBrainLib, Lodestone и Sound Physics Remastered в `build.gradle`/`mods.toml` 3.8.0 не добавлены. Единственная жёсткая библиотечная зависимость — GeckoLib.
 
-Проверить:
+## Статус функции Curios
+
+В этом обновлении зарегистрированы слоты `head` и `back`, если Curios присутствует. Предметы-аксессуары (`neuro_helmet`, `respirator`, `flame_tank`) и защита от выпадения при смерти ещё не включены: это C101/C102, поэтому не следует считать их доступными в текущем пакете.
+
+## Проверка
 
 ```bash
-unzip -p 01-coder/3.7.3/project-3.7.3-clean.zip \
-  src/main/resources/META-INF/mods.toml | grep -A4 dependencies
+python3 tools/deps_install_check.py 01-coder/3.8.0/project-3.8.0-clean.zip
+python3 tools/deps_soft_check.py 01-coder/3.8.0/project-3.8.0-clean.zip
 ```
 
-## 3. Пять библиотек из ТЗ — в коде их нет
-
-Требование волны 58 называет Curios, Patchouli, SmartBrainLib, Lodestone,
-Sound Physics. Проверил по исходникам пакета — **ни одного импорта, ни одного
-упоминания**:
-
-| библиотека | файлов Java | импортов | в `build.gradle` | в `mods.toml` |
-|---|---|---|---|---|
-| Curios | 0 | 0 | нет | нет |
-| Patchouli | 0 | 0 | нет | нет |
-| SmartBrainLib | 0 | 0 | нет | нет |
-| Lodestone | 0 | 0 | нет | нет |
-| Sound Physics | 0 | 0 | нет | нет |
-| **GeckoLib** | **57** | **154** | **есть** | **есть** |
-
-Проверить:
-
-```bash
-for L in curios patchouli smartbrain lodestone soundphysics geckolib; do
-  echo "$L: $(grep -rli "$L" /tmp/p373/src --include='*.java' | wc -l) файлов"
-done
-```
-
-**Почему это важно, а не придирка.** Если написать в требованиях «нужен
-Patchouli», игрок поставит лишний мод, а если написать «не нужен» про
-GeckoLib — получит краш при запуске. Ошибка в любую сторону стоит игроку
-времени, поэтому пишу то, что вижу в коде.
-
-Книга «Codex Carnis» реализована **своими средствами**, а не через Patchouli:
-это видно по отсутствию импортов.
-
-## 4. Где живёт зависимость при сборке
-
-`build.gradle`:
-
-```gradle
-repositories {
-    mavenCentral()
-    maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
-}
-implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.20.1:4.4.4")
-```
-
-Один внешний Maven — GeckoLib. `mavenCentral()` нужен для стандартных
-библиотек. Это значит: **сборка требует сети** к Cloudsmith, но **запуск** —
-нет.
-
-## 5. Чего этот документ не делает
-
-В корневом `README.md` раздела про установку **не было** — он описывает шину
-репозитория, а не мод. Я не переписываю README: он документ проекта для ролей,
-а требования к установке нужны **игроку**. Раздел «Установка» с ссылкой на
-этот файл добавлен в README отдельно, чтобы игрок не искал.
-
-Отдельно: `.jar` в этой версии **не собран** (запрет Архитектора до вердикта),
-поэтому «установить» пока можно только из собранного пакета, а не из релиза.
+Обе проверки сверяют требования по содержимому пакета, а не по одному этому отчёту.

@@ -200,3 +200,10 @@ S17):** Звук нашёл реальные точки вызова и обос
 - Added Curios Forge 5.9.1+1.20.1 as optional `compileOnly` API + `runtimeOnly` mod, optional `mandatory=false` metadata, and guarded head/back slot registration. Rebuilt 3.8.0 ZIP/manifests (1,038 entries; SHA `1cb324ba94ebc83a7d22ec8f09bee2f4bedbae17cea3f2c154aa26bb30ccb3c3`).
 - Static dependency checks passed: `deps_soft_check` code 0 and `deps_install_check` code 0; ZIP CRC and both manifests passed. Full `accept_3.8.0.py` remains code 1: current delta allow-list rejects `build.gradle` (Integrator-owned gate), with additional existing environment/input failures (`av`/`numpy` unavailable for timbre/crest/clip checks and `infected_sound_audit` code 1). Did not modify `tools/` or run Java/Gradle/JAR.
 - C100 remains in progress pending gate integration and permitted runtime/build acceptance. C101 accessories/tags and C102 death persistence were not started; respirator design question remains open. Full details: `00-board/reports/coder_c100_curios_slots.md`.
+
+## C103 — требования установки Curios · 2026-11-20
+
+- Обновлены root README, README в пакете 3.8.0 и `00-board/reports/install_requirements.md`: Curios не нужен для запуска Carnis, но для Curios-слотов необходим на клиенте и сервере. Документ не объявляет его hard requirement (`mandatory=false`, машиночитаемо `curios: not-required`); отмечено, что C101/C102 предметы и сохранение смерти ещё не готовы.
+- Текущий пакет 3.8.0 пересобран: 1,038 entries, SHA `864d1f1750e5a5861b1c0b90e2ac6fe1d7a0fa17499ba83f001ef136b6095b18`; ZIP CRC и внутренний/внешний манифест проверены.
+- `deps_install_check` code 0, `deps_soft_check` code 0, `readme_license_check` code 0. Полный `accept_3.8.0.py` остаётся code 1 по перечисленным в `coder_c100_curios_slots.md` блокерам; C100 runtime/build acceptance не подтверждён.
+- C103 отмечен выполненным в `coder_plan.md`. C101 design question остаётся открытым; C102 не начинал. Ни Java, ни Gradle/JAR не собирались.
