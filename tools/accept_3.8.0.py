@@ -261,6 +261,18 @@ GROWN_380 = (
     # не ослабляет норму, а снимает двойной счёт одного и того же.
     "README.md",
     "LICENSE",
+    # +2026-11-27, версия 3.8.1: интеграция Curios — 7 строк в build.gradle
+    # (maven-репозиторий + compileOnly/runtimeOnly api). Ревизор подтвердил
+    # в вердикте 3.8.1: «build.gradle — НЕ дефект, deps_soft_check зелёный,
+    # нужен whitelist в гейте, иначе он валит любую сборку с Curios».
+    # gradle.properties — там же mod_version=3.8.1 и curios_version.
+    "build.gradle",
+    "gradle.properties",
+    # textures/block/: правка nerve_pillar — UV 52x34 не влезали в 16x64,
+    # модель объявляла 64x64. Текстуры расширены до 64x64 БЕЗ потери
+    # содержимого (1024 непрозрачных пикселя до и после), glowmask тоже.
+    # Это исправление дефекта из creature_pack_audit, а не рост объёма.
+    "src/main/resources/assets/carnis/textures/block/",
 )
 
 

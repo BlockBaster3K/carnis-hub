@@ -138,7 +138,17 @@ def check_core9(pkg_path, extract_dir=None):
     problems = []
 
     # --- 1. Сверка списка с кодом -------------------------------------
+    #
+    # `_b` — ВАРИАНТ, а не существо. В 3.8.1 java ссылается и на
+    # `geo/entity/infected_<mob>_b.geo.json`: четверо мобов получили вторую
+    # боевую форму (`InfectedVariant` A/B), и `*GeoModel` переключает
+    # модель/текстуру/анимации по `isVariantA()`. Если хвост `_b` не отбросить,
+    # список «устаревает» на четырёх несуществующих существах, а чекер ниже
+    # прогонялся бы по именам, которых нет в реестре. Варианты при этом не
+    # теряются: они печатаются отдельной строкой, а сами `_b`-наборы
+    # проверяются блоком E.
     java_refs = set()
+    java_variant_refs = set()
     try:
         with _zip.ZipFile(pkg_path) as z:
             for n in z.namelist():
@@ -150,7 +160,11 @@ def check_core9(pkg_path, extract_dir=None):
                     continue
                 for m in _re.finditer(
                         r'"geo/entity/([a-z0-9_]+)\.geo\.json"', src):
-                    java_refs.add(m.group(1))
+                    raw = m.group(1)
+                    if raw.endswith("_b"):
+                        java_variant_refs.add(raw)
+                        raw = raw[:-2]
+                    java_refs.add(raw)
     except Exception as e:
         print("  x java в пакете не читается (%s) — сверка невозможна" % e)
         return ["core9: java не читается — проверка невозможна"]
@@ -164,6 +178,9 @@ def check_core9(pkg_path, extract_dir=None):
     declared = set(CORE9)
     extra = sorted(java_refs - declared)
     missing = sorted(declared - java_refs)
+    if java_variant_refs:
+        print("  · варианты B — та же сущность, отдельный визуал: %s"
+              % ", ".join(sorted(java_variant_refs)))
     if extra:
         print("  ✗ в java есть существа вне списка CORE9: %s" % ", ".join(extra))
         print("    список CORE9 в этом файле устарел — обновить перед приёмкой")
@@ -328,6 +345,138 @@ def check_volume_semantics(pkg_path):
     return []
 
 
+def check_variant_sets(pkg_path):
+    """§4e (новый блок 3.8.1): визуальные наборы варианта B не «висят» зря.
+
+    Зачем. Блок C теперь отбрасывает хвост `_b`, потому что это вариант, а не
+    существо. Ослабить проверку и ничего не добавить взамен нельзя: тогда
+    `_b`-модели могли бы лежать в пакете мёртвым грузом — ровно та дыра, из-за
+    которой 3.8.1 уже проходила при старых `*GeoModel` (модели `_b` были, но
+    код их не грузил).
+
+    Что проверяется по КАЖДОМУ из четырёх мобов:
+      1. код реально ссылается на `_b`-геометрию и `_b`-текстуру;
+      2. файлы существуют;
+      3. glowmask есть, ровно цвета (255,92,57), вне силуэта 0 px;
+      4. аудитор по `_b`-набору проходит с `--require-anims` (UV, топ-доля,
+         цвета, ключи idle/walk/attack/hurt/death).
+
+    Fail-closed: нет набора или он не прошёл — провал, а не «пропуск».
+    """
+    import io as _io
+    import json as _json
+    import re as _re
+    import zipfile as _zip
+
+    print()
+    print("E) Наборы варианта B (_b) — код грузит, ассеты полны (§4e)")
+    problems = []
+    MOBS = ("zombie", "skeleton", "spider", "creeper")
+    PREFIX = "src/main/resources/assets/carnis/"
+    GLOW = (255, 92, 57)
+
+    try:
+        z = _zip.ZipFile(pkg_path)
+    except Exception as e:
+        print("  x пакет не читается (%s)" % e)
+        return ["варианты B: пакет не читается"]
+
+    with z:
+        names = set(z.namelist())
+        srcs = {}
+        for n in names:
+            if n.endswith(".java"):
+                try:
+                    srcs[n.split("/")[-1]] = z.read(n).decode("utf-8", "ignore")
+                except Exception:
+                    pass
+        blob = "\n".join(srcs.values())
+
+        for mob in MOBS:
+            geo = "geo/entity/infected_%s_b.geo.json" % mob
+            tex = "textures/entity/infected_%s_b.png" % mob
+            glow = "textures/entity/infected_%s_b_glowmask.png" % mob
+            anim = "animations/entity/infected_%s_b.animation.json" % mob
+
+            ref_geo = ('"%s"' % geo) in blob
+            ref_tex = ('"%s"' % tex) in blob
+            if not ref_geo or not ref_tex:
+                print("  ✗ %s: код не ссылается на %s"
+                      % (mob, "геометрию" if not ref_geo else "текстуру"))
+                print("    модель _b лежит в пакете, но в игре не загрузится")
+                problems.append("варианты B: %s не грузится кодом" % mob)
+                continue
+
+            absent = [p for p in (geo, tex, glow, anim) if PREFIX + p not in names]
+            if absent:
+                print("  ✗ %s: нет файлов %s" % (mob, ", ".join(absent)))
+                problems.append("варианты B: у %s нет ассетов" % mob)
+                continue
+
+            # маска: размер, цвет, вне силуэта
+            try:
+                from PIL import Image
+                import numpy as np
+                ti = Image.open(_io.BytesIO(z.read(PREFIX + tex))).convert("RGBA")
+                gi = Image.open(_io.BytesIO(z.read(PREFIX + glow))).convert("RGBA")
+            except Exception as e:  # noqa: BLE001
+                print("  x %s: png не читается (%s)" % (mob, e))
+                problems.append("варианты B: %s png не читается" % mob)
+                continue
+            if gi.size != ti.size:
+                print("  ✗ %s: маска %s != текстуры %s" % (mob, gi.size, ti.size))
+                problems.append("варианты B: %s размер маски" % mob)
+                continue
+            ta, ga = np.array(ti), np.array(gi)
+            mask = ga[:, :, 3] > 0
+            cols = set(map(tuple, ga[mask][:, :3].tolist())) if mask.any() else set()
+            if cols != {GLOW}:
+                print("  ✗ %s: непрозрачные цвета маски %s, нужен только %s"
+                      % (mob, sorted(cols)[:3], GLOW))
+                problems.append("варианты B: %s цвет маски" % mob)
+                continue
+            outside = int(np.sum(mask & (ta[:, :, 3] == 0)))
+            if outside:
+                print("  ✗ %s: свечение вне силуэта %d px" % (mob, outside))
+                problems.append("варианты B: %s glow вне силуэта" % mob)
+                continue
+            alphas = set(np.unique(ta[:, :, 3]).tolist())
+            if not alphas <= {0, 255}:
+                print("  ✗ %s: альфа текстуры не бинарная %s"
+                      % (mob, sorted(alphas)[:4]))
+                problems.append("варианты B: %s альфа" % mob)
+                continue
+
+            # имена анимаций: всё, что код может попросить у этого моба
+            need = set(_re.findall(
+                r'"animation\.infected_%s(?:_b)?\.([a-z_]+)"' % mob, blob))
+            have = set()
+            for suffix in ("", "_b"):
+                p = PREFIX + "animations/entity/infected_%s%s.animation.json" % (
+                    mob, suffix)
+                if p in names:
+                    try:
+                        have |= set(_json.loads(z.read(p))["animations"])
+                    except Exception:
+                        pass
+            have_short = {k.split(".")[-1] for k in have}
+            miss = sorted(need - have_short)
+            if miss:
+                print("  ✗ %s: код просит анимации, которых нет: %s"
+                      % (mob, ", ".join(miss)))
+                print("    GeckoLib молча не проиграет их — поза замрёт")
+                problems.append("варианты B: %s нет анимаций %s" % (mob, miss))
+                continue
+            print("  v %s_b: модель+текстура загружаются, маска %d px, "
+                  "анимаций по коду %d/%d"
+                  % (mob, int(mask.sum()), len(need), len(need)))
+
+    if problems:
+        return problems
+    print("  ✓ все четыре набора варианта B полны и грузятся кодом")
+    return []
+
+
 def main():
     args = sys.argv[1:]
     pkg = args[0] if args else os.path.join(
@@ -384,6 +533,7 @@ def main():
     extra += check_volume_semantics(pkg)
     extra += check_core9(pkg)
     extra += check_java_refs(pkg)
+    extra += check_variant_sets(pkg)
 
     print()
     print("=" * 78)
