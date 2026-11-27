@@ -1,0 +1,8 @@
+=== R14 ===
+jar:   build-src/build/libs/carnis-3.8.1.jar
+пакет: /tmp/pkg_for_r14.zip
+sha256(jar):   38e5d86eb70a69781651fd40ceed975ab39bb86a0dd48d40862e618b2ef108fc
+sha256(пакет): a45b73119c8c7d278717f3fbacea3c8320ce189fff81a27a7f58980a577e68a4
+RC=2
+--- вывод release_jar_check.py ---
+/usr/bin/python3: can't open file '/home/runner/work/carnis-hub/carnis-hub/tools/release_jar_check.py': [Errno 2] No such file or directory
