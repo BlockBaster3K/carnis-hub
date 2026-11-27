@@ -360,6 +360,60 @@ jobs:
           # Коммит, в котором физически лежит именно этот JAR. На него встанет тег.
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      # ---------------------------------------------------------------
+      # R14: релиз обязан быть собран из ПРИНЯТЫХ байтов.
+      #
+      # Зачем. 3.7.3 был выпущен из аннулированного пакета: JAR отдан за ту же
+      # версию, что принята, а внутри прежние звуки. Проверка сравнивает
+      # ассеты `assets/carnis/**` в JAR с `src/main/resources/assets/carnis/**`
+      # в ZIP по sha256. Код 2 — сборка НЕ выпускается.
+      #
+      # Ставится ПОСЛЕ Commit jar и ПЕРЕД Publish: до коммита проверять нечего
+      # (jar ещё не там, откуда его возьмёт релиз), а после публикации
+      # останавливать поздно — asset уже залит.
+      # ---------------------------------------------------------------
+      - name: Verify jar matches accepted package (R14)
+        shell: bash
+        env:
+          PKG: ${{ steps.pkg.outputs.path }}
+          JAR_FILE: ${{ steps.jar.outputs.file }}
+        run: |
+          set -e
+          echo "Проверка R14: JAR против принятого пакета"
+          echo "- JAR:  \`$JAR_FILE\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ ! -f "$JAR_FILE" ]; then
+            echo "::error::R14: JAR не найден: $JAR_FILE"
+            exit 2
+          fi
+          if [ ! -f "$PKG" ]; then
+            echo "::error::R14: пакет не найден: $PKG"
+            exit 2
+          fi
+          PY=$(command -v python3 || command -v python)
+          set +e
+          "$PY" tools/release_jar_check.py --jar "$JAR_FILE" --pkg "$PKG" \
+            > /tmp/r14.txt 2>&1
+          RC=$?
+          set -e
+          cat /tmp/r14.txt
+          {
+            echo '```'
+            cat /tmp/r14.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$RC" = "0" ]; then
+            echo "- ✅ R14: JAR собран из принятого пакета" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ "$RC" = "2" ]; then
+            echo "::error::R14: JAR НЕ соответствует принятому пакету — релиз не выпускается"
+            echo "- ❌ R14: расхождения, релиз остановлен" >> "$GITHUB_STEP_SUMMARY"
+            exit 2
+          fi
+          echo "::error::R14: проверка не выполнена (код $RC) — релиз не выпускается"
+          exit 2
+
       - name: Publish release with jar
         shell: bash
         env:

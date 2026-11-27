@@ -266,11 +266,23 @@ def main():
     # растёт дальше. Только добавление; изменение/удаление держит дельта.
     grown = tuple(dict.fromkeys(tuple(mod.GROWN_380) + GROWN_381))
     mod.GROWN_380 = grown
+
     print()
     print("Правила: гейт 3.8.0, версия подменена на %s, ожидаемый рост — %d путей"
           % (VERSION, len(grown)))
     print()
-    base_rc = mod.main()
+    # ⛔ Найдено 2026-11-27 прогоном на реальном пакете 3.8.1. `mod.main()`
+    # читает путь из `sys.argv[1]`, а вызывающий скрипт запускался БЕЗ
+    # аргументов — значит гейт проверял путь по умолчанию, то есть пакет
+    # 3.8.0. Симптом: «✗ gradle.properties: 3.8.0», «✗ каталог пакета:
+    # 3.8.0», «версия 3.8.1: 0 из 4» — то есть обёртка судила не тот файл.
+    # Передаём путь явно, не полагаясь на argv.
+    _argv_restore = list(sys.argv)
+    sys.argv = [sys.argv[0], pkg]
+    try:
+        base_rc = mod.main()
+    finally:
+        sys.argv = _argv_restore
     print()
     print("=" * 78)
     print("Итог правил 3.8.0: код %d" % base_rc)
