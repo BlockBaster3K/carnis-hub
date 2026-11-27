@@ -1,0 +1,765 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.infected_spider",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 2,
+        "visible_bounds_offset": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0,
+            6,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                4,
+                -3
+              ],
+              "size": [
+                6,
+                6,
+                6
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "body",
+          "pivot": [
+            0,
+            6,
+            -3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                3,
+                -11
+              ],
+              "size": [
+                8,
+                8,
+                8
+              ],
+              "uv": [
+                32,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_cranial_spider",
+          "parent": "head",
+          "pivot": [
+            3.5,
+            7,
+            -7
+          ],
+          "rotation": [
+            5,
+            -8,
+            10
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2,
+                5,
+                -9
+              ],
+              "size": [
+                3,
+                4,
+                3
+              ],
+              "uv": [
+                14,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mandible_carnis",
+          "parent": "head",
+          "pivot": [
+            2,
+            4,
+            -11
+          ],
+          "rotation": [
+            25,
+            -10,
+            8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                1,
+                -12.5
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                36,
+                36
+              ]
+            }
+          ]
+        },
+        {
+          "name": "thorax_spike_base",
+          "parent": "body",
+          "pivot": [
+            1.5,
+            10,
+            0
+          ],
+          "rotation": [
+            22,
+            -8,
+            10
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0.5,
+                10,
+                -1
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                36,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "thorax_spike_tip",
+          "parent": "thorax_spike_base",
+          "pivot": [
+            1.5,
+            12,
+            0
+          ],
+          "rotation": [
+            18,
+            -6,
+            8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                12,
+                -0.5
+              ],
+              "size": [
+                1,
+                3,
+                1
+              ],
+              "uv": [
+                36,
+                56
+              ]
+            }
+          ]
+        },
+        {
+          "name": "abdomen",
+          "parent": "body",
+          "pivot": [
+            0,
+            6,
+            3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                3,
+                3
+              ],
+              "size": [
+                10,
+                8,
+                12
+              ],
+              "uv": [
+                0,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_abdomen_rupture",
+          "parent": "abdomen",
+          "pivot": [
+            2,
+            7,
+            9
+          ],
+          "rotation": [
+            4,
+            -6,
+            5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.5,
+                3.5,
+                4.5
+              ],
+              "size": [
+                8,
+                7,
+                10
+              ],
+              "uv": [
+                2,
+                36
+              ]
+            }
+          ]
+        },
+        {
+          "name": "chitin_clasp_1",
+          "parent": "flesh_abdomen_rupture",
+          "pivot": [
+            2,
+            10,
+            7
+          ],
+          "rotation": [
+            14,
+            -12,
+            -18
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                9,
+                6
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                36,
+                40
+              ]
+            }
+          ]
+        },
+        {
+          "name": "chitin_clasp_2",
+          "parent": "flesh_abdomen_rupture",
+          "pivot": [
+            3,
+            9.5,
+            11.5
+          ],
+          "rotation": [
+            -10,
+            14,
+            -24
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2,
+                8.5,
+                10.5
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                36,
+                40
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ovipositor_base",
+          "parent": "abdomen",
+          "pivot": [
+            0,
+            7,
+            15
+          ],
+          "rotation": [
+            -10,
+            6,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                6,
+                15
+              ],
+              "size": [
+                2,
+                2,
+                4
+              ],
+              "uv": [
+                36,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ovipositor_tip",
+          "parent": "ovipositor_base",
+          "pivot": [
+            0,
+            7,
+            19
+          ],
+          "rotation": [
+            -8,
+            4,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -0.5,
+                6.5,
+                19
+              ],
+              "size": [
+                1,
+                1,
+                3
+              ],
+              "uv": [
+                36,
+                56
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_front_right",
+          "parent": "body",
+          "pivot": [
+            -3,
+            5,
+            -2
+          ],
+          "rotation": [
+            0,
+            -35,
+            28
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -15,
+                4,
+                -3
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_mid_front_right",
+          "parent": "body",
+          "pivot": [
+            -3,
+            5,
+            0
+          ],
+          "rotation": [
+            0,
+            -12,
+            26
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -15,
+                4,
+                -1
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_mid_back_right",
+          "parent": "body",
+          "pivot": [
+            -3,
+            5,
+            1
+          ],
+          "rotation": [
+            0,
+            14,
+            27
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -15,
+                4,
+                0
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_back_right",
+          "parent": "body",
+          "pivot": [
+            -3,
+            5,
+            3
+          ],
+          "rotation": [
+            0,
+            38,
+            28
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -15,
+                4,
+                2
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_mid_back_left",
+          "parent": "body",
+          "pivot": [
+            3,
+            5,
+            1
+          ],
+          "rotation": [
+            0,
+            -16,
+            -27
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3,
+                4,
+                0
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_back_left",
+          "parent": "body",
+          "pivot": [
+            3,
+            5,
+            3
+          ],
+          "rotation": [
+            0,
+            -40,
+            -28
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3,
+                4,
+                2
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_mid_left",
+          "parent": "body",
+          "pivot": [
+            3,
+            5,
+            0
+          ],
+          "rotation": [
+            0,
+            10,
+            -26
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3,
+                4,
+                -1
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_knee_cyst",
+          "parent": "leg_mid_left",
+          "pivot": [
+            9,
+            5,
+            0
+          ],
+          "rotation": [
+            8,
+            -6,
+            12
+          ],
+          "cubes": [
+            {
+              "origin": [
+                7.5,
+                3.5,
+                -1.5
+              ],
+              "size": [
+                3,
+                3,
+                3
+              ],
+              "uv": [
+                4,
+                36
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_front_left",
+          "parent": "body",
+          "pivot": [
+            3,
+            6,
+            -2
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "cubes": []
+        },
+        {
+          "name": "flesh_femur",
+          "parent": "leg_front_left",
+          "pivot": [
+            3,
+            6,
+            -2
+          ],
+          "rotation": [
+            -30,
+            20,
+            15
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2,
+                6,
+                -3.5
+              ],
+              "size": [
+                3,
+                6,
+                3
+              ],
+              "uv": [
+                4,
+                36
+              ]
+            }
+          ]
+        },
+        {
+          "name": "scythe_blade",
+          "parent": "flesh_femur",
+          "pivot": [
+            3.5,
+            12,
+            -2
+          ],
+          "rotation": [
+            -80,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.5,
+                12,
+                -3
+              ],
+              "size": [
+                2,
+                10,
+                2
+              ],
+              "uv": [
+                36,
+                40
+              ]
+            }
+          ]
+        },
+        {
+          "name": "scythe_tip",
+          "parent": "scythe_blade",
+          "pivot": [
+            3.5,
+            22,
+            -2
+          ],
+          "rotation": [
+            -25,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3,
+                22,
+                -2.5
+              ],
+              "size": [
+                1,
+                4,
+                1
+              ],
+              "uv": [
+                36,
+                56
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
