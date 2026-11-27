@@ -211,6 +211,97 @@ def check_core9(pkg_path, extract_dir=None):
     return problems
 
 
+def check_java_refs(pkg_path):
+    """§4d: код не ссылается на ресурсы, которых нет в пакете.
+
+    Зачем. Проверено 2026-11-27 на пакете 3.8.1: гейт 3.8.0 разрешает любые
+    изменения `src/main/java/` флагом `--allow` и НЕ СМОТРИТ внутрь. За сессию
+    так прошли 2 изменённых файла (CarnisMod.java + новый
+    CuriosSlotRegistration.java) без единой проверки содержимого — при том что
+    в 3.8.1 должны появиться файлы 8 вариантов мобов.
+
+    Это дыра именно того класса, что уже ловился в проекте: проверка есть, но
+    смотрит не туда. Когда придёт код вариантов, он пройдёт так же молча, даже
+    если сошлётся на несуществующую модель, анимацию или текстуру. GeckoLib в
+    такой ситуации молча не рисует моб — ровно как было с `_glow.png` вместо
+    `_glowmask.png`.
+
+    Что проверяется: каждая литеральная ссылка вида
+    `new ResourceLocation(..., "geo/entity/x.geo.json")` и подобные должна
+    существовать в пакете как `src/main/resources/assets/carnis/<ссылка>`.
+
+    Чего НЕ проверяется: смысл кода, его корректность, компиляция. Это не
+    компилятор и не замена тестам — только «ссылка ведёт в существующий файл».
+
+    Fail-closed: если в пакете нет ни одного .java — это провал, а не пропуск.
+    Пустая проверка не имеет права выглядеть как успешная.
+    """
+    import re as _re
+    import zipfile as _zip
+
+    print()
+    print("D) Код не ссылается на отсутствующие ресурсы (§4d)")
+
+    PREFIX = "src/main/resources/assets/carnis/"
+    # Литералы путей ресурсов внутри java. Только то, что реально кладут в
+    # assets/carnis: geo, animations, textures, models, blockstates, sounds.
+    PAT = _re.compile(
+        r'"((?:geo|animations|textures|models|blockstates|sounds)/'
+        r'[A-Za-z0-9_./-]+\.(?:json|png|ogg))"')
+
+    try:
+        z = _zip.ZipFile(pkg_path)
+    except Exception as e:
+        print("  x пакет не читается (%s) — проверка невозможна" % e)
+        return ["java-ссылки: пакет не читается"]
+
+    with z:
+        names = set(z.namelist())
+        java = [n for n in names if n.endswith(".java")]
+        if not java:
+            print("  x в пакете нет ни одного .java — проверять нечего,")
+            print("    и это провал: пакет без кода не может быть 3.8.1.")
+            return ["java-ссылки: в пакете нет .java"]
+
+        refs = {}
+        unreadable = []
+        for n in java:
+            try:
+                src = z.read(n).decode("utf-8", "ignore")
+            except Exception:
+                unreadable.append(n)
+                continue
+            for m in PAT.finditer(src):
+                refs.setdefault(m.group(1), []).append(n.split("/")[-1])
+
+        if unreadable:
+            print("  x не читается %d .java: %s"
+                  % (len(unreadable), ", ".join(x.split("/")[-1]
+                                                for x in unreadable[:3])))
+            return ["java-ссылки: не читается %d файлов" % len(unreadable)]
+
+        if not refs:
+            print("  ? ни одной литеральной ссылки на ресурсы не найдено")
+            print("    само по себе не провал: код может собирать пути")
+            print("    динамически. Но и «чисто» это не делает.")
+            return []
+
+        missing = sorted(r for r in refs if (PREFIX + r) not in names)
+        print("  .java файлов: %d | ссылок на ресурсы: %d | битых: %d"
+              % (len(java), len(refs), len(missing)))
+        if missing:
+            for r in missing[:12]:
+                print("    ✗ %-46s <- %s" % (r, refs[r][0]))
+            if len(missing) > 12:
+                print("    ... и ещё %d" % (len(missing) - 12))
+            print("  ✗ код ссылается на ресурсы, которых нет в пакете")
+            print("    в игре это молчаливый отказ: GeckoLib ничего не нарисует")
+            return ["java-ссылки: %d битых ссылок" % len(missing)]
+
+        print("  v все %d ссылок ведут в существующие файлы" % len(refs))
+    return []
+
+
 def check_volume_semantics(pkg_path):
     """§4a: сторож половинчатой правки — нормативно для 3.8.1.
 
@@ -247,7 +338,7 @@ def main():
         return 2
 
     print("=" * 78)
-    print("Приёмка пакета %s — правила 3.8.0 + §4a/§4b/§4c промпта Архитектора" % VERSION)
+    print("Приёмка пакета %s — правила 3.8.0 + §4a/§4b/§4c/§4d промпта Архитектора" % VERSION)
     print("=" * 78)
 
     # 1. Базовый гейт 3.8.0 с подменённой версией и расширенным ростом.
@@ -292,6 +383,7 @@ def main():
     extra += check_require_anims(pkg)
     extra += check_volume_semantics(pkg)
     extra += check_core9(pkg)
+    extra += check_java_refs(pkg)
 
     print()
     print("=" * 78)
