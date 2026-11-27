@@ -22,6 +22,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -150,7 +151,61 @@ def main():
                 for ln in r.stdout.splitlines():
                     if ln.strip().startswith("\u2717"):
                         print("      " + ln.strip())
-        print("\nСлучаев: %d, расхождений: %d" % (len(CASES), bad))
+        # K: ПОРЯДОК ЗАПИСЕЙ В ZIP не должен влиять на результат.
+        # Дефект найден 2026-11-22: чекер собирал индекс через setdefault,
+        # поэтому «первый файл побеждает», а порядок обхода = порядок записей
+        # в архиве. Те же 1037 файлов, собранные в обратном порядке, дали
+        # 0 провалов вместо 4. Здесь фиксируется и независимость от порядка,
+        # и то, что коллизия имён печатается в любом порядке.
+        kdir = os.path.join(tmp, "K")
+        base = os.path.join(kdir, BASE)
+        for sub in ("geo/entity", "textures/entity",
+                    "animations/entity", "animations"):
+            os.makedirs(os.path.join(base, sub), exist_ok=True)
+        with open(os.path.join(base, "geo/entity", NAME + ".geo.json"), "w",
+                  encoding="utf-8") as f:
+            json.dump(_geo(), f)
+        _tex_normal().save(os.path.join(base, "textures/entity", NAME + ".png"))
+        _mask_ok().save(os.path.join(base, "textures/entity",
+                                     NAME + "_glowmask.png"))
+        # ДВА файла анимаций с одним именем и РАЗНЫМ содержимым: тот, что
+        # грузит код (animations/entity/), и мёртвый (animations/).
+        with open(os.path.join(base, "animations/entity",
+                               NAME + ".animation.json"), "w", encoding="utf-8") as f:
+            json.dump(_anim(), f)
+        dead = _anim()
+        dead["animations"]["animation.%s.idle" % NAME]["animation_length"] = 2.0
+        with open(os.path.join(base, "animations", NAME + ".animation.json"),
+                  "w", encoding="utf-8") as f:
+            json.dump(dead, f)
+        entries = []
+        for dp, _, fs in os.walk(kdir):
+            for f in fs:
+                full = os.path.join(dp, f)
+                entries.append(os.path.relpath(full, kdir).replace(os.sep, "/"))
+        entries.sort()
+        results = []
+        for label, order in (("прямой", entries), ("обратный", entries[::-1])):
+            zpath = os.path.join(tmp, "K_%s.zip" % label)
+            with zipfile.ZipFile(zpath, "w") as z:
+                for rel in order:
+                    z.write(os.path.join(kdir, rel), rel)
+            r = subprocess.run([sys.executable, TOOL, zpath, "--min-bones", "1",
+                                "--registry", "", "--require-anims"],
+                               capture_output=True, text=True)
+            results.append((label, r.returncode,
+                            "коллизия имён" in r.stdout))
+        same = results[0][1] == results[1][1]
+        both_flag = all(x[2] for x in results)
+        ok = same and both_flag
+        print("%-40s коды %d/%d, коллизия в обоих: %s  %s"
+              % ("K: порядок в ZIP не влияет",
+                 results[0][1], results[1][1],
+                 "да" if both_flag else "НЕТ", "OK" if ok else "РАСХОЖДЕНИЕ"))
+        if not ok:
+            bad += 1
+
+        print("\nСлучаев: %d, расхождений: %d" % (len(CASES) + 1, bad))
         return 0 if bad == 0 else 1
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

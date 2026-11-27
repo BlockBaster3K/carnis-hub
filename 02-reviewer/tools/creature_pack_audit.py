@@ -28,6 +28,7 @@
 """
 
 import argparse
+import hashlib
 import io
 import json
 import os
@@ -241,18 +242,40 @@ def main():
 
     files = iter_files(a.sources)
 
-    def by_tail(suffix):
-        """{базовое имя: реальный ключ} по хвосту пути.
+    # Коллизии «одно имя — разные файлы» фиксируем отдельно: пока выбор был
+    # «первый по порядку записей в ZIP», результат зависел от УПАКОВКИ, а не
+    # от содержания. Проверено 2026-11-22 на принятом 3.8.0: те же 1037
+    # файлов, собранные в обратном порядке, дали 0 провалов вместо 4.
+    collisions = {}
+
+    def by_tail(suffix, prefer=None):
+        """{базовое имя: реальный ключ} по хвосту пути, детерминированно.
 
         Сдача может лежать и плоско (`geo/x.geo.json`, `textures/entity/x.png`),
         и полным пакетом (`src/main/resources/assets/carnis/geo/entity/x.geo.json`).
         Поэтому имя ищется по хвосту, а не собирается из шаблона пути.
+
+        Если на одно имя приходится несколько файлов с РАЗНЫМ содержимым,
+        выбирается путь, содержащий `prefer` (то, что реально грузит код), а
+        при равенстве — лексикографически первый. Сама коллизия запоминается:
+        её должен судить вызывающий, а не порядок упаковки.
         """
-        out = {}
-        for k in files:
+        groups = {}
+        for k in sorted(files):
             if k.endswith(suffix):
                 base = k.split("/")[-1][: -len(suffix)]
-                out.setdefault(base, k)
+                groups.setdefault(base, []).append(k)
+        out = {}
+        for base, keys in groups.items():
+            if len(keys) > 1:
+                digests = {hashlib.sha256(files[k]).hexdigest() for k in keys}
+                if len(digests) > 1:
+                    collisions.setdefault(suffix, {})[base] = list(keys)
+            ordered = list(keys)
+            if prefer:
+                ordered = ([k for k in keys if prefer in k]
+                           + [k for k in keys if prefer not in k])
+            out[base] = ordered[0]
         return out
 
     # Реестр Художника — источник правды о том, что считать существом.
@@ -266,7 +289,7 @@ def main():
     else:
         print("реестр не задан/не разобран — все geo считаются существами")
 
-    geo_by_name = by_tail(".geo.json")
+    geo_by_name = by_tail(".geo.json", prefer="/geo/entity/")
     # Текстуры: приоритет textures/entity/, но не только она. У моделей блоков,
     # предметов и брони своя папка (block/, item/, armor/, models/) — раньше они
     # считались «существами без текстуры» (7 ложных провалов на пакете 3.8.0:
@@ -288,7 +311,9 @@ def main():
         # предметные модели Forge зовут текстуру `<имя>_geo.png`
         if base.endswith("_geo"):
             tex_by_name.setdefault(base[:-4], k)
-    anim_by_name = by_tail(".animation.json")
+    # Код грузит animations/entity/<mob>.animation.json (проверено по java);
+    # версии с hurt/death лежат в animations/ и игрой не читаются.
+    anim_by_name = by_tail(".animation.json", prefer="animations/entity/")
 
     geos = sorted(geo_by_name.values())
     if not geos:
@@ -338,6 +363,7 @@ def main():
         return out
 
     fails, warns = [], []
+    checked_names = set()
 
     def bad(msg):
         fails.append(msg)
@@ -354,6 +380,7 @@ def main():
     print("-" * 104)
 
     for name in creatures:
+        checked_names.add(name)
         # классификация — ВНУТРИ цикла: снаружи переменная оставалась от
         # предыдущего цикла и все модели считались geo-блоками (из-за этого
         # проверки масок и анимаций молчали, а провалы «исчезали»)
@@ -501,6 +528,16 @@ def main():
               % (name, info["bones"], "%dx%d" % (w, h), st["colors"],
                  st["top_share"] * 100, glow_res,
                  "%s" % ("ok" if uv_ok else "ВЫХОД"), anim_res))
+
+    # Коллизия имён среди проверяемых — провал, а не лотерея упаковки.
+    for suffix, items in sorted(collisions.items()):
+        for base, keys in sorted(items.items()):
+            if base not in checked_names:
+                continue
+            fails.append("%s: коллизия имён %s — %d файла с разным содержимым"
+                         % (base, suffix, len(keys)))
+            print("  \u2717 %s: коллизия имён (%s) — файлов %d с одним именем: %s"
+                  % (base, suffix, len(keys), ", ".join(keys)))
 
     if unregistered:
         warn("моделей вне реестра существ: %d (%s) — не оценивались"
