@@ -46,10 +46,7 @@
 не попадает в **3.7.x**.
 
 ### C100 · Curios API — слоты аксессуаров (перенесено в версию 3.8.1; v3.8.0 уже выпущена)
-- [ ] **C100.** Curios API, Forge 1.20.1, **LGPL-3.0-or-later**, подключить
-  **мягко**: `compileOnly` + `runtimeOnly` мода. Регистрация **1–2 слотов**
-  (`head`-слот для **Нейро-Шлема**, `back`-слот для **баллона огнемёта**,
-  респиратор — как предмет-фильтр).
+- [x] **C100 — source implementation 2026-11-20.** В 3.8.1 Curios API (`compileOnly`) + мод (`runtimeOnly`), `mandatory=false`, guarded registration HEAD/BACK. Java/Gradle build and runtime verification are still pending; report `coder_381_scaffold.md`.
 - [ ] **C101.** Предметы-аксессуары как `ICurioItem`: `neuro_helmet`,
   `respirator`, `flame_tank` — эффекты (фильтр заражения, огнестойкость).
 - [ ] **C102.** **Сохранение при смерти — обязательно.** По умолчанию вещи в
@@ -57,8 +54,7 @@
   события смерти + восстановление при респавне). **Критерий приёмки:** убий
   игрока с надетым респиратором → респиратор **на месте**, после респавна
   снова надет.
-- [ ] **C103.** Требования к установке: серверу нужен Curios — в README и в
-  отчёт о пакете.
+- [x] **C103 — docs 2026-11-20.** README 3.8.1 + `install_requirements_381.md`: Curios is optional for launch and needed on both sides only for slots; package metadata is `mandatory=false`.
 
 ### C104 · Patchouli — «Журнал Исследователя» (перенесено в версию 3.8.1; v3.8.0 уже выпущена)
 - [ ] **C104.** Patchouli (Ihmily), Forge 1.20.1, **CC-BY-NC-SA-3.0** —
