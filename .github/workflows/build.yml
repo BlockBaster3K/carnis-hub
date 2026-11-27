@@ -58,10 +58,21 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # ⛔ КЭШ ОТКЛЮЧЁН 2026-11-27, прогон 46074966096.
+      # Сборка упала не на коде: аннотации прогона —
+      #   «Restore Gradle distribution 8.1.1 failed: Cache service responded with 400»
+      #   «Failed to restore gradle-home-v1|Linux|build[...]: Error: Cache service responded with 400»
+      # Кэш-сервис ответил 400, gradle-home распаковался неполным, и `gradle` в шаге
+      # Build не запустился вовсе. Предыдущий прогон с ТЕМ ЖЕ кодом (46074376474)
+      # дошёл до R14, то есть исходники компилировались — значит виноват кэш, а не
+      # пакет. Кэш здесь даёт минуты, но ценой невоспроизводимых падений: при
+      # неполном gradle-home ошибка выглядит как «сломался код».
+      # cache-read-only/cache-disabled убирают восстановление, оставляя установку.
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.1.1'
+          cache-disabled: true
 
       - name: Resolve package
         id: pkg
@@ -246,7 +257,32 @@ jobs:
 
       - name: Build
         working-directory: build-src
-        run: gradle --no-daemon --console=plain build
+        run: |
+          set -o pipefail
+          echo "- javac: $(javac -version 2>&1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- java:  $(java -version 2>&1 | head -1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- gradle: $(gradle --version 2>&1 | grep -E '^Gradle' | head -1)" >> "$GITHUB_STEP_SUMMARY"
+          # ⛔ Диагностика добавлена 2026-11-27. Прежний шаг был одной строкой, и при
+          # падении из лога нельзя было понять, чей это провал: компилятора,
+          # плагина ForgeGradle или самого вызова gradle (кэш отдавал 400 и gradle
+          # не стартовал). Теперь при ошибке в summary видны версии инструментов,
+          # а в лог печатаются первые 120 строк с `error:`/`FAILURE`, если они есть.
+          set +e
+          gradle --no-daemon --console=plain --stacktrace build 2>&1 | tee /tmp/build.log
+          RC=${PIPESTATUS[0]}
+          set -e
+          if [ "$RC" != 0 ]; then
+            echo "- ⛔ gradle вернул код $RC" >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo '```'
+              grep -E "error:|FAILURE:|Could not|Caused by|Unresolved|symbol:|location:" /tmp/build.log | head -60 || true
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "--- первые ошибки компиляции ---"
+            grep -E "error:|FAILURE:|Could not resolve|Caused by" /tmp/build.log | head -40 || true
+            exit "$RC"
+          fi
+          echo "- ✅ gradle build: код 0" >> "$GITHUB_STEP_SUMMARY"
 
       # Сборка Gradle проставляет в jar текущее время: в MANIFEST.MF строку
       # Implementation-Timestamp и в заголовки zip метки времени записей.
