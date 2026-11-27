@@ -529,15 +529,38 @@ def main():
                  st["top_share"] * 100, glow_res,
                  "%s" % ("ok" if uv_ok else "ВЫХОД"), anim_res))
 
-    # Коллизия имён среди проверяемых — провал, а не лотерея упаковки.
+    # Коллизия имён среди проверяемых: судим по тому файлу, который грузит код.
+    # Если ОН полон (все пять анимаций на месте), дубль — мусор для уборки, но
+    # в игре его не видно: это предупреждение. Если полон только мёртвый файл,
+    # а грузимый пуст — это провал: ровно так 3 из core9 остались без
+    # walk/attack/hurt/death (замер 2026-11-22).
+    REQ = {"idle", "walk", "attack", "hurt", "death"}
     for suffix, items in sorted(collisions.items()):
         for base, keys in sorted(items.items()):
             if base not in checked_names:
                 continue
-            fails.append("%s: коллизия имён %s — %d файла с разным содержимым"
-                         % (base, suffix, len(keys)))
-            print("  \u2717 %s: коллизия имён (%s) — файлов %d с одним именем: %s"
-                  % (base, suffix, len(keys), ", ".join(keys)))
+            pref = [k for k in keys if "animations/entity/" in k] or keys
+            loaded = sorted(pref)[0]
+            have = set()
+            if suffix == ".animation.json":
+                try:
+                    data = json.loads(files[loaded].decode("utf-8"))
+                    have = {k.split(".")[-1] for k in data.get("animations", {})}
+                except (ValueError, UnicodeDecodeError):
+                    have = set()
+            if len(have & REQ) == len(REQ):
+                warn("%s: коллизия имён %s — грузимый файл полон, дубль %d избыточен"
+                     % (base, suffix, len(keys) - 1))
+                print("  ! %s: коллизия имён (%s) — грузимый файл полон, "
+                      "дубль избыточен: %s"
+                      % (base, suffix, ", ".join(k for k in keys if k != loaded)))
+                continue
+            fails.append("%s: коллизия имён %s — полон только НЕгрузимый файл"
+                         % (base, suffix))
+            print("  \u2717 %s: коллизия имён (%s) — грузимый файл неполон "
+                  "(есть %s), полный набор в: %s"
+                  % (base, suffix, ", ".join(sorted(have)) or "—",
+                     ", ".join(k for k in keys if k != loaded)))
 
     if unregistered:
         warn("моделей вне реестра существ: %d (%s) — не оценивались"
