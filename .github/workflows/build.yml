@@ -262,11 +262,9 @@ jobs:
           echo "- javac: $(javac -version 2>&1)" >> "$GITHUB_STEP_SUMMARY"
           echo "- java:  $(java -version 2>&1 | head -1)" >> "$GITHUB_STEP_SUMMARY"
           echo "- gradle: $(gradle --version 2>&1 | grep -E '^Gradle' | head -1)" >> "$GITHUB_STEP_SUMMARY"
-          # ⛔ Диагностика добавлена 2026-11-27. Прежний шаг был одной строкой, и при
-          # падении из лога нельзя было понять, чей это провал: компилятора,
-          # плагина ForgeGradle или самого вызова gradle (кэш отдавал 400 и gradle
-          # не стартовал). Теперь при ошибке в summary видны версии инструментов,
-          # а в лог печатаются первые 120 строк с `error:`/`FAILURE`, если они есть.
+          # Версии инструментов в summary и контекст ошибок в логе: при падении
+          # нужно сразу видеть, чей это провал — компилятора, ForgeGradle или
+          # самого вызова gradle.
           set +e
           gradle --no-daemon --console=plain --stacktrace build 2>&1 | tee /tmp/build.log
           RC=${PIPESTATUS[0]}
@@ -280,53 +278,17 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
             echo "--- первые ошибки компиляции ---"
             grep -E "error:|FAILURE:|Could not resolve|Caused by" /tmp/build.log | head -40 || true
-            # ⛔ Логи GitHub Actions недоступны снаружи (results-receiver отдаёт EOF),
-            # а summary не читается через API. Поэтому хвост лога складываем в
-            # репозиторий — оттуда его можно прочитать и починить причину, а не
-            # догадываться. Файл удаляется, когда сборка станет зелёной.
-            # ⛔ Ошибки компилятора печатаются ДО хвоста из предупреждений:
-            # javac выдаёт их в начале вывода, а хвост в 60 КБ состоял целиком
-            # из warning-ов, и текст 8 ошибок терялся. Берём только строки с
-            # error/error:/symbol:/location: — они короткие и содержательные.
-            {
-              echo "=== ОШИБКИ (grep error) ==="
-              grep -nE "error:|symbol:|location:|reason:|required:|found:" /tmp/build.log || true
-              echo
-              echo "=== КОНТЕКСТ каждой ошибки (±8 строк) ==="
-              grep -n "error:" /tmp/build.log | cut -d: -f1 | while read ln; do
-                sed -n "$((ln-3)),$((ln+10))p" /tmp/build.log
-                echo "-----"
-              done || true
-              echo
-              echo "=== ХВОСТ ==="
-              tail -c 20000 /tmp/build.log
-            } > "$GITHUB_WORKSPACE/06-build/build_failure.log" || true
+            # Печатаем контекст ошибок В ЛОГ прогона: javac пишет ошибки
+            # раньше предупреждений, поэтому tail бесполезен — берём строки
+            # error:/symbol:/location: и ±8 строк вокруг каждой.
+            echo "=== КОНТЕКСТ ОШИБОК ==="
+            grep -n "error:" /tmp/build.log | cut -d: -f1 | while read ln; do
+              sed -n "$((ln-3)),$((ln+10))p" /tmp/build.log
+              echo "-----"
+            done || true
             exit "$RC"
           fi
           echo "- ✅ gradle build: код 0" >> "$GITHUB_STEP_SUMMARY"
-
-      # ⛔ Временный шаг 2026-11-27: сохранить лог упавшей сборки в репозиторий.
-      # Нужен потому, что логи Actions недоступны, а без текста ошибки причину
-      # провала Build установить нельзя. Шаг no-op при успешной сборке.
-      # УДАЛИТЬ вместе с диагностикой в шаге Build, когда сборка станет зелёной.
-      - name: Save build failure log
-        if: failure()
-        shell: bash
-        run: |
-          set -e
-          LOG="$GITHUB_WORKSPACE/06-build/build_failure.log"
-          [ -f "$LOG" ] || { echo "лога нет"; exit 0; }
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch --no-tags origin "${{ github.ref_name }}" || true
-          cp "$LOG" /tmp/bf.log
-          git stash -u >/dev/null 2>&1 || true
-          git checkout -B "ci-log/${{ github.run_id }}" "origin/${{ github.ref_name }}" 2>/dev/null \
-            || git checkout -B "ci-log/${{ github.run_id }}" "${{ github.sha }}"
-          mkdir -p 06-build && cp /tmp/bf.log 06-build/build_failure.log
-          git add -f 06-build/build_failure.log
-          git commit -m "ci: лог упавшей сборки (прогон ${{ github.run_id }}) [skip ci]" || true
-          git push -f origin "HEAD:ci-log/${{ github.run_id }}"
 
       # Сборка Gradle проставляет в jar текущее время: в MANIFEST.MF строку
       # Implementation-Timestamp и в заголовки zip метки времени записей.
