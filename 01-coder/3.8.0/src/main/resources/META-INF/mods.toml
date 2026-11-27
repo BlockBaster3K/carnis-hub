@@ -30,3 +30,10 @@ mandatory=true
 versionRange="[4.4.4,)"
 ordering="AFTER"
 side="BOTH"
+
+[[dependencies.carnis]]
+modId="curios"
+mandatory=false
+versionRange="[5.9.1,)"
+ordering="AFTER"
+side="BOTH"

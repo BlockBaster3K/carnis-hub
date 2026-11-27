@@ -1,6 +1,7 @@
 package com.carnis.mod;
 
 import com.carnis.mod.config.CarnisConfig;
+import com.carnis.mod.compat.CuriosSlotRegistration;
 import com.carnis.mod.init.ModBlockEntities;
 import com.carnis.mod.init.ModBlocks;
 import com.carnis.mod.init.ModCreativeTabs;
@@ -13,6 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -30,6 +32,11 @@ public final class CarnisMod {
         GeckoLib.initialize();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        // Do not load the optional Curios API when the mod is absent.
+        if (ModList.get().isLoaded("curios")) {
+            modEventBus.addListener(CuriosSlotRegistration::enqueue);
+        }
 
         com.carnis.mod.init.ModEffects.register(modEventBus);
         com.carnis.mod.init.ModFluids.register(modEventBus);
