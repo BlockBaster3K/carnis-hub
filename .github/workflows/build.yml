@@ -284,7 +284,23 @@ jobs:
             # а summary не читается через API. Поэтому хвост лога складываем в
             # репозиторий — оттуда его можно прочитать и починить причину, а не
             # догадываться. Файл удаляется, когда сборка станет зелёной.
-            tail -c 60000 /tmp/build.log > "$GITHUB_WORKSPACE/06-build/build_failure.log" || true
+            # ⛔ Ошибки компилятора печатаются ДО хвоста из предупреждений:
+            # javac выдаёт их в начале вывода, а хвост в 60 КБ состоял целиком
+            # из warning-ов, и текст 8 ошибок терялся. Берём только строки с
+            # error/error:/symbol:/location: — они короткие и содержательные.
+            {
+              echo "=== ОШИБКИ (grep error) ==="
+              grep -nE "error:|symbol:|location:|reason:|required:|found:" /tmp/build.log || true
+              echo
+              echo "=== КОНТЕКСТ каждой ошибки (±8 строк) ==="
+              grep -n "error:" /tmp/build.log | cut -d: -f1 | while read ln; do
+                sed -n "$((ln-3)),$((ln+10))p" /tmp/build.log
+                echo "-----"
+              done || true
+              echo
+              echo "=== ХВОСТ ==="
+              tail -c 20000 /tmp/build.log
+            } > "$GITHUB_WORKSPACE/06-build/build_failure.log" || true
             exit "$RC"
           fi
           echo "- ✅ gradle build: код 0" >> "$GITHUB_STEP_SUMMARY"
