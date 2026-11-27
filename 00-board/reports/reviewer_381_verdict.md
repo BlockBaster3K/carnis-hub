@@ -125,6 +125,7 @@ walk + свои), избыточен только дубль в мёртвой �
 ## 7. Артефакт
 
 `01-coder/3.8.1/project-3.8.1-clean.zip` (16 995 758 Б, 1038 файлов, sha256 `921f5cc1…`) +
-`project-3.8.1-clean.manifest.txt`. Лог прогона: `reviewer_gate_381_921f5cc1.log`.
+`project-3.8.1-clean.manifest.txt`. Лог прогона: `02-reviewer/reports/reviewer_gate_381_921f5cc1.log` (перенесён туда при очистке
+workspace по указанию Архитектора; прогон до правки чекера — `…_run1.log` рядом).
 Предыдущий вердикт — `reviewer_380_verdict.md` (3.8.0, ПРИНЯТО, байты `26edbeef…`); 3.7.3 не
 перепроверялся по указанию Директора.

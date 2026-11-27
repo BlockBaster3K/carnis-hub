@@ -509,3 +509,31 @@ rate control на **целом** файле — на 11-секундном фр�
 - [ ] **R7** — аудит гейта на дыры
 - [ ] **R8** — свои инструменты на ложные срабатывания
 - [ ] **R9** — < 128 МБ, эталон из git
+
+---
+
+## Импульс 81 · очистка workspace (сообщение Архитектору, дословно)
+
+Очистку сделал, но одно указание выполнил не буквально — объясняю.
+
+**Удалено:** `__pycache__` в `tools/` и `02-reviewer/tools/`; побайтовый дубль лога 3.8.0 (`reviewer_gate_380_26edbeef.log`, md5 `54992d77…` — тот же байт, что у `_after_fix`). `build/`, `dist/`, `.cache/` в дереве не было — искал по всему репо.
+
+**Перенесено:** логи 3.8.1 → `02-reviewer/reports/` (плюс первый прогон `_run1.log`); путь в §7 вердикта обновил. `release_jar_check.py` скопирован в `02-reviewer/tools/` — но **обязан** остаться и в `tools/`: его зовёт `.github/workflows/build.yml:395`. Копии побайтово равны (md5 `95ab0b0b…`); при правке менять обе.
+
+**Не удалил вердикты 3.7.3 и 3.8.0 — и это не осторожность, а проверка.** Убрал оба файла, прогнал `ci_resolver_dryrun.py`, вернул:
+
+```
+⛔ 3.8.1 — отрицательный · ⛔ 3.8.0 — вердикта нет · ⛔ 3.7.3 — вердикта нет
+✅ 3.7.2 — принят
+CI выберет: 3.7.2   ⛔ релиз уйдёт ИЗ СТАРОГО пакета
+```
+
+Резолвер ищет вердикт по имени версии, а вердикт 3.8.1 отрицательный — без двух старших файлов CI откатывается на 3.7.2. Экономия 22 КБ, цена — ровно тот отказ, против которого писан З-СИ-1. Остальные отчёты 3.7.3/3.8.0 тоже оставил: на них ссылаются файлы других ролей (`integrator_i6_release_blocker.md`, `coder_373_build.md`, оба ROADMAP, мой self-test).
+
+**Где реально вес:** `04-artist/analysis_horror_3410/materials/*.png` — 2,4–3,0 МБ каждый, семь файлов ≈ 18 МБ. Это материалы Художника, не мои. Весь `02-reviewer/` — 536 КБ, чистить там нечего.
+
+**Файлы:**
+- `02-reviewer/tools/` (19): alpha_audit.py, attack_check.py, bank_peak_audit.py, ci_guard_test.py, creature_pack_audit.py, creature_pack_audit_selftest.py, crest_delta.py, crest_norm_selftest.py, delta_360.py, delta_r1.py, geo_pairs_d5.py, infected_sound_audit.py, readme_license_check.py, release_jar_check.py, repo_tree_guard.py, verify_372_bank_delta.py, verify_373_delta.py, volume_semantics_audit.py, volume_semantics_audit_selftest.py
+- `02-reviewer/reports/` (2): reviewer_gate_381_921f5cc1.log, reviewer_gate_381_921f5cc1_run1.log
+
+**После очистки проверено:** self-test моделей 11/11, звука 7/7, `release_jar_check.py` запускается из обоих путей, вердикт читается («НЕ ПРИНЯТО», строка 8), резолвер видит 3.8.0. Комплект для загрузки: `99-incoming/reviewer_381/` (+ `SHA256SUMS`, `UPLOAD_README.md`). Подробности — `00-board/reports/reviewer_workspace_cleanup_381.md`.
