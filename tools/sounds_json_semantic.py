@@ -74,6 +74,27 @@ def strip_volumes(spec):
     return clean
 
 
+# S131: варианты мобов 3.8.1 — СОЗНАТЕЛЬНОЕ добавление событий, а не «правка
+# вне S17». Белый список по префиксу, а не «любое новое событие разрешено»:
+# иначе тест перестаёт ловить настоящие случайные добавления. Расширять только
+# вместе с задачей, где появление событий объявлено (сейчас — промпт Архитектора
+# sound_prompt_submit_381.md, задача S131).
+NEW_EVENTS_ALLOWED_PREFIXES = (
+    "entity.infected_zombie_scythed.",
+    "entity.infected_zombie_ripper.",
+    "entity.infected_skeleton_sniper.",
+    "entity.infected_skeleton_impaler.",
+    "entity.infected_spider_arachnid.",
+    "entity.infected_spider_crusher.",
+    "entity.infected_creeper_mortar.",
+    "entity.infected_creeper_charger.",
+)
+
+
+def allowed_new_event(ev):
+    return ev.startswith(NEW_EVENTS_ALLOWED_PREFIXES)
+
+
 def compare(old, new):
     """Вернуть список нарушений S17."""
     bad = []
@@ -85,6 +106,8 @@ def compare(old, new):
     for ev in sorted(old_ev - new_ev):
         bad.append("событие УДАЛЕНО: %s" % ev)
     for ev in sorted(new_ev - old_ev):
+        if allowed_new_event(ev):
+            continue
         bad.append("событие ДОБАВЛЕНО вне S17: %s" % ev)
 
     for ev in sorted(old_ev & new_ev):
@@ -144,7 +167,18 @@ def main():
     print("Смысловая проверка sounds.json (S17/T-3202)")
     print("  было событий: %s, стало: %s"
           % (len(old) if old else "—", len(new) if new else "—"))
+    # ⚠ Раньше итог печатал «события и наборы файлов те же» ВСЕГДА при пустом
+    # списке нарушений, в том числе когда события добавлялись по белому списку:
+    # строка «было 214, стало 241» и вывод «те же» стояли рядом. Теперь итог
+    # называет, что именно произошло, чтобы зелёный прогон нельзя было принять
+    # за «ничего не менялось».
+    added = sorted(set(new) - set(old)) if (old is not None and new is not None) else []
     bad = compare(old, new)
+    if not bad and added:
+        print()
+        print("ДОБАВЛЕНО ПО БЕЛОМУ СПИСКУ S131 (%d):" % len(added))
+        for ev in added:
+            print("  + %s" % ev)
     if bad:
         print()
         print("ВНЕ S17 (%d):" % len(bad))
@@ -154,8 +188,12 @@ def main():
         print("ИТОГ: ЕСТЬ РАСХОЖДЕНИЯ — правка sounds.json выходит за S17")
         return 2
     print()
-    print("ИТОГ: СХОДИТСЯ — события и наборы файлов те же, менялись только "
-          "громкости")
+    if added:
+        print("ИТОГ: СХОДИТСЯ — громкости в норме, %d событий добавлено по "
+              "белому списку S131" % len(added))
+    else:
+        print("ИТОГ: СХОДИТСЯ — события и наборы файлов те же, менялись только "
+              "громкости")
     return 0
 
 
