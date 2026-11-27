@@ -537,3 +537,24 @@ CI выберет: 3.7.2   ⛔ релиз уйдёт ИЗ СТАРОГО пак�
 - `02-reviewer/reports/` (2): reviewer_gate_381_921f5cc1.log, reviewer_gate_381_921f5cc1_run1.log
 
 **После очистки проверено:** self-test моделей 11/11, звука 7/7, `release_jar_check.py` запускается из обоих путей, вердикт читается («НЕ ПРИНЯТО», строка 8), резолвер видит 3.8.0. Комплект для загрузки: `99-incoming/reviewer_381/` (+ `SHA256SUMS`, `UPLOAD_README.md`). Подробности — `00-board/reports/reviewer_workspace_cleanup_381.md`.
+
+## Импульс 82 · очистка, вторая редакция (сообщение Архитектору, дословно)
+
+**Сделал:** удалил `__pycache__` в `tools/`; удалил три старых лога гейтов 3.7.3/3.8.0 (48 КБ); `build/`, `dist/`, `out/`, `target/`, `.cache` в дереве нет — проверял `find` по всему репо; побайтовых дублей в моей зоне 0. Комплект-копию `99-incoming/reviewer_381/` снял — 7 файлов были точными копиями, а правило «дубликаты удалить» сильнее; вместо копий список с sha256: `00-board/reports/reviewer_381_upload_set.md`.
+
+**Не удалил `01-coder/`, `03-sound/`, `04-artist/` — и вот почему.**
+
+1. **Без них 3.8.1 нечем принимать.** Пакет, который я принимаю, лежит в `01-coder/3.8.1/project-3.8.1-clean.zip`; банк, с которым сверяются 27 пропавших `.ogg`, — в `03-sound/sounds` (второй банк — `sounds_380`); реестр «16/16» — в `04-artist/creature_registry.md`; архивы сдач — в `04-artist/deliverables/`. Сам гейт читает эти пути: `accept_3.8.0.py:47,49,54,283` (01-coder), `:285,1343,1629` (03-sound), `:926,1088-1095,1125` (04-artist), `creature_pack_audit.py:240` (реестр), `build.yml:79-81,334` (CI).
+2. **Гейт не упадёт — он станет тише.** Нет банка → `skipped_checks.append("банк: каталогов 03-sound/sounds* нет")`; нет реестра → то же. Гейт вернёт **код 0, ничего не проверив**. Это хуже кода 1: зелёный вердикт на пустом месте.
+3. **Задание противоречит себе.** В нём же: «Проектные ZIP-пакеты — не удалять». Внутри `01-coder/` — 17 таких ZIP, внутри `04-artist/deliverables/` — ещё 38 сданных архивов, включая `Carnis_3.8.1_animations_core9.zip` и `Carnis_3.8.1_core4_geo_upgrade.zip`. Удалить папки целиком = удалить то, что велено сохранить.
+4. **Арифметика:** освободится ~215 МБ дерева, но `.git` (156 МБ) останется — байты чужих сдач никуда не уйдут, а ветка потеряет ~9 000 отслеживаемых файлов Кодера, Звука и Художника.
+
+**Глобальный дедуп тоже небезопасен.** Побайтовые совпадения есть, и это не мусор: `infected_hoglin_ambient_01.ogg` совпадает в 3.8.0 / 3.8.1 / `sounds_380`, `bio_purifier.geo.json` — в 3.7.2/3.7.3/3.8.0/3.8.1, `hive_spawn_idle_03.ogg` — в четырёх пакетах и в `03-sound/sounds`. На этом стоит дельта «добавлено 277, изменено 5»; а `sounds` и `sounds_380` — два раздельных банка по S65. «Удалить дубликаты везде» сломало бы и дельту, и канон-манифест.
+
+**Вердикты 3.7.3/3.8.0 оставил** — те же основания, что в §4.1 отчёта импульса 81: без них резолвер даёт «CI выберет 3.7.2». В `02-reviewer/reports/` их и нет, там только логи 3.8.1.
+
+**Файлы:**
+- `02-reviewer/tools/` (19): alpha_audit.py, attack_check.py, bank_peak_audit.py, ci_guard_test.py, creature_pack_audit.py, creature_pack_audit_selftest.py, crest_delta.py, crest_norm_selftest.py, delta_360.py, delta_r1.py, geo_pairs_d5.py, infected_sound_audit.py, readme_license_check.py, release_jar_check.py, repo_tree_guard.py, verify_372_bank_delta.py, verify_373_delta.py, volume_semantics_audit.py, volume_semantics_audit_selftest.py
+- `02-reviewer/reports/` (2): reviewer_gate_381_921f5cc1.log, reviewer_gate_381_921f5cc1_run1.log
+
+**Проверено после очистки:** 11/11, 7/7, вердикт читается («НЕ ПРИНЯТО», строка 8), резолвер видит 3.8.0. Подробности — `00-board/reports/reviewer_workspace_cleanup_381_v2.md`; комплект к загрузке — `reviewer_381_upload_set.md`.
