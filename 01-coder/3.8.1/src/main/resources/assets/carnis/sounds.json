@@ -1,0 +1,2474 @@
+{
+  "item.inoculator.fire": {
+    "subtitle": "carnis.subtitle.inoculator_fire",
+    "sounds": [
+      {
+        "name": "carnis:item/inoculator_fire",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.dart.hit": {
+    "subtitle": "carnis.subtitle.dart_hit",
+    "sounds": [
+      {
+        "name": "carnis:item/dart_hit",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "item.purifier.ignite": {
+    "subtitle": "carnis.subtitle.purifier_ignite",
+    "sounds": [
+      {
+        "name": "carnis:item/purifier_ignite",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "item.purifier.loop": {
+    "subtitle": "carnis.subtitle.purifier_loop",
+    "sounds": [
+      {
+        "name": "carnis:item/purifier_loop",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": true
+      }
+    ]
+  },
+  "flamethrower_fire": {
+    "subtitle": "carnis.subtitle.flamethrower_fire",
+    "sounds": [
+      {
+        "name": "carnis:entity/flamethrower_fire",
+        "stream": false
+      }
+    ]
+  },
+  "amalgam_smash": {
+    "subtitle": "carnis.subtitle.amalgam_smash",
+    "sounds": [
+      {
+        "name": "carnis:entity/flesh_amalgam_smash_01",
+        "volume": 1.0,
+        "pitch": 0.95,
+        "weight": 1
+      },
+      {
+        "name": "carnis:entity/flesh_amalgam_smash_02",
+        "volume": 1.0,
+        "pitch": 1.05,
+        "weight": 1
+      }
+    ]
+  },
+  "organic_creak": {
+    "subtitle": "carnis.subtitle.organic_creak",
+    "sounds": [
+      {
+        "name": "carnis:entity/organic_creak"
+      }
+    ]
+  },
+  "amalgam_roar": {
+    "subtitle": "carnis.subtitle.amalgam_roar",
+    "sounds": [
+      {
+        "name": "carnis:entity/flesh_amalgam_roar_01",
+        "volume": 1.0,
+        "pitch": 0.75,
+        "weight": 1
+      },
+      {
+        "name": "carnis:entity/flesh_amalgam_roar_02",
+        "volume": 1.0,
+        "pitch": 0.75,
+        "weight": 1
+      }
+    ]
+  },
+  "heartbeat_loop": {
+    "subtitle": "carnis.subtitle.heartbeat_loop",
+    "sounds": [
+      {
+        "name": "carnis:block/heartbeat_loop",
+        "stream": true
+      }
+    ]
+  },
+  "amalgam_step": {
+    "subtitle": "carnis.subtitle.amalgam_step",
+    "sounds": [
+      {
+        "name": "carnis:entity/flesh_amalgam_step_01",
+        "volume": 0.9,
+        "pitch": 0.95,
+        "weight": 1
+      },
+      {
+        "name": "carnis:entity/flesh_amalgam_step_02",
+        "volume": 0.9,
+        "pitch": 1.05,
+        "weight": 1
+      }
+    ]
+  },
+  "phantom_creeper": {
+    "subtitle": "carnis.subtitle.phantom_creeper",
+    "sounds": [
+      {
+        "name": "carnis:hallucination/phantom_creeper",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "phantom_footsteps": {
+    "subtitle": "carnis.subtitle.phantom_footsteps",
+    "sounds": [
+      {
+        "name": "carnis:hallucination/phantom_footsteps"
+      }
+    ]
+  },
+  "phantom_whisper": {
+    "subtitle": "carnis.subtitle.phantom_whisper",
+    "sounds": [
+      {
+        "name": "carnis:hallucination/phantom_whisper",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "pulsing_heart_beat": {
+    "subtitle": "carnis.subtitle.pulsing_heart_beat",
+    "sounds": [
+      "carnis:block/heart_pulse"
+    ]
+  },
+  "synapse_shock": {
+    "subtitle": "carnis.subtitle.synapse_shock",
+    "sounds": [
+      {
+        "name": "carnis:block/synapse_shock"
+      }
+    ]
+  },
+  "synapse_rupture": {
+    "subtitle": "carnis.subtitle.synapse_rupture",
+    "sounds": [
+      {
+        "name": "carnis:block/synapse_rupture",
+        "pitch": 1.0
+      }
+    ]
+  },
+  "digestor_churn": {
+    "subtitle": "carnis.subtitle.digestor_churn",
+    "sounds": [
+      {
+        "name": "carnis:block/digestor_churn",
+        "volume": 0.9,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "flesh_block_step": {
+    "subtitle": "carnis.subtitle.flesh_block_step",
+    "sounds": [
+      {
+        "name": "carnis:flesh/flesh_block_step_01",
+        "pitch": 0.9
+      },
+      {
+        "name": "carnis:flesh/flesh_block_step_02",
+        "pitch": 1.0
+      },
+      {
+        "name": "carnis:flesh/flesh_block_step_03",
+        "pitch": 1.1
+      }
+    ]
+  },
+  "hive.spread": {
+    "subtitle": "carnis.subtitle.hive_spread",
+    "sounds": [
+      {
+        "name": "carnis:hive/hive_spread_01_creep",
+        "pitch": 0.9,
+        "volume": 1.921
+      },
+      {
+        "name": "carnis:hive/hive_spread_02_pulse",
+        "pitch": 1.0,
+        "volume": 1.336
+      },
+      {
+        "name": "carnis:hive/hive_spread_03_swell",
+        "pitch": 1.1,
+        "volume": 1.702
+      }
+    ]
+  },
+  "combat.flesh_hit": {
+    "subtitle": "carnis.subtitle.combat_flesh_hit",
+    "sounds": [
+      {
+        "name": "carnis:combat/combat_flesh_hit_01",
+        "pitch": 0.9,
+        "weight": 1,
+        "volume": 0.995
+      },
+      {
+        "name": "carnis:combat/combat_flesh_hit_02",
+        "pitch": 1.0,
+        "weight": 1,
+        "volume": 1.27
+      },
+      {
+        "name": "carnis:combat/combat_flesh_hit_03",
+        "pitch": 1.1,
+        "weight": 1,
+        "volume": 1.729
+      }
+    ]
+  },
+  "combat.flesh_hit_deep": {
+    "subtitle": "carnis.subtitle.combat_flesh_hit_deep",
+    "sounds": [
+      {
+        "name": "carnis:combat/combat_flesh_hit_deep_01_axe",
+        "pitch": 0.9,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_flesh_hit_deep_02_crit",
+        "pitch": 1.0,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_flesh_hit_deep_03_blast",
+        "pitch": 1.1,
+        "weight": 1
+      }
+    ]
+  },
+  "combat.dismember": {
+    "subtitle": "carnis.subtitle.combat_dismember",
+    "sounds": [
+      {
+        "name": "carnis:combat/dismember_01",
+        "pitch": 0.85,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/dismember_02",
+        "pitch": 0.92,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/dismember_03",
+        "pitch": 1.0,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/dismember_04",
+        "pitch": 1.08,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/dismember_05",
+        "pitch": 1.15,
+        "weight": 1
+      }
+    ]
+  },
+  "combat.armor_deflect": {
+    "subtitle": "carnis.subtitle.combat_armor_deflect",
+    "sounds": [
+      {
+        "name": "carnis:combat/combat_deflect_01_chitin",
+        "pitch": 0.85,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_deflect_02_bone",
+        "pitch": 0.92,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_deflect_03_metal",
+        "pitch": 1.0,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_deflect_04_glance",
+        "pitch": 1.08,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_deflect_05_parry",
+        "pitch": 1.15,
+        "weight": 1
+      }
+    ]
+  },
+  "combat.block_stab": {
+    "subtitle": "carnis.subtitle.combat_block_stab",
+    "sounds": [
+      {
+        "name": "carnis:combat/combat_stab_01_bone",
+        "pitch": 0.9,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_stab_02_chitin",
+        "pitch": 1.0,
+        "weight": 1
+      },
+      {
+        "name": "carnis:combat/combat_stab_03_shield",
+        "pitch": 1.1,
+        "weight": 1
+      }
+    ]
+  },
+  "creeper_rupture": {
+    "subtitle": "carnis.subtitle.creeper_rupture",
+    "sounds": [
+      {
+        "name": "carnis:block/creeper_rupture",
+        "pitch": 0.9,
+        "volume": 1.0
+      }
+    ]
+  },
+  "amalgamation_fuse": {
+    "subtitle": "carnis.subtitle.amalgamation_fuse",
+    "sounds": [
+      {
+        "name": "carnis:entity/amalgamation_fuse",
+        "volume": 1.1,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "bone_deflect": {
+    "subtitle": "carnis.subtitle.bone_deflect",
+    "sounds": [
+      {
+        "name": "carnis:block/bone_deflect"
+      }
+    ]
+  },
+  "acid_splash": {
+    "subtitle": "carnis.subtitle.acid_splash",
+    "sounds": [
+      {
+        "name": "carnis:entity/acid_splash",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "pustule_burst": {
+    "subtitle": "carnis.subtitle.pustule_burst",
+    "sounds": [
+      "carnis:block/pustule_burst"
+    ]
+  },
+  "flesh_amalgam_ambient": {
+    "subtitle": "carnis.subtitle.flesh_amalgam_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/flesh_amalgam_ambient",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "flesh_amalgam_hurt": {
+    "subtitle": "carnis.subtitle.flesh_amalgam_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/flesh_amalgam_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "flesh_amalgam_death": {
+    "subtitle": "carnis.subtitle.flesh_amalgam_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/flesh_amalgam_death_01",
+        "volume": 1.1,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "hive.spawn_creeper_sac": {
+    "subtitle": "carnis.subtitle.hive_spawn_creeper_sac",
+    "sounds": [
+      {
+        "name": "carnis:hive/spawn_creeper_sac_01"
+      },
+      {
+        "name": "carnis:hive/spawn_creeper_sac_02"
+      },
+      {
+        "name": "carnis:hive/spawn_creeper_sac_03"
+      }
+    ]
+  },
+  "hive.spawn_creeper_crawl": {
+    "subtitle": "carnis.subtitle.hive_spawn_creeper_crawl",
+    "sounds": [
+      {
+        "name": "carnis:hive/spawn_creeper_crawl_01"
+      },
+      {
+        "name": "carnis:hive/spawn_creeper_crawl_02"
+      }
+    ]
+  },
+  "hive.spawn_creeper_detonate": {
+    "subtitle": "carnis.subtitle.hive_spawn_creeper_detonate",
+    "sounds": [
+      {
+        "name": "carnis:hive/spawn_creeper_detonate_01"
+      },
+      {
+        "name": "carnis:hive/spawn_creeper_detonate_02"
+      }
+    ]
+  },
+  "hive.amalgam_shuffle": {
+    "subtitle": "carnis.subtitle.hive_amalgam_shuffle",
+    "sounds": [
+      {
+        "name": "carnis:hive/amalgam_shuffle_01"
+      },
+      {
+        "name": "carnis:hive/amalgam_shuffle_02"
+      },
+      {
+        "name": "carnis:hive/amalgam_shuffle_03"
+      }
+    ]
+  },
+  "hive.amalgam_breath": {
+    "subtitle": "carnis.subtitle.hive_amalgam_breath",
+    "sounds": [
+      {
+        "name": "carnis:entity/flesh_amalgam_ambient",
+        "volume": 0.25,
+        "pitch": 1.0,
+        "weight": 1
+      },
+      {
+        "name": "carnis:hive/amalgam_breath_01",
+        "volume": 0.35,
+        "weight": 1
+      },
+      {
+        "name": "carnis:hive/amalgam_breath_02",
+        "volume": 0.35,
+        "weight": 1
+      }
+    ]
+  },
+  "hive.amalgam_slam": {
+    "subtitle": "carnis.subtitle.hive_amalgam_slam",
+    "sounds": [
+      {
+        "name": "carnis:hive/amalgam_slam_01"
+      },
+      {
+        "name": "carnis:hive/amalgam_slam_02"
+      }
+    ]
+  },
+  "hive.block_place": {
+    "subtitle": "carnis.subtitle.hive_block_place",
+    "sounds": [
+      {
+        "name": "carnis:block/hive_block_place_01_soft",
+        "pitch": 0.9
+      },
+      {
+        "name": "carnis:block/hive_block_place_02_dense",
+        "pitch": 1.0
+      },
+      {
+        "name": "carnis:block/hive_block_place_03_wet",
+        "pitch": 1.1
+      }
+    ]
+  },
+  "hive.block_break": {
+    "subtitle": "carnis.subtitle.hive_block_break",
+    "sounds": [
+      {
+        "name": "carnis:block/hive_block_break_01_tear",
+        "pitch": 0.9
+      },
+      {
+        "name": "carnis:block/hive_block_break_02_pop",
+        "pitch": 1.0
+      },
+      {
+        "name": "carnis:block/hive_block_break_03_crunch",
+        "pitch": 1.1
+      }
+    ]
+  },
+  "hive.detail_flow": {
+    "subtitle": "carnis.subtitle.hive_detail_flow",
+    "sounds": [
+      {
+        "name": "carnis:hive/detail_flow_01",
+        "volume": 2.437,
+        "pitch": 0.95
+      },
+      {
+        "name": "carnis:hive/detail_flow_02",
+        "volume": 1.0,
+        "pitch": 1.05
+      }
+    ]
+  },
+  "hive.detail_membrane": {
+    "subtitle": "carnis.subtitle.hive_detail_membrane",
+    "sounds": [
+      {
+        "name": "carnis:hive/detail_membrane_01"
+      }
+    ]
+  },
+  "hive.detail_bubbles": {
+    "subtitle": "carnis.subtitle.hive_detail_bubbles",
+    "sounds": [
+      {
+        "name": "carnis:hive/detail_bubbles_01"
+      }
+    ]
+  },
+  "hive.detail_creak": {
+    "subtitle": "carnis.subtitle.hive_detail_creak",
+    "sounds": [
+      {
+        "name": "carnis:hive/detail_creak_01"
+      }
+    ]
+  },
+  "hive.detail_scuttle": {
+    "subtitle": "carnis.subtitle.hive_detail_scuttle",
+    "sounds": [
+      {
+        "name": "carnis:hive/detail_scuttle_01"
+      }
+    ]
+  },
+  "hive.spawn_alert": {
+    "subtitle": "carnis.subtitle.hive_spawn_alert",
+    "sounds": [
+      {
+        "name": "carnis:hive/hive_spawn_alert_01"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_alert_02"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_alert_03"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_alert_04"
+      }
+    ]
+  },
+  "hive.spawn_attack": {
+    "subtitle": "carnis.subtitle.hive_spawn_attack",
+    "sounds": [
+      {
+        "name": "carnis:hive/hive_spawn_attack_01",
+        "volume": 0.7,
+        "pitch": 0.94,
+        "weight": 1
+      },
+      {
+        "name": "carnis:hive/hive_spawn_attack_02",
+        "volume": 0.7,
+        "pitch": 0.98,
+        "weight": 1
+      },
+      {
+        "name": "carnis:hive/hive_spawn_attack_03",
+        "volume": 0.7,
+        "pitch": 1.02,
+        "weight": 1
+      },
+      {
+        "name": "carnis:hive/hive_spawn_attack_04",
+        "volume": 0.7,
+        "pitch": 1.06,
+        "weight": 1
+      }
+    ]
+  },
+  "hive.spawn_idle": {
+    "subtitle": "carnis.subtitle.hive_spawn_idle",
+    "sounds": [
+      {
+        "name": "carnis:hive/hive_spawn_idle_01",
+        "volume": 2.263
+      },
+      {
+        "name": "carnis:hive/hive_spawn_idle_02"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_idle_03"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_idle_04"
+      }
+    ]
+  },
+  "hive.spawn_hurt": {
+    "subtitle": "carnis.subtitle.hive_spawn_hurt",
+    "sounds": [
+      {
+        "name": "carnis:hive/hive_spawn_hurt_01"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_hurt_02"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_hurt_03"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_hurt_04"
+      }
+    ]
+  },
+  "hive.spawn_hurt_critical": {
+    "subtitle": "carnis.subtitle.hive_spawn_hurt_critical",
+    "sounds": [
+      {
+        "name": "carnis:hive/hive_spawn_hurt_critical_01"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_hurt_critical_02"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_hurt_critical_03"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_hurt_critical_04"
+      }
+    ]
+  },
+  "hive.spawn_death": {
+    "subtitle": "carnis.subtitle.hive_spawn_death",
+    "sounds": [
+      {
+        "name": "carnis:hive/hive_spawn_death_01"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_death_02"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_death_03"
+      },
+      {
+        "name": "carnis:hive/hive_spawn_death_04"
+      }
+    ]
+  },
+  "hive.spawn_skeleton_whip": {
+    "subtitle": "carnis.subtitle.spawn_skeleton_whip",
+    "sounds": [
+      {
+        "name": "carnis:hive/spawn_skeleton_whip_01"
+      },
+      {
+        "name": "carnis:hive/spawn_skeleton_whip_02"
+      },
+      {
+        "name": "carnis:hive/spawn_skeleton_whip_03"
+      }
+    ]
+  },
+  "hive.spawn_skeleton_blade": {
+    "subtitle": "carnis.subtitle.spawn_skeleton_blade",
+    "sounds": [
+      {
+        "name": "carnis:hive/spawn_skeleton_blade_01"
+      },
+      {
+        "name": "carnis:hive/spawn_skeleton_blade_02"
+      },
+      {
+        "name": "carnis:hive/spawn_skeleton_blade_03"
+      }
+    ]
+  },
+  "hive.spawn_skeleton_bonecrack": {
+    "subtitle": "carnis.subtitle.spawn_skeleton_bonecrack",
+    "sounds": [
+      {
+        "name": "carnis:hive/spawn_skeleton_bonecrack_01"
+      },
+      {
+        "name": "carnis:hive/spawn_skeleton_bonecrack_02"
+      }
+    ]
+  },
+  "hive.alarm": {
+    "subtitle": "carnis.subtitle.hive_alarm",
+    "sounds": [
+      {
+        "name": "carnis:block/hive_alarm",
+        "volume": 1.0,
+        "pitch": 0.9,
+        "stream": false
+      }
+    ]
+  },
+  "hive.ambient": {
+    "subtitle": "carnis.subtitle.hive_ambient",
+    "sounds": [
+      {
+        "name": "carnis:amb/hive_ambient_01",
+        "stream": true,
+        "volume": 0.45
+      },
+      {
+        "name": "carnis:amb/hive_ambient_02",
+        "stream": true,
+        "volume": 0.45
+      },
+      {
+        "name": "carnis:amb/hive_ambient_03",
+        "stream": true,
+        "volume": 0.45
+      }
+    ]
+  },
+  "hive.ambient_close": {
+    "subtitle": "carnis.subtitle.hive_ambient_close",
+    "sounds": [
+      {
+        "name": "carnis:amb/hive_ambient_close_01",
+        "stream": true,
+        "volume": 0.25
+      },
+      {
+        "name": "carnis:amb/hive_ambient_close_02",
+        "stream": true,
+        "volume": 0.25
+      }
+    ]
+  },
+  "hive.ambient_tonal_stinger": {
+    "subtitle": "carnis.subtitle.hive_ambient_tonal_stinger",
+    "sounds": [
+      {
+        "name": "carnis:amb/hive_ambient_tonal_stinger",
+        "stream": false
+      }
+    ]
+  },
+  "hive.eye_screech": {
+    "subtitle": "carnis.subtitle.hive_eye_screech",
+    "sounds": [
+      {
+        "name": "carnis:block/hive_eye_screech",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "hive.heartbeat": {
+    "subtitle": "carnis.subtitle.hive_heartbeat",
+    "sounds": [
+      {
+        "name": "carnis:block/hive_heartbeat"
+      }
+    ]
+  },
+  "hive.pulse": {
+    "subtitle": "carnis.subtitle.hive_pulse",
+    "sounds": [
+      {
+        "name": "carnis:amb/hive_pulse_01",
+        "stream": false,
+        "pitch": 1.0
+      },
+      {
+        "name": "carnis:amb/hive_pulse_02",
+        "stream": false,
+        "pitch": 1.0
+      },
+      {
+        "name": "carnis:amb/hive_pulse_03",
+        "stream": false,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hive.ambient_surface": {
+    "subtitle": "carnis.subtitle.amb_hive_surface",
+    "sounds": [
+      {
+        "name": "carnis:hive/amb_surface",
+        "stream": true,
+        "volume": 0.45
+      }
+    ]
+  },
+  "hive.ambient_deep": {
+    "subtitle": "carnis.subtitle.amb_hive_deep",
+    "sounds": [
+      {
+        "name": "carnis:hive/amb_deep",
+        "stream": true,
+        "volume": 0.45
+      }
+    ]
+  },
+  "hive.ambient_core": {
+    "subtitle": "carnis.subtitle.amb_hive_core",
+    "sounds": [
+      {
+        "name": "carnis:hive/amb_core",
+        "stream": true,
+        "volume": 0.45
+      }
+    ]
+  },
+  "hive.ambient_threshold": {
+    "subtitle": "carnis.subtitle.amb_hive_threshold",
+    "sounds": [
+      {
+        "name": "carnis:hive/amb_threshold",
+        "stream": true,
+        "volume": 0.45
+      }
+    ]
+  },
+  "hive.zone_stinger_intensify": {
+    "subtitle": "carnis.subtitle.zone_stinger_intensify",
+    "sounds": [
+      {
+        "name": "carnis:hive/zone_stinger_intensify",
+        "volume": 0.65,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hive.zone_stinger_release": {
+    "subtitle": "carnis.subtitle.zone_stinger_release",
+    "sounds": [
+      {
+        "name": "carnis:hive/zone_stinger_release",
+        "volume": 0.65,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hive.zone_stinger_deep": {
+    "subtitle": "carnis.subtitle.zone_stinger_deep",
+    "sounds": [
+      {
+        "name": "carnis:hive/zone_stinger_deep",
+        "volume": 0.65,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "block.hive_membrane.place": {
+    "subtitle": "carnis.subtitle.hive_membrane_place",
+    "sounds": [
+      {
+        "name": "carnis:block/hive_membrane_place_01"
+      }
+    ]
+  },
+  "block.hive_membrane.step": {
+    "subtitle": "carnis.subtitle.hive_membrane_step",
+    "sounds": [
+      {
+        "name": "carnis:block/hive_membrane_step_01"
+      }
+    ]
+  },
+  "block.synapse_node.pulse": {
+    "subtitle": "carnis.subtitle.synapse_node_pulse",
+    "sounds": [
+      {
+        "name": "carnis:block/synapse_node_pulse_01",
+        "stream": true
+      }
+    ]
+  },
+  "entity.incubation_cyst.rupture": {
+    "subtitle": "carnis.subtitle.incubation_cyst_rupture",
+    "sounds": [
+      {
+        "name": "carnis:entity/incubation_cyst_rupture_01"
+      }
+    ]
+  },
+  "entity.incubation_cyst.ambient": {
+    "subtitle": "carnis.subtitle.incubation_cyst_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/incubation_cyst_ambient_01",
+        "stream": true
+      }
+    ]
+  },
+  "entity.sinew_shield.block": {
+    "subtitle": "carnis.subtitle.sinew_shield_block",
+    "sounds": [
+      {
+        "name": "carnis:entity/sinew_shield_block_01"
+      }
+    ]
+  },
+  "item.ossified_scythe.swing": {
+    "subtitle": "carnis.subtitle.ossified_scythe_swing",
+    "sounds": [
+      {
+        "name": "carnis:combat/ossified_scythe_swing_01"
+      }
+    ]
+  },
+  "item.ossified_scythe.hit": {
+    "subtitle": "carnis.subtitle.ossified_scythe_hit",
+    "sounds": [
+      {
+        "name": "carnis:combat/ossified_scythe_hit_01"
+      }
+    ]
+  },
+  "item.bone_scythe.swing": {
+    "subtitle": "carnis.subtitle.bone_scythe_swing",
+    "sounds": [
+      {
+        "name": "carnis:combat/bone_scythe_swing_01",
+        "stream": false
+      }
+    ]
+  },
+  "item.bone_scythe.hit": {
+    "subtitle": "carnis.subtitle.bone_scythe_hit",
+    "sounds": [
+      {
+        "name": "carnis:combat/bone_scythe_hit_01",
+        "stream": false
+      }
+    ]
+  },
+  "entity.pustule_grenade.impact": {
+    "subtitle": "carnis.subtitle.pustule_grenade_impact",
+    "sounds": [
+      {
+        "name": "carnis:entity/pustule_grenade_impact_01"
+      }
+    ]
+  },
+  "entity.pustule_grenade.throw": {
+    "subtitle": "carnis.subtitle.pustule_grenade_throw",
+    "sounds": [
+      {
+        "name": "carnis:entity/pustule_grenade_throw_01"
+      }
+    ]
+  },
+  "block.purifier_lamp.ignite": {
+    "subtitle": "carnis.subtitle.purifier_lamp_ignite",
+    "sounds": [
+      {
+        "name": "carnis:item/purifier_lamp_ignite_01"
+      }
+    ]
+  },
+  "item.purification_vial.break": {
+    "subtitle": "carnis.subtitle.purification_vial_break",
+    "sounds": [
+      {
+        "name": "carnis:item/purification_vial_break_01"
+      }
+    ]
+  },
+  "entity.infected_slime.ambient": {
+    "subtitle": "carnis.subtitle.infected_slime_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_slime_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_slime.attack": {
+    "subtitle": "carnis.subtitle.infected_slime_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_slime_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_slime.hurt": {
+    "subtitle": "carnis.subtitle.infected_slime_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_slime_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_slime.death": {
+    "subtitle": "carnis.subtitle.infected_slime_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_slime_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_witch.ambient": {
+    "subtitle": "carnis.subtitle.infected_witch_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_witch_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_witch.attack": {
+    "subtitle": "carnis.subtitle.infected_witch_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_witch_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_witch.hurt": {
+    "subtitle": "carnis.subtitle.infected_witch_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_witch_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_witch.death": {
+    "subtitle": "carnis.subtitle.infected_witch_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_witch_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_enderman.ambient": {
+    "subtitle": "carnis.subtitle.infected_enderman_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_enderman_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_enderman.attack": {
+    "subtitle": "carnis.subtitle.infected_enderman_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_enderman_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_enderman.hurt": {
+    "subtitle": "carnis.subtitle.infected_enderman_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_enderman_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_enderman.death": {
+    "subtitle": "carnis.subtitle.infected_enderman_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_enderman_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_pillager.ambient": {
+    "subtitle": "carnis.subtitle.infected_pillager_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_pillager_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_pillager.attack": {
+    "subtitle": "carnis.subtitle.infected_pillager_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_pillager_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_pillager.hurt": {
+    "subtitle": "carnis.subtitle.infected_pillager_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_pillager_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_pillager.death": {
+    "subtitle": "carnis.subtitle.infected_pillager_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_pillager_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_blaze.ambient": {
+    "subtitle": "carnis.subtitle.infected_blaze_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_blaze_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_blaze.attack": {
+    "subtitle": "carnis.subtitle.infected_blaze_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_blaze_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_blaze.hurt": {
+    "subtitle": "carnis.subtitle.infected_blaze_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_blaze_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_blaze.death": {
+    "subtitle": "carnis.subtitle.infected_blaze_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_blaze_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_guardian.ambient": {
+    "subtitle": "carnis.subtitle.infected_guardian_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_guardian_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_guardian.attack": {
+    "subtitle": "carnis.subtitle.infected_guardian_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_guardian_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_guardian.hurt": {
+    "subtitle": "carnis.subtitle.infected_guardian_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_guardian_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_guardian.death": {
+    "subtitle": "carnis.subtitle.infected_guardian_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_guardian_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_phantom.ambient": {
+    "subtitle": "carnis.subtitle.infected_phantom_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_phantom_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_phantom.attack": {
+    "subtitle": "carnis.subtitle.infected_phantom_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_phantom_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_phantom.hurt": {
+    "subtitle": "carnis.subtitle.infected_phantom_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_phantom_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_phantom.death": {
+    "subtitle": "carnis.subtitle.infected_phantom_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_phantom_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ravager.ambient": {
+    "subtitle": "carnis.subtitle.infected_ravager_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ravager_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ravager.attack": {
+    "subtitle": "carnis.subtitle.infected_ravager_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ravager_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ravager.hurt": {
+    "subtitle": "carnis.subtitle.infected_ravager_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ravager_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ravager.death": {
+    "subtitle": "carnis.subtitle.infected_ravager_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ravager_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ghast.ambient": {
+    "subtitle": "carnis.subtitle.infected_ghast_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ghast_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ghast.attack": {
+    "subtitle": "carnis.subtitle.infected_ghast_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ghast_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ghast.hurt": {
+    "subtitle": "carnis.subtitle.infected_ghast_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ghast_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_ghast.death": {
+    "subtitle": "carnis.subtitle.infected_ghast_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_ghast_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither_skeleton.ambient": {
+    "subtitle": "carnis.subtitle.infected_wither_skeleton_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_skeleton_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither_skeleton.attack": {
+    "subtitle": "carnis.subtitle.infected_wither_skeleton_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_skeleton_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither_skeleton.hurt": {
+    "subtitle": "carnis.subtitle.infected_wither_skeleton_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_skeleton_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither_skeleton.death": {
+    "subtitle": "carnis.subtitle.infected_wither_skeleton_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_skeleton_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_drowned.ambient": {
+    "subtitle": "carnis.subtitle.infected_drowned_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_drowned_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_drowned.attack": {
+    "subtitle": "carnis.subtitle.infected_drowned_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_drowned_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_drowned.hurt": {
+    "subtitle": "carnis.subtitle.infected_drowned_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_drowned_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_drowned.death": {
+    "subtitle": "carnis.subtitle.infected_drowned_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_drowned_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vindicator.ambient": {
+    "subtitle": "carnis.subtitle.infected_vindicator_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vindicator_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vindicator.attack": {
+    "subtitle": "carnis.subtitle.infected_vindicator_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vindicator_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vindicator.hurt": {
+    "subtitle": "carnis.subtitle.infected_vindicator_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vindicator_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vindicator.death": {
+    "subtitle": "carnis.subtitle.infected_vindicator_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vindicator_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_evoker.ambient": {
+    "subtitle": "carnis.subtitle.infected_evoker_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_evoker_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_evoker.attack": {
+    "subtitle": "carnis.subtitle.infected_evoker_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_evoker_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_evoker.hurt": {
+    "subtitle": "carnis.subtitle.infected_evoker_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_evoker_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_evoker.death": {
+    "subtitle": "carnis.subtitle.infected_evoker_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_evoker_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin_brute.ambient": {
+    "subtitle": "carnis.subtitle.infected_piglin_brute_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_brute_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin_brute.attack": {
+    "subtitle": "carnis.subtitle.infected_piglin_brute_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_brute_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin_brute.hurt": {
+    "subtitle": "carnis.subtitle.infected_piglin_brute_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_brute_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin_brute.death": {
+    "subtitle": "carnis.subtitle.infected_piglin_brute_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_brute_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_hoglin.ambient": {
+    "subtitle": "carnis.subtitle.infected_hoglin_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_hoglin_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_hoglin.attack": {
+    "subtitle": "carnis.subtitle.infected_hoglin_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_hoglin_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_hoglin.hurt": {
+    "subtitle": "carnis.subtitle.infected_hoglin_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_hoglin_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_hoglin.death": {
+    "subtitle": "carnis.subtitle.infected_hoglin_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_hoglin_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_shulker.ambient": {
+    "subtitle": "carnis.subtitle.infected_shulker_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_shulker_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_shulker.attack": {
+    "subtitle": "carnis.subtitle.infected_shulker_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_shulker_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_shulker.hurt": {
+    "subtitle": "carnis.subtitle.infected_shulker_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_shulker_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_shulker.death": {
+    "subtitle": "carnis.subtitle.infected_shulker_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_shulker_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_magma_cube.ambient": {
+    "subtitle": "carnis.subtitle.infected_magma_cube_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_magma_cube_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_magma_cube.attack": {
+    "subtitle": "carnis.subtitle.infected_magma_cube_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_magma_cube_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_magma_cube.hurt": {
+    "subtitle": "carnis.subtitle.infected_magma_cube_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_magma_cube_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_magma_cube.death": {
+    "subtitle": "carnis.subtitle.infected_magma_cube_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_magma_cube_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_husk.ambient": {
+    "subtitle": "carnis.subtitle.infected_husk_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_husk_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_husk.attack": {
+    "subtitle": "carnis.subtitle.infected_husk_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_husk_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_husk.hurt": {
+    "subtitle": "carnis.subtitle.infected_husk_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_husk_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_husk.death": {
+    "subtitle": "carnis.subtitle.infected_husk_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_husk_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_stray.ambient": {
+    "subtitle": "carnis.subtitle.infected_stray_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_stray_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_stray.attack": {
+    "subtitle": "carnis.subtitle.infected_stray_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_stray_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_stray.hurt": {
+    "subtitle": "carnis.subtitle.infected_stray_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_stray_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_stray.death": {
+    "subtitle": "carnis.subtitle.infected_stray_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_stray_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_cave_spider.ambient": {
+    "subtitle": "carnis.subtitle.infected_cave_spider_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_cave_spider_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_cave_spider.attack": {
+    "subtitle": "carnis.subtitle.infected_cave_spider_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_cave_spider_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_cave_spider.hurt": {
+    "subtitle": "carnis.subtitle.infected_cave_spider_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_cave_spider_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_cave_spider.death": {
+    "subtitle": "carnis.subtitle.infected_cave_spider_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_cave_spider_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_silverfish.ambient": {
+    "subtitle": "carnis.subtitle.infected_silverfish_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_silverfish_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_silverfish.attack": {
+    "subtitle": "carnis.subtitle.infected_silverfish_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_silverfish_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_silverfish.hurt": {
+    "subtitle": "carnis.subtitle.infected_silverfish_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_silverfish_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_silverfish.death": {
+    "subtitle": "carnis.subtitle.infected_silverfish_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_silverfish_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_endermite.ambient": {
+    "subtitle": "carnis.subtitle.infected_endermite_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_endermite_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_endermite.attack": {
+    "subtitle": "carnis.subtitle.infected_endermite_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_endermite_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_endermite.hurt": {
+    "subtitle": "carnis.subtitle.infected_endermite_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_endermite_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_endermite.death": {
+    "subtitle": "carnis.subtitle.infected_endermite_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_endermite_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin.ambient": {
+    "subtitle": "carnis.subtitle.infected_piglin_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin.attack": {
+    "subtitle": "carnis.subtitle.infected_piglin_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin.hurt": {
+    "subtitle": "carnis.subtitle.infected_piglin_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_piglin.death": {
+    "subtitle": "carnis.subtitle.infected_piglin_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_piglin_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zoglin.ambient": {
+    "subtitle": "carnis.subtitle.infected_zoglin_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zoglin_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zoglin.attack": {
+    "subtitle": "carnis.subtitle.infected_zoglin_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zoglin_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zoglin.hurt": {
+    "subtitle": "carnis.subtitle.infected_zoglin_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zoglin_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zoglin.death": {
+    "subtitle": "carnis.subtitle.infected_zoglin_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zoglin_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vex.ambient": {
+    "subtitle": "carnis.subtitle.infected_vex_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vex_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vex.attack": {
+    "subtitle": "carnis.subtitle.infected_vex_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vex_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vex.hurt": {
+    "subtitle": "carnis.subtitle.infected_vex_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vex_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_vex.death": {
+    "subtitle": "carnis.subtitle.infected_vex_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_vex_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_illusioner.ambient": {
+    "subtitle": "carnis.subtitle.infected_illusioner_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_illusioner_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_illusioner.attack": {
+    "subtitle": "carnis.subtitle.infected_illusioner_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_illusioner_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_illusioner.hurt": {
+    "subtitle": "carnis.subtitle.infected_illusioner_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_illusioner_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_illusioner.death": {
+    "subtitle": "carnis.subtitle.infected_illusioner_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_illusioner_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_bogged.ambient": {
+    "subtitle": "carnis.subtitle.infected_bogged_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_bogged_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_bogged.attack": {
+    "subtitle": "carnis.subtitle.infected_bogged_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_bogged_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_bogged.hurt": {
+    "subtitle": "carnis.subtitle.infected_bogged_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_bogged_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_bogged.death": {
+    "subtitle": "carnis.subtitle.infected_bogged_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_bogged_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_breeze.ambient": {
+    "subtitle": "carnis.subtitle.infected_breeze_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_breeze_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_breeze.attack": {
+    "subtitle": "carnis.subtitle.infected_breeze_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_breeze_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_breeze.hurt": {
+    "subtitle": "carnis.subtitle.infected_breeze_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_breeze_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_breeze.death": {
+    "subtitle": "carnis.subtitle.infected_breeze_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_breeze_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_creaking.ambient": {
+    "subtitle": "carnis.subtitle.infected_creaking_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_creaking_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_creaking.attack": {
+    "subtitle": "carnis.subtitle.infected_creaking_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_creaking_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_creaking.hurt": {
+    "subtitle": "carnis.subtitle.infected_creaking_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_creaking_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_creaking.death": {
+    "subtitle": "carnis.subtitle.infected_creaking_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_creaking_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_warden.ambient": {
+    "subtitle": "carnis.subtitle.infected_warden_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_warden_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_warden.attack": {
+    "subtitle": "carnis.subtitle.infected_warden_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_warden_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_warden.hurt": {
+    "subtitle": "carnis.subtitle.infected_warden_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_warden_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_warden.death": {
+    "subtitle": "carnis.subtitle.infected_warden_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_warden_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither.ambient": {
+    "subtitle": "carnis.subtitle.infected_wither_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither.attack": {
+    "subtitle": "carnis.subtitle.infected_wither_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither.hurt": {
+    "subtitle": "carnis.subtitle.infected_wither_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_wither.death": {
+    "subtitle": "carnis.subtitle.infected_wither_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_wither_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zombie_villager.ambient": {
+    "subtitle": "carnis.subtitle.infected_zombie_villager_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zombie_villager_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zombie_villager.attack": {
+    "subtitle": "carnis.subtitle.infected_zombie_villager_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zombie_villager_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zombie_villager.hurt": {
+    "subtitle": "carnis.subtitle.infected_zombie_villager_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zombie_villager_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_zombie_villager.death": {
+    "subtitle": "carnis.subtitle.infected_zombie_villager_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_zombie_villager_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_elder_guardian.ambient": {
+    "subtitle": "carnis.subtitle.infected_elder_guardian_ambient",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_elder_guardian_ambient_01",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_elder_guardian.attack": {
+    "subtitle": "carnis.subtitle.infected_elder_guardian_attack",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_elder_guardian_attack_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_elder_guardian.hurt": {
+    "subtitle": "carnis.subtitle.infected_elder_guardian_hurt",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_elder_guardian_hurt_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  },
+  "entity.infected_elder_guardian.death": {
+    "subtitle": "carnis.subtitle.infected_elder_guardian_death",
+    "sounds": [
+      {
+        "name": "carnis:entity/infected_elder_guardian_death_01",
+        "volume": 1.0,
+        "pitch": 1.0,
+        "stream": false
+      }
+    ]
+  }
+}

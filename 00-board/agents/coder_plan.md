@@ -40,21 +40,22 @@
 
 Текст: `00-board/ROADMAP_<роль>.md`, раздел «ВОЛНА 58».
 
-- [ ] **C100** — Curios: слоты + регистрация
-- [ ] **C101** — предметы ICurioItem (шлем/респиратор/баллон)
+- [x] **C100** — 2026-11-20: в новом `01-coder/3.8.1` есть optional Curios 5.9.1 API/mod, `mandatory=false` и guarded HEAD/BACK IMC registration; source/package checks pass, runtime/build still unverified. Scaffold report: `coder_381_scaffold.md`.
+- [ ] **C101** — предметы ICurioItem (шлем/респиратор/баллон); respirator details still need resolution
 - [ ] **C102** — сохранение при смерти — вещь не выпадает
-- [x] **C103** — 2026-11-20: README + `00-board/reports/install_requirements.md` различают мягкую optional-зависимость и необходимость Curios на клиенте/сервере именно для слотов; `deps_install_check` сверяет `mandatory=false`.
-- [ ] **C104** — Patchouli: каркас журнала
+- [x] **C103** — 2026-11-20: README пакета + `install_requirements_381.md` говорят: Curios не нужен для запуска, но нужен клиенту и серверу именно для слотов; `mandatory=false`, hash привязан к текущему 3.8.1 scaffold.
+- [ ] **C104** — Patchouli: каркас журнала (**3.8.1**)
 - [ ] **C105** — каталог глав и страниц — JSON, без GUI
 - [ ] **C106** — проверка: журнал листается
-- [ ] **C107** — SmartBrainLib: пилот на 2 существах
-- [ ] **C108** — замер TPS/поведения/JAR до и после
-- [ ] **C109** — Lodestone: первый эффект — Screen Shake
+- [ ] **C107** — SmartBrainLib: пилот на `flesh_amalgam` и `hive_sentinel` (**3.8.1** по прямому запросу пользователя; former target 3.9.0)
+- [ ] **C108** — замер TPS/поведения/JAR до и после; сохранить vanilla-Goal fallback без SBL
+- [ ] **C109** — Lodestone: первый эффект — Screen Shake (3.9.0)
 - [ ] **C110** — замер FPS на каждый эффект
-- [ ] **C111** — Sound Physics: soft dependency, без копирования кода
+- [ ] **C111** — Sound Physics: soft dependency, без копирования кода (3.9.0)
 - [ ] **C112** — никогда не required
 - [ ] **C113** — build.gradle: все зависимости мягко, сборка без них
 - [ ] **C114** — README: требования + лицензии
 - [ ] **C115** — список изменённых .java в отчёте
-**Доступность C100…C115:** в текущем checkout `01-coder/` есть только 3.7.2/3.7.3, scaffolding исходников 3.8.0/3.9.0 отсутствует. Все библиотечные задачи привязаны к будущим версиям; не вносить зависимости в 3.7.x. Начать C100 можно после появления/создания одобренного 3.8.0 scaffold.
+
+**Reconciliation 2026-11-20:** официальный `v3.8.0` — accepted (`26edbeef…`, gate code 0; tag commit `be5fdb5`). Шесть ошибок из локального прогона post-release Curios candidate закрыты как non-applicable к релизу и не переносить в 3.8.1: `00-board/reports/coder_380_gate_reconciliation.md`. Не возвращаться к сборке/приёмке 3.8.0. Подготовить 3.8.1 от принятого 3.8.0 baseline; не копировать 3.7.x. C100–C108 выполняются в 3.8.1; C109–C112 остаются на 3.9.0.
 

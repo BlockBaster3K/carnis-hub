@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RRR",
+    "RSR",
+    "RRR"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "S": {
+      "item": "carnis:purification_serum"
+    }
+  },
+  "result": {
+    "item": "carnis:living_flesh",
+    "count": 1
+  }
+}
