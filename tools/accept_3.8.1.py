@@ -26,6 +26,13 @@ crest, банк == пакет, канон 144. Скопировать это в 
        эффективная громкость, метка и цели по сэмплам согласованы, «в спеке
        одно, в sounds.json другое» не допускается. Для 3.8.1 — нормативно.
 
+    C. **Покрытие core9** (найдено 2026-11-27). Приёмка 3.8.0 вызывает чекер с
+       `--only` по дельте реестра: 33 существа из 49. Ровно вне этой зоны
+       оказались те девять, у кого EСТЬ код в игре, и у них же — все 9 коллизий
+       имён анимаций. То есть приёмка проверяла то, чего в игре нет, и молчала
+       о том, что в игре есть. Для 3.8.1 блок C обязателен: core9 проверяются
+       явно и отдельно, даже если дельта их не включает.
+
 Использование:
     python3 tools/accept_3.8.1.py [путь_к_zip] [путь_к_манифесту]
 
@@ -37,6 +44,14 @@ import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "tools"))
+
+# Девять существ, у которых есть код в моде: ссылки на geo/entity/<name>.geo.json
+# в java. Это ЕДИНСТВЕННЫЕ, кого игрок может увидеть; всё остальное в пакете
+# лежит без кода. Приёмка 3.8.0 их не проверяет (они не в дельте реестра) —
+# отсюда блок C. Список сверен с кодом прогоном, не по памяти.
+CORE9 = ("infected_zombie", "infected_skeleton", "infected_spider",
+         "infected_creeper", "flesh_amalgam", "hive_sentinel",
+         "biomass_maggot", "cerebral_nexus", "parasitic_tendril")
 
 VERSION = "3.8.1"
 
@@ -97,6 +112,105 @@ def check_require_anims(pkg_path):
     return []
 
 
+def check_core9(pkg_path, extract_dir=None):
+    """§4c: core9 проверяются отдельно и явно.
+
+    Зачем. Приёмка 3.8.0 запускает `creature_pack_audit` с `--only` по дельте
+    реестра (33 из 49 существ). Проверено на 3.8.0: все 9 коллизий имён
+    анимаций — у существ ВНЕ этой зоны, и это ровно те девять, у кого есть код
+    в игре (ссылки `geo/entity/<name>.geo.json` в java). Получалось, что
+    приёмка строже всего там, где результат некому увидеть.
+
+    Блок делает две вещи:
+      1. гоняет чекер по core9 без `--only`, чтобы их изъяны были видны;
+      2. сверяет список CORE9 с тем, что реально прописано в java — если
+         Кодер добавил или убрал существо, список должен обновиться, иначе
+         блок тихо проверяет не то.
+
+    Fail-closed: не нашли java или чекер — провал, а не «пропуск».
+    """
+    import json as _json
+    import re as _re
+    import zipfile as _zip
+
+    print()
+    print("C) Покрытие core9 — существа, у которых есть код в игре (§4c)")
+    problems = []
+
+    # --- 1. Сверка списка с кодом -------------------------------------
+    java_refs = set()
+    try:
+        with _zip.ZipFile(pkg_path) as z:
+            for n in z.namelist():
+                if not n.endswith(".java"):
+                    continue
+                try:
+                    src = z.read(n).decode("utf-8", "ignore")
+                except Exception:
+                    continue
+                for m in _re.finditer(
+                        r'"geo/entity/([a-z0-9_]+)\.geo\.json"', src):
+                    java_refs.add(m.group(1))
+    except Exception as e:
+        print("  x java в пакете не читается (%s) — сверка невозможна" % e)
+        return ["core9: java не читается — проверка невозможна"]
+
+    if not java_refs:
+        print("  x в java нет ни одной ссылки geo/entity/*.geo.json")
+        print("    либо код сменил схему путей, либо пакет собран без java.")
+        print("    Молча пропустить нельзя: тогда core9 неопределим.")
+        return ["core9: ссылок на geo/entity в java нет — core9 неопределим"]
+
+    declared = set(CORE9)
+    extra = sorted(java_refs - declared)
+    missing = sorted(declared - java_refs)
+    if extra:
+        print("  ✗ в java есть существа вне списка CORE9: %s" % ", ".join(extra))
+        print("    список CORE9 в этом файле устарел — обновить перед приёмкой")
+        problems.append("core9: в java есть %s — список устарел" % extra)
+    if missing:
+        print("  ✗ в java нет ссылки на: %s" % ", ".join(missing))
+        print("    существо заявлено как «в игре», но кода у него нет")
+        problems.append("core9: нет кода у %s" % missing)
+    if not extra and not missing:
+        print("  v список CORE9 сходится с java: %d существ" % len(declared))
+
+    # --- 2. Прогон чекера по core9 ------------------------------------
+    checker = os.path.join(REPO, "02-reviewer", "tools",
+                           "creature_pack_audit.py")
+    if not os.path.isfile(checker):
+        print("  x чекера нет — изъяны core9 проверить нечем")
+        return problems + ["core9: чекер отсутствует"]
+
+    py = _python_with(["PIL", "numpy"])
+    r = subprocess.run([py, checker, pkg_path,
+                        "--only", ",".join(sorted(declared)),
+                        "--require-anims"],
+                       capture_output=True, text=True)
+    out = (r.stdout or "") + (r.stderr or "")
+    for line in out.split("\n"):
+        s = line.strip()
+        if not s:
+            continue
+        if s.startswith("\u2717") or "Существ:" in s or "ИТОГ" in s:
+            print("  | " + s)
+    # Счёт покрытия: чекер на пустом наборе печатает «Существ: 0» и «СХОДИТСЯ».
+    m = _re.search(r"Существ:\s*(\d+)", out)
+    covered = int(m.group(1)) if m else -1
+    if covered != len(declared):
+        print("  x проверено %d из %d — имена разошлись, аудит неполный"
+              % (max(covered, 0), len(declared)))
+        problems.append("core9: проверено %d из %d"
+                        % (max(covered, 0), len(declared)))
+        return problems
+    if r.returncode != 0:
+        print("  ✗ core9: код %d — у существ из игры есть изъяны" % r.returncode)
+        problems.append("core9: чекер код %d" % r.returncode)
+    else:
+        print("  v core9: код 0 — у всех девяти изъянов нет")
+    return problems
+
+
 def check_volume_semantics(pkg_path):
     """§4a: сторож половинчатой правки — нормативно для 3.8.1.
 
@@ -133,7 +247,7 @@ def main():
         return 2
 
     print("=" * 78)
-    print("Приёмка пакета %s — правила 3.8.0 + §4a/§4b промпта Архитектора" % VERSION)
+    print("Приёмка пакета %s — правила 3.8.0 + §4a/§4b/§4c промпта Архитектора" % VERSION)
     print("=" * 78)
 
     # 1. Базовый гейт 3.8.0 с подменённой версией и расширенным ростом.
@@ -165,11 +279,12 @@ def main():
     extra = []
     extra += check_require_anims(pkg)
     extra += check_volume_semantics(pkg)
+    extra += check_core9(pkg)
 
     print()
     print("=" * 78)
     if base_rc == 0 and not extra:
-        print("ИТОГ: ПРИНЯТО — правила 3.8.0 и оба новых блока 3.8.1 пройдены.")
+        print("ИТОГ: ПРИНЯТО — правила 3.8.0 и все новые блоки 3.8.1 пройдены.")
         return 0
     if base_rc != 0 and extra:
         print("ИТОГ: ЕСТЬ РАСХОЖДЕНИЯ — правила 3.8.0 (код %d) и %d новых блока"
