@@ -406,6 +406,21 @@ jobs:
           set -e
           JAR_NAME="${{ steps.jar.outputs.name }}"
           cp "${{ steps.jar.outputs.file }}" "/tmp/$JAR_NAME"
+          # ⛔ R14 ИДЁТ ПОСЛЕ ЭТОГО ШАГА И ПАДАЛ «пакет не найден» (прогон
+          # 46077358996). Причина: ниже делается `git checkout -B main`, рабочее
+          # дерево становится main-овым, а пакет 3.8.1 живёт только в ветке
+          # задачи — файла `01-coder/3.8.1/project-3.8.1-clean.zip` на диске уже
+          # нет, и R14 получал пустой путь. Сохраняем пакет в /tmp ДО переключения
+          # и отдаём его R14 через output. Сверка при этом не слабеет: это те же
+          # байты принятого пакета, что распакованы в build-src.
+          PKG_SRC="${{ steps.pkg.outputs.path }}"
+          if [ -f "$PKG_SRC" ]; then
+            cp "$PKG_SRC" /tmp/pkg_for_r14.zip
+            echo "pkg=/tmp/pkg_for_r14.zip" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::R14 не сможет сверить: пакет $PKG_SRC не найден до checkout"
+            echo "pkg=" >> "$GITHUB_OUTPUT"
+          fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch --no-tags origin main
@@ -455,10 +470,19 @@ jobs:
       - name: Verify jar matches accepted package (R14)
         shell: bash
         env:
-          PKG: ${{ steps.pkg.outputs.path }}
+          # ⛔ Берём пакет, сохранённый в /tmp шагом «Commit jar into repository»
+          # ДО `git checkout -B main`. Прежний env указывал на путь в ветке
+          # задачи, которого после переключения на main на диске нет — R14 падал
+          # с «пакет не найден» уже ПОСЛЕ успешной сборки и коммита jar.
+          # Пусто → падаем явно, а не проверяем пустоту.
+          PKG: ${{ steps.commitjar.outputs.pkg }}
           JAR_FILE: ${{ steps.jar.outputs.file }}
         run: |
           set -e
+          if [ -z "$PKG" ]; then
+            echo "::error::R14: пакет не передан шагом Commit jar — сверять нечем"
+            exit 2
+          fi
           echo "Проверка R14: JAR против принятого пакета"
           echo "- JAR:  \`$JAR_FILE\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
