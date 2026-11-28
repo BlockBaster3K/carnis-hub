@@ -225,6 +225,20 @@ jobs:
           echo "- mod_version в пакете: \`$V\`" >> "$GITHUB_STEP_SUMMARY"
           [ "$V" = "$EXPECT" ] || { echo "::error::ожидалась версия $EXPECT, в пакете '$V'"; exit 1; }
 
+      # ⛔ 3.8.1 доходил до игрока и падал на старте клиента:
+      #   GeckoLibException: Error loading animation file
+      #   Caused by: JsonParseException: Invalid keyframe data - multiple
+      #              starting keyframes?0.0
+      # GeckoLib обходит ключевые кадры В ПОРЯДКЕ ЗАПИСИ В JSON и бросает
+      # исключение, если кадр с временем 0 встретился не первым (а нечисловой
+      # ключ читается как 0). Сборка при этом зелёная: javac анимации не
+      # разбирает. Проверка ловит это ДО сборки, чтобы такой jar не вышел.
+      - name: Animation keyframes (GeckoLib order)
+        shell: bash
+        run: |
+          set -e
+          python3 tools/animation_keyframe_check.py "${{ steps.pkg.outputs.path }}"
+
       - name: Overlay accepted drops
         shell: bash
         run: |
