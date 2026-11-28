@@ -79,14 +79,29 @@ KEEP_IDENTICAL = [
 ]
 
 fail = []
+# З-17/З-18: проверки, которые не удалось выполнить как следует.
+# Это НЕ провал пакета, но и не «проверено» — выносится в итог отдельно.
+skipped_checks = []
 warn = []
 
 
 # ---------------------------------------------------------------- 1. манифест
-def check_manifest(extract_dir, manifest):
+def check_manifest(extract_dir, manifest, src="near"):
+    """Сверить пакет с манифестом.
+
+    src="near" — манифест рядом с пакетом: доверяем, расхождение = fail.
+    src="repo" — манифест из резервного пути репозитория, а пакет пришёл
+    не из своего каталога. Тогда расхождение может значить «манифест в
+    дереве от другой сборки», а не дефект пакета (З-18). Такое
+    расхождение НЕ валит приёмку, но печатается явно.
+    """
+    trusted = src != "repo"
     if not manifest or not os.path.exists(manifest):
-        print("  ✗ манифеста нет — sha256 не сверить")
-        fail.append("манифест: файла нет")
+        # З-18: «манифеста нет» — это НЕ «не сошлось N строк».
+        # Честно пишем, что проверка не выполнена, а не выносим приговор.
+        print("  · манифест не найден ни рядом с пакетом, ни в репозитории —")
+        print("    сверка sha256 не выполнена")
+        skipped_checks.append("манифест: не найден — сверка sha256 не выполнена")
         return
     files = 0
     for line in open(manifest, encoding="utf-8"):
@@ -97,7 +112,11 @@ def check_manifest(extract_dir, manifest):
         if len(parts) < 2:
             continue
         files += 1
-    r = subprocess.run(["sha256sum", "-c", "--quiet", manifest],
+    # Путь к манифесту АБСОЛЮТНЫЙ: cwd=extract_dir, и относительный путь
+    # из корня репозитория там не разрешается (проверка молча «не находила»
+    # файл и выдавала расхождение на корректном пакете).
+    manifest_abs = os.path.abspath(manifest)
+    r = subprocess.run(["sha256sum", "-c", "--quiet", manifest_abs],
                        cwd=extract_dir, capture_output=True, text=True)
     bad = [l for l in (r.stdout + r.stderr).split("\n")
            if l.strip() and "OK" not in l]
@@ -106,6 +125,14 @@ def check_manifest(extract_dir, manifest):
           % ("✓" if not bad else "✗", files, actual))
     for l in bad[:5]:
         print("      %s" % l)
+    if not trusted:
+        if bad or files != actual:
+            print("  ! З-18: манифест взят из репозитория, а пакет — не из своего")
+            print("    каталога: расхождение (%d строк) считаем возможной другой" % len(bad))
+            print("    сборкой, а не приговором. Для строгой сверки положите")
+            print("    манифест рядом с ZIP или укажите его вторым аргументом.")
+            skipped_checks.append("манифест: сверено по резервному файлу репозитория")
+        return
     if bad:
         fail.append("манифест: не сошлось %d строк" % len(bad))
     if files != actual:
@@ -415,19 +442,40 @@ def check_accepted_layers(extract_dir):
 
 # ------------------------------------------------------------------------ main
 def find_manifest(zip_path, given):
-    if given and os.path.exists(given):
-        return given
-    for ext in (".manifest.txt", ".manifest", ".sha256", ".txt"):
-        p = zip_path[:-4] + ext if zip_path.endswith(".zip") else zip_path + ext
-        if os.path.exists(p):
-            return p
-    return None
+    """Найти манифест. Возвращает (путь или None, источник).
 
+    Источник важен: манифест РЯДОМ с пакетом — доверенный (строгая сверка),
+    манифест из резервного пути репозитория — нет (З-18): пакет мог быть
+    получен из git, и тогда в рабочем дереве лежит манифест другой сборки.
+    """
+    # 1) явно указанный путь — уважаем.
+    if given:
+        if os.path.exists(given):
+            return given, "given"
+        print("  ! указанный манифест не найден: %s — ищу рядом с пакетом"
+              % given)
+    # 2) З-18: сосед пакета — главный источник.
+    if zip_path.endswith(".zip"):
+        near = zip_path[:-4] + ".manifest.txt"
+        if os.path.exists(near):
+            return near, "near"
+    for ext in (".manifest.txt", ".manifest", ".sha256", ".txt"):
+        q = zip_path[:-4] + ext if zip_path.endswith(".zip") else zip_path + ext
+        if os.path.exists(q):
+            return q, "near"
+    # 3) резерв — путь репозитория по версии (НЕ доверенный).
+    if os.path.exists(DEFAULT_MANIFEST):
+        return DEFAULT_MANIFEST, "repo"
+    return None, "none"
 
 def main():
     global REF_360_REAL, REF_STATUS, REF_SRC
     zip_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_ZIP
-    man_arg = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_MANIFEST
+    # З-18: манифест по умолчанию — СОСЕД пакета, а не фиксированный путь
+    # репозитория. Иначе проверяющий, взявший ZIP из git, сверяет его со
+    # старым манифестом своего рабочего дерева и получает ложное
+    # «не сошлось N строк» на корректном пакете. Путь репо — резерв.
+    man_arg = sys.argv[2] if len(sys.argv) > 2 else None
 
     # З-17: эталон разрешаем ОДИН раз до блоков.
     REF_360_REAL, REF_STATUS, REF_SRC = resolve_ref()
@@ -475,10 +523,10 @@ def main():
 
         print()
         print("1) Манифест (sha256sum -c)")
-        m = find_manifest(zip_path, man_arg)
+        m, m_src = find_manifest(zip_path, man_arg)
         if m:
             print("   %s" % os.path.relpath(m, REPO))
-        check_manifest(tmp, m)
+        check_manifest(tmp, m, m_src)
 
         print()
         print("2) JSON")
@@ -555,6 +603,16 @@ def main():
             for i, f in enumerate(fail, 1):
                 print("  %2d. %s" % (i, f))
             return 1
+        # З-20 (fail-closed): пропуск — не успех. Гейт, зелёный при
+        # непроведённой проверке, даёт ложную гарантию, и CI выпускает релиз.
+        if skipped_checks:
+            print("ИТОГ: ПРОВЕРКА НЕ ВЫПОЛНЕНА — fail-closed (З-20), %d:"
+                  % len(skipped_checks))
+            for s in skipped_checks:
+                print("  · %s" % s)
+            print("Пакет НЕ отвергнут по существу, но и не принят: часть")
+            print("проверок не выполнена. Код 2 — «не проверено», не «принято».")
+            return 2
         print("ИТОГ: ПРИНЯТО — все проверки пройдены.")
         print("Дальше: CI на новом коммите → merge PR → тег v%s → Release."
               % VERSION)

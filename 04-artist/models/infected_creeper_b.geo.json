@@ -1,0 +1,506 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.infected_creeper_b",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 2,
+        "visible_bounds_height": 2.5,
+        "visible_bounds_offset": [
+          0,
+          1.0,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0,
+            6,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                6,
+                -2
+              ],
+              "size": [
+                8,
+                12,
+                4
+              ],
+              "uv": [
+                16,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_shoulder_mass",
+          "parent": "body",
+          "pivot": [
+            3,
+            15,
+            0
+          ],
+          "rotation": [
+            6,
+            10,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                13,
+                -3
+              ],
+              "size": [
+                4,
+                5,
+                4
+              ],
+              "uv": [
+                0,
+                34
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_pectoral_anchor",
+          "parent": "flesh_shoulder_mass",
+          "pivot": [
+            2,
+            14,
+            -2
+          ],
+          "rotation": [
+            10,
+            -12,
+            -10
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0,
+                11,
+                -4
+              ],
+              "size": [
+                3,
+                4,
+                3
+              ],
+              "uv": [
+                8,
+                40
+              ]
+            }
+          ]
+        },
+        {
+          "name": "throat_volatile_core",
+          "parent": "head",
+          "pivot": [
+            0,
+            21,
+            -2
+          ],
+          "rotation": [
+            8,
+            -14,
+            4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.0,
+                19.0,
+                -3.0
+              ],
+              "size": [
+                2.5,
+                4,
+                2.5
+              ],
+              "uv": [
+                20,
+                34
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg0",
+          "parent": "root",
+          "pivot": [
+            -2,
+            6,
+            4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                0,
+                2
+              ],
+              "size": [
+                4,
+                6,
+                4
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg1",
+          "parent": "root",
+          "pivot": [
+            2,
+            6,
+            4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0,
+                0,
+                2
+              ],
+              "size": [
+                4,
+                6,
+                4
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg2",
+          "parent": "root",
+          "pivot": [
+            -2,
+            6,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                0,
+                -6
+              ],
+              "size": [
+                4,
+                6,
+                4
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg3",
+          "parent": "root",
+          "pivot": [
+            2,
+            6,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0,
+                0,
+                -6
+              ],
+              "size": [
+                4,
+                6,
+                4
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_knee_socket",
+          "parent": "leg3",
+          "pivot": [
+            2.5,
+            3.5,
+            -5.0
+          ],
+          "rotation": [
+            4,
+            6,
+            -6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.0,
+                2.0,
+                -6.5
+              ],
+              "size": [
+                3,
+                3,
+                3
+              ],
+              "uv": [
+                4,
+                38
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spur_base",
+          "parent": "flesh_knee_socket",
+          "pivot": [
+            2.5,
+            3.5,
+            -6.0
+          ],
+          "rotation": [
+            20,
+            0,
+            -10
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.5,
+                2.0,
+                -7.5
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                36,
+                48
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spur_tip",
+          "parent": "spur_base",
+          "pivot": [
+            2.5,
+            4.5,
+            -7.5
+          ],
+          "rotation": [
+            15,
+            0,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.0,
+                3.8,
+                -8.5
+              ],
+              "size": [
+                1,
+                2,
+                1
+              ],
+              "uv": [
+                44,
+                48
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "body",
+          "pivot": [
+            0,
+            18,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                18,
+                -4
+              ],
+              "size": [
+                8,
+                8,
+                8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_head_socket",
+          "parent": "head",
+          "pivot": [
+            3.5,
+            22,
+            -2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.5,
+                20.5,
+                -3.5
+              ],
+              "size": [
+                3,
+                4,
+                3
+              ],
+              "uv": [
+                32,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "horn_base",
+          "parent": "flesh_head_socket",
+          "pivot": [
+            3.5,
+            22,
+            -2
+          ],
+          "rotation": [
+            -18,
+            12,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.5,
+                21.0,
+                -5.5
+              ],
+              "size": [
+                2,
+                3,
+                4
+              ],
+              "uv": [
+                44,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "horn_mid",
+          "parent": "horn_base",
+          "pivot": [
+            3.5,
+            22.5,
+            -5.5
+          ],
+          "rotation": [
+            14,
+            -6,
+            4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.8,
+                22.0,
+                -8.5
+              ],
+              "size": [
+                1.5,
+                2,
+                3.5
+              ],
+              "uv": [
+                44,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "name": "horn_tip",
+          "parent": "horn_mid",
+          "pivot": [
+            3.5,
+            23.0,
+            -8.5
+          ],
+          "rotation": [
+            10,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3.0,
+                22.8,
+                -11.0
+              ],
+              "size": [
+                1,
+                1.2,
+                2.8
+              ],
+              "uv": [
+                54,
+                8
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

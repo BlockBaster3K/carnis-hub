@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/ladder",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "texture": "carnis:block/creeping_tendrils_1"
-  }
-}

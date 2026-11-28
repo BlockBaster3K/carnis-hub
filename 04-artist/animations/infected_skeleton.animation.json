@@ -1,0 +1,155 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.infected_skeleton.idle": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "heart_core": {
+          "scale": "0.95 + Math.sin(query.anim_time * 360) * 0.1"
+        },
+        "arm_left_upper": {
+          "rotation": {
+            "0.0": [
+              -20,
+              0,
+              5
+            ],
+            "1.0": [
+              -24,
+              0,
+              7
+            ],
+            "2.0": [
+              -20,
+              0,
+              5
+            ]
+          }
+        }
+      }
+    },
+    "animation.infected_skeleton.walk": {
+      "loop": true,
+      "animation_length": 1.2,
+      "bones": {
+        "leg_right": {
+          "rotation": {
+            "0.0": [
+              -24,
+              0,
+              0
+            ],
+            "0.6": [
+              24,
+              0,
+              0
+            ],
+            "1.2": [
+              -24,
+              0,
+              0
+            ]
+          }
+        },
+        "leg_left": {
+          "rotation": {
+            "0.0": [
+              20,
+              0,
+              3
+            ],
+            "0.6": [
+              -18,
+              0,
+              3
+            ],
+            "1.2": [
+              20,
+              0,
+              3
+            ]
+          }
+        }
+      }
+    },
+    "animation.infected_skeleton.attack": {
+      "loop": false,
+      "animation_length": 0.9,
+      "bones": {
+        "arm_right": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.45": [
+              -70,
+              25,
+              0
+            ],
+            "0.6": [
+              -20,
+              0,
+              0
+            ],
+            "0.9": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "bow_upper_limb": {
+          "rotation": {
+            "0.0": [
+              -25,
+              0,
+              10
+            ],
+            "0.45": [
+              -40,
+              0,
+              10
+            ],
+            "0.6": [
+              -20,
+              0,
+              10
+            ],
+            "0.9": [
+              -25,
+              0,
+              10
+            ]
+          }
+        },
+        "bow_lower_limb": {
+          "rotation": {
+            "0.0": [
+              25,
+              0,
+              -10
+            ],
+            "0.45": [
+              40,
+              0,
+              -10
+            ],
+            "0.6": [
+              20,
+              0,
+              -10
+            ],
+            "0.9": [
+              25,
+              0,
+              -10
+            ]
+          }
+        }
+      }
+    }
+  }
+}

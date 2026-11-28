@@ -1,0 +1,856 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "north": "true",
+        "tier": "1",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "1",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "1",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "1",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "1",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "1",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "1",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_1_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "1",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_1_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "1",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_1_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "1",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_1_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "1",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_1_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "1",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_1_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "1",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_2_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "1",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_2_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "1",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_2_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "1",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_2_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "1",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_2_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "1",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t1_2_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "2",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "2",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "2",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "2",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "2",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "2",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "2",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_1_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "2",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_1_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "2",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_1_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "2",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_1_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "2",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_1_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "2",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_1_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "2",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_2_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "2",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_2_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "2",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_2_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "2",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_2_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "2",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_2_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "2",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t2_2_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "3",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "3",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "3",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "3",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "3",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "3",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "3",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_1_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "3",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_1_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "3",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_1_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "3",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_1_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "3",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_1_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "3",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_1_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "3",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_2_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "3",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_2_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "3",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_2_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "3",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_2_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "3",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_2_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "3",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t3_2_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "4",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "4",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "4",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "4",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "4",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "4",
+        "variant": "0"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "4",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_1_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "4",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_1_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "4",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_1_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "4",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_1_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "4",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_1_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "4",
+        "variant": "1"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_1_face",
+        "uvlock": true,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tier": "4",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_2_face",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tier": "4",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_2_face",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tier": "4",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_2_face",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tier": "4",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_2_face",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "tier": "4",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_2_face",
+        "uvlock": true,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "tier": "4",
+        "variant": "2"
+      },
+      "apply": {
+        "model": "carnis:block/flesh_veins_t4_2_face",
+        "uvlock": true,
+        "x": 90
+      }
+    }
+  ]
+}

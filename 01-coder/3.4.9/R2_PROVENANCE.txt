@@ -1,6 +1,0 @@
-Actual available PHASE_F_3_4_8_FULL_DUMP.md fenced sounds.json payload:
-  fenced body including terminal LF: 20259 bytes, SHA-256 66dc02006482041a99d101b611f7fcacdb0091525ed5c216958f7d02070536e7
-  body excluding terminal LF: 20258 bytes, SHA-256 453a01a61bf1d633eaf7db9a40031430f8e1d706d18f780c7523c74f6eb91530
-Actual preserved baseline: 20259 bytes, SHA-256 66dc02006482041a99d101b611f7fcacdb0091525ed5c216958f7d02070536e7
-Exact baseline == local fenced payload including terminal LF: True
-The retry message cites 20,197 bytes and SHA-256 fragment 819ddccd…05aff27. Those values do not match the actual file available at PHASE_F_3_4_8_FULL_DUMP.md in this workspace. No payload bearing that hash was available to diff. Do not substitute that external assertion for the measured local artifact.

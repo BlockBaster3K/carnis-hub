@@ -1,0 +1,2 @@
+- ✅ Вердикт: `00-board/reports/reviewer_373_verdict.md` — версия 3.7.3 принята
+- Пакет: `01-coder/3.7.3/project-3.7.3-clean.zip`

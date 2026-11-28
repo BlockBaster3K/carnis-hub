@@ -1,0 +1,330 @@
+{
+ "schema": "carnis.sounds/1",
+ "_note": "ПРОВИЗОРНЫЙ (S131). Имена событий НЕ согласованы с Архитектором: в 3.8.1 sounds.json 214 событий, новых 0. volume=1.0 — заглушка до решения.",
+ "sounds": {
+  "zombie_a_cleave_swing": {
+   "category": "hostile",
+   "subtitle": "carnis.zombie_a_cleave_swing",
+   "sounds": [
+    {
+     "name": "carnis:zombie_a_cleave_swing",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "zombie_a_cleave_hit": {
+   "category": "hostile",
+   "subtitle": "carnis.zombie_a_cleave_hit",
+   "sounds": [
+    {
+     "name": "carnis:zombie_a_cleave_hit",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "zombie_a_bleed_apply": {
+   "category": "hostile",
+   "subtitle": "carnis.zombie_a_bleed_apply",
+   "sounds": [
+    {
+     "name": "carnis:zombie_a_bleed_apply",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "zombie_b_leap": {
+   "category": "hostile",
+   "subtitle": "carnis.zombie_b_leap",
+   "sounds": [
+    {
+     "name": "carnis:zombie_b_leap",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "zombie_b_bite_quick": {
+   "category": "hostile",
+   "subtitle": "carnis.zombie_b_bite_quick",
+   "sounds": [
+    {
+     "name": "carnis:zombie_b_bite_quick",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "zombie_b_vampiric": {
+   "category": "hostile",
+   "subtitle": "carnis.zombie_b_vampiric",
+   "sounds": [
+    {
+     "name": "carnis:zombie_b_vampiric",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "zombie_b_slowness": {
+   "category": "hostile",
+   "subtitle": "carnis.zombie_b_slowness",
+   "sounds": [
+    {
+     "name": "carnis:zombie_b_slowness",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "skeleton_a_bow_draw": {
+   "category": "hostile",
+   "subtitle": "carnis.skeleton_a_bow_draw",
+   "sounds": [
+    {
+     "name": "carnis:skeleton_a_bow_draw",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "skeleton_a_shot": {
+   "category": "hostile",
+   "subtitle": "carnis.skeleton_a_shot",
+   "sounds": [
+    {
+     "name": "carnis:skeleton_a_shot",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "skeleton_a_armor_pierce": {
+   "category": "hostile",
+   "subtitle": "carnis.skeleton_a_armor_pierce",
+   "sounds": [
+    {
+     "name": "carnis:skeleton_a_armor_pierce",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "skeleton_b_pike_thrust": {
+   "category": "hostile",
+   "subtitle": "carnis.skeleton_b_pike_thrust",
+   "sounds": [
+    {
+     "name": "carnis:skeleton_b_pike_thrust",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "skeleton_b_parry_ricochet": {
+   "category": "hostile",
+   "subtitle": "carnis.skeleton_b_parry_ricochet",
+   "sounds": [
+    {
+     "name": "carnis:skeleton_b_parry_ricochet",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "spider_a_jump": {
+   "category": "hostile",
+   "subtitle": "carnis.spider_a_jump",
+   "sounds": [
+    {
+     "name": "carnis:spider_a_jump",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "spider_a_land": {
+   "category": "hostile",
+   "subtitle": "carnis.spider_a_land",
+   "sounds": [
+    {
+     "name": "carnis:spider_a_land",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "spider_a_web": {
+   "category": "hostile",
+   "subtitle": "carnis.spider_a_web",
+   "sounds": [
+    {
+     "name": "carnis:spider_a_web",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "spider_a_paralytic": {
+   "category": "hostile",
+   "subtitle": "carnis.spider_a_paralytic",
+   "sounds": [
+    {
+     "name": "carnis:spider_a_paralytic",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "spider_b_leg_slam": {
+   "category": "hostile",
+   "subtitle": "carnis.spider_b_leg_slam",
+   "sounds": [
+    {
+     "name": "carnis:spider_b_leg_slam",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "spider_b_shockwave": {
+   "category": "hostile",
+   "subtitle": "carnis.spider_b_shockwave",
+   "sounds": [
+    {
+     "name": "carnis:spider_b_shockwave",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "spider_b_shield_break": {
+   "category": "hostile",
+   "subtitle": "carnis.spider_b_shield_break",
+   "sounds": [
+    {
+     "name": "carnis:spider_b_shield_break",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_a_anchor": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_a_anchor",
+   "sounds": [
+    {
+     "name": "carnis:creeper_a_anchor",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_a_launch": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_a_launch",
+   "sounds": [
+    {
+     "name": "carnis:creeper_a_launch",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_a_poison_cloud": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_a_poison_cloud",
+   "sounds": [
+    {
+     "name": "carnis:creeper_a_poison_cloud",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_a_death_blast": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_a_death_blast",
+   "sounds": [
+    {
+     "name": "carnis:creeper_a_death_blast",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_b_freeze": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_b_freeze",
+   "sounds": [
+    {
+     "name": "carnis:creeper_b_freeze",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_b_charge": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_b_charge",
+   "sounds": [
+    {
+     "name": "carnis:creeper_b_charge",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_b_shield_drop": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_b_shield_drop",
+   "sounds": [
+    {
+     "name": "carnis:creeper_b_shield_drop",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  },
+  "creeper_b_directed_blast": {
+   "category": "hostile",
+   "subtitle": "carnis.creeper_b_directed_blast",
+   "sounds": [
+    {
+     "name": "carnis:creeper_b_directed_blast",
+     "stream": false,
+     "volume": 1.0,
+     "pitch": 1.0
+    }
+   ]
+  }
+ }
+}

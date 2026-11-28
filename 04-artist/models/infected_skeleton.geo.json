@@ -1,0 +1,582 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.infected_skeleton",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.25,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0,
+            12,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                12,
+                -2
+              ],
+              "size": [
+                8,
+                12,
+                4
+              ],
+              "uv": [
+                16,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_torso_overgrowth",
+          "parent": "body",
+          "pivot": [
+            1.5,
+            18,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                14,
+                -2.5
+              ],
+              "size": [
+                5,
+                8,
+                5
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "sinew_band_1",
+          "parent": "flesh_torso_overgrowth",
+          "pivot": [
+            0,
+            20,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            12
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                19.5,
+                -2.7
+              ],
+              "size": [
+                6,
+                1.5,
+                5.4
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "sinew_band_2",
+          "parent": "flesh_torso_overgrowth",
+          "pivot": [
+            0,
+            16,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            -10
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                15.5,
+                -2.7
+              ],
+              "size": [
+                6,
+                1.5,
+                5.4
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "parasite_bone_spike_1",
+          "parent": "flesh_torso_overgrowth",
+          "pivot": [
+            2.5,
+            20,
+            -2.5
+          ],
+          "rotation": [
+            -25,
+            -15,
+            10
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2,
+                19,
+                -4.5
+              ],
+              "size": [
+                1,
+                2,
+                2.5
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "parasite_bone_spike_2",
+          "parent": "flesh_torso_overgrowth",
+          "pivot": [
+            3,
+            16.5,
+            -2.5
+          ],
+          "rotation": [
+            -18,
+            -22,
+            14
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.5,
+                15.5,
+                -4.5
+              ],
+              "size": [
+                1,
+                2,
+                2.5
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spine_cluster",
+          "parent": "body",
+          "pivot": [
+            0,
+            18,
+            2.5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.5,
+                13,
+                1.5
+              ],
+              "size": [
+                3,
+                10,
+                2
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "body",
+          "pivot": [
+            0,
+            24,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                24,
+                -4
+              ],
+              "size": [
+                8,
+                8,
+                8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "arm_right",
+          "parent": "body",
+          "pivot": [
+            -5,
+            22,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6,
+                12,
+                -1
+              ],
+              "size": [
+                2,
+                12,
+                2
+              ],
+              "uv": [
+                40,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "arm_left",
+          "parent": "body",
+          "pivot": [
+            5,
+            22,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4,
+                12,
+                -1
+              ],
+              "size": [
+                2,
+                12,
+                2
+              ],
+              "uv": [
+                40,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bow_upper_limb",
+          "parent": "arm_left",
+          "pivot": [
+            5,
+            14,
+            -1
+          ],
+          "rotation": [
+            -25,
+            0,
+            8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4,
+                14,
+                -2
+              ],
+              "size": [
+                2,
+                8,
+                2
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bow_lower_limb",
+          "parent": "arm_left",
+          "pivot": [
+            5,
+            12,
+            -1
+          ],
+          "rotation": [
+            25,
+            0,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4,
+                4,
+                -2
+              ],
+              "size": [
+                2,
+                8,
+                2
+              ],
+              "uv": [
+                40,
+                44
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tendon_string",
+          "parent": "arm_left",
+          "pivot": [
+            5,
+            13,
+            -3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                5,
+                6,
+                -3.2
+              ],
+              "size": [
+                0,
+                14,
+                1
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_right",
+          "parent": "root",
+          "pivot": [
+            -2,
+            12,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                0,
+                -1
+              ],
+              "size": [
+                2,
+                12,
+                2
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_left",
+          "parent": "root",
+          "pivot": [
+            2,
+            12,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                0,
+                -1
+              ],
+              "size": [
+                2,
+                12,
+                2
+              ],
+              "uv": [
+                16,
+                48
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_calf_muscle",
+          "parent": "leg_left",
+          "pivot": [
+            2,
+            6.5,
+            0.5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0.5,
+                3,
+                -1
+              ],
+              "size": [
+                3,
+                7,
+                3
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "eye_tendril_base",
+          "parent": "head",
+          "pivot": [
+            2,
+            27,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.5,
+                26.5,
+                -5.5
+              ],
+              "size": [
+                1,
+                1,
+                2
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "eye_tendril_tip",
+          "parent": "eye_tendril_base",
+          "pivot": [
+            2,
+            27,
+            -5.5
+          ],
+          "rotation": [
+            18,
+            15,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.5,
+                26.5,
+                -7.5
+              ],
+              "size": [
+                1,
+                1,
+                2
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flesh_cranial_growth",
+          "parent": "head",
+          "pivot": [
+            4,
+            27,
+            0
+          ],
+          "rotation": [
+            6,
+            -8,
+            10
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.5,
+                25,
+                -1
+              ],
+              "size": [
+                3,
+                4,
+                2
+              ],
+              "uv": [
+                16,
+                48
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

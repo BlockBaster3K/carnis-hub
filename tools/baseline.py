@@ -28,6 +28,7 @@
 как «проверил, не сходится».
 """
 
+import atexit
 import os
 import subprocess
 import tempfile
@@ -41,6 +42,32 @@ REF_REV = "a000b665"
 
 OK = "ok"                # эталон получен
 UNAVAILABLE = "unavailable"   # эталона нет — проверка пропускается
+
+#: Временные файлы, созданные модулем (I103). Удаляются при выходе из
+#: процесса — иначе каждый прогон гейта оставлял 12 МБ в `/tmp`.
+_TEMP_REFS = []
+
+
+def cleanup_temp_refs():
+    """Удалить все временные эталоны, созданные модулем.
+
+    Возвращает число удалённых файлов. Ошибки игнорируются: файл мог
+    уже исчезнуть (кто-то вычистил `/tmp`).
+    """
+    removed = 0
+    while _TEMP_REFS:
+        path = _TEMP_REFS.pop()
+        try:
+            os.unlink(path)
+            removed += 1
+        except OSError:
+            pass
+    return removed
+
+
+#: Страховка: файл удаляется при любом выходе из процесса, включая падение
+#: проверки с исключением.
+atexit.register(cleanup_temp_refs)
 
 
 def _repo_root(start=None):
@@ -80,7 +107,15 @@ def resolve(path=REF_PATH, rev=REF_REV, verbose=True):
     git). Вызывающий может открывать его как обычный ZIP. Если эталона
     нет, первый элемент None, статус UNAVAILABLE.
 
-    Временный файл живёт до выхода из процесса (delete=False, tmpdir).
+    Временный файл **живёт только до выхода из процесса**: он создаётся
+    через `mkstemp` (файл на диске, а не в памяти) и **удаляется в
+    `atexit`** — даже если проверка упала или процесс прерван.
+
+    И103: раньше файл оставался в `/tmp` навсегда. Эталон 3.6.0-R — 12 МБ,
+    и каждый прогон гейта оставлял ещё один: за 17 прогонов накопилось
+    200 МБ, что и упирало workspace в лимит. Теперь `cleanup_temp_refs()`
+    удаляет всё, что создал модуль, а `atexit` — страховка на любой путь
+    выхода из процесса.
     """
     # 1. Рабочее дерево — самый быстрый путь и полная совместимость.
     if os.path.exists(path):
@@ -103,6 +138,8 @@ def resolve(path=REF_PATH, rev=REF_REV, verbose=True):
                 fd, tmp = tempfile.mkstemp(prefix="baseline-", suffix=".zip")
                 with os.fdopen(fd, "wb") as f:
                     f.write(data)
+                # I103: файл обязателен к удалению при выходе из процесса.
+                _TEMP_REFS.append(tmp)
                 if verbose:
                     print("  · эталон: git-объект %s:%s (%d Б)"
                           % (r, rel, len(data)))

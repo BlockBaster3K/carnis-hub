@@ -34,16 +34,45 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Дерево репозитория: страж ПЕРВЫМ, до компиляции и до всего прочего.
+      # Причина реальная: коммит 84f3a43 сделан из подкаталога, его дерево
+      # содержало три файла и удаляло 7301 путь (пакет 3.7.3, tools/, доску).
+      # Git не ошибся, история цела — а каждая роль после pull получала
+      # «пакета нет». Страж ловит сигнатуру «корень — подкаталог», требует
+      # 12 корневых каталогов и порог 1000 путей.
+      - name: Repo tree guard
+        run: python3 02-reviewer/tools/repo_tree_guard.py
+
+      # Ревизор (R15): тесты звуковых проверок не запускались ни в CI, ни в
+      # гейте — страж allowlist был добровольным, а fail-open в
+      # heard_elsewhere жил незамеченным. Зависимостей у тестов нет.
+      - name: Sound orphans unit tests
+        run: |
+          set -e
+          python3 tools/sound_orphans_alias_test.py
+          python3 tools/sound_orphans_allowlist_test.py
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
+      # ⛔ КЭШ ОТКЛЮЧЁН 2026-11-27, прогон 46074966096.
+      # Сборка упала не на коде: аннотации прогона —
+      #   «Restore Gradle distribution 8.1.1 failed: Cache service responded with 400»
+      #   «Failed to restore gradle-home-v1|Linux|build[...]: Error: Cache service responded with 400»
+      # Кэш-сервис ответил 400, gradle-home распаковался неполным, и `gradle` в шаге
+      # Build не запустился вовсе. Предыдущий прогон с ТЕМ ЖЕ кодом (46074376474)
+      # дошёл до R14, то есть исходники компилировались — значит виноват кэш, а не
+      # пакет. Кэш здесь даёт минуты, но ценой невоспроизводимых падений: при
+      # неполном gradle-home ошибка выглядит как «сломался код».
+      # cache-read-only/cache-disabled убирают восстановление, оставляя установку.
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.1.1'
+          cache-disabled: true
 
       - name: Resolve package
         id: pkg
@@ -97,12 +126,22 @@ jobs:
                   echo "- ⛔ \`01-coder/$CAND\`: пакет есть, но вердикта Ревизора нет — пропускаю (не релиз)" >> "$GITHUB_STEP_SUMMARY"
                   continue
                 fi
-                # grep в условии возвращает 1 при «не найдено», а set -e на
-                # некоторых раннерах валит шаг. `|| true` делает проверку
-                # чисто логической: пусто = вердикт положительный.
-                NEG=""
-                NEG=$(grep -oiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$VERD2" 2>/dev/null || true)
-                if [ -n "$NEG" ]; then
+                # ⛔ З-CИ-4 (найдено сухим прогоном tools/ci_resolver_dryrun.py):
+                # прежний греп считал вердикт отрицательным по ЛЮБОМУ вхождению
+                # слова в файле. Вердикты содержат ИСТОРИЮ сдач: у 3.7.3 строка 7
+                # «`d19169b4...` — не принята», а решение на строке 11 «# ПРИНЯТО».
+                # CI пропускал 3.7.3 и 3.7.2 и выпускал релиз из 3.7.1.
+                # Теперь решение читает tools/verdict_decision.py: 0 — отказ,
+                # 1 — принято, 2 — решения нет, 3 — файл не прочитан.
+                RC_NEG=0
+                python3 "${VERDICT_TOOL:-tools/verdict_decision.py}" "$VERD2" > /tmp/vdec.log 2>&1 || RC_NEG=$?
+                echo "- вердикт: $(cat /tmp/vdec.log)"
+                if [ "$RC_NEG" = "2" ] || [ "$RC_NEG" = "3" ]; then
+                  echo "::error::вердикт $VERD2 не даёт решения (код $RC_NEG) — публиковать нельзя"
+                  echo "$(cat /tmp/vdec.log)"
+                  exit 1
+                fi
+                if [ "$RC_NEG" = "0" ]; then
                   echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю"
                   echo "- ⛔ \`01-coder/$CAND\`: вердикт Ревизора отрицательный — пропускаю" >> "$GITHUB_STEP_SUMMARY"
                   continue
@@ -146,7 +185,14 @@ jobs:
               echo "::error::ручной запуск: вердикт $MANUAL_VERDICT пуст по содержанию"
               exit 1
             fi
-            if grep -qiE 'НЕ ПРИНЯТ|ОТКЛОНЁН|ОТКЛОНЕНО|REJECTED' "$MANUAL_VERDICT"; then
+            RC_MAN=0
+            python3 "${VERDICT_TOOL:-tools/verdict_decision.py}" "$MANUAL_VERDICT" > /tmp/vman.log 2>&1 || RC_MAN=$?
+            if [ "$RC_MAN" = "2" ] || [ "$RC_MAN" = "3" ]; then
+              echo "::error::ручной запуск: вердикт $MANUAL_VERDICT не даёт решения (код $RC_MAN)"
+              cat /tmp/vman.log
+              exit 1
+            fi
+            if [ "$RC_MAN" = "0" ]; then
               echo "::error::ручной запуск: вердикт $MANUAL_VERDICT отрицательный"
               exit 1
             fi
@@ -178,6 +224,20 @@ jobs:
           echo "- Ожидаемая версия (каталог пакета \`$DIR\`): \`$EXPECT\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- mod_version в пакете: \`$V\`" >> "$GITHUB_STEP_SUMMARY"
           [ "$V" = "$EXPECT" ] || { echo "::error::ожидалась версия $EXPECT, в пакете '$V'"; exit 1; }
+
+      # ⛔ 3.8.1 доходил до игрока и падал на старте клиента:
+      #   GeckoLibException: Error loading animation file
+      #   Caused by: JsonParseException: Invalid keyframe data - multiple
+      #              starting keyframes?0.0
+      # GeckoLib обходит ключевые кадры В ПОРЯДКЕ ЗАПИСИ В JSON и бросает
+      # исключение, если кадр с временем 0 встретился не первым (а нечисловой
+      # ключ читается как 0). Сборка при этом зелёная: javac анимации не
+      # разбирает. Проверка ловит это ДО сборки, чтобы такой jar не вышел.
+      - name: Animation keyframes (GeckoLib order)
+        shell: bash
+        run: |
+          set -e
+          python3 tools/animation_keyframe_check.py "${{ steps.pkg.outputs.path }}"
 
       - name: Overlay accepted drops
         shell: bash
@@ -211,7 +271,38 @@ jobs:
 
       - name: Build
         working-directory: build-src
-        run: gradle --no-daemon --console=plain build
+        run: |
+          set -o pipefail
+          echo "- javac: $(javac -version 2>&1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- java:  $(java -version 2>&1 | head -1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- gradle: $(gradle --version 2>&1 | grep -E '^Gradle' | head -1)" >> "$GITHUB_STEP_SUMMARY"
+          # Версии инструментов в summary и контекст ошибок в логе: при падении
+          # нужно сразу видеть, чей это провал — компилятора, ForgeGradle или
+          # самого вызова gradle.
+          set +e
+          gradle --no-daemon --console=plain --stacktrace build 2>&1 | tee /tmp/build.log
+          RC=${PIPESTATUS[0]}
+          set -e
+          if [ "$RC" != 0 ]; then
+            echo "- ⛔ gradle вернул код $RC" >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo '```'
+              grep -E "error:|FAILURE:|Could not|Caused by|Unresolved|symbol:|location:" /tmp/build.log | head -60 || true
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "--- первые ошибки компиляции ---"
+            grep -E "error:|FAILURE:|Could not resolve|Caused by" /tmp/build.log | head -40 || true
+            # Печатаем контекст ошибок В ЛОГ прогона: javac пишет ошибки
+            # раньше предупреждений, поэтому tail бесполезен — берём строки
+            # error:/symbol:/location: и ±8 строк вокруг каждой.
+            echo "=== КОНТЕКСТ ОШИБОК ==="
+            grep -n "error:" /tmp/build.log | cut -d: -f1 | while read ln; do
+              sed -n "$((ln-3)),$((ln+10))p" /tmp/build.log
+              echo "-----"
+            done || true
+            exit "$RC"
+          fi
+          echo "- ✅ gradle build: код 0" >> "$GITHUB_STEP_SUMMARY"
 
       # Сборка Gradle проставляет в jar текущее время: в MANIFEST.MF строку
       # Implementation-Timestamp и в заголовки zip метки времени записей.
@@ -291,6 +382,35 @@ jobs:
           set -e
           JAR_NAME="${{ steps.jar.outputs.name }}"
           cp "${{ steps.jar.outputs.file }}" "/tmp/$JAR_NAME"
+          # ⛔ R14 ИДЁТ ПОСЛЕ ЭТОГО ШАГА И ПАДАЛ «пакет не найден» (прогон
+          # 46077358996). Причина: ниже делается `git checkout -B main`, рабочее
+          # дерево становится main-овым, а пакет 3.8.1 живёт только в ветке
+          # задачи — файла `01-coder/3.8.1/project-3.8.1-clean.zip` на диске уже
+          # нет, и R14 получал пустой путь. Сохраняем пакет в /tmp ДО переключения
+          # и отдаём его R14 через output. Сверка при этом не слабеет: это те же
+          # байты принятого пакета, что распакованы в build-src.
+          PKG_SRC="${{ steps.pkg.outputs.path }}"
+          if [ -f "$PKG_SRC" ]; then
+            cp "$PKG_SRC" /tmp/pkg_for_r14.zip
+            echo "pkg=/tmp/pkg_for_r14.zip" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::R14 не сможет сверить: пакет $PKG_SRC не найден до checkout"
+            echo "pkg=" >> "$GITHUB_OUTPUT"
+          fi
+          # ⛔ ТО ЖЕ САМОЕ ДЛЯ САМОГО СКРИПТА R14 (прогон 46078136979).
+          # После `git checkout -B main` на диске main-овое дерево, а
+          # tools/release_jar_check.py в main НЕТ — он живёт только в ветке
+          # задачи. Python падал с «can't open file», отдавал код 2, а шаг
+          # трактует 2 как «JAR НЕ соответствует пакету». То есть проверка
+          # не выполнялась вовсе, а вердикт был обвинительный — и релиз
+          # блокировался на пустом месте. Сохраняем скрипт рядом с пакетом.
+          if [ -f tools/release_jar_check.py ]; then
+            cp tools/release_jar_check.py /tmp/release_jar_check.py
+            echo "r14tool=/tmp/release_jar_check.py" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::R14 не сможет сверить: tools/release_jar_check.py не найден до checkout"
+            echo "r14tool=" >> "$GITHUB_OUTPUT"
+          fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch --no-tags origin main
@@ -313,10 +433,26 @@ jobs:
               echo "jar не изменился — коммит не нужен"
             else
               git commit -m "build: $JAR_NAME из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})"
+              # ⛔ ТИХАЯ ПРАВКА. Раньше здесь стоял цикл `git push ... && break`
+              # без проверки результата: если все три попытки отклонены (нет
+              # прав у GITHUB_TOKEN, защита ветки, гонка с другим агентом),
+              # шаг всё равно завершался успехом. Дальше `commit=$(git rev-parse
+              # HEAD)` отдавал локальный коммит, R14 сверял его — тоже успех
+              # (файл-то на диске), а «Publish release» падал на проверке
+              # «TARGET не в origin/main». Прогон 46150901060: все шаги
+              # success, а тега v3.9.0 и релиза нет — сдачу нельзя было
+              # проверить даже по логу, потому что причина тонула в тишине.
+              # Теперь push обязан пройти, иначе шаг падает с внятным текстом.
+              PUSHED=0
               for i in 1 2 3; do
-                git push origin main && break
+                if git push origin main; then PUSHED=1; break; fi
+                echo "::warning::push в main отклонён (попытка $i) — повтор"
                 git pull --rebase --autostash origin main
               done
+              if [ "$PUSHED" != "1" ]; then
+                echo "::error::JAR собран и проверен, но push в main не прошёл за 3 попытки — релиз опубликовать нельзя. Причины: токен без contents:write, защита ветки main, или встречный push другого агента."
+                exit 1
+              fi
             fi
             echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
           else
@@ -324,6 +460,113 @@ jobs:
           fi
           # Коммит, в котором физически лежит именно этот JAR. На него встанет тег.
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      # ---------------------------------------------------------------
+      # R14: релиз обязан быть собран из ПРИНЯТЫХ байтов.
+      #
+      # Зачем. 3.7.3 был выпущен из аннулированного пакета: JAR отдан за ту же
+      # версию, что принята, а внутри прежние звуки. Проверка сравнивает
+      # ассеты `assets/carnis/**` в JAR с `src/main/resources/assets/carnis/**`
+      # в ZIP по sha256. Код 2 — сборка НЕ выпускается.
+      #
+      # Ставится ПОСЛЕ Commit jar и ПЕРЕД Publish: до коммита проверять нечего
+      # (jar ещё не там, откуда его возьмёт релиз), а после публикации
+      # останавливать поздно — asset уже залит.
+      # ---------------------------------------------------------------
+      - name: Verify jar matches accepted package (R14)
+        shell: bash
+        env:
+          # ⛔ Берём пакет, сохранённый в /tmp шагом «Commit jar into repository»
+          # ДО `git checkout -B main`. Прежний env указывал на путь в ветке
+          # задачи, которого после переключения на main на диске нет — R14 падал
+          # с «пакет не найден» уже ПОСЛЕ успешной сборки и коммита jar.
+          # Пусто → падаем явно, а не проверяем пустоту.
+          PKG: ${{ steps.commitjar.outputs.pkg }}
+          R14_TOOL: ${{ steps.commitjar.outputs.r14tool }}
+          JAR_FILE: ${{ steps.jar.outputs.file }}
+        run: |
+          set -e
+          if [ -z "$PKG" ]; then
+            echo "::error::R14: пакет не передан шагом Commit jar — сверять нечем"
+            exit 2
+          fi
+          echo "Проверка R14: JAR против принятого пакета"
+          # ⛔ Печатаем ФАКТИЧЕСКИЕ байты, которые проверяем: путь сам по себе
+          # ничего не доказывает, а локальный прогон того же скрипта на jar из
+          # main и на принятом пакете даёт «654/654 ассетов совпали, 0 лишних
+          # кроме датагена». Если CI снова упадёт — по sha256 будет видно, тот
+          # ли это пакет и тот ли jar (прогон 46077692665 упал без цифр).
+          echo "- JAR:  \`$JAR_FILE\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Пакет: \`$PKG\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- sha256(jar):   $(sha256sum "$JAR_FILE" | cut -d' ' -f1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- sha256(пакет): $(sha256sum "$PKG" | cut -d' ' -f1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- упаковка jar:  $(unzip -Z1 "$JAR_FILE" | wc -l) записей" >> "$GITHUB_STEP_SUMMARY"
+          # ⛔ Отчёт R14 уходит в ветку ci-log упавшего прогона.
+          # Причина: `gh run view --log` в этой среде отдаёт EOF, а результат
+          # R14 живёт только в GITHUB_STEP_SUMMARY, которую прочитать нечем —
+          # прогон 46077692665 упал с RC=2 без единой цифры расхождения.
+          # Локальный прогон того же скрипта на тех же файлах даёт 0, поэтому
+          # без вывода CI дальше идти нельзя. Пушим только при падении.
+          dump_r14() {
+            {
+              echo "=== R14 ==="
+              echo "jar:   $JAR_FILE"
+              echo "пакет: $PKG"
+              echo "sha256(jar):   $(sha256sum "$JAR_FILE" 2>/dev/null | cut -d' ' -f1)"
+              echo "sha256(пакет): $(sha256sum "$PKG" 2>/dev/null | cut -d' ' -f1)"
+              echo "RC=$RC"
+              echo "--- вывод release_jar_check.py ---"
+              cat /tmp/r14.txt 2>/dev/null
+            } > /tmp/r14_report.txt 2>&1
+            git fetch --no-tags origin main >/dev/null 2>&1 || true
+            BLOB=$(git hash-object -w /tmp/r14_report.txt 2>/dev/null) || exit 0
+            git update-index --add --cacheinfo 100644,"$BLOB",06-build/r14_report.txt 2>/dev/null || exit 0
+            TREE=$(git write-tree 2>/dev/null) || exit 0
+            CMT=$(git commit-tree "$TREE" -p "$(git rev-parse HEAD)" \
+                    -m "ci: отчёт R14 (run ${{ github.run_id }})" 2>/dev/null) || exit 0
+            git push --force origin "$CMT:refs/heads/ci-log/${{ github.run_id }}" >/dev/null 2>&1 || true
+            git reset --hard HEAD >/dev/null 2>&1 || true
+          }
+          if [ ! -f "$JAR_FILE" ]; then
+            echo "::error::R14: JAR не найден: $JAR_FILE"
+            exit 2
+          fi
+          if [ ! -f "$PKG" ]; then
+            echo "::error::R14: пакет не найден: $PKG"
+            exit 2
+          fi
+          if [ -z "$R14_TOOL" ] || [ ! -f "$R14_TOOL" ]; then
+            echo "::error::R14: скрипт проверки не сохранён — сверять нечем"
+            exit 2
+          fi
+          PY=$(command -v python3 || command -v python)
+          set +e
+          "$PY" "$R14_TOOL" --jar "$JAR_FILE" --pkg "$PKG" \
+            > /tmp/r14.txt 2>&1
+          RC=$?
+          set -e
+          cat /tmp/r14.txt
+          {
+            echo '```'
+            cat /tmp/r14.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$RC" = "0" ]; then
+            echo "- ✅ R14: JAR собран из принятого пакета" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ "$RC" = "2" ]; then
+            echo "::error::R14: JAR НЕ соответствует принятому пакету — релиз не выпускается"
+            echo "- ❌ R14: расхождения, релиз остановлен" >> "$GITHUB_STEP_SUMMARY"
+            dump_r14
+            exit 2
+          fi
+          # код 1 = проверка не смогла выполниться (нет файла, пустой вход),
+          # это НЕ доказательство расхождения — сообщение должно отличаться,
+          # иначе «не смогли проверить» маскируется под «проверили и плохо».
+          dump_r14
+          echo "::error::R14: проверка не выполнена (код $RC) — релиз не выпускается"
+          exit 2
 
       - name: Publish release with jar
         shell: bash
@@ -339,7 +582,33 @@ jobs:
           # Раньше шаг шёл до коммита JAR в main и тег вставал на предыдущий
           # коммит: релиз ссылался на сборку, которой в нём не было.
           git fetch --no-tags origin main
+          # Диагностика в ветку ci-log: по логам прогона этот отказ читать
+          # нечем (gh run view --log отдаёт EOF в этой среде), поэтому
+          # состояние пишется туда, откуда его можно забрать.
+          dump_publish_fail() {
+            {
+              echo "=== Publish release: отказ ==="
+              echo "TAG=$TAG"
+              echo "TARGET=$TARGET"
+              echo "origin/main=$(git rev-parse origin/main)"
+              echo "исходная ветка: $GITHUB_REF_NAME"
+              echo "--- есть ли коммит в origin/main ---"
+              git merge-base --is-ancestor "$TARGET" origin/main && echo "да" || echo "НЕТ"
+              echo "--- есть ли jar в коммите ---"
+              git cat-file -e "$TARGET:06-build/jars/$JAR_NAME" && echo "да" || echo "НЕТ"
+              echo "--- ветки, содержащие TARGET ---"
+              git branch -r --contains "$TARGET" 2>/dev/null || echo "нет"
+            } > /tmp/publish_report.txt 2>&1
+            BLOB=$(git hash-object -w /tmp/publish_report.txt 2>/dev/null) || exit 0
+            git update-index --add --cacheinfo 100644,"$BLOB",06-build/publish_report.txt 2>/dev/null || exit 0
+            TREE=$(git write-tree 2>/dev/null) || exit 0
+            CMT=$(git commit-tree "$TREE" -p "$(git rev-parse HEAD)" \
+                    -m "ci: отчёт публикации (run ${{ github.run_id }})" 2>/dev/null) || exit 0
+            git push --force origin "$CMT:refs/heads/ci-log/${{ github.run_id }}-publish" >/dev/null 2>&1 || true
+            git reset --hard HEAD >/dev/null 2>&1 || true
+          }
           git merge-base --is-ancestor "$TARGET" origin/main || {
+            dump_publish_fail
             echo "::error::коммит $TARGET не в origin/main — тег ставить нельзя"; exit 1; }
           git cat-file -e "$TARGET:06-build/jars/$JAR_NAME" || {
             echo "::error::в коммите $TARGET нет 06-build/jars/$JAR_NAME — тег ставить нельзя"; exit 1; }

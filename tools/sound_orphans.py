@@ -9,17 +9,59 @@
 Также ловит обратную ошибку: ссылка в sounds.json на несуществующий файл
 («ссылка в пустоту») — она ломает звук на клиенте.
 
+С T-3185 ловит и **третье** направление, которое раньше не проверял никто:
+событие `ModSounds` объявлено, звук в банке есть, а **вызова в коде нет** —
+звук загружен, но недостижим (находка Звука: 11 событий / 15 файлов).
+Такое событие теперь **проваливает проверку** (fail-closed), а не пишется
+предупреждением.
+
 Использование:
     python3 tools/sound_orphans.py <каталог|zip> [--quiet]
 
-Код возврата: 0 — сирот 0 и ссылок в пустоту 0, 2 — есть замечания, 1 — ошибка.
+Код возврата:
+    0 — сирот 0, ссылок в пустоту 0, недостижимых событий 0;
+    2 — есть замечания по ассетам (сироты/ссылки в пустоту) — исторический код;
+    3 — есть **недостижимые события** (T-3185): отдельный код нужен потому, что
+        гейты `accept_3.7.x.py` трактуют код 2 как «пропущено/замечания» и
+        пакет проходит (это и была дыра). Код 3 гейт валит как ✗;
+    1 — ошибка запуска / нечего проверять (fail-closed).
 """
 
 import io
 import json
 import os
+import re
 import sys
 import zipfile
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# З-26: allowlist «задел». Часть событий недостижима СОЗНАТЕЛЬНО — например
+# FLAMETHROWER_FIRE: механики огнемёта в моде ещё нет, но звук записан и лежит
+# в банке как задел. Такое событие надо отличать от недостижимого по ошибке:
+# первое печатается строкой, второе валит проверку.
+ALLOWLIST = os.path.join(REPO_ROOT, "00-board", "reports",
+                         "sound_orphans_allowlist.md")
+ALLOW_MARK = re.compile(r"^\s*[-*]\s*`?([A-Z][A-Z0-9_]+)`?\s*[\u2014-]\s*(.+)$")
+
+
+def load_allowlist(path=None):
+    """Прочитать allowlist. Возвращает {ИМЯ: причина} или None, если файла нет.
+
+    None (файла нет) — это «проверка не выполнена», а не «всё разрешено»:
+    иначе достаточно удалить файл, чтобы любое недостижимое событие
+    перестало валиться.
+    """
+    path = path or ALLOWLIST
+    if not os.path.isfile(path):
+        return None
+    allowed = {}
+    for line in open(path, encoding="utf-8"):
+        m = ALLOW_MARK.match(line)
+        if m:
+            allowed[m.group(1)] = m.group(2).strip()
+    return allowed
+
 
 ASSETS = "assets/carnis/"
 SOUNDS_JSON = ASSETS + "sounds.json"
@@ -87,9 +129,162 @@ def collect(src):
     return refs, files, data
 
 
+RE_CONST = re.compile(
+    r"RegistryObject\s*<\s*SoundEvent\s*>\s+([A-Z0-9_]+)\s*=\s*[^;]*?\"([^\"]+)\"",
+    re.S)
+
+
+def read_sources(src):
+    """Вернуть {имя файла: текст} для всех .java в пакете/каталоге."""
+    out = {}
+    if zipfile.is_zipfile(src):
+        with zipfile.ZipFile(src) as z:
+            for n in z.namelist():
+                if n.endswith(".java"):
+                    try:
+                        out[n.split("/")[-1]] = z.read(n).decode("utf-8", "replace")
+                    except (KeyError, OSError):
+                        pass
+    else:
+        for dp, _, fs in os.walk(src):
+            for f in fs:
+                if f.endswith(".java"):
+                    try:
+                        with open(os.path.join(dp, f), encoding="utf-8",
+                                  errors="replace") as fh:
+                            out[f] = fh.read()
+                    except OSError:
+                        pass
+    return out
+
+
+def heard_elsewhere(dead, data, sources, files):
+    """Из недостижимых событий выбрать те, чьи файлы ЦЕЛИКОМ слышны живьём.
+
+    З-Г6: константа может не вызываться, а её звук — играться. Пример из
+    3.7.3: `FLESH_AMALGAM_AMBIENT` не вызывается вообще, но его файл
+    `entity/flesh_amalgam_ambient` входит в живое событие
+    `hive.amalgam_breath`, которое код вызывает через
+    `ModSounds.HIVE_AMALGAM_BREATH`. Считать такое событие «недостижимым по
+    ошибке» неправильно: звук слышен, работа Звука не выброшена.
+
+    Критерий строгий — покрыты ВСЕ файлы события живыми событиями. Если хотя
+    бы один файл не звучит нигде, это уже настоящая потеря, и событие валит
+    проверку как раньше.
+
+    Возвращает {константа: (ключ, живое_событие)}.
+    """
+    # Невызванные ключи не могут считаться «живым» покрытием друг для друга.
+    dead_keys = {key for _name, key in dead}
+    event_refs = {}
+    live = {}
+    # R15: «живое» покрытие строим только из событий с ВЫЗЫВАЕМОЙ константой.
+    # Переиспользую тот же предикат, что и unreachable_events: пока их два,
+    # они расходятся и мёртвое событие оправдывает другое мёртвое.
+    others = {k: v for k, v in (sources or {}).items()
+              if k != "ModSounds.java"}
+    static_imported = set()
+    if sources:
+        for text in others.values():
+            for m in re.finditer(r"import\s+static\s+[\w.]*ModSounds\."
+                                 r"([A-Z0-9_]+)\s*;", text):
+                static_imported.add(m.group(1))
+    key2name = dict((key, name) for name, key in
+                    (RE_CONST.findall(sources.get("ModSounds.java") or "")
+                     if sources else []))
+    for ev, spec in (data or {}).items():
+        snds = spec.get("sounds", []) if isinstance(spec, dict) else []
+        refs = set()
+        for s in snds:
+            name = s.get("name") if isinstance(s, dict) else s
+            if isinstance(name, str) and name.startswith("carnis:"):
+                refs.add(name[len("carnis:"):])
+        event_refs[ev] = refs
+        evname = key2name.get(ev)
+        if evname is None:
+            # Событие без константы ModSounds (например, чужое/фиктивное) —
+            # НЕ может быть доказательством слышимости. Прежний фолбэк
+            # «evname is None -> живое» и был дырой: любое событие без
+            # константы оправдывало мёртвое.
+            is_live = not sources
+        else:
+            is_live = (not sources
+                       or is_called(evname, others, static_imported))
+        if ev not in dead_keys and is_live:
+            live[ev] = refs
+
+    out = {}
+    for name, key in dead:
+        own = event_refs.get(key, set())
+        if not own:
+            continue
+        # Все файлы события должны быть покрыты ХОТЯ БЫ ОДНИМ живым событием.
+        uncovered = set()
+        covering = set()
+        for f in own:
+            cov = [ev for ev, refs in live.items()
+                   if ev != key and f in refs]
+            if cov:
+                covering.update(cov)
+            else:
+                uncovered.add(f)
+        if not uncovered and covering:
+            out[name] = (key, sorted(covering)[0])
+    return out
+
+
+def unreachable_events(sources):
+    """События ModSounds без единого вызова в коде -> список (константа, ключ).
+
+    Достижимо, если имя константы встречается как `ModSounds.ИМЯ` вне
+    ModSounds.java либо импортировано статически и используется по имени.
+    """
+    mod = sources.get("ModSounds.java")
+    if not mod:
+        return None
+    consts = RE_CONST.findall(mod)
+    if not consts:
+        return None
+    others = {k: v for k, v in sources.items() if k != "ModSounds.java"}
+    static_imported = set()
+    for text in others.values():
+        for m in re.finditer(r"import\s+static\s+[\w.]*ModSounds\.([A-Z0-9_]+)\s*;", text):
+            static_imported.add(m.group(1))
+    dead = []
+    for name, key in consts:
+        if not is_called(name, others, static_imported):
+            dead.append((name, key))
+    return dead
+
+
+def is_called(name, others, static_imported=None):
+    """Вызывается ли константа ModSounds.ИМЯ в коде (вне ModSounds.java).
+
+    Один предикат на две проверки: `unreachable_events` решает, мертва ли
+    константа, а `heard_elsewhere` — можно ли считать событие ЖИВЫМ
+    покрытием. Пока предикатов было два, они расходились (R15: мёртвое
+    событие оправдывало другое мёртвое).
+    """
+    if static_imported is None:
+        static_imported = set()
+    pat_qual = re.compile(r"\bModSounds\s*\.\s*" + name + r"\b")
+    for text in others.values():
+        if pat_qual.search(text):
+            return True
+    if name in static_imported:
+        pat_bare = re.compile(r"(?<![\w.])" + name + r"\b")
+        for text in others.values():
+            body = re.sub(r"import\s+static[^;]*;", "", text)
+            if pat_bare.search(body):
+                return True
+    return False
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     quiet = "--quiet" in sys.argv
+    assets_only = "--assets-only" in sys.argv
+    use_allow = "--no-allowlist" not in sys.argv
     if not args:
         print(__doc__)
         return 1
@@ -128,12 +323,73 @@ def main():
         for d in dangling:
             print("  - %s" % d)
 
+    # --- третье направление: событие объявлено, но не вызывается (T-3185)
+    dead = None
+    if not assets_only:
+        sources = read_sources(src)
+        dead = unreachable_events(sources)
+        if dead is None:
+            print()
+            print("ПРОВЕРКА НЕДОСТИЖИМЫХ СОБЫТИЙ НЕ ВЫПОЛНЕНА: в источнике нет "
+                  "ModSounds.java (нужен пакет/каталог с кодом)")
+            print("ИТОГ: НЕ ПРОВЕРЕНО — fail-closed (для одних ассетов: --assets-only)")
+            return 2
+        print()
+        # З-26: разделяем «сознательный задел» и «недостижимо по ошибке».
+        allowed, allow_unknown = {}, []
+        # З-Г6: третий исход — константа мертва, но файл слышен через живое
+        # событие. Это не потеря, поэтому не валит, но и молчать нельзя.
+        heard = heard_elsewhere(dead or [], data, sources, files)
+        if heard:
+            dead = [d for d in dead if d[0] not in heard]
+            print()
+            print("СЛЫШНЫ ЧЕРЕЗ ДРУГОЕ СОБЫТИЕ (%d) — константа не вызывается, "
+                  "но файл играется (З-Г6):" % len(heard))
+            for name, (key, via) in sorted(heard.items()):
+                print("  ~ ModSounds.%-28s — играется через \"%s\"" % (name, via))
+        if dead and use_allow:
+            table = load_allowlist()
+            if table is None:
+                print("ALLOWLIST НЕ НАЙДЕН: %s" % ALLOWLIST)
+                print("ИТОГ: НЕ ПРОВЕРЕНО — fail-closed (З-26: без файла "
+                      "allowlist «задел» не отличить от ошибки)")
+                return 2
+            dead_names = {n for n, _k in dead}
+            rest = []
+            for name, key in dead:
+                if name in table:
+                    allowed[name] = (key, table[name])
+                else:
+                    rest.append((name, key))
+            allow_unknown = sorted(set(table) - dead_names)
+            dead = rest
+        if allowed:
+            print("ЗАДЕЛ ПО ALLOWLIST (%d) — недостижимо сознательно (З-26):"
+                  % len(allowed))
+            for name, (key, why) in sorted(allowed.items()):
+                print("  ~ ModSounds.%-28s (ключ \"%s\") — %s" % (name, key, why))
+            print()
+        if dead:
+            print("НЕДОСТИЖИМЫЕ СОБЫТИЯ (%d) — объявлены в ModSounds, вызова в коде нет:"
+                  % len(dead))
+            for name, key in dead:
+                print("  - ModSounds.%-28s (ключ \"%s\")" % (name, key))
+        elif not allowed:
+            print("Недостижимых событий нет: 0")
+        if allow_unknown:
+            print()
+            print("! в allowlist %d записей, которых нет среди недостижимых: %s"
+                  % (len(allow_unknown), ", ".join(allow_unknown[:6])))
+            print("  (не валит проверку — устаревшие строки, стоит убрать)")
+
     print()
-    if orphans or dangling:
-        print("ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ — сирот %d, ссылок в пустоту %d"
-              % (len(orphans), len(dangling)))
-        return 2
-    print("ИТОГ: СХОДИТСЯ — сирот 0, ссылок в пустоту 0")
+    if orphans or dangling or dead:
+        print("ИТОГ: ЕСТЬ ЗАМЕЧАНИЯ — сирот %d, ссылок в пустоту %d, "
+              "недостижимых событий %d"
+              % (len(orphans), len(dangling), len(dead or [])))
+        # 3 — чтобы гейт (для которого 2 = «пропущено») не пропустил пакет
+        return 3 if dead else 2
+    print("ИТОГ: СХОДИТСЯ — сирот 0, ссылок в пустоту 0, недостижимых событий 0")
     return 0
 
 

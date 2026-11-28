@@ -1,0 +1,250 @@
+{
+ "schema": "carnis.sounds_additions/1",
+ "_note": "S131: готовые записи sounds.json для 27 событий 8 вариантов. Каталог 01-coder/3.8.1 в репозитории отсутствует (распаковка Кодера, untracked), поэтому правка не может быть закоммичена там. Приёмка накатывает этот файл на src/main/resources/assets/carnis/sounds.json пакета 3.8.1 и проверяет tools/sounds_json_semantic.py.",
+ "target": "src/main/resources/assets/carnis/sounds.json",
+ "events": {
+  "entity.infected_creeper_charger.charge": {
+   "subtitle": "carnis.subtitle.infected_creeper_charger_charge",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_b_charge",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_creeper_charger.directed_blast": {
+   "subtitle": "carnis.subtitle.infected_creeper_charger_directed_blast",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_b_directed_blast",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_creeper_charger.freeze": {
+   "subtitle": "carnis.subtitle.infected_creeper_charger_freeze",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_b_freeze",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_creeper_charger.shield_drop": {
+   "subtitle": "carnis.subtitle.infected_creeper_charger_shield_drop",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_b_shield_drop",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_creeper_mortar.anchor": {
+   "subtitle": "carnis.subtitle.infected_creeper_mortar_anchor",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_a_anchor",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_creeper_mortar.death_blast": {
+   "subtitle": "carnis.subtitle.infected_creeper_mortar_death_blast",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_a_death_blast",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_creeper_mortar.launch": {
+   "subtitle": "carnis.subtitle.infected_creeper_mortar_launch",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_a_launch",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_creeper_mortar.poison_cloud": {
+   "subtitle": "carnis.subtitle.infected_creeper_mortar_poison_cloud",
+   "sounds": [
+    {
+     "name": "carnis:entity/creeper_a_poison_cloud",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_skeleton_impaler.parry_ricochet": {
+   "subtitle": "carnis.subtitle.infected_skeleton_impaler_parry_ricochet",
+   "sounds": [
+    {
+     "name": "carnis:entity/skeleton_b_parry_ricochet",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_skeleton_impaler.pike_thrust": {
+   "subtitle": "carnis.subtitle.infected_skeleton_impaler_pike_thrust",
+   "sounds": [
+    {
+     "name": "carnis:entity/skeleton_b_pike_thrust",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_skeleton_sniper.armor_pierce": {
+   "subtitle": "carnis.subtitle.infected_skeleton_sniper_armor_pierce",
+   "sounds": [
+    {
+     "name": "carnis:entity/skeleton_a_armor_pierce",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_skeleton_sniper.bow_draw": {
+   "subtitle": "carnis.subtitle.infected_skeleton_sniper_bow_draw",
+   "sounds": [
+    {
+     "name": "carnis:entity/skeleton_a_bow_draw",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_skeleton_sniper.shot": {
+   "subtitle": "carnis.subtitle.infected_skeleton_sniper_shot",
+   "sounds": [
+    {
+     "name": "carnis:entity/skeleton_a_shot",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_spider_arachnid.jump": {
+   "subtitle": "carnis.subtitle.infected_spider_arachnid_jump",
+   "sounds": [
+    {
+     "name": "carnis:entity/spider_a_jump",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_spider_arachnid.land": {
+   "subtitle": "carnis.subtitle.infected_spider_arachnid_land",
+   "sounds": [
+    {
+     "name": "carnis:entity/spider_a_land",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_spider_arachnid.paralytic": {
+   "subtitle": "carnis.subtitle.infected_spider_arachnid_paralytic",
+   "sounds": [
+    {
+     "name": "carnis:entity/spider_a_paralytic",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_spider_arachnid.web": {
+   "subtitle": "carnis.subtitle.infected_spider_arachnid_web",
+   "sounds": [
+    {
+     "name": "carnis:entity/spider_a_web",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_spider_crusher.leg_slam": {
+   "subtitle": "carnis.subtitle.infected_spider_crusher_leg_slam",
+   "sounds": [
+    {
+     "name": "carnis:entity/spider_b_leg_slam",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_spider_crusher.shield_break": {
+   "subtitle": "carnis.subtitle.infected_spider_crusher_shield_break",
+   "sounds": [
+    {
+     "name": "carnis:entity/spider_b_shield_break",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_spider_crusher.shockwave": {
+   "subtitle": "carnis.subtitle.infected_spider_crusher_shockwave",
+   "sounds": [
+    {
+     "name": "carnis:entity/spider_b_shockwave",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_zombie_ripper.bite_quick": {
+   "subtitle": "carnis.subtitle.infected_zombie_ripper_bite_quick",
+   "sounds": [
+    {
+     "name": "carnis:entity/zombie_b_bite_quick",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_zombie_ripper.leap": {
+   "subtitle": "carnis.subtitle.infected_zombie_ripper_leap",
+   "sounds": [
+    {
+     "name": "carnis:entity/zombie_b_leap",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_zombie_ripper.slowness_apply": {
+   "subtitle": "carnis.subtitle.infected_zombie_ripper_slowness_apply",
+   "sounds": [
+    {
+     "name": "carnis:entity/zombie_b_slowness",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_zombie_ripper.vampiric_drain": {
+   "subtitle": "carnis.subtitle.infected_zombie_ripper_vampiric_drain",
+   "sounds": [
+    {
+     "name": "carnis:entity/zombie_b_vampiric",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_zombie_scythed.bleed_apply": {
+   "subtitle": "carnis.subtitle.infected_zombie_scythed_bleed_apply",
+   "sounds": [
+    {
+     "name": "carnis:entity/zombie_a_bleed_apply",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_zombie_scythed.cleave_hit": {
+   "subtitle": "carnis.subtitle.infected_zombie_scythed_cleave_hit",
+   "sounds": [
+    {
+     "name": "carnis:entity/zombie_a_cleave_hit",
+     "stream": false
+    }
+   ]
+  },
+  "entity.infected_zombie_scythed.cleave_swing": {
+   "subtitle": "carnis.subtitle.infected_zombie_scythed_cleave_swing",
+   "sounds": [
+    {
+     "name": "carnis:entity/zombie_a_cleave_swing",
+     "stream": false
+    }
+   ]
+  }
+ }
+}

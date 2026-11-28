@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "carnis:item/neuro_resonator_helmet"
-  }
-}

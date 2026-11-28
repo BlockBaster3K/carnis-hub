@@ -1,0 +1,150 @@
+{
+  "schema": "carnis.volume_spec/4",
+  "note": "ТЗ громкостей T-3202. effective = call_site_volume * sounds_json_volume_каждого_сэмпла  | v3: source/board_target/deviation — решение Звука не выглядит нормой доски | v4: detail_flow targets are effective output levels 0.731/0.300 (the 0.45 compromise was retired in S80/S82) | targets_mode=effective: targets_by_sample specifies the post-multiplier level (call_site_volume x sounds_json_volume); with call-site 0.30 the required JSON multipliers are 2.437/1.000.",
+  "tolerance": 0.005,
+  "events": [
+    {
+      "event": "amalgam_smash",
+      "target": 1.0,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/entity/FleshAmalgamEntity.java",
+        "volume": 1.0
+      }
+    },
+    {
+      "event": "creeper_rupture",
+      "target": 1.0,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/event/CarnisEvents.java",
+        "volume": 1.0
+      }
+    },
+    {
+      "event": "synapse_shock",
+      "target": 0.8,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/block/SynapseNodeBlock.java",
+        "volume": 0.8
+      }
+    },
+    {
+      "event": "hive.detail_membrane",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_bubbles",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_creak",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_scuttle",
+      "target": 0.3,
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      }
+    },
+    {
+      "event": "hive.detail_flow",
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/client/sound/HiveAmbientSoundHandler.java",
+        "volume": 0.3,
+        "arg_marker": "detail,",
+        "note": "общий вызов через selectHiveDetail(); событие выбирается в том же файле"
+      },
+      "targets_by_sample": {
+        "detail_flow_01": 0.731,
+        "detail_flow_02": 0.3
+      },
+      "why": "S17 предлагал частичную компенсацию 0.45 (остаток 4.22 дБ). В S80 измерено, что полное выравнивание даёт 0.731 при разрыве 0.00 дБ и пике -7.38 dBFS, запас до потолка -1.20 dBFS = 6.18 дБ. Цель 0.45 снята: автор (Звук) признал её половинчатой.",
+      "source": "выравнивание пары по измерению — S80 (таблица решений), S82, reviewer_detail_flow_decision.md §3. Решение Звука, НЕ норма доски",
+      "board_target": 0.3,
+      "deviation": "доска даёт одно число 0.30 на событие; здесь пара выровнена: flow_01 тише на 7.74 дБ (RMS -29.57 против -21.86), поэтому множитель 2.437 даёт 0.30*2.437=0.731 и разрыв 0.00 дБ. Компромисс 0.45 (S17) снят автором в S80/S82."
+    },
+    {
+      "event": "hive.spawn_idle",
+      "call_site": {
+        "kind": "no_code_multiplier",
+        "file": "src/main/java/com/carnis/mod/entity/InfectedZombieEntity.java",
+        "volume": null,
+        "arg_marker": "getAmbientSound",
+        "note": "две точки вызова, обе возвращают ModSounds.HIVE_SPAWN_IDLE без аргумента громкости; заявление проверяется по коду функцией prove_no_code_multiplier",
+        "other_call_sites": [
+          "src/main/java/com/carnis/mod/entity/InfectedCreeperEntity.java"
+        ]
+      },
+      "targets_by_sample": {
+        "hive_spawn_idle_01": 2.263,
+        "hive_spawn_idle_02": 1.0,
+        "hive_spawn_idle_03": 1.0,
+        "hive_spawn_idle_04": 1.0
+      },
+      "source": "T-3128 (sound_quiet_normalization.md): _02/_03/_04 подняты до -22 dBFS, _01 остался на -29.09, потому что отбор шёл по порогу «тише -30.2»",
+      "board_target": 0.3,
+      "deviation": "нет: правка одним ключом volume в sounds.json, банк не перекодируется",
+      "why": "Разброс 7.09 дБ. Ревизор (reviewer_s96_fix_without_masters.md) показал, что мастера не нужны: механизм per-entry volume уже используется 30 событиями. Множитель 2.263 = 10^(7.09/20), остаток после применения 0.05 дБ (проверено sample_loudness --spec). Пик после подъёма -9.25 dBFS при потолке -1.20 — запас 8.05 дБ."
+    },
+    {
+      "event": "combat.flesh_hit",
+      "call_site": {
+        "kind": "no_code_multiplier",
+        "note": "три сэмпла выбираются взвешенно (weight 1); все Java call-sites используют проверенный unity volume (1.0F / SoundType volume 1.0F), поэтому итоговый уровень задаётся per-sample volume в sounds.json"
+      },
+      "targets_by_sample": {
+        "combat_flesh_hit_01": 0.995,
+        "combat_flesh_hit_02": 1.270,
+        "combat_flesh_hit_03": 1.729
+      },
+      "source": "S127: выравнивание по ВОСПРИНИМАЕМОЙ громкости (A-взвешивание), не по сырому RMS. Решение Звука, НЕ норма доски",
+      "board_target": 1.0,
+      "deviation": "доска даёт одно число на событие; здесь три множителя, потому что сырой RMS расходится на 4.63 дБ, а пик всего на 1.12 — расхождение в СПЕКТРЕ, не в уровне",
+      "residual_tolerance": 0.05,
+      "tolerance_why": "crest внутри события выровнен перерисовкой (S128), поэтому RMS выравнивается до нуля",
+      "why": "A-разброс 2.17 -> 0.01 дБ; RMS 4.63 -> 2.55; пик 1.12 -> 1.53; все пики <= -1.20 dBFS (худший ровно -1.20 у _02). Цель -21.20 дБ: A-громкость выровнена, пик _02 -1.45 (запас 0.45 дБ до -1.00); при -20.95 пик _02 вставал ровно в -1.20 без запаса. Норма RMS 3 дБ без правки НЕДОСТИЖИМА: чтобы довести сырой RMS до 3 дБ, _01 пришлось бы опустить до -1.20 по пику, и остаток всё равно 3.1 дБ"
+    },
+    {
+      "event": "hive.spread",
+      "call_site": {
+        "file": "src/main/java/com/carnis/mod/world/infection/VeinMutationEngine.java",
+        "volume": 0.65
+      },
+      "targets_by_sample": {
+        "hive_spread_01_creep": 1.24865,
+        "hive_spread_02_pulse": 0.8684,
+        "hive_spread_03_swell": 1.1063
+      },
+      "source": "S128: перерисовка crest до 18.0 (был разброс 4.27 дБ) + выравнивание RMS множителями. Решение Звука",
+      "board_target": 0.65,
+      "deviation": "crest внутри события приведён к одной цели; после этого RMS выравнивается точно (остаток 0.00), а не частично",
+      "why": "crest было 23.06 / 18.79 / 22.75 (разброс 4.27) — тот же класс дефекта, что у combat.flesh_hit. После перерисовки crest 18.14 у всех, JSON multipliers 1.921 / 1.336 / 1.702 дают RMS -19.54 у всех трёх; effective targets здесь равны call-site 0.65 × JSON volume: 1.24865 / 0.8684 / 1.1063. Пики -1.40 / -1.49 / -1.43 dBFS. У 01 и 03 срезано 185 и 83 отсчёта, энергия >10 кГц выросла на 4.92 и 7.87 дБ — цена отчитывается, а не скрывается",
+      "residual_tolerance": 0.05,
+      "tolerance_why": "crest внутри события выровнен перерисовкой (S128)"
+    }
+  
+  
+  ],
+  "targets_mode": "effective"
+}
