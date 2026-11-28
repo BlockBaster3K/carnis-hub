@@ -433,10 +433,26 @@ jobs:
               echo "jar не изменился — коммит не нужен"
             else
               git commit -m "build: $JAR_NAME из ${{ steps.pkg.outputs.path }} (run ${{ github.run_id }})"
+              # ⛔ ТИХАЯ ПРАВКА. Раньше здесь стоял цикл `git push ... && break`
+              # без проверки результата: если все три попытки отклонены (нет
+              # прав у GITHUB_TOKEN, защита ветки, гонка с другим агентом),
+              # шаг всё равно завершался успехом. Дальше `commit=$(git rev-parse
+              # HEAD)` отдавал локальный коммит, R14 сверял его — тоже успех
+              # (файл-то на диске), а «Publish release» падал на проверке
+              # «TARGET не в origin/main». Прогон 46150901060: все шаги
+              # success, а тега v3.9.0 и релиза нет — сдачу нельзя было
+              # проверить даже по логу, потому что причина тонула в тишине.
+              # Теперь push обязан пройти, иначе шаг падает с внятным текстом.
+              PUSHED=0
               for i in 1 2 3; do
-                git push origin main && break
+                if git push origin main; then PUSHED=1; break; fi
+                echo "::warning::push в main отклонён (попытка $i) — повтор"
                 git pull --rebase --autostash origin main
               done
+              if [ "$PUSHED" != "1" ]; then
+                echo "::error::JAR собран и проверен, но push в main не прошёл за 3 попытки — релиз опубликовать нельзя. Причины: токен без contents:write, защита ветки main, или встречный push другого агента."
+                exit 1
+              fi
             fi
             echo "- **JAR в репозитории:** [06-build/jars/$JAR_NAME](https://github.com/${{ github.repository }}/blob/main/06-build/jars/$JAR_NAME)" >> "$GITHUB_STEP_SUMMARY"
           else
@@ -566,7 +582,33 @@ jobs:
           # Раньше шаг шёл до коммита JAR в main и тег вставал на предыдущий
           # коммит: релиз ссылался на сборку, которой в нём не было.
           git fetch --no-tags origin main
+          # Диагностика в ветку ci-log: по логам прогона этот отказ читать
+          # нечем (gh run view --log отдаёт EOF в этой среде), поэтому
+          # состояние пишется туда, откуда его можно забрать.
+          dump_publish_fail() {
+            {
+              echo "=== Publish release: отказ ==="
+              echo "TAG=$TAG"
+              echo "TARGET=$TARGET"
+              echo "origin/main=$(git rev-parse origin/main)"
+              echo "исходная ветка: $GITHUB_REF_NAME"
+              echo "--- есть ли коммит в origin/main ---"
+              git merge-base --is-ancestor "$TARGET" origin/main && echo "да" || echo "НЕТ"
+              echo "--- есть ли jar в коммите ---"
+              git cat-file -e "$TARGET:06-build/jars/$JAR_NAME" && echo "да" || echo "НЕТ"
+              echo "--- ветки, содержащие TARGET ---"
+              git branch -r --contains "$TARGET" 2>/dev/null || echo "нет"
+            } > /tmp/publish_report.txt 2>&1
+            BLOB=$(git hash-object -w /tmp/publish_report.txt 2>/dev/null) || exit 0
+            git update-index --add --cacheinfo 100644,"$BLOB",06-build/publish_report.txt 2>/dev/null || exit 0
+            TREE=$(git write-tree 2>/dev/null) || exit 0
+            CMT=$(git commit-tree "$TREE" -p "$(git rev-parse HEAD)" \
+                    -m "ci: отчёт публикации (run ${{ github.run_id }})" 2>/dev/null) || exit 0
+            git push --force origin "$CMT:refs/heads/ci-log/${{ github.run_id }}-publish" >/dev/null 2>&1 || true
+            git reset --hard HEAD >/dev/null 2>&1 || true
+          }
           git merge-base --is-ancestor "$TARGET" origin/main || {
+            dump_publish_fail
             echo "::error::коммит $TARGET не в origin/main — тег ставить нельзя"; exit 1; }
           git cat-file -e "$TARGET:06-build/jars/$JAR_NAME" || {
             echo "::error::в коммите $TARGET нет 06-build/jars/$JAR_NAME — тег ставить нельзя"; exit 1; }
