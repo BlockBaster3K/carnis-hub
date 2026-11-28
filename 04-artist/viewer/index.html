@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CARNIS · cerebral_nexus — 3D</title>
+<style>
+  :root { --accent:#ff5c39; --bg:#14121a; --panel:#1e1a24; --txt:#e8dcd8; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--txt);
+    font-family:"DejaVu Sans",ui-monospace,Consolas,monospace; overflow:hidden; }
+  #app { position:fixed; inset:0; }
+  canvas { display:block; }
+  #hud { position:fixed; top:16px; left:16px; z-index:10; max-width:340px;
+    background:rgba(30,26,36,.82); border:1px solid #3a2f3a; border-radius:10px;
+    padding:14px 16px; backdrop-filter:blur(6px); }
+  #hud h1 { margin:0 0 2px; font-size:16px; letter-spacing:.5px; color:var(--accent); }
+  #hud .sub { font-size:11px; color:#a89aa0; margin-bottom:10px; line-height:1.5; }
+  .row { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  button { background:#2a2430; color:var(--txt); border:1px solid #4a3f4a; border-radius:6px;
+    padding:6px 10px; font-size:12px; cursor:pointer; font-family:inherit; transition:.15s; }
+  button:hover { border-color:var(--accent); color:#fff; }
+  button.active { background:var(--accent); color:#1a0f0c; border-color:var(--accent); font-weight:bold; }
+  .lbl { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#8a7a80; margin-top:10px; }
+  #status { position:fixed; bottom:14px; left:16px; z-index:10; font-size:11px; color:#a89aa0;
+    background:rgba(30,26,36,.7); padding:6px 10px; border-radius:6px; }
+  #status b { color:var(--accent); }
+  #hint { position:fixed; bottom:14px; right:16px; z-index:10; font-size:11px; color:#7a6a70; text-align:right; }
+  #loading { position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:var(--bg); z-index:50; color:var(--accent); font-size:14px; letter-spacing:2px; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./three.module.js" } }
+</script>
+</head>
+<body>
+<div id="loading">ЗАГРУЗКА НЕКСУСА…</div>
+<div id="app"></div>
+<div id="hud">
+  <h1>CARNIS · cerebral_nexus</h1>
+  <div class="sub">Церебральный Нексус Улья · BlockEntity<br>45 кубов · 64×64 · палитра PALETTE.md · эмиссив Р-3&nbsp;#FF5C39</div>
+  <div class="lbl">Анимация</div>
+  <div class="row">
+    <button id="btn-idle" class="active">idle</button>
+    <button id="btn-pulse">psychic_pulse</button>
+    <button id="btn-death">death</button>
+  </div>
+  <div class="lbl">Отображение</div>
+  <div class="row">
+    <button id="btn-glow" class="active">свечение</button>
+    <button id="btn-rotate" class="active">автовращение</button>
+    <button id="btn-wire">каркас</button>
+    <button id="btn-reset">сброс камеры</button>
+  </div>
+</div>
+<div id="status">клип: <b id="clip-name">idle</b> · <span id="clip-time">0.00s</span></div>
+<div id="hint">ЛКМ — вращение · колесо — зум · ПКМ — панорама</div>
+<script type="module" src="./viewer.js"></script>
+</body>
+</html>
