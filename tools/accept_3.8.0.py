@@ -273,6 +273,29 @@ GROWN_380 = (
     # содержимого (1024 непрозрачных пикселя до и после), glowmask тоже.
     # Это исправление дефекта из creature_pack_audit, а не рост объёма.
     "src/main/resources/assets/carnis/textures/block/",
+    # +2026-11-28, правки реестра дефектов 3.8.1 (D-004). Два предмета были
+    # зарегистрированы в коде и в творческой вкладке (ModCreativeTabs 59-60),
+    # но без единого ресурса: в логе игрока —
+    #   «Exception loading blockstate definition: carnis_web.json missing model»
+    #   «Unable to load model: carnis:carnis_web#inventory FileNotFoundException»
+    # Это забытое оформление, а не новый контент: классы CarnisWebBlock и
+    # предмет carnis_spore существовали с 3.8.0. Разрешение добавляет ровно
+    # недостающие blockstates/, models/block/ и models/item/; сами предметы
+    # проверяются блоками D (ссылки) и 9д (ассеты существ), текстуры — нормой
+    # A3R1 в check_blocks (>=7 цветов, топ-доля <=35%), она и сработала:
+    # первая версия текстуры была плоской заливкой и покраснела.
+    "src/main/resources/assets/carnis/blockstates/",
+    "src/main/resources/assets/carnis/models/block/",
+    "src/main/resources/assets/carnis/models/item/",
+    # textures/item/: иконка второй половины D-004 — carnis_spore.
+    "src/main/resources/assets/carnis/textures/item/",
+    # +2026-11-28, D-004 всё тот же: названия и подсказки двух забытых
+    # предметов обязаны попасть в оба языка. Без этого во вкладке висели бы
+    # технические имена «item.carnis.carnis_web». Lang — не код и не ассет
+    # существа; его ключи сверяет блок 2) JSON (файл обязан разбираться),
+    # а полноту имён для предметов кода не проверить автоматически — поэтому
+    # разрешение узкое: только каталог lang/, и оба языка правятся вместе.
+    "src/generated/resources/assets/carnis/lang/",
 )
 
 
